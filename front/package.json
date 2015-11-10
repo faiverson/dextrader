@@ -1,0 +1,38 @@
+{
+  "name": "ng-launchpad",
+  "description": "An opinionated starting point for Angular JS projects.",
+  "scripts": {
+    "postinstall": "bower update",
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/samora/ng-launchpad"
+  },
+  "author": "Samora Dake",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/samora/ng-launchpad/issues"
+  },
+  "homepage": "https://github.com/samora/ng-launchpad",
+  "dependencies": {
+    "run-sequence": "~0.3.6",
+    "connect": "~2.14.5",
+    "gulp-wrap": "~0.3.0",
+    "gulp-cache": "~0.1.3",
+    "gulp-ngmin": "~0.2.0",
+    "gulp-livereload": "~1.3.1",
+    "gulp-uglify": "~0.2.1",
+    "gulp-jade": "~0.5.0",
+    "gulp-minify-css": "~0.3.2",
+    "gulp-html2js": "~0.1.0",
+    "gulp-clean": "~0.2.4",
+    "gulp-jshint": "~1.5.5",
+    "gulp-concat": "~2.2.0",
+    "gulp": "~3.6.2",
+    "gulp-htmlmin": "~0.1.2",
+    "gulp-less": "~1.2.3",
+    "karma": "~0.12.14",
+    "gulp-imagemin": "~0.5.0"
+  }
+}
