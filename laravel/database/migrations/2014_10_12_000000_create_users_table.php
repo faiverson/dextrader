@@ -54,7 +54,6 @@ class UsersTable extends Migration
 		Schema::dropIfExists('password_resets');
 		Schema::dropIfExists('roles');
 		Schema::dropIfExists('users');
-
 		DB::statement('SET FOREIGN_KEY_CHECKS = 1');
 	}
 }
