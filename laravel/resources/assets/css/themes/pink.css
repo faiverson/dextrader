@@ -1,0 +1,84 @@
+/*
+Template Name: media-theme
+Version: 1.00.0
+License: Custom
+License URI: URI: http://themeforest.net/licenses
+*/
+
+
+/**************************************************************
+============	Pace style
+**************************************************************/
+.pace .pace-progress {
+  background: #e52e5d;
+}
+
+.pace .pace-progress-inner {
+	box-shadow: 0 0 10px #2ab3ac, 0 0 5px #e52e5d;
+}
+
+.pace .pace-activity {
+  border-top-color: #e52e5d;
+  border-left-color: #e52e5d;
+}
+
+
+/**************************************************************
+============	Header
+**************************************************************/
+.header-nav .navbar-collapse.collapse.in{
+	border-bottom:1px solid #e52e5d;
+}
+
+.header-nav .topbar .responsive span {
+	color: #e52e5d;
+}
+
+
+/**************************************************************
+============	section recommend
+**************************************************************/
+#recommend .header h3 {
+	color: #e52e5d;
+}
+
+#recommend h4 {
+	color: #e52e5d;
+}
+
+#recommend .row div:hover h4 {
+	color: #ef6f24;
+}
+
+#recommend .img i.fa {
+	color: #e52e5d;
+}
+
+
+/**************************************************************
+============	section portfolio
+**************************************************************/
+#portfolio #portfolioProject ul li h4 {
+	color: #e52e5d;
+}
+
+#portfolio #portfolioProject ul li a.more {
+	color: #e52e5d;
+}
+
+
+/***********************************
+// CONTACT DATA
+***********************************/
+#footer form button {
+	background: #e52e5d;
+	color: #fff;
+}
+
+
+/***********************************
+// COPYRIGHT 
+***********************************/
+#copyright a.social:hover {
+	background: #e52e5d;
+}
