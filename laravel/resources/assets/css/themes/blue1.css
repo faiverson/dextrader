@@ -1,0 +1,84 @@
+/*
+Template Name: media-theme
+Version: 1.00.0
+License: Custom
+License URI: URI: http://themeforest.net/licenses
+*/
+
+
+/**************************************************************
+============	Pace style
+**************************************************************/
+.pace .pace-progress {
+  background: #274293;
+}
+
+.pace .pace-progress-inner {
+	box-shadow: 0 0 10px #2ab3ac, 0 0 5px #274293;
+}
+
+.pace .pace-activity {
+  border-top-color: #274293;
+  border-left-color: #274293;
+}
+
+
+/**************************************************************
+============	Header
+**************************************************************/
+.header-nav .navbar-collapse.collapse.in{
+	border-bottom:1px solid #274293;
+}
+
+.header-nav .topbar .responsive span {
+	color: #274293;
+}
+
+
+/**************************************************************
+============	section recommend
+**************************************************************/
+#recommend .header h3 {
+	color: #274293;
+}
+
+#recommend h4 {
+	color: #274293;
+}
+
+#recommend .row div:hover h4 {
+	color: #ef6f24;
+}
+
+#recommend .img i.fa {
+	color: #274293;
+}
+
+
+/**************************************************************
+============	section portfolio
+**************************************************************/
+#portfolio #portfolioProject ul li h4 {
+	color: #274293;
+}
+
+#portfolio #portfolioProject ul li a.more {
+	color: #274293;
+}
+
+
+/***********************************
+// CONTACT DATA
+***********************************/
+#footer form button {
+	background: #274293;
+	color: #fff;
+}
+
+
+/***********************************
+// COPYRIGHT 
+***********************************/
+#copyright a.social:hover {
+	background: #274293;
+}
