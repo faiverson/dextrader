@@ -68,7 +68,6 @@ gulp.task('vendor_css', function () {
 // Convert index.jade into index.html.
 gulp.task('html', function () {
     var sources = gulp.src(files.js.app , {read: false});
-   console.log(sources);
 
     return gulp.src(files.html.index)
         .pipe(inject(sources, {

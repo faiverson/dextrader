@@ -1,4 +1,4 @@
-angular.module('app.home', ['ui.router', 'datatables', 'datatables.bootstrap'])
+angular.module('app.home', ['ui.router'])
     .config(function config( $stateProvider ) {
         $stateProvider
             .state('home', {
@@ -11,17 +11,36 @@ angular.module('app.home', ['ui.router', 'datatables', 'datatables.bootstrap'])
             });
     })
 
-    .controller('HomeCtrl', ['$scope', 'DTOptionsBuilder', 'DTColumnBuilder', 'DummyService',
-        function ($scope, DTOptionsBuilder, DTColumnBuilder, DummyService) {
+    .controller('HomeCtrl', ['$scope', 'UserService',
+        function ($scope, UserService) {
 
-            $scope.dtOptions = DTOptionsBuilder.fromFnPromise(function () {
-                return DummyService.getDummyData();
-            }).withPaginationType('full_numbers').withBootstrap();
+            var vm = this;
 
-            $scope.dtColumns = [
-                DTColumnBuilder.newColumn('id').withTitle('ID'),
-                DTColumnBuilder.newColumn('firstName').withTitle('First name'),
-                DTColumnBuilder.newColumn('lastName').withTitle('Last name').notVisible()
-            ];
+            $scope.pagination = {
+                itemsPerPage: 3,
+                currentPage: 1,
+                getPage: function () {
+                    vm.getUsers();
+                }
+            };
+
+            vm.getUsers = function(page){
+                UserService.getUsers().then(success, error);
+
+                function success(res){
+                    $scope.users = res.splice(($scope.pagination.currentPage - 1)* $scope.pagination.itemsPerPage, $scope.pagination.itemsPerPage);
+                }
+
+                function error(res){
+                    console.log(res);
+                    //message
+                }
+            };
+
+            vm.init = function(){
+                vm.getUsers();
+            };
+
+            vm.init();
 
         }]);

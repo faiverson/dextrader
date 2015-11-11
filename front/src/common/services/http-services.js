@@ -1,36 +1,27 @@
 
 (function(){
-    angular.module('app.http-services', [])
-        .factory('DummyService', ['$q', function($q){
+    angular.module('app.http-services', ['app.site-configs'])
+        .factory('UserService', ['$http', '$q', '$site-configs', function($http, $q, $configs){
+            var service = $configs.API_BASE_URL + 'users';
+
             return {
-                getDummyData: getDummyData
+                getUsers: getUsers
             };
 
-            function getDummyData(){
-                var deferred = $q.defer();
-
-                var data = [{
-                    "id": 860,
-                    "firstName": "Superman",
-                    "lastName": "Yoda"
-                }, {
-                    "id": 870,
-                    "firstName": "Foo",
-                    "lastName": "Whateveryournameis"
-                }, {
-                    "id": 590,
-                    "firstName": "Toto",
-                    "lastName": "Titi"
-                }, {
-                    "id": 803,
-                    "firstName": "Luke",
-                    "lastName": "Kyle"
-                }];
+            function getUsers(){
+                var deferred = $q.defer(),
+                    endpoint = service;
 
 
-                setTimeout(function(){
-                   deferred.resolve(data);
-                }, 500);
+                $http.get(endpoint).then(success, error);
+
+                function success(res){
+                    deferred.resolve(res.data);
+                }
+
+                function error(res){
+                    deferred.reject(res);
+                }
 
                 return deferred.promise;
             }
