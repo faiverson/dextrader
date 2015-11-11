@@ -10,36 +10,45 @@ module.exports = {
             // If you remove a library you must remove it here too.
             vendor: [
                 'vendor/jquery/dist/jquery.js',
+                'vendor/datatables/media/js/jquery.dataTables.js',
                 'vendor/bootstrap/dist/js/bootstrap.js',
                 'vendor/angular/angular.js',
                 'vendor/angular-mocks/angular-mocks.js',
                 'vendor/angular-ui-router/release/angular-ui-router.js',
-                'vendor/angular-bootstrap/ui-bootstrap-tpls.js'
+                'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
+                'vendor/angular-datatables/dist/angular-datatables.js',
+                'vendor/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.js'
+
             ],
 
             app: [
-                'src/common/**/*.js',
-                '!src/common/**/*.spec.js',
-                '!src/common/**/*.scenario.js',
-
-                'src/modules/**/*.js',
-                '!src/modules/**/*.spec.js',
-                '!src/modules/**/*.scenario.js'
+                'src/**/*.js',
+                '!src/**/*.spec.js',
+                '!src/**/*.scenario.js'
             ],
 
-            buildDest: 'build/js'
+            buildDest: '../public_html/js',
+            buildDestPattern: '../public_html/**/*.js'
         },
 
         less: {
             main: [
                 'src/less/main.less',
                 'src/common/**/*.less',
-                'src/modules/**/*.less'
+                'src/modules/**/*.less',
+                'vendor/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.css'
             ],
 
-            buildDest: 'build/css'
+            buildDest: '../public_html/css'
         },
 
+        css: {
+            vendor_files: [
+                'vendor/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.css'
+            ],
+
+            buildDest: '../public_html/css'
+        },
 
         html: {
             index: 'src/index.html',
@@ -50,24 +59,15 @@ module.exports = {
                 common: 'src/common/**/*.tpl.html'
             },
 
-            buildDest: 'build'
+            buildDestFileName: 'home.php',
+
+            buildDest: '../laravel/resources/views'
         },
 
         img: {
             src: 'src/img/**/*',
 
-            buildDest: 'build/img'
-        },
-
-        test: {
-            e2e: 'src/**/*.scenario.js',
-
-            unit: [
-                'build/js/vendor.js',
-                'build/js/templates-*.js',
-                'build/js/app.js',
-                'src/**/*.spec.js'
-            ]
+            buildDest: '../public_html/img'
         }
     }
 };

@@ -1,26 +1,31 @@
 angular.module('app', [
     'templates-modules',
-    // 'templates-common',
+    //'templates-common',
+    'app.header',
+    'app.footer',
     'app.home',
-    'ui.router',
     'ui.bootstrap.tpls',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'app.http-services'
 ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider) {
-
-        $stateProvider
-            .state('home', {
-                url: '/home',
-                templateUrl: 'home/home.tpl.html',
-                data: {
-                    pageTitle: 'Home'
-                }
-            });
 
         $urlRouterProvider.otherwise('/home');
     })
 
     .run(function run() {
 
+    })
+
+    .controller('AppCtrl', function AppCtrl($scope, $location) {
+        $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+            if (angular.isDefined(toState.data.pageTitle)) {
+                $scope.pageTitle = toState.data.pageTitle + ' | ng-launchpad'
+            }
+        })
+
+        $scope.links = [
+            {state: 'home', text: 'Home', icon: 'home'},
+        ]
     });
