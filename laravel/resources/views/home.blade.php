@@ -11,18 +11,10 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/vendor.css">
 
-    <script type="text/javascript" src="js/vendor.js"></script>
-    <script type="text/javascript" src="js/templates-modules.js"></script>
-    <script type="text/javascript" src="js/templates-common.js"></script>
+
     <!--<script type="text/javascript" src="js/app.js"></script>-->
 
-    <!-- inject:js -->
-    <script type="text/javascript" src="/js/modules/app.js"></script>
-    <script type="text/javascript" src="/js/common/services/http-services.js"></script>
-    <script type="text/javascript" src="/js/modules/home/home.js"></script>
-    <script type="text/javascript" src="/js/modules/shared/footer/footer.js"></script>
-    <script type="text/javascript" src="/js/modules/shared/header/header.js"></script>
-    <!-- endinject -->
+
 </head>
 <body><!--[if lt IE 8]>
 <p class="browsehappy">
@@ -37,5 +29,16 @@
 
 
 <script type="text/javascript" src="http://localhost:35729/livereload.js"></script>
+<script type="text/javascript" src="js/vendor.js"></script>
+<script type="text/javascript" src="js/templates-modules.js"></script>
+<script type="text/javascript" src="js/templates-common.js"></script>
+<!-- inject:js -->
+<script type="text/javascript" src="/js/modules/app.js"></script>
+<script type="text/javascript" src="/js/common/services/http-services.js"></script>
+<script type="text/javascript" src="/js/modules/aa/home.js"></script>
+<script type="text/javascript" src="/js/modules/home/home.js"></script>
+<script type="text/javascript" src="/js/modules/shared/footer/footer.js"></script>
+<script type="text/javascript" src="/js/modules/shared/header/header.js"></script>
+<!-- endinject -->
 </body>
 </html>
