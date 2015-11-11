@@ -1,10 +1,12 @@
+angular.module('app.views', ['app.home', 'ui.router', 'datatables', 'datatables.bootstrap'])
+
 angular.module('app', [
     'templates-modules',
     //'templates-common',
     'app.header',
     'app.footer',
     'app.home',
-    'ui.bootstrap.tpls',
+	'ui.bootstrap.tpls',
     'ui.bootstrap',
     'app.http-services'
 ])
