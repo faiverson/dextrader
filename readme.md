@@ -6,6 +6,7 @@ This is a point to start from scratch new projects but with a solid baseline.
 2. Install composer if you don't have it.
 3. Install node.js
 4. Setup the file .env with your local configuration
+5. Download the plugin related to your Editor [IDE](http://editorconfig.org/#download)
 5. Run commands:
 ```sh
 sudo chmod -R 777 .
@@ -14,10 +15,7 @@ composer install
 php artisan vendor:publish
 php artisan migrate:refresh --seed
 ```
-
-Used:
-## Laravel PHP Framework
-
+## Laravel PHP Framework (http://laravel.com/docs/5.1)
 [![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
 [![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
 [![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
