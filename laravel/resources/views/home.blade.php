@@ -2,7 +2,7 @@
 <html ng-app="ngBoilerplate" ng-controller="AppCtrl">
 <head>
 	<title ng-bind="pageTitle"></title>
-
+	<meta name="csrf-token" content="{{ csrf_token() }}" />
 	<!-- social media tags -->
 	<meta name="twitter:card" content="summary">
 	<meta name="twitter:site" content="@joshdmiller">

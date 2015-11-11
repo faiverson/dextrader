@@ -145,6 +145,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+		yajra\Datatables\DatatablesServiceProvider::class,
 		Snowfire\Beautymail\BeautymailServiceProvider::class,
 
     ],
@@ -196,6 +197,11 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
 
+		'Datatables' => yajra\Datatables\Datatables::class,
+		'Beautymail'=> Snowfire\Beautymail\Beautymail::class,
+
+		'User' => App\Models\User::class,
+		'Role' => App\Models\Role::class,
     ],
 
 ];

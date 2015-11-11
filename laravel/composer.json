@@ -7,6 +7,7 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
+		"yajra/laravel-datatables-oracle": "^5.11",
         "snowfire/beautymail": "dev-master"
     },
     "require-dev": {
