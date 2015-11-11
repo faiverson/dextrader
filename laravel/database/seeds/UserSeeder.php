@@ -20,9 +20,9 @@ class UserSeeder extends Seeder
         User::create([
             'first_name' => 'fabian',
             'last_name' => 'torres',
-            'username' => 'faiverson',
+            'username' => 'admin',
             'email' => 'fa.iverson@gmail.com',
-            'password' => 'admin',
+            'password' => bcrypt('admin'),
             'role_id' => 10
         ]);
 
@@ -33,8 +33,8 @@ class UserSeeder extends Seeder
                 'last_name' => $faker->lastName,
                 'username' => str_replace('.', '_', $faker->unique()->userName),
                 'email' => $faker->email,
-                'password' => $faker->word,
-                'role_id' => rand(1,2)
+                'password' => bcrypt('password'), //$faker->word
+                'role_id' => 1
             ]);
         }
     }

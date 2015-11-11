@@ -3,13 +3,13 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UsersTable extends Migration
+class Basics extends Migration
 {
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
 	public function up()
 	{
 		Schema::create('roles', function(Blueprint $table)
@@ -43,11 +43,11 @@ class UsersTable extends Migration
 		});
 	}
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
 	public function down()
 	{
 		DB::statement('SET FOREIGN_KEY_CHECKS = 0');

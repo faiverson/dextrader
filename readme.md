@@ -8,11 +8,11 @@ This is a point to start from scratch new projects but with a solid baseline.
 4. Setup the file .env with your local configuration
 5. Run commands:
 ```sh
+sudo chmod -R 777 .
 cd laravel
 composer install
 php artisan vendor:publish
-sudo chmod -R 777 laravel
-sudo chmod -R 777 public_html
+php artisan migrate:refresh --seed
 ```
 
 Used:
