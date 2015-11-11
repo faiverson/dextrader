@@ -59,7 +59,7 @@ module.exports = {
                 common: 'src/common/**/*.tpl.html'
             },
 
-            buildDestFileName: 'home.php',
+            buildDestFileName: 'home.blade.php',
 
             buildDest: '../laravel/resources/views'
         },
