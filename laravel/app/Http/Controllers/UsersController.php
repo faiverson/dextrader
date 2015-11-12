@@ -56,17 +56,7 @@ class UsersController extends Controller
 //            ->where('id', '!=', Auth::user()->id);
 //        return Datatables::of($query)->make(true);
 		$user = User::with('role')->where('active', 1)->get();
-		return $user;
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('users.create');
+		return response()->info($user);
     }
 
     /**
@@ -88,11 +78,7 @@ class UsersController extends Controller
         ]);
 
         if ($validator->fails()) {
-            $err = '';
-            foreach ($validator->errors()->all() as $e => $errors) {
-                $err .= $errors . '<br>';
-            }
-            return array('success' => false, 'error' => $err);
+			return response()->error($validator->errors()->all());
         }
         $user->first_name = $request->get('first_name');
         $user->last_name = $request->get('last_name');
@@ -101,16 +87,16 @@ class UsersController extends Controller
         $user->password = bcrypt($request->get('password'));
         $user->role = $request->get('role');
         $user->save();
-        return array('success' => true);
+		return response()->info();
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Edit the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function edit(Request $request)
     {
         $id = $request->get('id');
         $user = User::find($id);
@@ -123,13 +109,9 @@ class UsersController extends Controller
             'role' => 'required|integer',
         ]);
 
-        if ($validator->fails()) {
-            $err = '';
-            foreach ($validator->errors()->all() as $e => $errors) {
-                $err .= $errors . '<br>';
-            }
-            return array('success' => false, 'error' => $err);
-        }
+		if ($validator->fails()) {
+			return response()->error($validator->errors()->all());
+		}
 
         $user->update([
             'first_name' => $request->get('first_name'),
@@ -139,7 +121,7 @@ class UsersController extends Controller
             'password' => bcrypt($request->get('password')),
             'role' => $request->get('role')
         ]);
-        return array('success' => true);
+		return response()->info();
     }
 
     /**
@@ -152,6 +134,6 @@ class UsersController extends Controller
     {
         $id = $request->get('id');
         User::destroy($id);
-        return array('success' => true);
+		return response()->info();
     }
 }
