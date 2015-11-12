@@ -33,12 +33,12 @@
 <script type="text/javascript" src="js/templates-modules.js"></script>
 <script type="text/javascript" src="js/templates-common.js"></script>
 <!-- inject:js -->
-<script type="text/javascript" src="/js/modules/app.js"></script>
 <script type="text/javascript" src="/js/common/services/http-services.js"></script>
-<script type="text/javascript" src="/js/modules/aa/home.js"></script>
+<script type="text/javascript" src="/js/common/services/site-configs.js"></script>
+<script type="text/javascript" src="/js/modules/app.js"></script>
 <script type="text/javascript" src="/js/modules/home/home.js"></script>
-<script type="text/javascript" src="/js/modules/shared/footer/footer.js"></script>
 <script type="text/javascript" src="/js/modules/shared/header/header.js"></script>
+<script type="text/javascript" src="/js/modules/shared/footer/footer.js"></script>
 <!-- endinject -->
 </body>
 </html>

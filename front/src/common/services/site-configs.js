@@ -13,3 +13,4 @@ angular.module('app.site-configs', [])
             }
         };
     });
+console.log('ddsss');

@@ -1,6 +1,28 @@
 {
-  "private": true,
-  "devDependencies": {
-  },
-  "dependencies": {}
+	"name": "Startup",
+	"description": "Starting point of Laravel and Angular using gulpjs",
+	"author": "The Real Creators",
+	"license": "UNLICENSED",
+	"contributors": [
+		{
+			"name": "Fabian Torres",
+			"email": "fa.iverson@gmail.com",
+			"web": "http://fabiantorres.com.ar"
+		},
+		{
+			"name": "Luciano Seisdedos",
+			"email": "lucho6d2@gmail.com"
+		},
+		{
+			"name": "Juan Borda",
+			"email": "juampiib@gmail.com"
+		},
+		{
+			"name": "Jason Collins",
+			"email": "jason.cullins@innovationstechgroup.com"
+		}
+	],
+	"private": true,
+	"devDependencies": {},
+	"dependencies": {}
 }
