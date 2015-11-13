@@ -1,4 +1,4 @@
-angular.module('app.views', ['app.home', 'ui.router', 'datatables', 'datatables.bootstrap'])
+angular.module('app.views', ['app.home', 'ui.router', 'datatables', 'datatables.bootstrap']);
 
 angular.module('app', [
     'templates-modules',

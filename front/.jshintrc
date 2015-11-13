@@ -1,9 +1,27 @@
 {
-  "curly": true,
-  "immed": true,
-  "newcap": true,
-  "noarg": true,
-  "sub": true,
-  "boss": true,
-  "eqnull": true
+	"boss" : true,
+	"browser" : true,
+	"curly" : true,
+	"debug" : true,
+	"eqeqeq" : true,
+	"eqnull" : true,
+	"evil" : true,
+	"immed" : true,
+	"latedef" : true,
+	"newcap" : true,
+	"noarg" : true,
+	"plusplus" : false,
+	"scripturl" : true,
+	"smarttabs" : true,
+	"sub" : true,
+	"undef" : true,
+  	"es5": false,
+	"globals" : {
+		"_": true,
+		"define": true,
+		"module": true,
+		"require": true,
+		"console": true,
+		"angular": true
+	}
 }
