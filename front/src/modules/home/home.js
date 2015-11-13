@@ -25,16 +25,15 @@ angular.module('app.home', ['ui.router'])
             };
 
             vm.getUsers = function(page){
-                UserService.getUsers().then(success, error);
-
                 function success(res){
                     $scope.users = res.splice(($scope.pagination.currentPage - 1)* $scope.pagination.itemsPerPage, $scope.pagination.itemsPerPage);
                 }
 
                 function error(res){
                     console.log(res);
-                    //message
                 }
+
+				UserService.getUsers().then(success, error);
             };
 
             vm.init = function(){

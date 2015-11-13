@@ -50,22 +50,17 @@ module.exports = {
 			output: '../public_html/js/'
 		}
 	},
-	less: [
-		'src/less/main.less',
-		'src/common/**/*.less',
-		'src/modules/**/*.less',
-		'vendor/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.css'
-	],
-	css: {
-		vendor: {
-			input: [
-				'vendor/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.css'
-			],
-			output: '../public_html/js/vendor.css'
-		}
+	less: {
+		input: [
+			'src/less/main.less',
+			'src/common/**/*.less',
+			'src/modules/**/*.less'
+		],
+		output: '../public_html/css/'
 	},
 	html: {
-		main: '../laravel/resources/views/home.blade.php',
+		input: 'src/index.html',
+		output: 'home.blade.php',
 		tpl: {
 			modules: 'src/modules/**/*.tpl.html',
 			common: 'src/common/**/*.tpl.html'
