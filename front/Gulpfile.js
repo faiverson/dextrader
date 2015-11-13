@@ -18,7 +18,6 @@ var gulp = require('gulp'),
 	LessPluginAutoPrefix = require('less-plugin-autoprefix'),
 	html2js = require('gulp-html2js'),
 	gulpif = require('gulp-if'),
-	vinylPaths = require('vinyl-paths'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
 	svgmin = require('gulp-svgmin'),
@@ -29,12 +28,11 @@ var gulp = require('gulp'),
     livereload = require('gulp-livereload'),
     wrap = require('gulp-wrap'),
 	ngAnnotate = require('gulp-ng-annotate'),
-    runSequence = require('run-sequence'),
 	markdown = require('gulp-markdown'),
-	fileinclude = require('gulp-file-include'),
 	sourcemaps = require('gulp-sourcemaps'),
 	prettify = require('gulp-jsbeautifier'),
     connectPhp = require('gulp-connect-php'),
+	debug = require('gulp-debug'),
     inject = require('gulp-inject'),
 	sInject = require('gulp-inject-string'),
     connect = require('connect'),
@@ -43,14 +41,13 @@ var gulp = require('gulp'),
 	config = require('./build.config.js');
 
 // FACADES
-gulp.task('default', ['jshint', 'js:vendor', 'js:files', 'js:templates', 'css', 'build:images', 'build:svg', 'prettify-js']);
+gulp.task('default', ['clean:dist', 'jshint', 'js:vendor', 'js:files', 'js:templates', 'css', 'build:images', 'build:svg', 'prettify-js']);
 // compile all for development env
 gulp.task('dev', ['default']);
 // compile all for production env
 gulp.task('prod', ['env', 'default']);
 // run a server and a watcher
 gulp.task('run', ['server', 'watch']);
-
 
 // TASKS
 // set the environment
@@ -88,53 +85,45 @@ gulp.task('clean:test', function () {
 
 // create a file with all JS vendors
 gulp.task('js:vendor', function() {
-	var condition = (environment !== 'dev'),
+	var condition = (environment === 'dev'),
 		jsDev = lazypipe()
-			.pipe(header, config.banner.full, { pkg: pkg })
-			.pipe(gulp.dest, config.js.files.output),
+			.pipe(header, config.banner.full, { pkg: pkg });
 
 		jsLive = lazypipe()
 			.pipe(rename, { suffix: '.min' })
-			//.pipe(vinylPaths(del))
-			.pipe(uglify)
-			.pipe(header, config.banner.min, { pkg: pkg })
-			.pipe(gulp.dest, config.js.files.output);
+			.pipe(uglify, {outSourceMap: config.js.vendor.output + '.map'})
+			.pipe(header, config.banner.min, { pkg: pkg });
 
 	return gulp.src(config.js.vendor.input)
 		.pipe(plumber())
-		.pipe(sourcemaps.init())
 		.pipe(concat(config.js.vendor.output))
-		.pipe(jsDev())
+		.pipe(gulpif(!condition, jsDev()))
 		.pipe(gulpif(condition, jsLive()))
-		.pipe(sourcemaps.write('./'))
+		.pipe(gulp.dest(config.js.files.output))
 		.on('error', gutil.log);
 });
 
 // Process app's JS into app.js.
 gulp.task('js:files', function () {
-	var filename = pkg.name + '-v' + pkg.version + '.js',
-		jsDev = lazypipe()
-			.pipe(header, config.banner.full, { pkg: pkg })
-			.pipe(gulp.dest, config.js.files.output),
-
+	var condition = (environment !== 'dev'),
+		filename = pkg.name + '-v' + pkg.version + '.js',
 		jsLive = lazypipe()
-			.pipe(rename, { suffix: '.min' })
-			.pipe(uglify)
+			.pipe(concat, filename)
+			.pipe(wrap, '(function ( window, angular, undefined ) {\n'
+			+ '\'use strict\';\n'
+			+ '<%= contents %>'
+			+ '})( window, window.angular );')
 			.pipe(header, config.banner.min, { pkg: pkg })
-			.pipe(gulp.dest(config.js.files.output));
+			.pipe(rename, { suffix: '.min' })
+			.pipe(uglify, {outSourceMap: filename + '.map'})
+
 
 	return gulp.src(config.js.files.input)
 		.pipe(plumber())
 		.pipe(ngAnnotate())
-		.pipe(sourcemaps.init())
-		.pipe(concat(filename))
-		.pipe(wrap('(function ( window, angular, undefined ) {\n'
-		+ '\'use strict\';\n'
-		+ '<%= contents %>'
-		+ '})( window, window.angular );'))
-		.pipe(jsDev())
 		.pipe(gulpif(condition, jsLive()))
-		.pipe(sourcemaps.write('./'))
+		//.pipe(debug({verbose: true}))
+		.pipe(gulp.dest(config.js.files.output))
 		.on('error', gutil.log);
 });
 
@@ -185,26 +174,6 @@ gulp.task('jshint', function () {
 		.pipe(jshint('.jshintrc'))
 		.pipe(jshint.reporter(stylish))
 		.pipe(jshint.reporter('fail'));
-});
-
-gulp.task('watch', function () {
-	livereload.listen();
-	watch(config.js.files.input)
-		.on('change', function(file) {
-			gulp.start('default');
-			gulp.start('refresh');
-		}).on('add', function(file) {
-			gulp.start('default');
-			gulp.start('refresh');
-		}).on('unlink', function(file) {
-			gulp.start('default');
-			gulp.start('refresh');
-		});
-});
-
-// Run livereload after file change
-gulp.task('refresh', function () {
-	livereload.changed();
 });
 
 gulp.task('prettify-js', function() {
@@ -269,12 +238,6 @@ gulp.task('css', function () {
 		.on('error', gutil.log);
 });
 
-//gulp.task('prettify-html', function() {
-//	gulp.src('./src/foo.html')
-//		.pipe(prettify({indentSize: 2}))
-//		.pipe(gulp.dest('./dist'))
-//});
-
 //// Convert index.jade into index.html.
 gulp.task('html', function () {
     var condition = environment !== 'dev',
@@ -330,67 +293,85 @@ gulp.task('html', function () {
         .pipe(gulp.dest('../laravel/resources/views/'));
 });
 
+gulp.task('watch', function () {
+	livereload.listen();
+	watch(config.js.files.input)
+		.on('change', function(file) {
+			gulp.start('js:files');
+			gulp.start('refresh');
+		}).on('add', function(file) {
+			gulp.start('js:files');
+			gulp.start('refresh');
+		}).on('unlink', function(file) {
+			gulp.start('js:files');
+			gulp.start('refresh');
+		});
 
-//
-//// Watch task
-//gulp.task('watch:files', [], function () {
-//    gulp.watch('build.config.js', ['js:vendor']);
-//
-//    gulp.watch(files.js.app, ['js:app']);
-//
-//    gulp.watch(files.html.tpls.modules, ['js:templates-modules']);
-//
-//    gulp.watch(files.html.tpls.common, ['js:templates-common']);
-//
-//    gulp.watch([
-//        'src/less/**/*.less',
-//        'src/common/**/*.less',
-//        'src/modules/**/*.less'
-//    ], ['css']);
-//
-//    gulp.watch(files.html.index, ['html']);
-//
-//    gulp.watch(files.img.src, ['img']);
-//
-//    // Livereload
-//    var server = livereload();
-//
-//    gulp.watch('../public_html/**/*', function (event) {
-//        server.changed(event.path);
-//    });
-//});
-//
-//// Build, run server watch for changes.
-//gulp.task('watch', function (callback) {
-//    runSequence(
-//        'watch:files',
-//        'serverphp',
-//        callback);
-//});
-//
-//// Same as watch:files.
-//gulp.task('default', ['watch:files']);
-//
-///**
-// * Generate tasks for Angular JS template caching
-// *
-// * @param {string} folder
-// * @return stream
-// */
-//function gulpJSTemplates(folder) {
-//
-//}
-//
-///**
-// * Generate cleaning tasks.
-// *
-// * @param {string} folder
-// * @return stream
-// */
-//function gulpClean(folder) {
-//    gulp.task('clean:' + folder, function () {
-//		rimraf('./folder', cb);
-//    });
-//}
+	watch(config.js.vendor.input)
+		.on('change', function(file) {
+			gulp.start('js:vendor');
+			gulp.start('refresh');
+		}).on('add', function(file) {
+			gulp.start('js:vendor');
+			gulp.start('refresh');
+		}).on('unlink', function(file) {
+			gulp.start('js:vendor');
+			gulp.start('refresh');
+		});
 
-// Run server.
+	watch([config.html.tpl.common, config.html.tpl.modules])
+		.on('change', function(file) {
+			gulp.start('js:templates');
+			gulp.start('html');
+			gulp.start('refresh');
+		}).on('add', function(file) {
+			gulp.start('js:templates');
+			gulp.start('html');
+			gulp.start('refresh');
+		}).on('unlink', function(file) {
+			gulp.start('js:templates');
+			gulp.start('html');
+			gulp.start('refresh');
+		});
+
+	watch(config.assets.images.input)
+		.on('change', function(file) {
+			gulp.start('build:images');
+			gulp.start('refresh');
+		}).on('add', function(file) {
+			gulp.start('build:images');
+			gulp.start('refresh');
+		}).on('unlink', function(file) {
+			gulp.start('build:images');
+			gulp.start('refresh');
+		});
+
+	watch(config.assets.svg.input)
+		.on('change', function(file) {
+			gulp.start('build:svg');
+			gulp.start('refresh');
+		}).on('add', function(file) {
+			gulp.start('build:svg');
+			gulp.start('refresh');
+		}).on('unlink', function(file) {
+			gulp.start('build:svg');
+			gulp.start('refresh');
+		});
+
+	watch('src/**/*.less')
+		.on('change', function(file) {
+			gulp.start('css');
+			gulp.start('refresh');
+		}).on('add', function(file) {
+			gulp.start('css');
+			gulp.start('refresh');
+		}).on('unlink', function(file) {
+			gulp.start('css');
+			gulp.start('refresh');
+		});
+});
+
+// Run livereload after file change
+gulp.task('refresh', function () {
+	livereload.changed();
+});
