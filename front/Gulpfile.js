@@ -85,7 +85,7 @@ gulp.task('clean:test', function () {
 
 // create a file with all JS vendors
 gulp.task('js:vendor', function() {
-	var condition = (environment === 'dev'),
+	var condition = (environment !== 'dev'),
 		jsDev = lazypipe()
 			.pipe(header, config.banner.full, { pkg: pkg });
 
@@ -115,8 +115,7 @@ gulp.task('js:files', function () {
 			+ '})( window, window.angular );')
 			.pipe(header, config.banner.min, { pkg: pkg })
 			.pipe(rename, { suffix: '.min' })
-			.pipe(uglify, {outSourceMap: filename + '.map'})
-
+			.pipe(uglify, {outSourceMap: filename + '.map'});
 
 	return gulp.src(config.js.files.input)
 		.pipe(plumber())
@@ -206,7 +205,7 @@ gulp.task('js:templates', function () {
 	return gulp.src([config.html.tpl.common, config.html.tpl.modules])
 		.pipe(plumber())
 		.pipe(html2js({
-			outputModuleName: 'templates',
+			outputModuleName: 'templates-app',
 			useStrict: true,
 			base: 'src/'
 		}))
@@ -297,12 +296,15 @@ gulp.task('watch', function () {
 	livereload.listen();
 	watch(config.js.files.input)
 		.on('change', function(file) {
+			gulp.start('jshint');
 			gulp.start('js:files');
 			gulp.start('refresh');
 		}).on('add', function(file) {
+			gulp.start('jshint');
 			gulp.start('js:files');
 			gulp.start('refresh');
 		}).on('unlink', function(file) {
+			gulp.start('jshint');
 			gulp.start('js:files');
 			gulp.start('refresh');
 		});
@@ -333,6 +335,18 @@ gulp.task('watch', function () {
 			gulp.start('html');
 			gulp.start('refresh');
 		});
+	watch([config.html.input])
+		.on('change', function(file) {
+			gulp.start('html');
+			gulp.start('refresh');
+		}).on('add', function(file) {
+			gulp.start('html');
+			gulp.start('refresh');
+		}).on('unlink', function(file) {
+			gulp.start('html');
+			gulp.start('refresh');
+		});
+
 
 	watch(config.assets.images.input)
 		.on('change', function(file) {

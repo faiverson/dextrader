@@ -1,27 +1,26 @@
-(function(){
-    angular.module('app.http-services', ['app.site-configs'])
-        .factory('UserService', ['$http', '$q', '$site-configs', function($http, $q, $configs){
-            var service = $configs.API_BASE_URL + 'users';
 
-            function getUsers(){
-                var deferred = $q.defer(),
-                    endpoint = service;
+angular.module('app.http-services', ['app.site-configs'])
+.factory('UserService', ['$http', '$q', '$site-configs', function($http, $q, $configs){
+		var service = $configs.API_BASE_URL + 'users';
 
-                function success(res){
-                    deferred.resolve(res.data);
-                }
+		function getUsers(){
+			var deferred = $q.defer(),
+				endpoint = service;
 
-                function error(res){
-                    deferred.reject(res);
-                }
+			function success(res){
+				deferred.resolve(res.data);
+			}
 
-				$http.get(endpoint).then(success, error);
+			function error(res){
+				deferred.reject(res);
+			}
 
-                return deferred.promise;
-            }
+			$http.get(endpoint).then(success, error);
 
-			return {
-				getUsers: getUsers
-			};
-        }]);
-})();
+			return deferred.promise;
+		}
+
+		return {
+			getUsers: getUsers
+		};
+	}]);

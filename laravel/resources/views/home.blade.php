@@ -28,10 +28,9 @@
 		Please <a href="http://browsehappy.com/">upgrade your browser</a>
 		to improve your experience.
 	</p><![endif]-->
-
-<div data-ng-include="'shared/header/header.tpl.html'"></div>
+<div data-ng-include="'modules/shared/header/header.tpl.html'"></div>
 <div ui-view></div>
-<div data-ng-include="'shared/footer/footer.tpl.html'"></div>
+<div data-ng-include="'modules/shared/footer/footer.tpl.html'"></div>
 <script type="text/javascript" src="http://localhost:35729/livereload.js"></script>
 <script type="text/javascript" src="/js/vendor.js"></script>
 <script type="text/javascript" src="/js/templates.js"></script>

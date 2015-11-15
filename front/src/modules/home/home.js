@@ -3,7 +3,7 @@ angular.module('app.home', ['ui.router'])
         $stateProvider
             .state('home', {
                 url: '/home',
-                templateUrl: 'home/home.tpl.html',
+                templateUrl: 'modules/home/home.tpl.html',
                 controller: 'HomeCtrl',
                 data: {
                     pageTitle: 'Home'
@@ -25,8 +25,8 @@ angular.module('app.home', ['ui.router'])
             };
 
             vm.getUsers = function(page){
-                function success(res){
-                    $scope.users = res.splice(($scope.pagination.currentPage - 1)* $scope.pagination.itemsPerPage, $scope.pagination.itemsPerPage);
+                function success(response){
+                    $scope.users = response.data.splice(($scope.pagination.currentPage - 1)* $scope.pagination.itemsPerPage, $scope.pagination.itemsPerPage);
                 }
 
                 function error(res){
