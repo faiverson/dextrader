@@ -1,18 +1,20 @@
-	angular.module('app.views', ['app.home', 'ui.router']);
+angular.module('app.views', ['app.home', 'ui.router']);
 
-	angular.module('app', [
-		'templates-app',
-		'app.header',
-		'app.footer',
-		'app.home',
-		'ui.bootstrap.tpls',
-		'ui.bootstrap',
-		'app.http-services'
-	])
+angular.module('app', [
+    'templates-app',
+    'app.header',
+    'app.footer',
+    'app.home',
+    'ui.bootstrap.tpls',
+    'ui.bootstrap',
+    'app.http-services'
+])
 
-    .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider) {
+    .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider) {
 
-        $urlRouterProvider.otherwise('/home');
+        $urlRouterProvider.otherwise('/users');
+
+        showErrorsConfigProvider.showSuccess(true);
     })
 
     .run(function run() {

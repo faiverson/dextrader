@@ -387,5 +387,5 @@ gulp.task('watch', function () {
 
 // Run livereload after file change
 gulp.task('refresh', function () {
-	livereload.changed();
+	livereload.changed('');
 });

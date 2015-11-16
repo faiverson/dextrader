@@ -34,7 +34,7 @@ class UsersController extends Controller
             'msg' => $msg
         );
         $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-        $beautymail->send('emails.contact', $params, function($message) {
+        $beautymail->send('emails.contact', $params, function ($message) {
             $message
                 ->from('system@xxx.com.ar')
                 ->to('info@xxx.com.ar')
@@ -44,8 +44,9 @@ class UsersController extends Controller
         return array('success' => true);
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $id = $request->get('id');
 //        $raw = DB::raw('CASE role
 //                    WHEN 1 THEN "Usuario"
 //                    WHEN 2 THEN "Editor"
@@ -55,14 +56,20 @@ class UsersController extends Controller
 //            ->select('id', 'first_name', 'last_name', 'username', 'email', 'created_at', 'updated_at', $raw)
 //            ->where('id', '!=', Auth::user()->id);
 //        return Datatables::of($query)->make(true);
-		$user = User::with('role')->where('active', 1)->get();
-		return response()->info($user);
+        if (isset($id)) {
+            $user = User::with('role')->where('id', $request->get('id'))->where('active', 1)->first();
+        } else {
+
+            $user = User::with('role')->where('active', 1)->get();
+        }
+
+        return response()->info($user);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -74,26 +81,26 @@ class UsersController extends Controller
             'email' => 'required|email|unique:users|',
             'username' => 'required|unique:users',
             'password' => 'required',
-            'role' => 'required|integer',
+            'role_id' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
-			return response()->error($validator->errors()->all());
+            return response()->error($validator->errors()->all());
         }
         $user->first_name = $request->get('first_name');
         $user->last_name = $request->get('last_name');
         $user->email = $request->get('email');
         $user->username = $request->get('username');
         $user->password = bcrypt($request->get('password'));
-        $user->role = $request->get('role');
+        $user->role_id = $request->get('role_id');
         $user->save();
-		return response()->info();
+        return response()->info();
     }
 
     /**
      * Edit the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request)
@@ -105,13 +112,12 @@ class UsersController extends Controller
             'last_name' => 'required',
             'email' => 'required|email|unique:users,id,' . $user->id,
             'username' => 'required|unique:users,id,' . $user->id,
-            'password' => 'required',
-            'role' => 'required|integer',
+            'role_id' => 'required|integer',
         ]);
 
-		if ($validator->fails()) {
-			return response()->error($validator->errors()->all());
-		}
+        if ($validator->fails()) {
+            return response()->error($validator->errors()->all());
+        }
 
         $user->update([
             'first_name' => $request->get('first_name'),
@@ -119,21 +125,21 @@ class UsersController extends Controller
             'email' => $request->get('email'),
             'username' => $request->get('username'),
             'password' => bcrypt($request->get('password')),
-            'role' => $request->get('role')
+            'role_id' => $request->get('role_id')
         ]);
-		return response()->info();
+        return response()->info();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
     {
         $id = $request->get('id');
         User::destroy($id);
-		return response()->info();
+        return response()->info();
     }
 }

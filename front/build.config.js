@@ -37,7 +37,8 @@ module.exports = {
 				'vendor/angular-ui-router/release/angular-ui-router.js',
 				'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
 				'vendor/angular-datatables/dist/angular-datatables.js',
-				'vendor/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.js'
+				'vendor/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.js',
+                'vendor/angular-bootstrap-show-errors/src/showErrors.js'
 			],
 			output: 'vendor.js'
 		},

@@ -1,0 +1,97 @@
+<div class="home">
+    <div class="container">
+        <h1>Form example</h1>
+
+        <form name="userForm" novalidate="novalidate">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">General Information</div>
+                        <div class="panel-body">
+                            <div class="form-group" data-show-errors>
+                                <label for="first_name">First Name</label>
+                                <input type="text"
+                                       name="first_name"
+                                       class="form-control"
+                                       id="first_name"
+                                       data-ng-model="user.first_name"
+                                       placeholder="First Name" required>
+                            </div>
+                            <div class="form-group" data-show-errors>
+                                <label for="last_name">Last Name</label>
+                                <input type="text"
+                                       name="last_name"
+                                       class="form-control"
+                                       id="last_name"
+                                       placeholder="Last Name"
+                                       data-ng-model="user.last_name"
+                                       required>
+                            </div>
+                            <div class="form-group" data-show-errors>
+                                <label for="role">User Role</label>
+                                <select type="text"
+                                       name="role"
+                                       class="form-control"
+                                       id="role"
+                                       placeholder="User role"
+                                       data-ng-change="user.role_id = selectedRole.id"
+                                       data-ng-model="selectedRole"
+                                       data-ng-options="role.name for role in roles"
+                                       required>
+
+                                    </select>
+                            </div>
+                            <div class="form-group" data-show-errors>
+                                <label for="email">Email</label>
+                                <input type="email"
+                                       name="email"
+                                       class="form-control"
+                                       id="email"
+                                       placeholder="Email"
+                                       data-ng-model="user.email"
+                                       required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Auth Information</div>
+                        <div class="panel-body">
+                            <div class="form-group" data-show-errors>
+                                <label for="username">Username</label>
+                                <input type="username"
+                                       name="username"
+                                       class="form-control"
+                                       id="username"
+                                       required
+                                       data-ng-minlength="4"
+                                       data-ng-model="user.username"
+                                       placeholder="Username">
+                            </div>
+                            <div class="form-group" data-show-errors>
+                                <label for="password">Password</label>
+                                <input type="password"
+                                       name="password"
+                                       class="form-control"
+                                       id="password"
+                                       required
+                                       data-ng-minlength="4"
+                                       data-ng-model="user.password"
+                                       placeholder="Password">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body text-right">
+                            <button class="btn btn-success" data-ng-click="save()">Save</button>
+                            <button class="btn btn-danger">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
