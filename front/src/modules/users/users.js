@@ -87,7 +87,7 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors'])
             };
 
             vm.errorUserSave = function (err) {
-                console.log('error', err)
+                console.log('error', err);
             };
 
             vm.getUserRoles = function () {

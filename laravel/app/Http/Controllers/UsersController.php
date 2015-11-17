@@ -56,6 +56,7 @@ class UsersController extends Controller
 //            ->select('id', 'first_name', 'last_name', 'username', 'email', 'created_at', 'updated_at', $raw)
 //            ->where('id', '!=', Auth::user()->id);
 //        return Datatables::of($query)->make(true);
+
         if (isset($id)) {
             $user = User::with('role')->where('id', $request->get('id'))->where('active', 1)->first();
         } else {
@@ -66,13 +67,21 @@ class UsersController extends Controller
         return response()->info($user);
     }
 
+    public function show($id)
+    {
+        $user = User::with('role')->where('id', $id)->where('active', 1)->first();
+
+        return response()->info($user);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public
+    function store(Request $request)
     {
         $user = new User();
         $validator = Validator::make($request->all(), [
@@ -103,7 +112,8 @@ class UsersController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
+    public
+    function edit(Request $request)
     {
         $id = $request->get('id');
         $user = User::find($id);
@@ -136,7 +146,8 @@ class UsersController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public
+    function destroy(Request $request)
     {
         $id = $request->get('id');
         User::destroy($id);

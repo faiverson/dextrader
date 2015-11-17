@@ -9,6 +9,7 @@ Route::get('', function () {
 //Route::group(['prefix' => 'api', 'before' => 'csrf',], function () {
 Route::group(['prefix' => 'api', 'before' => 'csrf'], function () {
 	Route::get('/users', 'UsersController@index');
+    Route::get('/users/{id}', 'UsersController@show');
 	Route::post('/users', 'UsersController@store');
 	Route::put('/users', 'UsersController@edit');
 	Route::delete('/users', 'UsersController@destroy');
