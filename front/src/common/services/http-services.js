@@ -41,13 +41,13 @@ angular.module('app.http-services', ['app.site-configs'])
 
         function getUser(id) {
             var deferred = $q.defer(),
-                endpoint = service;
+                endpoint = service + '/';
 
             if(angular.isUndefined(id)){
                 deferred.reject('User id not found!');
             }
 
-            endpoint += '?id=' + id;
+            endpoint += id;
 
             function success(res) {
                 deferred.resolve(res.data);

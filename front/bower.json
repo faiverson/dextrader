@@ -11,6 +11,7 @@
     "angular-bootstrap-show-errors": "~2.3.0"
   },
   "devDependencies": {
-    "angular-cookies": "~1.4.7"
+    "angular-cookies": "~1.4.7",
+    "satellizer": "~0.13.0"
   }
 }
