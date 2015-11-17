@@ -1,7 +1,7 @@
 <div class="auth">
     <div class="container">
         <h1>Login</h1>
-        <form name="authForm" novalidate="novalidate">
+        <form name="loginForm" novalidate="novalidate" data-ng-init="setFromScope(this)">
             <div class="row">
                 <div class="col-md-6">
                     <div class="panel panel-default">
@@ -9,7 +9,7 @@
                         <div class="panel-body">
 							<div class="form-group" data-show-errors>
 								<label for="username">Username</label>
-								<input type="username"
+								<input type="text"
 									   name="username"
 									   class="form-control"
 									   id="username"
