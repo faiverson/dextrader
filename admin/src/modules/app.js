@@ -49,7 +49,7 @@
         $scope.links = [
             {
 				state: 'home',
-				text: 'Home',
+				text: 'Admin',
 				icon: 'home'
 			}
         ];

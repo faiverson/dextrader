@@ -2,7 +2,7 @@ angular.module('app.site-configs', [])
 
 .provider('$site-configs', function () {
 	var globals = {
-		API_BASE_URL: 'http://localhost:8000/api/'
+		API_BASE_URL: 'http://localhost:8005/admin/api/'
 	};
 
 	return {
