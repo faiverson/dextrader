@@ -9,12 +9,13 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 class User extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
                                     CanResetPasswordContract
 {
-    use Authenticatable, Authorizable, CanResetPassword;
+    use Authenticatable, CanResetPassword, EntrustUserTrait;
 
     /**
      * The database table used by the model.
@@ -28,17 +29,12 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-	protected $fillable = ['first_name', 'last_name', 'username', 'email', 'active', 'role', 'password'];
+	protected $fillable = ['first_name', 'last_name', 'username', 'email', 'active', 'password'];
 
     /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token', 'role_id', 'active' ,'deleted_at', 'updated_at', 'created_at'];
-
-	public function role()
-	{
-		return $this->hasOne('Role', 'id', 'role_id');
-	}
+    protected $hidden = ['password', 'remember_token', 'active' ,'deleted_at', 'updated_at', 'created_at'];
 }

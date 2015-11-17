@@ -149,6 +149,7 @@ return [
 		yajra\Datatables\DatatablesServiceProvider::class,
 		Snowfire\Beautymail\BeautymailServiceProvider::class,
 		Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+		Zizaco\Entrust\EntrustServiceProvider::class
 
 
     ],
@@ -204,9 +205,11 @@ return [
 		'Beautymail'=> Snowfire\Beautymail\Beautymail::class,
 		'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
 		'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+		'Entrust' => Zizaco\Entrust\EntrustFacade::class,
 
 		'User' => App\Models\User::class,
 		'Role' => App\Models\Role::class,
+		'Permission' => App\Models\Permission::class,
     ],
 
 ];

@@ -14,25 +14,36 @@ class RoleSeeder extends Seeder
     {
         $this->command->info("Starting to seed roles");
 
-        // creates the admin user
+		Role::unguard();
         Role::create([
-            'id' => 1,
-            'role' => 'user',
+            'name' => 'owner',
+			'display_name' => 'Application God',
+			'description' => 'This role can do everything',
         ]);
 
         Role::create([
-            'id' => 5,
-            'role' => 'editor',
+			'name' => 'admin',
+			'display_name' => 'Aministrator',
+			'description' => 'This role is an admin'
         ]);
 
 		Role::create([
-			'id' => 9,
-			'role' => 'admin',
+			'name' => 'editor',
+			'display_name' => 'Editor',
+			'description' => 'This role is an editor'
 		]);
 
         Role::create([
-            'id' => 10,
-            'role' => 'superadmin',
+			'name' => 'user',
+			'display_name' => 'User',
+			'description' => ''
         ]);
+
+		Role::create([
+			'name' => 'lead',
+			'display_name' => 'Lead',
+			'description' => ''
+		]);
+		Role::reguard();
     }
 }

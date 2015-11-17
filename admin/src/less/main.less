@@ -1,0 +1,30 @@
+// Import bootstrap.
+@import '../../vendor/bootstrap/less/bootstrap.less';
+// This is the main variables file. Can be used to override bootstrap's less variables.
+// You can also put your custom variables here.
+@import 'variables.less';
+// ADD CSS FILES HERE
+@import (inline) "../../vendor/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.css";
+
+// Custom CSS rules.
+body {
+  padding-top: 50px;
+}
+
+footer {
+  border-top: 10px solid @blue;
+  padding: 20px 0;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.navbar-default {
+	background-color: @blue;
+	border-color: @blue;
+
+	.navbar-collapse,
+	.navbar-form {
+		background-color: @blue;
+		border-color: @blue;
+	}
+}

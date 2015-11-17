@@ -21,10 +21,10 @@ module.exports = {
 		' *\n' +
 		' */\n\n'
 	},
-    port: 8000,
+    port: 8005,
 	paths: {
 		input: 'src/**/*',
-		output: '../public_html/'
+		output: '../public_html/admin/'
 	},
 	js: {
 		vendor: {
@@ -36,6 +36,7 @@ module.exports = {
 				'vendor/angular-cookies/angular-cookies.js',
 				'vendor/angular-mocks/angular-mocks.js',
 				'vendor/angular-ui-router/release/angular-ui-router.js',
+				'vendor/satellizer/satellizer.js',
 				'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
 				'vendor/angular-datatables/dist/angular-datatables.js',
 				'vendor/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.js',
@@ -49,7 +50,7 @@ module.exports = {
 				'!src/**/*.spec.js',
 				'!src/**/*.scenario.js'
 			],
-			output: '../public_html/js/'
+			output: '../public_html/admin/js/'
 		}
 	},
 	less: {
@@ -58,7 +59,7 @@ module.exports = {
 			'src/common/**/*.less',
 			'src/modules/**/*.less'
 		],
-		output: '../public_html/css/'
+		output: '../public_html/admin/css/'
 	},
 	html: {
 		input: 'src/index.html',
@@ -71,11 +72,11 @@ module.exports = {
 	assets: {
 		images: {
 			input: ['src/assets/**/*.{png,gif,jpeg,jpg}'],
-			output: '../public_html/assets/'
+			output: '../public_html/admin/assets/'
 		},
 		svg: {
 			input: 'src/assets/**/*.svg',
-			output: '../public_html/assets/'
+			output: '../public_html/admin/assets/'
 		}
 	},
 	docs: {
