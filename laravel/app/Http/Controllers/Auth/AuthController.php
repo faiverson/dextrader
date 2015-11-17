@@ -62,10 +62,9 @@ class AuthController extends Controller
 	 */
 	public function login(Request $request)
 	{
-		$email = $request->input('email');
-		$username = $request->input('username');
-		$password = $request->input('password');
-
+		$email = $request->json('email');
+		$username = $request->json('username');
+		$password = $request->json('password');
 		if(($email || $username)  && $password) {
 			$user = $this->setUsernameLogin($email, $username);
 			$user['password'] = $password;

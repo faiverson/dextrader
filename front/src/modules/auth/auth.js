@@ -35,6 +35,7 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors', 'ngCookies']
 			$http({
 				url: '/api/login',
 				method: 'POST',
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
 				withCredentials: false,
 				data: credentials
 			}).then(function(response) {
