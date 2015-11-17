@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
-use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use User;
+use Validator;
+use JWTAuth;
+use Auth;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -30,7 +34,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => 'getLogout']);
+//        $this->middleware('guest', ['except' => 'logout']);
     }
 
     /**
@@ -41,25 +45,71 @@ class AuthController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:6',
-        ]);
+		return Validator::make($data, [
+			'username' => 'required|max:255|unique:users',
+			'email' => 'required|email|max:255|unique:users',
+			'password' => 'required|confirmed|min:6',
+		]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
-    }
+	/**
+	 * @param Request $request
+	 * @return mixed
+	 *
+	 * We can set a email or username to create the authentication
+	 * after this the session is created
+	 *
+	 */
+	public function login(Request $request)
+	{
+		$email = $request->input('email');
+		$username = $request->input('username');
+		$password = $request->input('password');
+
+		if(($email || $username)  && $password) {
+			$user = $this->setUsernameLogin($email, $username);
+			$user['password'] = $password;
+			try {
+				if(Auth::attempt($user)) {
+					$user = Auth::user();
+					$customClaims = $user->toArray();
+					$customClaims['iss'] = 'login';
+					$customClaims['exp'] = strtotime('+7 days', time());
+					unset($customClaims['id']);
+					$token = JWTAuth::fromUser($user, $customClaims);
+					if($token) {
+						return response()->ok(compact('token'));
+					}
+				}
+				return response()->error('Invalid Credentials', 401);
+			}
+			catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+				return response()->json(['Token expired'], $e->getStatusCode());
+			}
+			catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+				return response()->error('Token invalid', $e->getStatusCode());
+			}
+			catch (JWTException $e) {
+				return response()->error('Could not create a token', $e->getStatusCode());
+			}
+		}
+		return response()->error("The credentials are wrong", 400);
+	}
+
+	public function logout(Request $request)
+	{
+		//Auth::logout();
+		JWTAuth::invalidate(JWTAuth::getToken());
+		return response()->ok();
+	}
+
+	protected function setUsernameLogin($email, $username)
+	{
+		if(empty($email)) {
+			return array('username' => $username, 'password' => '');
+		} else {
+			return array('email' => $email, 'password' => '');
+		}
+	}
+
 }

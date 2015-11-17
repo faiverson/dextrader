@@ -27,13 +27,13 @@ class UserSeeder extends Seeder
         ]);
 
         // common users
-        foreach(range(2, 10) as $index) {
+        foreach(range(2, 100) as $index) {
             User::create([
                 'first_name' => $faker->firstName,
                 'last_name' => $faker->lastName,
                 'username' => str_replace('.', '_', $faker->unique()->userName),
                 'email' => $faker->email,
-                'password' => bcrypt('password'), //$faker->word
+                'password' => bcrypt('password'),
                 'role_id' => 1
             ]);
         }

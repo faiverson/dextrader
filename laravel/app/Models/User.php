@@ -35,7 +35,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password', 'remember_token', 'role_id', 'active' ,'deleted_at', 'updated_at', 'created_at'];
 
 	public function role()
 	{
