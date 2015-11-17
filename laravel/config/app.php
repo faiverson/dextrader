@@ -148,6 +148,8 @@ return [
 
 		yajra\Datatables\DatatablesServiceProvider::class,
 		Snowfire\Beautymail\BeautymailServiceProvider::class,
+		Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+
 
     ],
 
@@ -200,6 +202,8 @@ return [
 
 		'Datatables' => yajra\Datatables\Datatables::class,
 		'Beautymail'=> Snowfire\Beautymail\Beautymail::class,
+		'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
+		'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
 
 		'User' => App\Models\User::class,
 		'Role' => App\Models\Role::class,

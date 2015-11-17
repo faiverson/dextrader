@@ -14,9 +14,8 @@ angular.module('app.http-services', ['app.site-configs'])
                 deferred.reject(res);
             }
 
-            $http.get(endpoint).then(success, error);
-
-            return deferred.promise;
+			$http.get(endpoint).then(success, error);
+			return deferred.promise;
         }
 
         function save(data) {
@@ -82,5 +81,5 @@ angular.module('app.http-services', ['app.site-configs'])
 
         return {
             getRoles: getRoles
-        }
+        };
     }]);

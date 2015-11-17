@@ -33,10 +33,19 @@ class ResponseServiceProvider extends ServiceProvider
 			return Response($response, $code);
 		});
 
-		Response::macro('info', function($value = null , $code = 200) {
+		Response::macro('ok', function($value = null , $code = 200) {
 			$response = array(
-				'success' => true,
-				'data' => $value
+				'success' => true
+			);
+			if($value != null) {
+				$response['data'] = $value;
+			}
+			return Response($response, $code);
+		});
+
+		Response::macro('added', function($value = null , $code = 201) {
+			$response = array(
+				'success' => true
 			);
 
 			return Response($response, $code);

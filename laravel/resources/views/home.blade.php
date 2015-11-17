@@ -10,7 +10,6 @@
 <meta content="width=device-width,initial-scale=1" name="viewport">
 <meta name="author" content="Real Creators">
 <meta name="description" content="">
-<meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="apple-touch-icon-144x144-precomposed.png">
@@ -37,7 +36,8 @@
 <script type="text/javascript" src="/js/modules/app.js"></script>
 <script type="text/javascript" src="/js/common/services/http-services.js"></script>
 <script type="text/javascript" src="/js/common/services/site-configs.js"></script>
-<script type="text/javascript" src="/js/modules/home/home.js"></script>
+<script type="text/javascript" src="/js/modules/auth/auth.js"></script>
+<script type="text/javascript" src="/js/modules/users/users.js"></script>
 <script type="text/javascript" src="/js/modules/shared/footer/footer.js"></script>
 <script type="text/javascript" src="/js/modules/shared/header/header.js"></script>
 </body>

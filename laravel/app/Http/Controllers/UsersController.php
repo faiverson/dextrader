@@ -44,27 +44,21 @@ class UsersController extends Controller
         return array('success' => true);
     }
 
-    public function index(Request $request)
+    public function show($id)
     {
-        $id = $request->get('id');
-//        $raw = DB::raw('CASE role
-//                    WHEN 1 THEN "Usuario"
-//                    WHEN 2 THEN "Editor"
-//                    WHEN 3 THEN "Administrador"
-//                    END AS role ');
-//        $query = DB::table('users')
-//            ->select('id', 'first_name', 'last_name', 'username', 'email', 'created_at', 'updated_at', $raw)
-//            ->where('id', '!=', Auth::user()->id);
-//        return Datatables::of($query)->make(true);
         if (isset($id)) {
-            $user = User::with('role')->where('id', $request->get('id'))->where('active', 1)->first();
+            $user = User::with('role')->where('id', $id)->where('active', 1)->first();
+			return response()->ok($user);
         } else {
-
-            $user = User::with('role')->where('active', 1)->get();
-        }
-
-        return response()->info($user);
+			return response()->error('User not found');
+		}
     }
+
+	public function index(Request $request)
+	{
+		$user = User::with('role')->where('active', 1)->get();
+		return response()->ok($user);
+	}
 
     /**
      * Store a newly created resource in storage.
@@ -94,7 +88,7 @@ class UsersController extends Controller
         $user->password = bcrypt($request->get('password'));
         $user->role_id = $request->get('role_id');
         $user->save();
-        return response()->info();
+        return response()->added();
     }
 
     /**
@@ -103,7 +97,7 @@ class UsersController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
+    public function update(Request $request)
     {
         $id = $request->get('id');
         $user = User::find($id);
@@ -127,7 +121,7 @@ class UsersController extends Controller
             'password' => bcrypt($request->get('password')),
             'role_id' => $request->get('role_id')
         ]);
-        return response()->info();
+        return response()->ok();
     }
 
     /**
@@ -140,6 +134,6 @@ class UsersController extends Controller
     {
         $id = $request->get('id');
         User::destroy($id);
-        return response()->info();
+        return response()->destroy();
     }
 }
