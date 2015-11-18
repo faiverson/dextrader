@@ -26,7 +26,9 @@ return [
     |
     */
 
-    'url' => 'http://localhost',
+    'url' => env('URL', 'http://localhost:8000'),
+	// the admin section
+	'admin' => env('ADMIN_URL', 'http://localhost:8005'),
 
     /*
     |--------------------------------------------------------------------------

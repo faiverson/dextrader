@@ -31,16 +31,16 @@ class UserSeeder extends Seeder
 		User::create([
 			'first_name' => 'fabian',
 			'last_name' => 'torres',
-			'username' => 'editor',
-			'email' => 'editor@gmail.com',
-			'password' => bcrypt('editor')
+			'username' => 'fabian',
+			'email' => 'fabian@gmail.com',
+			'password' => bcrypt('admin')
 		])->attachRole($role);
 
 		$role = Role::where('name', 'editor')->first();
 		User::create([
 			'first_name' => 'luciano',
 			'last_name' => 'sixfingers',
-			'username' => 'editor',
+			'username' => 'luciano',
 			'email' => 'luciano.sixfingers@gmail.com',
 			'password' => bcrypt('editor')
 		])->attachRole($role);
@@ -48,7 +48,7 @@ class UserSeeder extends Seeder
 		User::create([
 			'first_name' => 'juan',
 			'last_name' => 'borda',
-			'username' => 'editor',
+			'username' => 'juan',
 			'email' => 'juan@borda.com',
 			'password' => bcrypt('editor')
 		])->attachRole($role);

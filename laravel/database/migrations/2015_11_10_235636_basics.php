@@ -23,7 +23,7 @@ class Basics extends Migration
 			$table->increments('id');
 			$table->string('first_name', 50); //->nullable()
 			$table->string('last_name', 50);
-			$table->string('username', 50);
+			$table->string('username', 50)->unique('username');
 			$table->string('email')->unique('email');
 			$table->tinyInteger('active')->default(1);
 			$table->string('password', 200);
