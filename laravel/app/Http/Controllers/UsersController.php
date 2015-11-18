@@ -56,8 +56,27 @@ class UsersController extends Controller
 
 	public function index(Request $request)
 	{
-		$user = User::with('role')->where('active', 1)->get();
-		return response()->ok($user);
+		$draw = $request->input('draw');
+		$start = $request->input('start') ? $request->input('start') : 0;
+		$length = $request->input('length') ? $request->input('length') : 10;
+		$order = $request->input('order');
+
+		$order_by = $order[0] ? $order[0] : array();
+		$sort = ['id', 'first_name', 'last_name', 'username', 'email', 'created_at', 'updated_at'];
+		$fields = ['s.id', 'l.name as product', 's.datetime as created_at', 's.last_billing', 's.status'];
+
+		if(!array_key_exists("column", $order_by)) {
+			$order_by = " ORDER BY id DESC";
+		} else {
+			$key = $order_by['column'];
+			$order_by = " ORDER BY {$sort[$key]} {$order_by['dir']}";
+		}
+
+		$query = DB::table('users')
+			->select($fields)
+			->where('id', '!=', Auth::user()->id);
+		$query = User::where('active', 1)->with('roles')->orderBy('id')->get();
+		return Datatables::of($query)->make(true);
 	}
 
     /**

@@ -11,6 +11,8 @@ use JWTAuth;
 use Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Http\Request;
+use DB;
+use Hash;
 
 class AuthController extends Controller
 {
@@ -62,23 +64,37 @@ class AuthController extends Controller
 	 */
 	public function login(Request $request)
 	{
-		$email = $request->json('email');
-		$username = $request->json('username');
-		$password = $request->json('password');
+		$email = $request->input('email');
+		$username = $request->input('username');
+		$password = $request->input('password');
 		if(($email || $username)  && $password) {
-			$user = $this->setUsernameLogin($email, $username);
-			$user['password'] = $password;
 			try {
-				if(Auth::attempt($user)) {
-					$user = Auth::user();
-					$customClaims = $user->toArray();
-					$customClaims['iss'] = 'login';
-					$customClaims['exp'] = strtotime('+7 days', time());
-					unset($customClaims['id']);
-					$token = JWTAuth::fromUser($user, $customClaims);
-					if($token) {
-						return response()->ok(compact('token'));
-					}
+				$u = DB::table('users')
+					->select('id', 'password')
+					->where('active', 1)
+					->where(function($q) use ($email, $username)
+					{
+						$q->where('email', $email)
+							->orWhere('username', $username);
+					})
+					->first();
+				if(empty($u)) {
+					return response()->error('Invalid Credentials', 401);
+				}
+
+				if(!Hash::check($password, $u->password)) {
+					return response()->error('Wrong Password', 401);
+				}
+
+				$user = User::find($u->id);
+				$customClaims = $user->toArray();
+				$customClaims['iss'] = 'login';
+				$customClaims['exp'] = strtotime('+7 days', time());
+				unset($customClaims['id']);
+				Auth::login($user);
+				$token = JWTAuth::fromUser($user, $customClaims);
+				if($token) {
+					return response()->ok(compact('token'));
 				}
 				return response()->error('Invalid Credentials', 401);
 			}
@@ -100,15 +116,6 @@ class AuthController extends Controller
 		//Auth::logout();
 		JWTAuth::invalidate(JWTAuth::getToken());
 		return response()->ok();
-	}
-
-	protected function setUsernameLogin($email, $username)
-	{
-		if(empty($email)) {
-			return array('username' => $username, 'password' => '');
-		} else {
-			return array('email' => $email, 'password' => '');
-		}
 	}
 
 }

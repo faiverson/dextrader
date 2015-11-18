@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Config;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -24,8 +25,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(Router $router)
     {
-        //
-
         parent::boot($router);
     }
 
@@ -37,8 +36,16 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map(Router $router)
     {
-        $router->group(['namespace' => $this->namespace], function ($router) {
-            require app_path('Http/routes.php');
-        });
+		if(url() == Config::get('app.url')) {
+			$router->group(['namespace' => $this->namespace], function ($router) {
+				require app_path('Http/routes.php');
+			});
+		}
+		else if(url() == Config::get('app.admin')) {
+			$router->group(['namespace' => $this->namespace], function ($router) {
+				require app_path('Http/admin.routes.php');
+			});
+		}
+
     }
 }

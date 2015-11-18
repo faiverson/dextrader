@@ -11,6 +11,8 @@ use JWTAuth;
 use Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Http\Request;
+use DB;
+use Hash;
 
 class AuthController extends Controller
 {
@@ -62,26 +64,44 @@ class AuthController extends Controller
 	 */
 	public function login(Request $request)
 	{
-		$email = $request->json('email');
-		$username = $request->json('username');
-		$password = $request->json('password');
+		$email = $request->input('email');
+		$username = $request->input('username');
+		$password = $request->input('password');
 		if(($email || $username)  && $password) {
-			$user = $this->setUsernameLogin($email, $username);
-			$user['password'] = $password;
-			$user['role'] = $password;
 			try {
-				if(Auth::attempt($user)->hasRole(['owner', 'admin', 'editor'])) {
-					$user = Auth::user();
-					$customClaims = $user->toArray();
-					$customClaims['iss'] = 'admin/login';
-					$customClaims['exp'] = strtotime('+7 days', time());
-					unset($customClaims['id']);
-					$token = JWTAuth::fromUser($user, $customClaims);
-					if($token) {
-						return response()->ok(compact('token'));
-					}
+				$u = DB::table('users')
+					->select('id', 'password')
+					->where('active', 1)
+					->where(function($q) use ($email, $username)
+					{
+						$q->where('email', $email)
+							->orWhere('username', $username);
+					})
+					->first();
+
+				if(empty($u)) {
+					return response()->error('Invalid Credentials', 401);
 				}
-				return response()->error('Invalid Credentials', 401);
+
+				if(!Hash::check($password, $u->password)) {
+					return response()->error('Wrong Password', 401);
+				}
+
+				$user = User::find($u->id);
+				if($user->hasRole('owner', 'admin', 'editor')) {
+					return response()->error('Not Allowed', 401);
+				}
+
+				$customClaims = $user->toArray();
+				$customClaims['iss'] = 'admin/login';
+				$customClaims['exp'] = strtotime('+7 days', time());
+				unset($customClaims['id']);
+				Auth::login($user);
+				$token = JWTAuth::fromUser($user, $customClaims);
+				if($token) {
+					return response()->ok(compact('token'));
+				}
+
 			}
 			catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
 				return response()->json(['Token expired'], $e->getStatusCode());
