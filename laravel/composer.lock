@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0554a6bd7088aa5445585e9fd90675f5",
-    "content-hash": "2dba8e0509f62d3665139010cf0a2a1e",
+    "hash": "083d6ca452bceae3a612ecdfb6cf73de",
+    "content-hash": "382cb5421a13d8bd7953b7ba02c14cd3",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -2426,6 +2426,52 @@
             "time": "2015-04-02 19:54:00"
         },
         {
+            "name": "nicolaslopezj/searchable",
+            "version": "1.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nicolaslopezj/searchable.git",
+                "reference": "8d97d2c97dc17bc0795220b11b9ce0769d7d9173"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nicolaslopezj/searchable/zipball/8d97d2c97dc17bc0795220b11b9ce0769d7d9173",
+                "reference": "8d97d2c97dc17bc0795220b11b9ce0769d7d9173",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "illuminate/database": "4.2.x|~5.0",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Nicolaslopezj\\Searchable\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Lopez",
+                    "email": "nicolaslopezj@me.com"
+                }
+            ],
+            "description": "Eloquent model search trait.",
+            "keywords": [
+                "database",
+                "eloquent",
+                "laravel",
+                "model",
+                "search",
+                "searchable"
+            ],
+            "time": "2015-10-28 02:46:28"
+        },
+        {
             "name": "phpdocumentor/reflection-docblock",
             "version": "2.0.4",
             "source": {
@@ -3390,12 +3436,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jarektkaczyk/eloquence.git",
-                "reference": "8c3c8fa948355f9b77e068550e0682d8b054dab4"
+                "reference": "d569a329ae6c4f09aac04d68d93baeb80213b39f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jarektkaczyk/eloquence/zipball/8c3c8fa948355f9b77e068550e0682d8b054dab4",
-                "reference": "8c3c8fa948355f9b77e068550e0682d8b054dab4",
+                "url": "https://api.github.com/repos/jarektkaczyk/eloquence/zipball/d569a329ae6c4f09aac04d68d93baeb80213b39f",
+                "reference": "d569a329ae6c4f09aac04d68d93baeb80213b39f",
                 "shasum": ""
             },
             "require": {
@@ -3439,7 +3485,7 @@
                 "mutable",
                 "searchable"
             ],
-            "time": "2015-11-17 17:18:14"
+            "time": "2015-11-18 18:59:28"
         },
         {
             "name": "sofa/hookable",

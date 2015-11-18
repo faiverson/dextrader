@@ -17,7 +17,8 @@
         "phpunit/phpunit": "^4.0",
         "phpspec/phpspec": "^2.1",
 		"zizaco/entrust": "dev-laravel-5",
-		"sofa/eloquence": "~5.1@dev"
+		"sofa/eloquence": "~5.1@dev",
+		"nicolaslopezj/searchable": "1.*"
     },
     "autoload": {
         "classmap": [

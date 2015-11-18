@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     {
         $this->command->info("Starting to seed Users");
         $faker = Faker::create();
-
+//
         // creates the admin user
 		$role = Role::where('name', 'owner')->first();
 		User::create([
@@ -27,14 +27,14 @@ class UserSeeder extends Seeder
             'password' => bcrypt('admin')
         ])->attachRole($role->id);
 
-		$role = Role::where('name', 'admin')->first();
+		$roleAdmin = Role::where('name', 'admin')->first();
 		User::create([
 			'first_name' => 'fabian',
 			'last_name' => 'torres',
 			'username' => 'fabian',
 			'email' => 'fabian@gmail.com',
 			'password' => bcrypt('admin')
-		])->attachRole($role);
+		])->attachRole($roleAdmin);
 
 		$role = Role::where('name', 'editor')->first();
 		User::create([
@@ -51,17 +51,27 @@ class UserSeeder extends Seeder
 			'username' => 'juan',
 			'email' => 'juan@borda.com',
 			'password' => bcrypt('editor')
-		])->attachRole($role);
+		])->attachRoles([$role, $roleAdmin]);
 
         // common users
-        foreach(range(4, 500) as $index) {
-            User::create([
-                'first_name' => $faker->firstName,
-                'last_name' => $faker->lastName,
-                'username' => str_replace('.', '_', $faker->unique()->userName),
-                'email' => $faker->email,
-                'password' => bcrypt('password')
-            ]);
-        }
+		$total_batch = 10;
+		foreach(range(1, $total_batch) as $batch) {
+			$this->command->info("Starting batch " . $batch . " of " . $total_batch);
+			$users = [];
+			foreach (range(1, 50) as $index) {
+				try {
+					$users[] = [
+						'first_name' => $faker->firstName,
+						'last_name' => $faker->lastName,
+						'username' => str_replace('.', '_', $faker->unique()->userName),
+						'email' => $faker->unique()->email,
+						'password' => bcrypt('password')
+					];
+				} catch (Exception $e) {
+					var_dump($e);
+				}
+			}
+			DB::table('users')->insert($users);
+		}
     }
 }

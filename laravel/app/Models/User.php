@@ -31,7 +31,8 @@ class User extends Model implements AuthenticatableContract,
 
 	protected $maps = [
 //		'id' => 'user_id',
-		'name' => 'roles.display_name'
+//		'first_name' => '',
+//		'name' => 'roles.display_name'
 	];
 
 	protected $getterMutators = [
@@ -41,6 +42,7 @@ class User extends Model implements AuthenticatableContract,
 	];
 
 	protected $setterMutators = [
+		'username' => 'strtolower',
 		'first_name' => 'strtolower|ucwords',
 		'last_name' => 'strtolower|ucwords'
 	];
