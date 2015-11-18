@@ -4,7 +4,6 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'api'], function () {
-	echo 'prefix';
 	Route::post('/login', ['uses' => 'Auth\AuthController@login']);
 	Route::get('/logout', ['uses' => 'Auth\AuthController@logout']);
 

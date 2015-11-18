@@ -61,21 +61,22 @@ class UsersController extends Controller
 		$length = $request->input('length') ? $request->input('length') : 10;
 		$order = $request->input('order');
 
-		$order_by = $order[0] ? $order[0] : array();
+		$order_by = $order[0] ? $order[0] : array('column' => 0, 'dir' => 'asc');
 		$sort = ['id', 'first_name', 'last_name', 'username', 'email', 'created_at', 'updated_at'];
 		$fields = ['s.id', 'l.name as product', 's.datetime as created_at', 's.last_billing', 's.status'];
 
-		if(!array_key_exists("column", $order_by)) {
-			$order_by = " ORDER BY id DESC";
-		} else {
-			$key = $order_by['column'];
-			$order_by = " ORDER BY {$sort[$key]} {$order_by['dir']}";
-		}
+		$order_by['column'] = $sort[$order_by['column']];
 
-		$query = DB::table('users')
-			->select($fields)
-			->where('id', '!=', Auth::user()->id);
-		$query = User::where('active', 1)->with('roles')->orderBy('id')->get();
+//		$query = DB::table('users')
+//			->select($fields)
+//			->where('id', '!=', Auth::user()->id);
+
+		$query = User::where('active', 1)
+			->with('roles')
+			->skip($start)
+			->take($length)
+			->orderBy($order_by['column'], $order_by['dir'])
+			->get();
 		return Datatables::of($query)->make(true);
 	}
 
