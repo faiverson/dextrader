@@ -24,23 +24,25 @@ module.exports = {
     port: 8005,
 	paths: {
 		input: 'src/**/*',
-		output: '../public_html/admin/'
+		output: '../public_html/admin/',
+        server_path: '../public_html'
 	},
 	js: {
 		vendor: {
 			input: [
-				'vendor/jquery/dist/jquery.js',
-				'vendor/datatables/media/js/jquery.dataTables.js',
-				'vendor/bootstrap/dist/js/bootstrap.js',
-				'vendor/angular/angular.js',
-				'vendor/angular-cookies/angular-cookies.js',
-				'vendor/angular-mocks/angular-mocks.js',
-				'vendor/angular-ui-router/release/angular-ui-router.js',
-				'vendor/satellizer/satellizer.js',
-				'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
-				'vendor/angular-datatables/dist/angular-datatables.js',
-				'vendor/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.js',
-                'vendor/angular-bootstrap-show-errors/src/showErrors.js'
+                'vendor/jquery/dist/jquery.js',
+                'vendor/datatables/media/js/jquery.dataTables.js',
+                'vendor/bootstrap/dist/js/bootstrap.js',
+                'vendor/angular/angular.js',
+                'vendor/angular-cookies/angular-cookies.js',
+                'vendor/angular-mocks/angular-mocks.js',
+                'vendor/angular-ui-router/release/angular-ui-router.js',
+                'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
+                'vendor/angular-datatables/dist/angular-datatables.js',
+                'vendor/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.js',
+                'vendor/angular-bootstrap-show-errors/src/showErrors.js',
+                'vendor/angular-local-storage/dist/angular-local-storage.js',
+                'vendor/angular-jwt/dist/angular-jwt.js'
 			],
 			output: 'vendor.js'
 		},

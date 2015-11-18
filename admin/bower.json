@@ -11,5 +11,8 @@
     "angular-bootstrap-show-errors": "~2.3.0"
   },
   "devDependencies": {
+    "angular-cookies": "~1.4.7",
+    "angular-local-storage": "~0.2.3",
+    "angular-jwt": "~0.0.6"
   }
 }

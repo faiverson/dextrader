@@ -1,10 +1,9 @@
-
 angular.module('app.header', [])
     .controller('HeaderCtrl', ['$scope', '$state', 'AuthService', function ($scope, $state, AuthService) {
-        $scope.logout = function (){
+        $scope.logout = function () {
             AuthService.logout()
-                .then(function(){
+                .then(function () {
                     $state.go('login');
                 });
-        }
+        };
     }]);

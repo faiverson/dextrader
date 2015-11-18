@@ -1,5 +1,5 @@
 <?php
-Route::get('/admin', function () {
+Route::get('/', function () {
 	return view('admin.home');
 });
 
