@@ -65,7 +65,9 @@ class UserSeeder extends Seeder
 						'last_name' => $faker->lastName,
 						'username' => str_replace('.', '_', $faker->unique()->userName),
 						'email' => $faker->unique()->email,
-						'password' => bcrypt('password')
+						'password' => bcrypt('password'),
+						'created_at' => $faker->dateTimeThisYear('now'),
+						'updated_at' => $faker->dateTimeThisYear('now')
 					];
 				} catch (Exception $e) {
 					var_dump($e);

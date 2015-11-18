@@ -61,7 +61,7 @@ class UsersController extends Controller
 		$length = $request->input('length') ? $request->input('length') : 10;
 		$order = $request->input('order');
 
-		$order_by = $order[0] ? $order[0] : array('column' => 0, 'dir' => 'asc');
+		$order_by = $order[0] ? $order[0] : array('column' => 0, 'dir' => 'desc');
 		$sort = ['id', 'first_name', 'last_name', 'username', 'email', 'created_at', 'updated_at'];
 		$fields = ['s.id', 'l.name as product', 's.datetime as created_at', 's.last_billing', 's.status'];
 
@@ -94,8 +94,7 @@ class UsersController extends Controller
             'last_name' => 'required',
             'email' => 'required|email|unique:users|',
             'username' => 'required|unique:users',
-            'password' => 'required',
-            'role_id' => 'required|integer',
+            'password' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -106,7 +105,6 @@ class UsersController extends Controller
         $user->email = $request->get('email');
         $user->username = $request->get('username');
         $user->password = bcrypt($request->get('password'));
-        $user->role_id = $request->get('role_id');
         $user->save();
         return response()->added();
     }
@@ -125,8 +123,7 @@ class UsersController extends Controller
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email|unique:users,id,' . $user->id,
-            'username' => 'required|unique:users,id,' . $user->id,
-            'role_id' => 'required|integer',
+            'username' => 'required|unique:users,id,' . $user->id
         ]);
 
         if ($validator->fails()) {
@@ -138,8 +135,7 @@ class UsersController extends Controller
             'last_name' => $request->get('last_name'),
             'email' => $request->get('email'),
             'username' => $request->get('username'),
-            'password' => bcrypt($request->get('password')),
-            'role_id' => $request->get('role_id')
+            'password' => bcrypt($request->get('password'))
         ]);
         return response()->ok();
     }
