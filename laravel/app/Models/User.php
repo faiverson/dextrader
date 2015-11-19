@@ -30,7 +30,7 @@ class User extends Model implements AuthenticatableContract,
 	protected $dates = ['created_at', 'updated_at'];
 
 	protected $maps = [
-		'id' => 'user_id',
+		'user_id' => 'id',
 	];
 
 	protected $getterMutators = [

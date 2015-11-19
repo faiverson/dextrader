@@ -87,7 +87,7 @@ class AuthController extends Controller
 					return response()->error('Wrong Password', 401);
 				}
 
-				$user = User::find($u->id);
+				$user = User::with('roles.permissions')->find($u->id);
 				if(!$user->hasRole('owner') || !$user->hasRole('admin') || !$user->hasRole('editor')) {
 					return response()->error('Not Allowed', 401);
 				}
