@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Http\Request;
 use Config;
 
 class RouteServiceProvider extends ServiceProvider
@@ -34,18 +35,23 @@ class RouteServiceProvider extends ServiceProvider
      * @param  \Illuminate\Routing\Router  $router
      * @return void
      */
-    public function map(Router $router)
+    public function map(Router $router, Request $request)
     {
-		if(url() == Config::get('app.url')) {
-			$router->group(['namespace' => $this->namespace], function ($router) {
-				require app_path('Http/routes.php');
-			});
-		}
-		else if(url() == Config::get('app.admin')) {
-			$router->group(['namespace' => $this->namespace], function ($router) {
-				require app_path('Http/admin.routes.php');
-			});
+//		echo $request->path();
+//		echo '<br>'.$request->url();
+		$this->loadRoutesFrom(app_path('Http/Routes/routes.php'));
+		if ($request->is('abo*')) {
+			$this->loadRoutesFrom(app_path('Http/Routes/admin.php'));
 		}
 
+		$router->group(['prefix' => 'api'], function () use($request) {
+			if ($request->is('api/users*')) {
+				$this->loadRoutesFrom(app_path('Http/Routes/users.php'));
+			}
+
+			if ($request->is('api/roles*')) {
+				$this->loadRoutesFrom(app_path('Http/Routes/roles.php'));
+			}
+		});
     }
 }

@@ -88,9 +88,9 @@ class AuthController extends Controller
 				}
 
 				$user = User::find($u->id);
-//				if(!$user->hasRole('owner') || !$user->hasRole('admin') || !$user->hasRole('editor')) {
-//					return response()->error('Not Allowed', 401);
-//				}
+				if(!$user->hasRole('owner') || !$user->hasRole('admin') || !$user->hasRole('editor')) {
+					return response()->error('Not Allowed', 401);
+				}
 
 				$customClaims = $user->toArray();
 				$customClaims['iss'] = 'admin/login';
@@ -118,18 +118,8 @@ class AuthController extends Controller
 
 	public function logout(Request $request)
 	{
-		//Auth::logout();
 		JWTAuth::invalidate(JWTAuth::getToken());
 		return response()->ok();
-	}
-
-	protected function setUsernameLogin($email, $username)
-	{
-		if(empty($email)) {
-			return array('username' => $username, 'password' => '');
-		} else {
-			return array('email' => $email, 'password' => '');
-		}
 	}
 
 }

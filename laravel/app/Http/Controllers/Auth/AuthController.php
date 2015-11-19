@@ -86,12 +86,11 @@ class AuthController extends Controller
 					return response()->error('Wrong Password', 401);
 				}
 
-				$user = User::find($u->id);
+				$user = User::with('roles.permissions')->find($u->id);
 				$customClaims = $user->toArray();
 				$customClaims['iss'] = 'login';
 				$customClaims['exp'] = strtotime('+7 days', time());
 				unset($customClaims['id']);
-				Auth::login($user);
 				$token = JWTAuth::fromUser($user, $customClaims);
 				if($token) {
 					return response()->ok(compact('token'));
@@ -113,7 +112,6 @@ class AuthController extends Controller
 
 	public function logout(Request $request)
 	{
-		//Auth::logout();
 		JWTAuth::invalidate(JWTAuth::getToken());
 		return response()->ok();
 	}

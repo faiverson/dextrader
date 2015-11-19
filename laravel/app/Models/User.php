@@ -30,7 +30,7 @@ class User extends Model implements AuthenticatableContract,
 	protected $dates = ['created_at', 'updated_at'];
 
 	protected $maps = [
-//		'id' => 'user_id',
+		'id' => 'user_id',
 	];
 
 	protected $getterMutators = [
@@ -50,9 +50,10 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-	protected $fillable = ['first_name', 'last_name', 'username', 'email', 'active', 'password'];
+	protected $fillable = ['id', 'first_name', 'last_name', 'username', 'email', 'active', 'password'];
 
-	protected $appends = array('full_name');
+	protected $appends = array('full_name', 'user_id');
+
     /**
      * The attributes excluded from the model's JSON form.
      *
@@ -63,6 +64,11 @@ class User extends Model implements AuthenticatableContract,
 	public function getFullnameAttribute()
 	{
 		return ucfirst($this->attributes['first_name']) . " " . ucfirst($this->attributes['last_name']);
+	}
+
+	public function getUserIdAttribute()
+	{
+		return $this->attributes['id'];
 	}
 
 }

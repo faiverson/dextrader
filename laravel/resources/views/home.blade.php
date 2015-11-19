@@ -19,7 +19,7 @@
 <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png">
 <!--[if IE]><link rel="shortcut icon" href="favicon.ico"><![endif]-->
 <link rel="icon" type="image/png" href="favicon.png">
-<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="front/css/styles.css">
 </head>
 <body>
 <!--[if lt IE 8]><p class="browsehappy">
@@ -31,14 +31,14 @@
 <div ui-view></div>
 <div data-ng-include="'modules/shared/footer/footer.tpl.html'"></div>
 <script type="text/javascript" src="http://localhost:35729/livereload.js"></script>
-<script type="text/javascript" src="/js/vendor.js"></script>
-<script type="text/javascript" src="/js/templates.js"></script>
-<script type="text/javascript" src="/js/modules/app.js"></script>
-<script type="text/javascript" src="/js/common/services/http-services.js"></script>
-<script type="text/javascript" src="/js/common/services/site-configs.js"></script>
-<script type="text/javascript" src="/js/modules/auth/auth.js"></script>
-<script type="text/javascript" src="/js/modules/users/users.js"></script>
-<script type="text/javascript" src="/js/modules/shared/footer/footer.js"></script>
-<script type="text/javascript" src="/js/modules/shared/header/header.js"></script>
+<script type="text/javascript" src="/front/js/vendor.js"></script>
+<script type="text/javascript" src="/front/js/templates.js"></script>
+<script type="text/javascript" src="/front/js/modules/app.js"></script>
+<script type="text/javascript" src="/front/js/common/services/http-services.js"></script>
+<script type="text/javascript" src="/front/js/common/services/site-configs.js"></script>
+<script type="text/javascript" src="/front/js/modules/users/users.js"></script>
+<script type="text/javascript" src="/front/js/modules/auth/auth.js"></script>
+<script type="text/javascript" src="/front/js/modules/shared/footer/footer.js"></script>
+<script type="text/javascript" src="/front/js/modules/shared/header/header.js"></script>
 </body>
 </html>
