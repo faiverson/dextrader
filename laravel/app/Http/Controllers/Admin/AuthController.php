@@ -88,7 +88,7 @@ class AuthController extends Controller
 				}
 
 				$user = User::with('roles.permissions')->find($u->id);
-				if(!$user->hasRole('owner') || !$user->hasRole('admin') || !$user->hasRole('editor')) {
+				if(!$user->hasRole(['owner', 'admin', 'editor'])) {
 					return response()->error('Not Allowed', 401);
 				}
 
@@ -96,7 +96,6 @@ class AuthController extends Controller
 				$customClaims['iss'] = 'admin/login';
 				$customClaims['exp'] = strtotime('+7 days', time());
 				unset($customClaims['id']);
-				Auth::login($user);
 				$token = JWTAuth::fromUser($user, $customClaims);
 				if($token) {
 					return response()->ok(compact('token'));
