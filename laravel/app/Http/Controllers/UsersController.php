@@ -47,7 +47,7 @@ class UsersController extends Controller
     public function show($id)
     {
         if (isset($id)) {
-            $user = User::with('role')->where('id', $id)->where('active', 1)->first();
+            $user = User::with('roles')->where('id', $id)->where('active', 1)->first();
 			return response()->ok($user);
         } else {
 			return response()->error('User not found');
@@ -73,10 +73,11 @@ class UsersController extends Controller
 
 		$query = User::where('active', 1)
 			->with('roles')
-			->skip($start)
-			->take($length)
+			//->skip($start)
+			//->take($length)
 			->orderBy($order_by['column'], $order_by['dir'])
 			->get();
+
 		return Datatables::of($query)->make(true);
 	}
 

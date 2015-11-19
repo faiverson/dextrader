@@ -3,37 +3,8 @@
         <h1>Table example
         <button class="btn btn-sm btn-primary pull-right" ui-sref="users-new">NEW USER</button></h1>
         <div class="row">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Username</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="user in users">
-                        <td data-ng-bind="user.username"></td>
-                        <td data-ng-bind="user.last_name + ', ' + user.first_name" class="text-capitalize"></td>
-                        <td ng-bind="user.email"></td>
-                        <td ng-bind="user.role.role"></td>
-                        <td class="text-right">
-                            <button class="btn btn-primary"
-                                    ui-sref="users-edit({id: user.id})">Edit</button>
-                        </td>
-                    </tr>
-                </tbody>
+            <table class="table" datatable="" dt-options="dtOptions" dt-columns="dtColumns">
             </table>
-            <div class="pull-right">
-                <uib-pagination direction-links="false"
-                                boundary-links="true"
-                                items-per-page="pagination.itemsPerPage"
-                                total-items="10"
-                                ng-change="pagination.getPage()"
-                                ng-model="pagination.currentPage"></uib-pagination>
-            </div>
         </div>
     </div>
 </div>

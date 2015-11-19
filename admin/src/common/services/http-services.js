@@ -1,6 +1,6 @@
-angular.module('app.http-services', ['app.site-configs', 'angular-jwt'])
+angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.shared-helpers'])
 
-    .factory('AuthService', ['$http', '$q', '$site-configs', 'localStorageService', 'jwtHelper', function ($http, $q, $configs, localStorageService, jwtHelper) {
+    .factory('AuthService', ['$http', '$q', '$site-configs', 'localStorageService', 'jwtHelper', '$objects', function ($http, $q, $configs, localStorageService, jwtHelper, $objects) {
 
         function login(username, password) {
             var endpoint = $configs.API_BASE_URL + 'login';
@@ -27,10 +27,10 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt'])
                 method: 'POST',
                 headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
                 withCredentials: false,
-                data: {
+                data: $objects.toUrlString({
                     username: username,
                     password: password
-                }
+                })
             }).then(success, error);
 
 
@@ -77,11 +77,11 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt'])
         };
     }])
 
-    .factory('httpRequestInterceptor', ['localStorageService', function(localStorageService) {
+    .factory('httpRequestInterceptor', ['localStorageService', function (localStorageService) {
         return {
-            request: function($config) {
+            request: function ($config) {
                 var header;
-                if($config.withCredentials !== false) {
+                if ($config.withCredentials !== false) {
                     $config.withCredentials = true;
                     header = 'Bearer ' + localStorageService.get('token');
                     $config.headers['Authorization'] = header;
@@ -162,14 +162,23 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt'])
     }])
 
     .factory('UserRolesService', ['$http', '$q', '$site-configs', function ($http, $q, $configs) {
-        //var service = $configs.API_BASE_URL + 'users';
+        var service = $configs.API_BASE_URL + 'roles';
+
         function getRoles() {
-            return [
-                {id: 1, name: 'User'},
-                {id: 5, name: 'Editor'},
-                {id: 9, name: 'Admin'},
-                {id: 10, name: 'Super Admin'}
-            ];
+            var deferred = $q.defer(),
+                endpoint = service;
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
         }
 
         return {

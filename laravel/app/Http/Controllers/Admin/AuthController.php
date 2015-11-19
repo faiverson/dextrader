@@ -88,7 +88,7 @@ class AuthController extends Controller
 				}
 
 				$user = User::find($u->id);
-				if($user->hasRole('owner', 'admin', 'editor')) {
+				if(!$user->hasRole('owner', 'admin', 'editor')) {
 					return response()->error('Not Allowed', 401);
 				}
 

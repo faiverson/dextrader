@@ -28,18 +28,21 @@
                                        required>
                             </div>
                             <div class="form-group" data-show-errors>
-                                <label for="role">User Role</label>
-                                <select type="text"
-                                       name="role"
-                                       class="form-control"
-                                       id="role"
-                                       placeholder="User role"
-                                       data-ng-change="user.role_id = selectedRole.id"
-                                       data-ng-model="selectedRole"
-                                       data-ng-options="role.name for role in roles"
-                                       required>
+                                <label>User Roles</label>
 
-                                    </select>
+                                <div class="row">
+                                    <div class="checkbox col-md-3" ng-repeat="role in roles">
+                                        <label>
+                                            <input type="checkbox"
+                                                   name="selectedRoles[]"
+                                                   value="{{role.id}}"
+                                                   ng-checked="selectedRoles.indexOf(role) > -1"
+                                                   ng-click="toggleRoleSelection(role)"/>
+                                            {{role.display_name}}
+                                        </label>
+                                    </div>
+                                </div>
+                                {{selectedRoles}}
                             </div>
                             <div class="form-group" data-show-errors>
                                 <label for="email">Email</label>

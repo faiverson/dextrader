@@ -1,4 +1,4 @@
-angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors'])
+angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables', 'datatables.bootstrap'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('users', {
@@ -27,42 +27,50 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors'])
             });
     })
 
-    .controller('UsersCtrl', ['$scope', 'UserService',
-        function ($scope, UserService) {
-
-            var vm = this;
-
-            $scope.pagination = {
-                itemsPerPage: 3,
-                currentPage: 1,
-                getPage: function () {
-                    vm.getUsers();
-                }
-            };
-
-            vm.getUsers = function (page) {
-                function success(response) {
-                    $scope.users = response.data.splice(($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage, $scope.pagination.itemsPerPage);
-                }
-
-                function error(res) {
-                    console.log(res);
-                }
-
-                UserService.getUsers().then(success, error);
-            };
+    .controller('UsersCtrl', ['$scope', 'UserService', 'DTOptionsBuilder', 'DTColumnBuilder', 'localStorageService', '$compile',
+        function ($scope, UserService, DTOptionsBuilder, DTColumnBuilder, localStorageService, $compile) {
 
 
-            vm.init = function () {
-                vm.getUsers();
-            };
+            $scope.dtOptions = DTOptionsBuilder.newOptions()
+                .withOption('ajax', {
+                    headers: {'Authorization': 'Bearer ' + localStorageService.get('token')},
+                    url: '/api/users',
+                    type: 'GET'
+                })
+                .withDataProp('data')
+                .withOption('processing', true)
+                .withOption('serverSide', true)
+                .withBootstrap()
+                .withPaginationType('full_numbers')
+                .withOption('createdRow', createdRow);
 
-            vm.init();
+            $scope.dtColumns = [
+                DTColumnBuilder.newColumn('id').withTitle('ID'),
+                DTColumnBuilder.newColumn('username').withTitle('Username'),
+                DTColumnBuilder.newColumn('full_name').withTitle('Name'),
+                DTColumnBuilder.newColumn('email').withTitle('Email'),
+                DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable()
+                    .renderWith(actionsHtml)
+            ];
+
+            function actionsHtml(data, type, full, meta) {
+                return '<button class="btn btn-warning" ui-sref="users-edit({ id:' + data.id + '})">' +
+                    '   <i class="fa fa-edit"></i>' +
+                    '</button>&nbsp;' +
+                    '<button class="btn btn-danger" ng-click="showCase.delete(showCase.persons[' + data.id + '])" )"="">' +
+                    '   <i class="fa fa-trash-o"></i>' +
+                    '</button>';
+            }
+
+            function createdRow(row, data, dataIndex) {
+                // Recompiling so we can bind Angular directive to the DT
+                $compile(angular.element(row).contents())($scope);
+            }
 
         }])
 
-    .controller('UsersFormCtrl', ['$scope', '$state', '$stateParams', '$filter', 'UserService', 'UserRolesService',
-        function ($scope, $state, $stateParams, $filter, UserService, UserRolesService) {
+    .controller('UsersFormCtrl', ['$scope', '$q', '$state', '$stateParams', '$filter', 'UserService', 'UserRolesService',
+        function ($scope, $q, $state, $stateParams, $filter, UserService, UserRolesService) {
 
             var vm = this;
 
@@ -91,20 +99,23 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors'])
             };
 
             vm.getUserRoles = function () {
-                $scope.roles = UserRolesService.getRoles();
+                var prom = UserRolesService.getRoles();
+                prom.then(function (res) {
+                    $scope.roles = res.data;
+                });
+
+                return prom;
             };
 
             vm.loadUser = function (id) {
-                UserService.getUser(id)
-                    .then(vm.successLoadUser, vm.errorLoadUser);
+                var prom = UserService.getUser(id);
+                prom.then(vm.successLoadUser, vm.errorLoadUser);
+
+                return prom;
             };
 
             vm.successLoadUser = function (res) {
                 $scope.user = res.data;
-
-                $scope.user.password = '******';
-
-                $scope.selectedRole = $filter('filter')($scope.roles, {id: $scope.user.role_id}, true)[0];
             };
 
             vm.errorLoadUser = function (res) {
@@ -112,11 +123,23 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors'])
             };
 
             vm.init = function () {
-                vm.getUserRoles();
+                var proms = [];
+                proms.push(vm.getUserRoles());
 
                 if (angular.isDefined($stateParams.id)) {
-                    vm.loadUser($stateParams.id);
+                    proms.push(vm.loadUser($stateParams.id));
                 }
+
+                $q.all(proms).then(vm.setUser);
+            };
+
+            vm.setUser = function () {
+                $scope.user.password = '******';
+
+                angular.forEach($scope.roles, function(role){
+
+                });
+                //$scope.selectedRole = $filter('filter')($scope.roles, {id: $scope.user.role_id}, true)[0];
             };
 
             vm.init();
