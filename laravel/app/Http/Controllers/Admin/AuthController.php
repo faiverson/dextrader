@@ -88,9 +88,9 @@ class AuthController extends Controller
 				}
 
 				$user = User::find($u->id);
-				if(!$user->hasRole('owner', 'admin', 'editor')) {
-					return response()->error('Not Allowed', 401);
-				}
+//				if(!$user->hasRole('owner') || !$user->hasRole('admin') || !$user->hasRole('editor')) {
+//					return response()->error('Not Allowed', 401);
+//				}
 
 				$customClaims = $user->toArray();
 				$customClaims['iss'] = 'admin/login';

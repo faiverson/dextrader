@@ -30,6 +30,19 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
     .controller('UsersCtrl', ['$scope', 'UserService', 'DTOptionsBuilder', 'DTColumnBuilder', 'localStorageService', '$compile',
         function ($scope, UserService, DTOptionsBuilder, DTColumnBuilder, localStorageService, $compile) {
 
+            function actionsHtml(data, type, full, meta) {
+                return '<button class="btn btn-warning" ui-sref="users-edit({ id:' + data.id + '})">' +
+                    '   <i class="fa fa-edit"></i>' +
+                    '</button>&nbsp;' +
+                    '<button class="btn btn-danger" ng-click="showCase.delete(showCase.persons[' + data.id + '])" )"="">' +
+                    '   <i class="fa fa-trash-o"></i>' +
+                    '</button>';
+            }
+
+            function createdRow(row, data, dataIndex) {
+                // Recompiling so we can bind Angular directive to the DT
+                $compile(angular.element(row).contents())($scope);
+            }
 
             $scope.dtOptions = DTOptionsBuilder.newOptions()
                 .withOption('ajax', {
@@ -53,20 +66,6 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
                     .renderWith(actionsHtml)
             ];
 
-            function actionsHtml(data, type, full, meta) {
-                return '<button class="btn btn-warning" ui-sref="users-edit({ id:' + data.id + '})">' +
-                    '   <i class="fa fa-edit"></i>' +
-                    '</button>&nbsp;' +
-                    '<button class="btn btn-danger" ng-click="showCase.delete(showCase.persons[' + data.id + '])" )"="">' +
-                    '   <i class="fa fa-trash-o"></i>' +
-                    '</button>';
-            }
-
-            function createdRow(row, data, dataIndex) {
-                // Recompiling so we can bind Angular directive to the DT
-                $compile(angular.element(row).contents())($scope);
-            }
-
         }])
 
     .controller('UsersFormCtrl', ['$scope', '$q', '$state', '$stateParams', '$filter', 'UserService', 'UserRolesService',
@@ -76,6 +75,14 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
 
             $scope.save = function () {
                 if ($scope.userForm.$valid) {
+
+                    $scope.user.roles = $scope.roles
+                        .filter(function (role) {
+                            return role.selected;
+                        })
+                        .map(function (role) {
+                            return {id: role.id};
+                        });
 
                     if ($scope.user.password === '******') {
                         delete $scope.user.password;
@@ -123,6 +130,8 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
             };
 
             vm.init = function () {
+                $scope.user = {};
+
                 var proms = [];
                 proms.push(vm.getUserRoles());
 
@@ -135,11 +144,17 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
 
             vm.setUser = function () {
                 $scope.user.password = '******';
+                if(angular.isArray($scope.user.roles)){
+                    angular.forEach($scope.roles, function (role) {
+                        role.selected = ($filter('filter')($scope.user.roles, {id: role.id}, true)).length > 0;
 
-                angular.forEach($scope.roles, function(role){
+                    });
+                }
 
-                });
-                //$scope.selectedRole = $filter('filter')($scope.roles, {id: $scope.user.role_id}, true)[0];
+            };
+
+            $scope.toggleRole = function (role) {
+                role.selected = !role.selected;
             };
 
             vm.init();

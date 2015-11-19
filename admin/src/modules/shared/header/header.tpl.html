@@ -1,14 +1,25 @@
 <div class="navbar navbar-default navbar-fixed-top" data-ng-controller="HeaderCtrl">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" data-toggle="collapse" data-target="#main-navbar" class="navbar-toggle"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+            <button type="button" data-toggle="collapse" data-target="#main-navbar" class="navbar-toggle"><span
+                    class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span
+                    class="icon-bar"></span></button>
         </div>
         <div id="main-navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li ><a data-ng-click="logout()">
-                    <i class="fa fa-fw fa-close"></i>
-                    Logout
-                </a></li>
+            <ul class="nav navbar-nav" ng-if="isLoggedIn">
+                <li>
+                    <a href="#" ui-sref="users">
+                        <i class="fa fa-fw fa-close"></i>
+                        Users
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-ng-click="logout()">
+                        <i class="fa fa-fw fa-close"></i>
+                        Logout
+                    </a>
+                </li>
+
             </ul>
         </div>
     </div>

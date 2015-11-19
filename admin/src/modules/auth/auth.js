@@ -19,8 +19,8 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
             });
     })
 
-    .controller('AuthController', ['$scope', '$state', 'AuthService',
-        function ($scope, $state, AuthService) {
+    .controller('AuthController', ['$scope', '$state', 'AuthService', '$rootScope',
+        function ($scope, $state, AuthService, $rootScope) {
 
             var vm = this;
 
@@ -31,8 +31,6 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
 
             $scope.login = function () {
 
-                $scope.$broadcast('show-errors-check-validity');
-
                 if ($scope.form.loginForm.$valid) {
                     AuthService.login(vm.username, vm.password)
                         .then(vm.successLogin, vm.errorLogin);
@@ -42,6 +40,8 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
 
             vm.successLogin = function () {
                 var user = AuthService.getLoggedInUser();
+
+                $rootScope.$broadcast('user-login-success');
 
                 //message
 

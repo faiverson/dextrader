@@ -1,6 +1,6 @@
 <div class="home">
     <div class="container">
-        <h1>Form example</h1>
+        <h1>System users</h1>
 
         <form name="userForm" novalidate="novalidate">
             <div class="row">
@@ -27,7 +27,7 @@
                                        data-ng-model="user.last_name"
                                        required>
                             </div>
-                            <div class="form-group" data-show-errors>
+                            <div class="form-group">
                                 <label>User Roles</label>
 
                                 <div class="row">
@@ -36,8 +36,8 @@
                                             <input type="checkbox"
                                                    name="selectedRoles[]"
                                                    value="{{role.id}}"
-                                                   ng-checked="selectedRoles.indexOf(role) > -1"
-                                                   ng-click="toggleRoleSelection(role)"/>
+                                                   ng-checked="role.selected"
+                                                   ng-click="toggleRole(role)"/>
                                             {{role.display_name}}
                                         </label>
                                     </div>
@@ -90,7 +90,7 @@
                     <div class="panel panel-default">
                         <div class="panel-body text-right">
                             <button class="btn btn-success" data-ng-click="save()">Save</button>
-                            <button class="btn btn-danger">Cancel</button>
+                            <button class="btn btn-danger" ui-sref="users">Cancel</button>
                         </div>
                     </div>
                 </div>
