@@ -46,7 +46,11 @@ class UsersController extends Controller
 
     public function show($id)
     {
+		$user = Auth::user();
         if (isset($id)) {
+			if($user->id != $id && !$user->can(['user.profile'])) {
+				return response()->error('User does not have permission user.profile');
+			}
             $user = User::with('roles')->where('id', $id)->where('active', 1)->first();
 			return response()->ok($user);
         } else {
@@ -66,11 +70,6 @@ class UsersController extends Controller
 		$fields = ['s.id', 'l.name as product', 's.datetime as created_at', 's.last_billing', 's.status'];
 
 		$order_by['column'] = $sort[$order_by['column']];
-
-//		$query = DB::table('users')
-//			->select($fields)
-//			->where('id', '!=', Auth::user()->id);
-
 		$query = User::where('active', 1)
 			->with('roles')
 			//->skip($start)
