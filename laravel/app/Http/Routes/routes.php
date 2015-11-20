@@ -8,9 +8,19 @@ Route::group(['namespace' => 'Auth', 'prefix' => 'api'], function () {
 	Route::get('/logout', 'AuthController@logout');
 });
 
-Event::listen('illuminate.query', function($query, $params)
-{
+//Event::listen('illuminate.query', function($query, $params)
+//{
 //	print $query.'<br>';
 //	var_dump($params);
 //	exit;
-});
+//});
+
+//Event::listen('router.matched', function($route, $request)
+//{
+//	print $query.'<br>';
+//	var_dump($request->path());
+//});
+//Event::listen('tymon.jwt.valid', function($user)
+//{
+//	var_dump($user);
+//});
