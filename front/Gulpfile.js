@@ -36,6 +36,7 @@ var gulp = require('gulp'),
     inject = require('gulp-inject'),
 	sInject = require('gulp-inject-string'),
     connect = require('connect'),
+	replace = require('gulp-replace-task'),
 	pkg = require('./package.json'),
 	environment = 'dev',
 	config = require('./build.config.js');
@@ -119,6 +120,9 @@ gulp.task('js:files', function () {
 
 	return gulp.src(config.js.files.input)
 		.pipe(plumber())
+		.pipe(replace({
+			patterns: config.placeholders[environment]
+		}))
 		.pipe(ngAnnotate())
 		.pipe(prettify({
 			mode: 'VERIFY_AND_WRITE',
