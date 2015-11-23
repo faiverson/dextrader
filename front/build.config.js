@@ -65,15 +65,19 @@ module.exports = {
 	},
 	html: {
 		input: 'src/index.html',
-		output: 'home.blade.php',
+		output: 'home.php',
 		tpl: {
 			modules: 'src/modules/**/*.tpl.html',
 			common: 'src/common/**/*.tpl.html'
 		}
 	},
 	assets: {
+		fonts: {
+			input: ['src/assets/fonts/**/*.{ttf,woff,woff2,eof,eot}'],
+			output: '../public_html/front/assets/fonts/'
+		},
 		images: {
-			input: ['src/assets/**/*.{png,gif,jpeg,jpg,woff}'],
+			input: ['src/assets/**/*.{png,gif,jpeg,jpg}'],
 			output: '../public_html/front/assets/'
 		},
 		svg: {

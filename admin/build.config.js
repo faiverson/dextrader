@@ -72,6 +72,10 @@ module.exports = {
 		}
 	},
 	assets: {
+		fonts: {
+			input: ['src/assets/fonts/**/*.{ttf,woff,woff2,eof,eot}'],
+			output: '../public_html/admin/assets/fonts/'
+		},
 		images: {
 			input: ['src/assets/**/*.{png,gif,jpeg,jpg}'],
 			output: '../public_html/admin/assets/'

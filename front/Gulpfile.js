@@ -42,7 +42,7 @@ var gulp = require('gulp'),
 	config = require('./build.config.js');
 
 // FACADES
-gulp.task('default', ['clean:dist', 'jshint', 'js:vendor', 'js:files', 'js:templates', 'css', 'build:images', 'build:svg', 'html']);
+gulp.task('default', ['clean:dist', 'jshint', 'js:vendor', 'js:files', 'js:templates', 'css', 'fonts', 'images', 'svg', 'html']);
 // compile all for development env
 gulp.task('dev', ['default']);
 // compile all for production env
@@ -88,7 +88,7 @@ gulp.task('clean:test', function () {
 gulp.task('js:vendor', function() {
 	var condition = (environment !== 'dev'),
 		jsDev = lazypipe()
-			.pipe(header, config.banner.full, { pkg: pkg });
+			.pipe(header, config.banner.full, { pkg: pkg }),
 
 		jsLive = lazypipe()
 			.pipe(rename, { suffix: '.min' })
@@ -108,12 +108,14 @@ gulp.task('js:vendor', function() {
 gulp.task('js:files', function () {
 	var condition = (environment !== 'dev'),
 		filename = pkg.name + '-v' + pkg.version + '.js',
+		jsLive,
+		banner = '(function ( window, angular, undefined ) {\n';
+		banner +=  '\'use strict\';\n';
+		banner +=  '<%= contents %>';
+		banner +=  '})( window, window.angular );';
 		jsLive = lazypipe()
 			.pipe(concat, filename)
-			.pipe(wrap, '(function ( window, angular, undefined ) {\n'
-			+ '\'use strict\';\n'
-			+ '<%= contents %>'
-			+ '})( window, window.angular );')
+			.pipe(wrap, banner)
 			.pipe(header, config.banner.min, { pkg: pkg })
 			.pipe(rename, { suffix: '.min' })
 			.pipe(uglify, {outSourceMap: filename + '.map'});
@@ -135,7 +137,6 @@ gulp.task('js:files', function () {
 				spaceInParen: true
 			}}))
 		.pipe(gulpif(condition, jsLive()))
-		//.pipe(debug({verbose: true}))
 		.pipe(gulp.dest(config.js.files.output))
 		.on('error', gutil.log);
 });
@@ -149,7 +150,7 @@ gulp.task('server', function (next) {
 	});
 });
 
-gulp.task('build:svg', function () {
+gulp.task('svg', function () {
 	return gulp.src(config.assets.svg.input)
 		.pipe(plumber())
 		.pipe(tap(function (file, t) {
@@ -169,8 +170,14 @@ gulp.task('build:svg', function () {
 		.pipe(gulp.dest(config.assets.svg.output));
 });
 
+// Copy fonts files into output folder
+gulp.task('fonts', function() {
+	return gulp.src(config.assets.fonts.input)
+		.pipe(gulp.dest(config.assets.fonts.output));
+});
+
 // Copy image files into output folder
-gulp.task('build:images', function() {
+gulp.task('images', function() {
 	return gulp.src(config.assets.images.input)
 		.pipe(plumber())
 		.pipe(imagemin({
@@ -183,6 +190,14 @@ gulp.task('build:images', function() {
 
 gulp.task('jshint', function () {
 	return gulp.src(config.js.files.input)
+		.pipe(plumber())
+		.pipe(jshint('.jshintrc'))
+		.pipe(jshint.reporter(stylish))
+		.pipe(jshint.reporter('fail'));
+});
+
+gulp.task('gulpfile', function () {
+	return gulp.src('./Gulpfile.js')
 		.pipe(plumber())
 		.pipe(jshint('.jshintrc'))
 		.pipe(jshint.reporter(stylish))
@@ -238,7 +253,7 @@ gulp.task('css', function () {
 //// Convert index.jade into index.html.
 gulp.task('html', function () {
     var condition = environment !== 'dev',
-		input, inputs,
+		input, inputs, sources,
 		appending = '';
 
 	if(condition) {
@@ -292,6 +307,12 @@ gulp.task('html', function () {
 
 gulp.task('watch', function () {
 	livereload.listen();
+
+	watch('./Gulpfile.js')
+		.on('change', function(file) {
+			gulp.start('gulpfile');
+		});
+
 	watch(config.js.files.input)
 		.on('change', function(file) {
 			gulp.start('jshint');
@@ -324,15 +345,18 @@ gulp.task('watch', function () {
 			gulp.start('js:templates');
 			gulp.start('html');
 			gulp.start('refresh');
-		}).on('add', function(file) {
+		})
+		.on('add', function(file) {
 			gulp.start('js:templates');
 			gulp.start('html');
 			gulp.start('refresh');
-		}).on('unlink', function(file) {
+		})
+		.on('unlink', function(file) {
 			gulp.start('js:templates');
 			gulp.start('html');
 			gulp.start('refresh');
 		});
+
 	watch([config.html.input])
 		.on('change', function(file) {
 			gulp.start('html');
@@ -345,32 +369,43 @@ gulp.task('watch', function () {
 			gulp.start('refresh');
 		});
 
-
 	watch(config.assets.images.input)
 		.on('change', function(file) {
-			gulp.start('build:images');
+			gulp.start('images');
 			gulp.start('refresh');
 		}).on('add', function(file) {
-			gulp.start('build:images');
+			gulp.start('images');
 			gulp.start('refresh');
 		}).on('unlink', function(file) {
-			gulp.start('build:images');
+			gulp.start('images');
 			gulp.start('refresh');
 		});
 
 	watch(config.assets.svg.input)
 		.on('change', function(file) {
-			gulp.start('build:svg');
+			gulp.start('svg');
 			gulp.start('refresh');
 		}).on('add', function(file) {
-			gulp.start('build:svg');
+			gulp.start('svg');
 			gulp.start('refresh');
 		}).on('unlink', function(file) {
-			gulp.start('build:svg');
+			gulp.start('svg');
 			gulp.start('refresh');
 		});
 
-	watch('src/**/*.less')
+	watch(config.assets.fonts.input)
+		.on('change', function(file) {
+			gulp.start('fonts');
+			gulp.start('refresh');
+		}).on('add', function(file) {
+			gulp.start('fonts');
+			gulp.start('refresh');
+		}).on('unlink', function(file) {
+			gulp.start('fonts');
+			gulp.start('refresh');
+		});
+
+	watch('src/**/*.less', 'src/**/*.css')
 		.on('change', function(file) {
 			gulp.start('css');
 			gulp.start('refresh');
