@@ -1,0 +1,8 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,700,500,100);
+
+@font-face {
+    font-family: 'Menlo';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Menlo Regular'), url('/front/assets/fonts/Menlo-Regular.woff') format('woff');
+}

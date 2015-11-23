@@ -21,7 +21,8 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="front/css/styles.css">
 </head>
-<body>
+<body data-ng-class="{'page-login': true}">
+<base href="/">
 <!--[if lt IE 8]><p class="browsehappy">
 		You are using an <strong>outdated</strong> browser.
 		Please <a href="http://browsehappy.com/">upgrade your browser</a>
@@ -34,10 +35,10 @@
 <script type="text/javascript" src="/front/js/vendor.js"></script>
 <script type="text/javascript" src="/front/js/templates.js"></script>
 <script type="text/javascript" src="/front/js/modules/app.js"></script>
+<script type="text/javascript" src="/front/js/modules/auth/auth.js"></script>
 <script type="text/javascript" src="/front/js/common/services/http-services.js"></script>
 <script type="text/javascript" src="/front/js/common/services/site-configs.js"></script>
 <script type="text/javascript" src="/front/js/modules/users/users.js"></script>
-<script type="text/javascript" src="/front/js/modules/auth/auth.js"></script>
 <script type="text/javascript" src="/front/js/modules/shared/footer/footer.js"></script>
 <script type="text/javascript" src="/front/js/modules/shared/header/header.js"></script>
 </body>

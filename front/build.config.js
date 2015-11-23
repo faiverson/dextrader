@@ -73,7 +73,7 @@ module.exports = {
 	},
 	assets: {
 		images: {
-			input: ['src/assets/**/*.{png,gif,jpeg,jpg}'],
+			input: ['src/assets/**/*.{png,gif,jpeg,jpg,woff}'],
 			output: '../public_html/front/assets/'
 		},
 		svg: {

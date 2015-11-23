@@ -14,7 +14,8 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
                 //templateUrl: 'modules/users/users.form.tpl.html',
                 controller: 'AuthController',
                 data: {
-                    pageTitle: 'Login Page'
+                    pageTitle: 'Login Page',
+                    bodyClass: 'page-login'
                 }
             });
     })

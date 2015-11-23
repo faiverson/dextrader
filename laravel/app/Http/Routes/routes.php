@@ -3,6 +3,11 @@ Route::get('/', function () {
 	return view('home');
 });
 
+Route::any('{path?}', function()
+{
+    return view("home");
+})->where("path", ".+");
+
 Route::group(['namespace' => 'Auth', 'prefix' => 'api'], function () {
 	Route::post('/login', 'AuthController@login');
 	Route::get('/logout', 'AuthController@logout');

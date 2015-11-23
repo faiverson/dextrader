@@ -14,12 +14,14 @@ angular.module('app', [
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider) {
 
-        $urlRouterProvider.otherwise('/login');
+        $urlRouterProvider.otherwise('login');
         showErrorsConfigProvider.showSuccess(true);
         $httpProvider.interceptors.push('httpRequestInterceptor');
 
         localStorageServiceProvider
             .setPrefix('app');
+
+        $locationProvider.html5Mode(true);
     })
 
     .run(function run() {
@@ -32,6 +34,10 @@ angular.module('app', [
             if (!AuthService.isLoggedIn() && toState.name !== 'login') {
                 event.preventDefault();
                 $state.go('login');
+            }
+
+            if (angular.isDefined(toState.data.bodyClass)) {
+                $scope.bodyClass = toState.data.bodyClass;
             }
         });
 

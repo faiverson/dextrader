@@ -1,39 +1,35 @@
-<div class="auth">
-    <div class="container">
-        <h1>Login</h1>
+<section id="login-wrapper">
+    <h1>Login</h1>
+    <div id="login-box">
         <form name="loginForm" novalidate="novalidate" data-ng-init="setFromScope(this)">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Login </div>
-                        <div class="panel-body">
-							<div class="form-group" data-show-errors>
-								<label for="username">Username</label>
-								<input type="text"
-									   name="username"
-									   class="form-control"
-									   id="username"
-									   required
-									   data-ng-minlength="4"
-									   data-ng-model="auth.username"
-									   placeholder="Username">
-							</div>
-							<div class="form-group" data-show-errors>
-								<label for="password">Password</label>
-								<input type="password"
-									   name="password"
-									   id="password"
-									   class="form-control"
-									   required
-									   data-ng-minlength="4"
-									   data-ng-model="auth.password"
-									   placeholder="Password">
-							</div>
-							<button class="btn btn-success pull-right" data-ng-click="login()">Login</button>
-                        </div>
-                    </div>
-                </div>
+            <div class="form-group" data-show-errors>
+                <!--<label for="username">Username</label>-->
+                <input type="text"
+                       name="username"
+                       class="form-control"
+                       id="username"
+                       required
+                       data-ng-minlength="4"
+                       data-ng-model="auth.username"
+                       placeholder="Username">
+            </div>
+            <div class="form-group has-feedback" data-show-errors>
+                <!--<label for="password">Password</label>-->
+                <input type="password"
+                       name="password"
+                       id="password"
+                       class="form-control"
+                       required
+                       data-ng-minlength="4"
+                       data-ng-model="auth.password"
+                       placeholder="Password">
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
             </div>
         </form>
+        <div id="form-login-links">
+            <a id="form-login-forgotten" href="#">Forgot Password?</a>
+            <a id="form-login-submit" class="button bg-orange" href="#" data-ng-click="login()">Login</a>
+            <div class="clear"></div>
+        </div>
     </div>
-</div>
+</section>
