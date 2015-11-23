@@ -3,16 +3,15 @@ Route::get('/', function () {
 	return view('home');
 });
 
-Route::any('{path?}', function()
-{
-    return view("home");
-})->where("path", ".+");
-
 Route::group(['namespace' => 'Auth', 'prefix' => 'api'], function () {
 	Route::post('/login', 'AuthController@login');
 	Route::get('/logout', 'AuthController@logout');
 });
 
+
+//Route::any('{path?}', function() {
+//	return view("home");
+//})->where("path", ".+");
 //Event::listen('illuminate.query', function($query, $params)
 //{
 //	print $query.'<br>';

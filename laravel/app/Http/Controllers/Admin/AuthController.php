@@ -102,12 +102,6 @@ class AuthController extends Controller
 				}
 
 			}
-			catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-				return response()->json(['Token expired'], $e->getStatusCode());
-			}
-			catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-				return response()->error('Token invalid', $e->getStatusCode());
-			}
 			catch (JWTException $e) {
 				return response()->error('Could not create a token', $e->getStatusCode());
 			}

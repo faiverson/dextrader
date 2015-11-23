@@ -35,9 +35,9 @@
 <script type="text/javascript" src="/front/js/vendor.js"></script>
 <script type="text/javascript" src="/front/js/templates.js"></script>
 <script type="text/javascript" src="/front/js/modules/app.js"></script>
-<script type="text/javascript" src="/front/js/modules/auth/auth.js"></script>
 <script type="text/javascript" src="/front/js/common/services/http-services.js"></script>
 <script type="text/javascript" src="/front/js/common/services/site-configs.js"></script>
+<script type="text/javascript" src="/front/js/modules/auth/auth.js"></script>
 <script type="text/javascript" src="/front/js/modules/users/users.js"></script>
 <script type="text/javascript" src="/front/js/modules/shared/footer/footer.js"></script>
 <script type="text/javascript" src="/front/js/modules/shared/header/header.js"></script>
