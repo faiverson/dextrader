@@ -14,9 +14,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $this->command->info("Starting to seed Users");
-        $faker = Faker::create();
-//
+        $this->command->info("Starting to seed Users");//
         // creates the admin user
 		$role = Role::where('name', 'owner')->first();
 		User::create([
@@ -53,7 +51,15 @@ class UserSeeder extends Seeder
 			'password' => bcrypt('editor')
 		])->attachRoles([$role, $roleAdmin]);
 
-        // common users
+		if (App::Environment() === 'local') {
+			$this->fakeUsers();
+		}
+    }
+
+	protected function fakeUsers()
+	{
+		$faker = Faker::create();
+		// common users
 		$total_batch = 10;
 		foreach(range(1, $total_batch) as $batch) {
 			$this->command->info("Starting batch " . $batch . " of " . $total_batch);
@@ -75,5 +81,5 @@ class UserSeeder extends Seeder
 			}
 			DB::table('users')->insert($users);
 		}
-    }
+	}
 }
