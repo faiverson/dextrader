@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Faker\Provider\zh_TW\DateTime;
 use User;
 use Datatables;
 use Illuminate\Http\Request;
@@ -104,6 +105,7 @@ class UsersController extends Controller
         $user->last_name = $request->get('last_name');
         $user->email = $request->get('email');
         $user->username = $request->get('username');
+		$user->phone = $request->get('phone');
         $user->password = bcrypt($request->get('password'));
         $user->save();
         return response()->added();
@@ -117,26 +119,53 @@ class UsersController extends Controller
      */
     public function update(Request $request)
     {
-        $id = $request->get('id');
-        $user = User::find($id);
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email|unique:users,id,' . $user->id,
-            'username' => 'required|unique:users,id,' . $user->id
-        ]);
+        $id = $request->input('id');
+		$first_name = $request->input('first_name');
+		$last_name = $request->input('last_name');
+		$email = $request->input('email');
+		$username = $request->input('username');
+		$phone = $request->input('phone');
+		$password = $request->input('password');
+dd($id);
+		$user = User::find($id);
+		$update = [];
+		if($first_name) {
+			$update['first_name'] = $first_name;
+			$validations['first_name'] = 'required';
+		}
 
-        if ($validator->fails()) {
-            return response()->error($validator->errors()->all());
-        }
+		if($last_name) {
+			$update['last_name'] = $last_name;
+			$validations['last_name'] = 'required';
+		}
 
-        $user->update([
-            'first_name' => $request->get('first_name'),
-            'last_name' => $request->get('last_name'),
-            'email' => $request->get('email'),
-            'username' => $request->get('username'),
-            'password' => bcrypt($request->get('password'))
-        ]);
+		if($email) {
+			$update['email'] = $email;
+			$validations['email'] = 'required|email|unique:users,id,' . $user->id;
+		}
+
+		if($username) {
+			$update['username'] = $username;
+			$validations['username'] = 'required|unique:users,id,' . $user->id;
+		}
+
+		if($phone) {
+			$update['phone'] = $phone;
+		}
+
+		if($password) {
+			$validations['password'] = 'required';
+			$update['password'] = bcrypt($password);
+		}
+
+		if(!empty($validations)) {
+			$validator = Validator::make($update, $validations);
+			if ($validator->fails()) {
+				return response()->error($validator->errors()->all());
+			}
+		}
+
+        $user->update($update);
         return response()->ok();
     }
 
