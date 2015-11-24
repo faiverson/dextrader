@@ -50,7 +50,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-	protected $fillable = ['id', 'first_name', 'last_name', 'username', 'email', 'active', 'password'];
+	protected $fillable = ['id', 'first_name', 'last_name', 'username', 'email', 'phone', 'active', 'password'];
 
 	protected $appends = array('full_name', 'user_id');
 
@@ -59,7 +59,12 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token', 'active' ,'deleted_at', 'updated_at'];
+    protected $hidden = ['password', 'remember_token', 'active' , 'deleted_at'];
+
+	public function setPhoneAttribute($value)
+	{
+		$this->attributes['phone'] = !empty($value) ? preg_replace("/[^0-9]/", "", $value) : '';
+	}
 
 	public function getFullnameAttribute()
 	{
@@ -70,5 +75,12 @@ class User extends Model implements AuthenticatableContract,
 	{
 		return $this->attributes['id'];
 	}
+
+	public function getPhoneAttribute()
+	{
+		return preg_replace("/(\d{3})(\d{3})(\d{4})/", "$1/$2/$3", $this->attributes['phone']);
+	}
+
+
 
 }

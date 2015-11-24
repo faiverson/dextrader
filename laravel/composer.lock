@@ -2463,16 +2463,16 @@
         },
         {
             "name": "nicolaslopezj/searchable",
-            "version": "1.6.1",
+            "version": "1.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nicolaslopezj/searchable.git",
-                "reference": "8d97d2c97dc17bc0795220b11b9ce0769d7d9173"
+                "reference": "30453f6bf2b68f871c52ce3e5a613eccca9370aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nicolaslopezj/searchable/zipball/8d97d2c97dc17bc0795220b11b9ce0769d7d9173",
-                "reference": "8d97d2c97dc17bc0795220b11b9ce0769d7d9173",
+                "url": "https://api.github.com/repos/nicolaslopezj/searchable/zipball/30453f6bf2b68f871c52ce3e5a613eccca9370aa",
+                "reference": "30453f6bf2b68f871c52ce3e5a613eccca9370aa",
                 "shasum": ""
             },
             "require": {
@@ -2505,7 +2505,7 @@
                 "search",
                 "searchable"
             ],
-            "time": "2015-10-28 02:46:28"
+            "time": "2015-11-23 18:12:44"
         },
         {
             "name": "phpdocumentor/reflection-docblock",

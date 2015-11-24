@@ -13,9 +13,13 @@
 
 $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
     return [
-        'first_name' => $faker->name,
-        'email' => $faker->email,
-        'password' => bcrypt(str_random(10)),
-        'remember_token' => str_random(10),
+		'first_name' => $faker->firstName,
+		'last_name' => $faker->lastName,
+		'username' => str_replace('.', '_', $faker->unique()->userName),
+		'email' => $faker->unique()->email,
+		'phone' => rand(1, 1000) . '-' . rand(1, 1000) . ' ' . rand(1, 10000),
+		'password' => bcrypt(str_random(10)),
+		'created_at' => $faker->dateTimeThisYear('now'),
+		'updated_at' => $faker->dateTimeThisYear('now')
     ];
 });

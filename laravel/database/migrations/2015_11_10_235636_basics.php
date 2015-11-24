@@ -21,12 +21,13 @@ class Basics extends Migration
 
 		Schema::create('users', function (Blueprint $table) {
 			$table->increments('id');
-			$table->string('first_name', 50); //->nullable()
-			$table->string('last_name', 50);
-			$table->string('username', 50)->unique('username');
-			$table->string('email')->unique('email');
-			$table->tinyInteger('active')->default(1);
-			$table->string('password', 200);
+			$table->string('first_name', 50)->nullable(false);
+			$table->string('last_name', 50)->nullable(false);
+			$table->string('username', 50)->nullable(false)->unique('username');
+			$table->string('email')->nullable(false)->unique('email');
+			$table->string('phone', 15);
+			$table->tinyInteger('active')->nullable(false)->default(1);
+			$table->string('password', 200)->nullable(false);
 			$table->rememberToken();
 			$table->softDeletes();
 			$table->timestamps();
