@@ -405,7 +405,7 @@ gulp.task('watch', function () {
 			gulp.start('refresh');
 		});
 
-	watch('src/**/*.less', 'src/**/*.css')
+	watch(['src/**/*.less', 'src/**/*.css'])
 		.on('change', function(file) {
 			gulp.start('css');
 			gulp.start('refresh');

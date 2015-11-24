@@ -1,22 +1,35 @@
-angular.module('app.views', ['app.home', 'app.auth', 'ui.router']);
+angular.module('app.views', ['app.auth', 'ui.router']);
 
 angular.module('app', [
     'templates-app',
     'app.header',
     'app.footer',
-    'app.home',
     'app.auth',
+    'app.dashboard',
+    'app.user-profile',
+    'ui-notification',
     'ui.bootstrap.tpls',
     'ui.bootstrap',
     'app.http-services',
+    'app.shared-directives',
     'LocalStorageModule'
 ])
 
-    .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider) {
+    .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {
 
         $urlRouterProvider.otherwise('login');
         showErrorsConfigProvider.showSuccess(true);
         $httpProvider.interceptors.push('httpRequestInterceptor');
+        NotificationProvider.setOptions({
+            delay: 10000,
+            startTop: 20,
+            startRight: 10,
+            verticalSpacing: 20,
+            horizontalSpacing: 20,
+            positionX: 'right',
+            positionY: 'top'
+        });
+
 
         localStorageServiceProvider
             .setPrefix('app');
@@ -36,8 +49,9 @@ angular.module('app', [
                 $state.go('login');
             }
 
-            if (angular.isDefined(toState.data.bodyClass)) {
-                $scope.bodyClass = toState.data.bodyClass;
+            if (AuthService.isLoggedIn() && toState.name === 'login') {
+                event.preventDefault();
+                $state.go('dashboard');
             }
         });
 
@@ -45,6 +59,8 @@ angular.module('app', [
             if (angular.isDefined(toState.data.pageTitle)) {
                 $scope.pageTitle = toState.data.pageTitle;
             }
+
+            $scope.bodyClass = toState.data.bodyClass || '';
         });
 
         $scope.links = [

@@ -2,7 +2,7 @@
     <h1>Login</h1>
     <div id="login-box">
         <form name="loginForm" novalidate="novalidate" data-ng-init="setFromScope(this)">
-            <div class="form-group" data-show-errors>
+            <div class="form-group has-feedback" data-show-errors>
                 <!--<label for="username">Username</label>-->
                 <input type="text"
                        name="username"
@@ -11,7 +11,8 @@
                        required
                        data-ng-minlength="4"
                        data-ng-model="auth.username"
-                       placeholder="Username">
+                       placeholder="E-Mail">
+                <span class="glyphicon glyphicon-envelope form-control-feedback" aria-hidden="true"></span>
             </div>
             <div class="form-group has-feedback" data-show-errors>
                 <!--<label for="password">Password</label>-->
@@ -23,7 +24,7 @@
                        data-ng-minlength="4"
                        data-ng-model="auth.password"
                        placeholder="Password">
-                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-lock form-control-feedback" aria-hidden="true"></span>
             </div>
         </form>
         <div id="form-login-links">

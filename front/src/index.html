@@ -24,9 +24,9 @@
 	<link rel="shortcut icon" href="favicon.ico">
 	<![endif]-->
 	<link rel="icon" type="image/png" href="favicon.png">
-	<link rel="stylesheet" href="front/css/styles.css">
+	<link rel="stylesheet" href="/front/css/styles.css">
 </head>
-<body  data-ng-class="{'page-login': true}">
+<body class="{{bodyClass}}">
     <base href="/">
 	<!--[if lt IE 8]>
 	<p class="browsehappy">
@@ -36,6 +36,7 @@
 	</p>
 	<![endif]-->
 	<div data-ng-include="'modules/shared/header/header.tpl.html'"></div>
+    <div class="clear"></div>
 	<div ui-view></div>
 	<div data-ng-include="'modules/shared/footer/footer.tpl.html'"></div>
 	<!-- inject:js -->

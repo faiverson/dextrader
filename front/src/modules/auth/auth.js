@@ -6,7 +6,8 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
                 templateUrl: 'modules/auth/auth.form.tpl.html',
                 controller: 'AuthController as auth',
                 data: {
-                    pageTitle: 'Login Page'
+                    pageTitle: 'Login Page',
+                    bodyClass: 'page-login'
                 }
             })
             .state('logout', {
@@ -20,8 +21,8 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
             });
     })
 
-    .controller('AuthController', ['$scope', '$state', 'AuthService',
-        function ($scope, $state, AuthService) {
+    .controller('AuthController', ['$scope', '$state', 'AuthService', 'Notification',
+        function ($scope, $state, AuthService, Notification) {
 
             var vm = this;
 
@@ -44,13 +45,13 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
             vm.successLogin = function () {
                 var user = AuthService.getLoggedInUser();
 
-                //message
+                Notification.success("Welcome " + user.full_name);
 
-                $state.go('users');
+                $state.go('dashboard');
             };
 
-            vm.errorLogin = function () {
-                //message
+            vm.errorLogin = function (err) {
+                Notification.error(err.error);
             };
 
         }]);

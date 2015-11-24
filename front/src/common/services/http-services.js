@@ -1,6 +1,6 @@
-angular.module('app.http-services', ['app.site-configs', 'angular-jwt'])
+angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.shared-helpers'])
 
-    .factory('AuthService', ['$http', '$q', '$site-configs', 'localStorageService', 'jwtHelper', function ($http, $q, $configs, localStorageService, jwtHelper) {
+    .factory('AuthService', ['$http', '$q', '$site-configs', 'localStorageService', 'jwtHelper', '$objects', function ($http, $q, $configs, localStorageService, jwtHelper, $objects) {
 
         function login(username, password) {
             var endpoint = $configs.API_BASE_URL + 'login';
@@ -19,7 +19,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt'])
             }
 
             function error(err) {
-                deferred.reject(err);
+                deferred.reject(err.data);
             }
 
             $http({
@@ -27,10 +27,10 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt'])
                 method: 'POST',
                 headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
                 withCredentials: false,
-                data: {
+                data: $objects.toUrlString({
                     username: username,
                     password: password
-                }
+                })
             }).then(success, error);
 
 
