@@ -31,9 +31,8 @@ class ProfileUpdateTest extends TestCase
 		];
 
 		$this->withoutMiddleware();
-		$response = $this->call('put', '/api/users', $updated);
-		$this->assertEquals(200, $response->status());
-//		dd($response->status());
+		$response = $this->call('PUT', '/api/users', $updated);
+		dump($response->content());
 //		$this->assertResponseOk();
 //		$this->seeInDatabase('users', $updated);
     }
