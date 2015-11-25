@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
 		$this->call('RoleSeeder');
 		$this->call('UserSeeder');
 		$this->call('ProductsSeeder');
-        Model::reguard();
+		$this->call('MarketingLinksSeeder');
+		$this->call('TrainingsSeeder');
+		Model::reguard();
     }
 }
