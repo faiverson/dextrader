@@ -6,19 +6,19 @@
     "type": "project",
     "require": {
         "php": ">=5.5.9",
-        "laravel/framework": "^5.1.0",
+        "laravel/framework": "^5.1.24",
 		"yajra/laravel-datatables-oracle": "^5.11",
         "snowfire/beautymail": "dev-master",
-		"tymon/jwt-auth": "0.5.*"
+		"tymon/jwt-auth": "0.5.*",
+		"zizaco/entrust": "dev-laravel-5",
+		"sofa/eloquence": "~5.1@dev",
+		"nicolaslopezj/searchable": "1.*"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",
         "mockery/mockery": "^0.9.4",
         "phpunit/phpunit": "^4.0",
-        "phpspec/phpspec": "^2.1",
-		"zizaco/entrust": "dev-laravel-5",
-		"sofa/eloquence": "~5.1@dev",
-		"nicolaslopezj/searchable": "1.*"
+        "phpspec/phpspec": "^2.1"
     },
     "autoload": {
         "classmap": [

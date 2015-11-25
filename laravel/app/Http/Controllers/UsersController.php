@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use Faker\Provider\zh_TW\DateTime;
 use User;
 use Datatables;
 use Illuminate\Http\Request;
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use Validator;
 use DB;
 use Beautymail;
@@ -126,7 +124,7 @@ class UsersController extends Controller
 		$username = $request->input('username');
 		$phone = $request->input('phone');
 		$password = $request->input('password');
-dd($id);
+
 		$user = User::find($id);
 		$update = [];
 		if($first_name) {

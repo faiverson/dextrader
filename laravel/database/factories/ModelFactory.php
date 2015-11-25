@@ -23,3 +23,14 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
 		'updated_at' => $faker->dateTimeThisYear('now')
     ];
 });
+
+$factory->define(App\Models\MarketingLink::class, function (Faker\Generator $faker) {
+	return [
+		'title' => $faker->sentence,
+		'description' => $faker->paragraph,
+		'image' => $faker->imageUrl(640, 480),
+		'link' => $faker->url,
+		'created_at' => $faker->dateTimeThisYear('now'),
+		'updated_at' => $faker->dateTimeThisYear('now')
+	];
+});

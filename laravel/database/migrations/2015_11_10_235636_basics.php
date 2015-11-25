@@ -20,7 +20,7 @@ class Basics extends Migration
 		});
 
 		Schema::create('users', function (Blueprint $table) {
-			$table->increments('id');
+			$table->bigIncrements('id');
 			$table->string('first_name', 50)->nullable(false);
 			$table->string('last_name', 50)->nullable(false);
 			$table->string('username', 50)->nullable(false)->unique('username');

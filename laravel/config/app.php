@@ -151,9 +151,7 @@ return [
 		yajra\Datatables\DatatablesServiceProvider::class,
 		Snowfire\Beautymail\BeautymailServiceProvider::class,
 		Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
-		Zizaco\Entrust\EntrustServiceProvider::class
-
-
+		Zizaco\Entrust\EntrustServiceProvider::class,
     ],
 
     /*
@@ -212,6 +210,9 @@ return [
 		'User' => App\Models\User::class,
 		'Role' => App\Models\Role::class,
 		'Permission' => App\Models\Permission::class,
+		'Product' => App\Models\Product::class,
+		'MarketingLink' => App\Models\MarketingLink::class,
+		'Training' => App\Models\Training::class,
     ],
 
 ];
