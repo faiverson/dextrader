@@ -7,6 +7,7 @@ angular.module('app', [
     'app.auth',
     'app.dashboard',
     'app.user-profile',
+    'app.affiliates',
     'ui-notification',
     'ui.bootstrap.tpls',
     'ui.bootstrap',

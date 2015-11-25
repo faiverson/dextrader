@@ -43,10 +43,6 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             if (this.isLoggedIn()) {
                 data = jwtHelper.decodeToken(localStorageService.get('token'));
             }
-
-            console.log(data);
-
-
             return data;
         }
 

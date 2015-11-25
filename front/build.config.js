@@ -43,7 +43,8 @@ module.exports = {
                 'vendor/angular-bootstrap-show-errors/src/showErrors.js',
                 'vendor/angular-local-storage/dist/angular-local-storage.js',
                 'vendor/angular-jwt/dist/angular-jwt.js',
-                'vendor/angular-ui-notification/dist/angular-ui-notification.js'
+                'vendor/angular-ui-notification/dist/angular-ui-notification.js',
+                'vendor/angular-youtube-mb/dist/angular-youtube-embed.min.js'
 			],
 			output: 'vendor.js'
 		},
