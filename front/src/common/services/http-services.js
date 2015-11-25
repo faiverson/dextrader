@@ -157,6 +157,56 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
     }])
 
+    .factory('MarketingLinksService', ['$http', '$q', '$site-configs', function ($http, $q, $configs){
+        var service = $configs.API_BASE_URL + 'marketing-links';
+
+        function query(){
+            var deferred = $q.defer(),
+                endpoint = service;
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
+        return {
+            query: query
+        };
+    }])
+
+    .factory('TrainingService', ['$http', '$q', '$site-configs', function ($http, $q, $configs){
+        var service = $configs.API_BASE_URL + 'training';
+
+        function queryAffiliates(){
+            var deferred = $q.defer(),
+                endpoint = service + '/affiliates';
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
+        return {
+            queryAffiliates: queryAffiliates
+        };
+    }])
+
     .factory('UserRolesService', ['$http', '$q', '$site-configs', function ($http, $q, $configs) {
         //var service = $configs.API_BASE_URL + 'users';
         function getRoles() {

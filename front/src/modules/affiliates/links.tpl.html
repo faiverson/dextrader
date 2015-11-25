@@ -3,62 +3,19 @@
     <h2>Affiliate Promotion Links</h2>
 
     <div class="spacer-big"></div>
-    <div class="aff-link-wrapper clearfix">
+    <div class="aff-link-wrapper clearfix" data-ng-repeat="mLink in mLinks">
         <div class="left">
-            <img src="/front/assets/images/aff-link-1.jpg">
+            <img data-ng-src="{{mLink.image}}" width="120" height="120">
 
-            <h2>First Affiliate Promotion Link Title</h2>
-				<span>
-					We will creating a logo for each one of the brands/
-products below that should be similar, but each have their own unique color or style to set them apart. 
-				</span>
+            <h2 data-ng-bind="::mLink.title"></h2>
+				<span data-ng-bind="::mLink.description"></span>
         </div>
         <div class="right">
             <h3>Promote URL</h3>
 
             <div class="aff-link">
-                <input type="text" value="http://www.dextrader.com/affiliate_1/">
-                <a href="#"><img src="/front/assets/images/arrow-right.png"></a>
-            </div>
-        </div>
-    </div>
-
-    <div class="aff-link-wrapper clearfix">
-        <div class="left">
-            <img src="/front/assets/images/aff-link-2.jpg">
-
-            <h2>Second Affiliate Promotion Link Title</h2>
-				<span>
-					We will creating a logo for each one of the brands/
-products below that should be similar, but each have their own unique color or style to set them apart. 
-				</span>
-        </div>
-        <div class="right">
-            <h3>Promote URL</h3>
-
-            <div class="aff-link">
-                <input type="text" value="http://www.dextrader.com/affiliate_2/">
-                <a href="#"><img src="/front/assets/images/arrow-right.png"></a>
-            </div>
-        </div>
-    </div>
-
-    <div class="aff-link-wrapper clearfix">
-        <div class="left">
-            <img src="/front/assets/images/aff-link-3.jpg">
-
-            <h2>Next Affiliate Promotion Link Title</h2>
-				<span>
-					We will creating a logo for each one of the brands/
-products below that should be similar, but each have their own unique color or style to set them apart. 
-				</span>
-        </div>
-        <div class="right">
-            <h3>Promote URL</h3>
-
-            <div class="aff-link">
-                <input type="text" value="http://www.dextrader.com/affiliate_3/">
-                <a href="#"><img src="/front/assets/images/arrow-right.png"></a>
+                <input type="text" value="{{::mLink.link}}">
+                <a target="_blank" href="{{::mLink.link}}"><img src="/front/assets/images/arrow-right.png"></a>
             </div>
         </div>
     </div>

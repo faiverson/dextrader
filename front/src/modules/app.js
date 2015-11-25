@@ -13,7 +13,8 @@ angular.module('app', [
     'ui.bootstrap',
     'app.http-services',
     'app.shared-directives',
-    'LocalStorageModule'
+    'LocalStorageModule',
+    'ngAnimate'
 ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {
