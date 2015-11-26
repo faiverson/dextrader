@@ -16,6 +16,7 @@ class Trainings extends Migration
 			$table->increments('id');
 			$table->string('video_id', 30)->nullable(false);
 			$table->string('title', 150)->nullable();
+			$table->string('filename', 150)->nullable(false);
 			$table->text('description')->nullable();
 			$table->string('time', 8)->nullable();
 			$table->integer('unlock_at')->nullable()->default(0); //seconds

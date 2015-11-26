@@ -9,6 +9,7 @@ use DB;
 use Role;
 use DateTime;
 use Token;
+use Files;
 
 class Trainings extends Controller
 {
@@ -117,6 +118,20 @@ class Trainings extends Controller
 		}
 
 		return response()->added();
+	}
+
+	public function download(Request $request)
+	{
+		$training_id = $request->training_id;
+		$doc = Training::find($training_id);
+		if($doc->type === 'certification') {
+			$unblock = $this->getUserTraining($training_id);
+			if($unblock <= 0) {
+				return response()->error('The user does not unblock the video.');
+//				return view('errors.404', array('error' => 'The user does not unblock the video.'));
+			}
+		}
+		return Files::download('trainings/' . $doc->filename, true);
 	}
 
 	/**

@@ -207,6 +207,7 @@ return [
 		'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
 		'Entrust' => Zizaco\Entrust\EntrustFacade::class,
 		'Token' => App\Helpers\Token::class,
+		'Files' => App\Helpers\Files::class,
 
 		'User' => App\Models\User::class,
 		'Role' => App\Models\Role::class,
