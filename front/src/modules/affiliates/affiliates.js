@@ -1,4 +1,4 @@
-angular.module('app.affiliates', ['ui.router', 'youtube-embed'])
+angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-resources'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('affiliates', {
@@ -125,7 +125,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed'])
             $scope.nextVideo = false;
 
             //reset player status
-            if(angular.isDefined($scope.currentVideo)){
+            if (angular.isDefined($scope.currentVideo)) {
                 $scope.currentVideo.playing = false;
             }
 
@@ -156,8 +156,40 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed'])
         };
     }])
 
-    .controller('ResourcesCtrl', ['$scope', function ($scope) {
+    .controller('ResourcesCtrl', ['$scope', 'AffiliateResources', 'Notification', '$templateCache', '$filter', function ($scope, AffiliateResources, Notification, $templateCache, $filter) {
+        var vm = this;
+
         $scope.oneAtATime = true;
+
+        $scope.select = function (resource) {
+
+            if (angular.isDefined($scope.selectedResource)) {
+                $scope.selectedResource.selected = false;
+            }
+
+            $scope.selectedResource = resource;
+
+            $scope.selectedResource.selected = true;
+            angular.forEach($scope.selectedResource.items, function (item) {
+                item.text = $filter('htmlToPlaintext')($templateCache.get(item.templateUrl));
+            });
+        };
+
+        $scope.copySuccess = function () {
+            Notification.success('Text copied to clipboard!');
+        };
+
+        $scope.copyError = function () {
+            Notification.success('Ups! something went wrong! select the text and copy manually');
+        };
+
+        vm.init = function () {
+            $scope.resources = AffiliateResources;
+
+            $scope.select($scope.resources[0]);
+        };
+
+        vm.init();
     }])
 
     .controller('CommissionsCtrl', ['$scope', function ($scope) {

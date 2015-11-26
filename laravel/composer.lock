@@ -1321,12 +1321,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Snowfire/Beautymail.git",
-                "reference": "8f0972f13ec91bbe4ab9f3ab4df329069d6b46f8"
+                "reference": "e93b5a2575d3f59248f343ca2ce7ff339e918fc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Snowfire/Beautymail/zipball/8f0972f13ec91bbe4ab9f3ab4df329069d6b46f8",
-                "reference": "8f0972f13ec91bbe4ab9f3ab4df329069d6b46f8",
+                "url": "https://api.github.com/repos/Snowfire/Beautymail/zipball/e93b5a2575d3f59248f343ca2ce7ff339e918fc4",
+                "reference": "e93b5a2575d3f59248f343ca2ce7ff339e918fc4",
                 "shasum": ""
             },
             "require": {
@@ -1356,7 +1356,7 @@
                 "html",
                 "laravel"
             ],
-            "time": "2015-09-26 15:09:44"
+            "time": "2015-11-25 12:46:21"
         },
         {
             "name": "sofa/eloquence",
@@ -2229,16 +2229,16 @@
         },
         {
             "name": "tymon/jwt-auth",
-            "version": "0.5.5",
+            "version": "0.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tymondesigns/jwt-auth.git",
-                "reference": "eb4abc9bf9d301e3e22f4eaa45a509d6b3100d58"
+                "reference": "f70842d94a548f1457114dd57b6c0b9bf94ba13c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tymondesigns/jwt-auth/zipball/eb4abc9bf9d301e3e22f4eaa45a509d6b3100d58",
-                "reference": "eb4abc9bf9d301e3e22f4eaa45a509d6b3100d58",
+                "url": "https://api.github.com/repos/tymondesigns/jwt-auth/zipball/f70842d94a548f1457114dd57b6c0b9bf94ba13c",
+                "reference": "f70842d94a548f1457114dd57b6c0b9bf94ba13c",
                 "shasum": ""
             },
             "require": {
@@ -2288,7 +2288,7 @@
                 "laravel",
                 "tymon"
             ],
-            "time": "2015-09-15 21:20:29"
+            "time": "2015-11-24 20:02:19"
         },
         {
             "name": "vlucas/phpdotenv",

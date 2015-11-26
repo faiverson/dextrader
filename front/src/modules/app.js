@@ -13,6 +13,7 @@ angular.module('app', [
     'ui.bootstrap',
     'app.http-services',
     'app.shared-directives',
+    'app.shared-filters',
     'LocalStorageModule',
     'ngAnimate'
 ])
