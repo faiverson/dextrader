@@ -48,14 +48,15 @@ class Handler extends ExceptionHandler
 		else if ($e instanceof Tymon\JWTAuth\Exceptions\TokenInvalidException) {
 			return response()->error('Invalid Token', $e->getStatusCode());
 		}
-        else if ($e instanceof ModelNotFoundException) {
+		else if ($e instanceof ModelNotFoundException) {
 			$e = new NotFoundHttpException($e->getMessage(), $e);
-        }
+		}
 		else if ($this->isHttpException($e))
 		{
 			return response()->view('home');
 		}
 
+//		return response()->error($e->getMessage(), $e->getStatusCode());
         return parent::render($request, $e);
     }
 

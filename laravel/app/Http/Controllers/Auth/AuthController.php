@@ -4,15 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-use User;
 use Validator;
-use JWTAuth;
 use Auth;
-use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Http\Request;
 use DB;
 use Hash;
+use Token;
 
 class AuthController extends Controller
 {
@@ -27,7 +24,7 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+    use ThrottlesLogins;
 
     /**
      * Create a new authentication controller instance.
@@ -86,12 +83,7 @@ class AuthController extends Controller
 					return response()->error('Wrong Password', 401);
 				}
 
-				$user = User::with('roles.permissions')->find($u->id);
-				$customClaims = $user->toArray();
-				$customClaims['iss'] = 'login';
-				$customClaims['exp'] = strtotime('+7 days', time());
-				unset($customClaims['id']);
-				$token = JWTAuth::fromUser($user, $customClaims);
+				$token = Token::add($u->id);
 				if($token) {
 					return response()->ok(compact('token'));
 				}
@@ -106,9 +98,8 @@ class AuthController extends Controller
 
 	public function logout(Request $request)
 	{
-		$token = JWTAuth::setRequest($request)->getToken();
-		JWTAuth::invalidate($token);
-		return response()->ok();
+		$response = Token::deprecate($request);
+		return !is_string($response) ? response()->ok() : response()->error($response);
 	}
 
 }

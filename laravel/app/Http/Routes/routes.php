@@ -8,10 +8,6 @@ Route::group(['namespace' => 'Auth', 'prefix' => 'api'], function () {
 	Route::get('/logout', 'AuthController@logout');
 });
 
-
-//Route::any('{path?}', function() {
-//	return view("home");
-//})->where("path", ".+");
 //Event::listen('illuminate.query', function($query, $params)
 //{
 //	print $query.'<br>';

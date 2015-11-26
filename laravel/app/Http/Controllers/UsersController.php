@@ -99,12 +99,12 @@ class UsersController extends Controller
         if ($validator->fails()) {
             return response()->error($validator->errors()->all());
         }
-        $user->first_name = $request->get('first_name');
-        $user->last_name = $request->get('last_name');
-        $user->email = $request->get('email');
-        $user->username = $request->get('username');
-		$user->phone = $request->get('phone');
-        $user->password = bcrypt($request->get('password'));
+        $user->first_name = $request->input('first_name');
+        $user->last_name = $request->input('last_name');
+        $user->email = $request->input('email');
+        $user->username = $request->input('username');
+		$user->phone = $request->input('phone');
+        $user->password = bcrypt($request->input('password'));
         $user->save();
         return response()->added();
     }

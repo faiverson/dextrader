@@ -56,8 +56,14 @@ class ProductsSeeder extends Seeder
 			'description' => 'Allow to view IB section',
 		]);
 
+		$training = Permission::create([
+			'name' => 'product.ib.training',
+			'display_name' => 'Training Certification Viewed',
+			'description' => 'Allow to view IB section',
+		]);
+
 		$pro = Permission::create([
-			'name' => 'product.pro',
+			'name' => 'product.ib.pro',
 			'display_name' => 'View IB PRO',
 			'description' => 'Allow to view IB Pro section',
 		]);
@@ -73,6 +79,7 @@ class ProductsSeeder extends Seeder
 			'display_name' => 'View FX',
 			'description' => 'Allow to view FX section',
 		]);
+
 		Permission::unguard();
 
 		$this->command->info("Starting to create roles per product");
@@ -84,7 +91,13 @@ class ProductsSeeder extends Seeder
 		])->attachPermission($ib);
 
 		Role::create([
-			'name' => 'pro',
+			'name' => 'certification.training',
+			'display_name' => 'IB Certification Training',
+			'description' => 'When the user has viewed the Certification Training',
+		])->attachPermission($training);
+
+		Role::create([
+			'name' => 'PRO',
 			'display_name' => 'IB PRO product',
 			'description' => 'This role is related to the IB PRO product',
 		])->attachPermission($pro);

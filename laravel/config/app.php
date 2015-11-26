@@ -206,13 +206,14 @@ return [
 		'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
 		'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
 		'Entrust' => Zizaco\Entrust\EntrustFacade::class,
+		'Token' => App\Helpers\Token::class,
 
 		'User' => App\Models\User::class,
 		'Role' => App\Models\Role::class,
 		'Permission' => App\Models\Permission::class,
 		'Product' => App\Models\Product::class,
 		'MarketingLink' => App\Models\MarketingLink::class,
-		'Training' => App\Models\Training::class,
+		'Training' => App\Models\Training::class
     ],
 
 ];
