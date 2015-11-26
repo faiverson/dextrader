@@ -4,7 +4,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
             .state('affiliates', {
                 url: '/affiliates',
                 templateUrl: 'modules/affiliates/affiliates.tpl.html',
-                controller: 'HowItWorksCtrl',
+                controller: 'AffiliatesCtrl',
                 data: {
                     pageTitle: 'Affiliates - How it works'
                 }
@@ -58,6 +58,10 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 }
             });
     })
+
+    .controller('AffiliatesCtrl', ['$state', function ($state) {
+        $state.go('affiliates.how_it_works');
+    }])
 
     .controller('HowItWorksCtrl', ['$scope', function ($scope) {
         $scope.youTubeVideoId = "lYKRPzOi1zI";

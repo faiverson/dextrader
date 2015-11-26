@@ -8,6 +8,7 @@ angular.module('app', [
     'app.dashboard',
     'app.user-profile',
     'app.affiliates',
+    'app.dex_ib',
     'ui-notification',
     'ui.bootstrap.tpls',
     'ui.bootstrap',

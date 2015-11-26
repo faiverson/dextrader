@@ -73,11 +73,11 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
     }])
 
-    .factory('httpRequestInterceptor', ['localStorageService', function(localStorageService) {
+    .factory('httpRequestInterceptor', ['localStorageService', function (localStorageService) {
         return {
-            request: function($config) {
+            request: function ($config) {
                 var header;
-                if($config.withCredentials !== false) {
+                if ($config.withCredentials !== false) {
                     $config.withCredentials = true;
                     header = 'Bearer ' + localStorageService.get('token');
                     $config.headers['Authorization'] = header;
@@ -157,10 +157,10 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
     }])
 
-    .factory('MarketingLinksService', ['$http', '$q', '$site-configs', function ($http, $q, $configs){
+    .factory('MarketingLinksService', ['$http', '$q', '$site-configs', function ($http, $q, $configs) {
         var service = $configs.API_BASE_URL + 'marketing-links';
 
-        function query(){
+        function query() {
             var deferred = $q.defer(),
                 endpoint = service;
 
@@ -182,10 +182,10 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
     }])
 
-    .factory('TrainingService', ['$http', '$q', '$site-configs', function ($http, $q, $configs){
+    .factory('TrainingService', ['$http', '$q', '$site-configs', 'localStorageService', function ($http, $q, $configs, localStorageService) {
         var service = $configs.API_BASE_URL + 'training';
 
-        function queryAffiliates(){
+        function queryAffiliates() {
             var deferred = $q.defer(),
                 endpoint = service + '/affiliates';
 
@@ -202,8 +202,52 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
+        function queryDexIB() {
+            var deferred = $q.defer(),
+                endpoint = service + '/certification';
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
+        function unlockTraining(id) {
+            var deferred = $q.defer(),
+                endpoint = service + '/certification';
+
+
+            if(angular.isUndefined(id)){
+                deferred.reject();
+            }
+
+            function success(res) {
+                // Set the token into local storage
+                localStorageService.set('token', res.data.data.token);
+
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            $http.post(endpoint, {training_id: id}).then(success, error);
+
+            return deferred.promise;
+        }
+
         return {
-            queryAffiliates: queryAffiliates
+            queryAffiliates: queryAffiliates,
+            queryDexIB: queryDexIB,
+            unlockTraining: unlockTraining
         };
     }])
 

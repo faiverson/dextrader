@@ -1,6 +1,7 @@
-<section id="content">
+<section id="content" class="certification-training">
     <div id="video-wrapper" class="clearfix">
-        <h2>Affiliates Training</h2>
+        <h2>Some Video Header {{$scope.currentVideo.watched_seconds}}</h2>
+
         <div id="video">
             <div id="video-player" style="height: 363px">
                 <youtube-video video-id="currentVideo.video_id"
@@ -14,20 +15,24 @@
                 <a id="next-video"
                    class="button"
                    href="#"
+                   data-ng-class="{'disabled': !canReproduce(nextVideo)}"
                    data-ng-if="nextVideo"
                    data-ng-click="setVideo(nextVideo)">Next Video</a>
             </div>
         </div>
         <div id="video-sideinfo" class="playlist">
-            <a class="title" href="#">Affiliate Training</a>
+            <a class="title" href="#">Certification Training</a>
             <a class="video-playlist-item video-stopped"
                href="#"
-               data-ng-class="[{'video-playing': training.playing}, {'active': currentVideo.id == training.id}]"
+               data-ng-class="[{'video-playing': training.playing}, {'active': currentVideo.id == training.id}, {'disabled': !canReproduce(training)}]"
                data-ng-click="setVideo(training)"
                data-ng-repeat="training in trainings">{{::training.title}}<span data-ng-bind="::training.time"></span></a>
+
+            <a class="submitbutton bg-blue"
+               href="#"
+               data-ng-click="nextStep()"
+               data-ng-class="{'disabled': !isTrainingComplete()}"
+               style="padding-left: 20px">Complete Certification Course</a>
         </div>
     </div>
-
-    <h2 class="spaced sz25" data-ng-bind="currentVideo.title"></h2>
-    <div id="training-video-description" data-ng-bind="currentVideo.description"></div>
 </section>
