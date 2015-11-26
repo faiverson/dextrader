@@ -22,17 +22,26 @@ class Trainings extends Controller
 		$this->userId = $this->user->id;
 	}
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+	/**
+	 *
+	 * List of all the training affiliate type
+	 *
+	 * @param Request $request
+	 * @return mixed json object
+	 */
     public function affiliates()
     {
         $trainings = Training::where('type', 'affiliates')->get();
 		return response()->ok($trainings);
     }
 
+	/**
+	 *
+	 * List of all the training certification type
+	 *
+	 * @param Request $request
+	 * @return mixed json object
+	 */
 	public function certification(Request $request)
 	{
 		$userId = $this->userId;
@@ -55,12 +64,26 @@ class Trainings extends Controller
 		return response()->ok($trainings);
 	}
 
+	/**
+	 *
+	 * List of all the training pro type
+	 *
+	 * @param Request $request
+	 * @return mixed json object
+	 */
 	public function pro()
 	{
 		$trainings = Training::where('type', 'pro')->get();
 		return response()->ok($trainings);
 	}
 
+	/**
+	 *
+	 * Save a checkpoint when the user has watched a training video
+	 *
+	 * @param Request $request
+	 * @return mixed (token if all the traning has been watched)
+	 */
 	public function checkpoint(Request $request)
 	{
 		$training_id = $request->input('training_id');
@@ -82,7 +105,7 @@ class Trainings extends Controller
 		}
 
 		// check if the trainings are completed
-		$total_training = $this->getTotalCertification();
+		$total_training = $this->getTotalTrainings('certification');
 		// we want to update the token with a new permission
 		$total_completed = $this->getTrainingCompletedByUser('certification');
 
@@ -96,6 +119,13 @@ class Trainings extends Controller
 		return response()->added();
 	}
 
+	/**
+	 *
+	 * Check if the user has a specific training
+	 *
+	 * @param Integer $training_id
+	 * @return Integer
+	 */
 	protected function getUserTraining($training_id)
 	{
 		return DB::table('users_trainings')
@@ -104,6 +134,13 @@ class Trainings extends Controller
 			->count();
 	}
 
+	/**
+	 *
+	 * How many trainings a user has
+	 *
+	 * @param String $type the type of the training [affiliate|pro|certification]
+	 * @return Integer
+	 */
 	protected function getTrainingCompletedByUser($type)
 	{
 		return DB::table('users_trainings')
@@ -112,8 +149,14 @@ class Trainings extends Controller
 			->count();
 	}
 
-	protected function getTotalCertification()
+	/**
+	 *
+	 * How many trainings by type
+	 *
+	 * @return Integer
+	 */
+	protected function getTotalTrainings($type)
 	{
-		return Training::where('type', 'certification')->count();
+		return Training::where('type', $type)->count();
 	}
 }
