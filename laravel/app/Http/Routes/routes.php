@@ -3,9 +3,13 @@ Route::get('/', function () {
 	return view('home');
 });
 
+
+Route::get('/password/reset/{token}', 'UsersController@resetPassword');
+
 Route::group(['namespace' => 'Auth', 'prefix' => 'api'], function () {
 	Route::post('/login', 'AuthController@login');
 	Route::get('/logout', 'AuthController@logout');
+	Route::post('/password', 'PasswordController@postEmail');
 });
 
 //Event::listen('illuminate.query', function($query, $params)
@@ -19,8 +23,4 @@ Route::group(['namespace' => 'Auth', 'prefix' => 'api'], function () {
 //{
 //	print $query.'<br>';
 //	var_dump($request->path());
-//});
-//Event::listen('tymon.jwt.valid', function($user)
-//{
-//	var_dump($user);
 //});

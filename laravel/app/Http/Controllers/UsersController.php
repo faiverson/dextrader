@@ -10,6 +10,7 @@ use App\Http\Requests;
 use Validator;
 use DB;
 use Beautymail;
+use Hash;
 
 class UsersController extends Controller
 {
@@ -179,4 +180,30 @@ class UsersController extends Controller
         User::destroy($id);
         return response()->destroy();
     }
+
+	/**
+	 * Generate and email and a token
+	 *
+	 * @param  int $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function emailPassword(Request $request)
+	{
+//		$this->validate($request, ['email' => 'required|email']);
+//		$email = $request->email;
+//		$user = User::where('email', $email)->first();
+//		dd();
+//		if($user) {
+//			$token = Hash::make($email . '-' . time());
+//			DB::table('password_resets')
+//				->insert([
+//					'email' => $email
+//				]);
+//		}
+//		else {
+//			return response()->error('The email does not exist.');
+//		}
+//
+//		return response()->ok();
+	}
 }
