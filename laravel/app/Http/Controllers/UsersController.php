@@ -72,8 +72,8 @@ class UsersController extends Controller
 		$order_by['column'] = $sort[$order_by['column']];
 		$query = User::where('active', 1)
 			->with('roles')
-			//->skip($start)
-			//->take($length)
+			->skip($start)
+			->take($length)
 			->orderBy($order_by['column'], $order_by['dir'])
 			->get();
 

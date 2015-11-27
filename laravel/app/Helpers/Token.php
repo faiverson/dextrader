@@ -13,6 +13,12 @@ class Token {
 		return $payload['sub'];
 	}
 
+	public static function getPayload($request)
+	{
+		$payload = JWTAuth::setRequest($request)->getPayload();
+		return $payload->toArray();
+	}
+
 	public static function add($user_id)
 	{
 		$user = User::with('roles.permissions')->find($user_id);

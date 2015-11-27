@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Token;
+use User;
 /**
  * Class IsUser
  *
@@ -23,9 +24,12 @@ class IsUser
 	 */
 	public function handle($request, \Closure $next)
 	{
-		$sub = Token::getId($request);
-		if($sub != $request->id) {
-			return response()->error('Unauthorized', 401);
+		$userId = Token::getId($request);
+		if($userId != $request->id ) {
+			$user = User::find($userId);
+			if(!$user->hasRole('admin')) {
+				return response()->error('Unauthorized', 401);
+			}
 		}
 
 		return $next($request);

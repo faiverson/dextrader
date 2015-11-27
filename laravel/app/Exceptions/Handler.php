@@ -16,8 +16,8 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        HttpException::class,
-        ModelNotFoundException::class,
+//        HttpException::class,
+//        ModelNotFoundException::class,
     ];
 
     /**
@@ -62,7 +62,9 @@ class Handler extends ExceptionHandler
 
 	protected function renderHttpException(HttpException $e)
 	{
+		dd('asas');
 		if (view()->exists('errors.' . $e->getStatusCode())) {
+			response()->error($e->getMessage(), $e->getStatusCode());
 			return response()->view('errors.'.$e->getStatusCode(), [], $e->getStatusCode());
 		}
 	}
