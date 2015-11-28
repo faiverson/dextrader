@@ -44,7 +44,7 @@ angular.module('app.shared-directives', [])
                     node.select();
 
                     //document.execCommand('copy');
-                    if(!document.execCommand('copy')) {
+                    if (!document.execCommand('copy')) {
                         throw('failure copy');
                     }
                     selection.removeAllRanges();
@@ -72,6 +72,19 @@ angular.module('app.shared-directives', [])
                         }
                     }
                 });
+            }
+        };
+    }])
+    .directive('userCan', ['AuthService', function (AuthService) {
+        return {
+            restrict: 'A',
+            link: function ($scope, $elem, $attrs) {
+
+                if(angular.isDefined($attrs.userCan)){
+                    if(!AuthService.userHasPermission($attrs.userCan)){
+                        $elem.addClass('user-disable-action');
+                    }
+                }
             }
         };
     }]);

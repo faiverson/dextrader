@@ -21,8 +21,8 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
             });
     })
 
-    .controller('AuthController', ['$scope', '$state', 'AuthService', 'Notification',
-        function ($scope, $state, AuthService, Notification) {
+    .controller('AuthController', ['$scope', '$state', 'AuthService', 'Notification', '$uibModal',
+        function ($scope, $state, AuthService, Notification, $uibModal) {
 
             var vm = this;
 
@@ -54,4 +54,35 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
                 Notification.error(err.error);
             };
 
-        }]);
+
+            $scope.openForgotPassword = function () {
+
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'modules/auth/auth.forgot-password.tpl.html',
+                    controller: 'ForgotPasswordCtrl'
+                });
+
+                modalInstance.result.then(function (selectedItem) {
+                    //$scope.selected = selectedItem;
+                }, function () {
+                    //$log.info('Modal dismissed at: ' + new Date());
+                });
+            };
+
+        }])
+
+    .controller('ForgotPasswordCtrl', ['$scope', '$uibModalInstance', 'AuthService', function ($scope, $uibModalInstance, AuthService) {
+        $scope.close = function () {
+            $uibModalInstance.dismiss('close');
+        };
+
+        $scope.send = function () {
+
+            AuthService.forgotPassword($scope.email)
+                .then(function () {
+                    $uibModalInstance.close();
+                }, function () {
+
+                });
+        };
+    }]);

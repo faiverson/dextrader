@@ -1,6 +1,6 @@
 angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.shared-helpers'])
 
-    .factory('AuthService', ['$http', '$q', '$site-configs', 'localStorageService', 'jwtHelper', '$objects', function ($http, $q, $configs, localStorageService, jwtHelper, $objects) {
+    .factory('AuthService', ['$http', '$q', '$site-configs', 'localStorageService', 'jwtHelper', '$objects', '$filter', function ($http, $q, $configs, localStorageService, jwtHelper, $objects, $filter) {
 
         function login(username, password) {
             var endpoint = $configs.API_BASE_URL + 'login';
@@ -40,10 +40,38 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         function getLoggedInUser() {
             var data = {};
 
-            if (this.isLoggedIn()) {
+            if (isLoggedIn()) {
                 data = jwtHelper.decodeToken(localStorageService.get('token'));
             }
+
             return data;
+        }
+
+        function getUserPermissions(){
+            var userData = getLoggedInUser();
+            var permissions = [];
+
+            if(angular.isUndefined(userData)){
+                return permissions;
+            }
+
+            angular.forEach(userData.roles, function (role) {
+                permissions = permissions.concat(role.permissions);
+            });
+
+            console.log(permissions);
+
+            return permissions;
+        }
+
+        function userHasPermission(perm){
+            var permissions = getUserPermissions();
+
+            if(angular.isUndefined(perm)){
+                return true;
+            }
+
+            return ($filter('filter')(permissions, { name: perm }, true)).length > 0;
         }
 
         function isLoggedIn() {
@@ -65,11 +93,48 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
+        function forgotPassword(email) {
+            var endpoint = $configs.API_BASE_URL + 'password';
+            var deferred = $q.defer();
+
+            function success(res) {
+                if (res.data.success) {
+
+                    // Set the token into local storage
+                    localStorageService.set('token', res.data.data.token);
+
+                    deferred.resolve();
+                } else {
+                    deferred.reject(res);
+                }
+            }
+
+            function error(err) {
+                deferred.reject(err.data);
+            }
+
+            $http({
+                url: endpoint,
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+                withCredentials: false,
+                data: $objects.toUrlString({
+                    username: username,
+                    password: password
+                })
+            }).then(success, error);
+
+
+            return deferred.promise;
+        }
+
         return {
             login: login,
             getLoggedInUser: getLoggedInUser,
             isLoggedIn: isLoggedIn,
-            logout: logout
+            logout: logout,
+            userHasPermission: userHasPermission,
+            forgotPassword: forgotPassword
         };
     }])
 

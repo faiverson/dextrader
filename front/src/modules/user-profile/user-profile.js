@@ -81,6 +81,8 @@ angular.module('app.user-profile', ['ui.router'])
         };
 
         vm.init = function () {
+            AuthService.getUserPermissions();
+
             vm.getUser();
         };
 
