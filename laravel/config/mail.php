@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST', 'mail.edificiosfiumiccino.com.ar '),
+    'host' => env('MAIL_HOST', 'mail.dextrader.com '),
 
     /*
     |--------------------------------------------------------------------------
@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'fa.iverson@gmail.com', 'name' => 'Walid Jalil'],
+    'from' => ['address' => 'info@dextrader.com', 'name' => 'Dex Trader'],
 
     /*
     |--------------------------------------------------------------------------
