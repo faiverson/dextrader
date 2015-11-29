@@ -59,8 +59,13 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
             });
     })
 
-    .controller('DexIBCtrl', ['$state', function ($state) {
-        $state.go('dex_ib.certification_training');
+    .controller('DexIBCtrl', ['$state', 'AuthService', function ($state, AuthService) {
+        if(AuthService.isLoggedIn()){
+            $state.go('dex_ib.certification_training');
+        }else{
+            $state.go('dex_ib.upgrade');
+        }
+
     }])
 
     .controller('DexIBUpgradeCtrl', ['$state', function ($state) {

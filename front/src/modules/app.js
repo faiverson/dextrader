@@ -50,7 +50,7 @@ angular.module('app', [
             var redirectTo = toState.data.redirectTo;
 
 
-            if (!AuthService.isLoggedIn() && toState.name !== 'login') {
+            if (!AuthService.isLoggedIn() && toState.name !== 'login' && angular.isDefined(perm)) {
                 event.preventDefault();
                 $state.go('login');
             }

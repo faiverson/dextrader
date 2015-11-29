@@ -47,11 +47,11 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return data;
         }
 
-        function getUserPermissions(){
+        function getUserPermissions() {
             var userData = getLoggedInUser();
             var permissions = [];
 
-            if(angular.isUndefined(userData)){
+            if (angular.isUndefined(userData)) {
                 return permissions;
             }
 
@@ -64,14 +64,14 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return permissions;
         }
 
-        function userHasPermission(perm){
+        function userHasPermission(perm) {
             var permissions = getUserPermissions();
 
-            if(angular.isUndefined(perm)){
+            if (angular.isUndefined(perm)) {
                 return true;
             }
 
-            return ($filter('filter')(permissions, { name: perm }, true)).length > 0;
+            return ($filter('filter')(permissions, {name: perm}, true)).length > 0;
         }
 
         function isLoggedIn() {
@@ -98,6 +98,23 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             var deferred = $q.defer();
 
             function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err.data);
+            }
+
+            $http.post(endpoint, {email: email}).then(success, error);
+
+            return deferred.promise;
+        }
+
+        function resetPassword(token, email, password, password_confirmation) {
+            var endpoint = $configs.API_BASE_URL + 'password/reset';
+            var deferred = $q.defer();
+
+            function success(res) {
                 if (res.data.success) {
 
                     // Set the token into local storage
@@ -113,17 +130,12 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 deferred.reject(err.data);
             }
 
-            $http({
-                url: endpoint,
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-                withCredentials: false,
-                data: $objects.toUrlString({
-                    username: username,
-                    password: password
-                })
+            $http.post(endpoint, {
+                token: token,
+                email: email,
+                password: password,
+                password_confirmation: password_confirmation
             }).then(success, error);
-
 
             return deferred.promise;
         }
@@ -134,7 +146,8 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             isLoggedIn: isLoggedIn,
             logout: logout,
             userHasPermission: userHasPermission,
-            forgotPassword: forgotPassword
+            forgotPassword: forgotPassword,
+            resetPassword: resetPassword
         };
     }])
 
@@ -289,7 +302,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 endpoint = service + '/certification';
 
 
-            if(angular.isUndefined(id)){
+            if (angular.isUndefined(id)) {
                 deferred.reject();
             }
 

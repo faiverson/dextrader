@@ -18,8 +18,9 @@
             <li>
                 <a ui-sref="user.profile">Profile</a>
                 <ul>
-                    <li><a ui-sref="user.profile">Edit Profile</a></li>
-                    <li><a href="#" data-ng-click="logout()">Logout</a></li>
+                    <li><a ui-sref="login" data-ng-if="!isLoggedIn()">Login</a></li>
+                    <li><a ui-sref="user.profile" data-ng-if="isLoggedIn()">Edit Profile</a></li>
+                    <li><a href="#" data-ng-click="logout()" data-ng-if="isLoggedIn()">Logout</a></li>
                 </ul>
             </li>
         </ul>

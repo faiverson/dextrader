@@ -9,12 +9,22 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                     pageTitle: 'Affiliates - How it works'
                 }
             })
+            .state('affiliates.upgrade', {
+                url: '/upgrade',
+                templateUrl: 'modules/affiliates/upgrade.tpl.html',
+                controller: 'AffiliatesUpgradeCtrl',
+                data: {
+                    pageTitle: 'Affiliate - Upgrade'
+                }
+            })
             .state('affiliates.how_it_works', {
                 url: '/how-it-works',
                 templateUrl: 'modules/affiliates/how-it-works.tpl.html',
                 controller: 'HowItWorksCtrl',
                 data: {
-                    pageTitle: 'Affiliates - How it works'
+                    pageTitle: 'Affiliates - How it works',
+                    permission: 'user.view',
+                    redirectTo: 'affiliates.upgrade'
                 }
             })
             .state('affiliates.links', {
@@ -22,7 +32,9 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 templateUrl: 'modules/affiliates/links.tpl.html',
                 controller: 'MarketingLinksCtrl',
                 data: {
-                    pageTitle: 'Affiliates - Links'
+                    pageTitle: 'Affiliates - Links',
+                    permission: 'user.view',
+                    redirectTo: 'affiliates.upgrade'
                 }
             })
             .state('affiliates.training', {
@@ -30,7 +42,9 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 templateUrl: 'modules/affiliates/training.tpl.html',
                 controller: 'TrainingCtrl',
                 data: {
-                    pageTitle: 'Affiliates - Training'
+                    pageTitle: 'Affiliates - Training',
+                    permission: 'user.view',
+                    redirectTo: 'affiliates.upgrade'
                 }
             })
             .state('affiliates.resources', {
@@ -38,7 +52,9 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 templateUrl: 'modules/affiliates/resources.tpl.html',
                 controller: 'ResourcesCtrl',
                 data: {
-                    pageTitle: 'Affiliates - Resources'
+                    pageTitle: 'Affiliates - Resources',
+                    permission: 'user.view',
+                    redirectTo: 'affiliates.upgrade'
                 }
             })
             .state('affiliates.commissions', {
@@ -46,7 +62,9 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 templateUrl: 'modules/affiliates/commissions.tpl.html',
                 controller: 'CommissionsCtrl',
                 data: {
-                    pageTitle: 'Affiliates - Commissions'
+                    pageTitle: 'Affiliates - Commissions',
+                    permission: 'user.view',
+                    redirectTo: 'affiliates.upgrade'
                 }
             })
             .state('affiliates.payments', {
@@ -54,13 +72,27 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 templateUrl: 'modules/affiliates/payments.tpl.html',
                 controller: 'PaymentsCtrl',
                 data: {
-                    pageTitle: 'Affiliates - Payments'
+                    pageTitle: 'Affiliates - Payments',
+                    permission: 'user.view',
+                    redirectTo: 'affiliates.upgrade'
                 }
             });
     })
 
-    .controller('AffiliatesCtrl', ['$state', function ($state) {
-        $state.go('affiliates.how_it_works');
+    .controller('AffiliatesCtrl', ['$scope', '$state', 'AuthService', function ($scope, $state, AuthService) {
+
+        $scope.isLoggedIn = AuthService.isLoggedIn;
+
+        if(AuthService.isLoggedIn()){
+            $state.go('affiliates.how_it_works');
+        }else{
+            $state.go('affiliates.upgrade');
+        }
+
+    }])
+
+    .controller('AffiliatesUpgradeCtrl', ['$state', function ($state) {
+
     }])
 
     .controller('HowItWorksCtrl', ['$scope', function ($scope) {

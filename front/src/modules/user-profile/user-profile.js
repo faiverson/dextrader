@@ -6,7 +6,7 @@ angular.module('app.user-profile', ['ui.router'])
                 templateUrl: 'modules/user-profile/user.profile.tpl.html',
                 controller: 'UserProfileCtrl',
                 data: {
-                    pageTitle: 'Dashboard'
+                    pageTitle: 'User Profile'
                 }
             })
             .state('user.profile', {
@@ -14,7 +14,9 @@ angular.module('app.user-profile', ['ui.router'])
                 templateUrl: 'modules/user-profile/user.profile.settings.tpl.html',
                 controller: 'UserProfileSettingsCtrl',
                 data: {
-                    pageTitle: 'User Settings'
+                    pageTitle: 'User Settings',
+                    permission: 'user.profile',
+                    redirectTo: 'dashboard'
                 }
             })
             .state('user.support', {
@@ -81,8 +83,6 @@ angular.module('app.user-profile', ['ui.router'])
         };
 
         vm.init = function () {
-            AuthService.getUserPermissions();
-
             vm.getUser();
         };
 
