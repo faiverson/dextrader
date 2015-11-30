@@ -62,6 +62,7 @@
     "gulp-uglify": "^0.2.1",
     "gulp-watch": "^4.2.4",
     "gulp-wrap": "^0.3.0",
+    "imagemin": "^4.0.0",
     "jshint-stylish": "^2.0.1",
     "lazypipe": "^0.2.4"
   },
