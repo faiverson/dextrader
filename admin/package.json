@@ -1,6 +1,6 @@
 {
-  "name": "Startup",
-  "version": "0.0.2",
+  "name": "DexTrader",
+  "version": "1.0.0",
   "description": "Starting point of Laravel and Angular using gulpjs",
   "author": "The Real Creators",
   "license": "UNLICENSED",
