@@ -37,6 +37,12 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
+        function isLoggedIn() {
+            var token = localStorageService.get('token');
+
+            return token != null && angular.isDefined(token);
+        }
+
         function getLoggedInUser() {
             var data = {};
 
@@ -72,12 +78,6 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             }
 
             return ($filter('filter')(permissions, {name: perm}, true)).length > 0;
-        }
-
-        function isLoggedIn() {
-            var token = localStorageService.get('token');
-
-            return token != null && angular.isDefined(token);
         }
 
         function logout() {
