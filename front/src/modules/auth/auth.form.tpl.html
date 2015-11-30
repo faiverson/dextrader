@@ -1,7 +1,8 @@
 <section id="login-wrapper">
     <h1>Login</h1>
+
     <div id="login-box">
-        <form name="loginForm" novalidate="novalidate" data-ng-init="setFromScope(this)">
+        <form name="loginForm" novalidate="novalidate" data-ng-submit="login()">
             <div class="form-group has-feedback" data-show-errors>
                 <!--<label for="username">Username</label>-->
                 <input type="text"
@@ -10,7 +11,7 @@
                        id="username"
                        required
                        data-ng-minlength="4"
-                       data-ng-model="auth.username"
+                       data-ng-model="username"
                        placeholder="E-Mail">
                 <span class="glyphicon glyphicon-envelope form-control-feedback" aria-hidden="true"></span>
             </div>
@@ -22,15 +23,21 @@
                        class="form-control"
                        required
                        data-ng-minlength="4"
-                       data-ng-model="auth.password"
+                       data-ng-model="password"
                        placeholder="Password">
                 <span class="glyphicon glyphicon-lock form-control-feedback" aria-hidden="true"></span>
             </div>
+
+            <div id="form-login-links">
+                <a id="form-login-forgotten" data-ng-click="openForgotPassword()">Forgot Password?</a>
+                <!--<a id="form-login-submit" class="button bg-orange" href="#">Login</a>-->
+                <input type="submit"
+                       id="form-login-submit"
+                       value="Login"
+                       class="button btn btn-warning"/>
+
+                <div class="clear"></div>
+            </div>
         </form>
-        <div id="form-login-links">
-            <a id="form-login-forgotten" href="#">Forgot Password?</a>
-            <a id="form-login-submit" class="button bg-orange" href="#" data-ng-click="login()">Login</a>
-            <div class="clear"></div>
-        </div>
     </div>
 </section>

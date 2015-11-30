@@ -6,7 +6,15 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
                 templateUrl: 'modules/dex-ib/dex-ib.tpl.html',
                 controller: 'DexIBCtrl',
                 data: {
-                    pageTitle: 'Affiliates - How it works'
+                    pageTitle: 'Dex IB'
+                }
+            })
+            .state('dex_ib.upgrade', {
+                url: '/dexib/upgrade',
+                templateUrl: 'modules/dex-ib/dex-ib.upgrade.tpl.html',
+                controller: 'DexIBUpgradeCtrl',
+                data: {
+                    pageTitle: 'Dex IB - Upgrade'
                 }
             })
             .state('dex_ib.certification_training', {
@@ -14,7 +22,9 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
                 templateUrl: 'modules/dex-ib/dex-ib.certification-training.tpl.html',
                 controller: 'CertificationTrainingCtrl',
                 data: {
-                    pageTitle: 'Dex IB - Certification Training'
+                    pageTitle: 'Dex IB - Certification Training',
+                    permission: 'product.ib',
+                    redirectTo: 'dex_ib.upgrade'
                 }
             })
             .state('dex_ib.live_signals', {
@@ -22,7 +32,9 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
                 templateUrl: 'modules/dex-ib/dex-ib.live-signals.tpl.html',
                 controller: 'LiveSignalsCtrl',
                 data: {
-                    pageTitle: 'Dex IB - Live Signals'
+                    pageTitle: 'Dex IB - Live Signals',
+                    permission: 'product.ib.training',
+                    redirectTo: 'dex_ib.certification_training'
                 }
             })
             .state('dex_ib.dex_score', {
@@ -30,7 +42,9 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
                 templateUrl: 'modules/dex-ib/dex-ib.dex-score.tpl.html',
                 controller: 'DexScoreCtrl',
                 data: {
-                    pageTitle: 'Dex IB - Dex Score'
+                    pageTitle: 'Dex IB - Dex Score',
+                    permission: 'product.ib.live_signal',
+                    redirectTo: 'dex_ib.live_signals'
                 }
             })
             .state('dex_ib.dex_ib_pro', {
@@ -38,13 +52,24 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
                 templateUrl: 'modules/dex-ib/dex-ib.dex-ib-pro.tpl.html',
                 controller: 'DexIBProCtrl',
                 data: {
-                    pageTitle: 'Dex IB - Pro'
+                    pageTitle: 'Dex IB - Pro',
+                    permission: 'product.ib.dex_score',
+                    redirectTo: 'dex_ib.dex_score'
                 }
             });
     })
 
-    .controller('DexIBCtrl', ['$state', function ($state) {
-        $state.go('dex_ib.certification_training');
+    .controller('DexIBCtrl', ['$state', 'AuthService', function ($state, AuthService) {
+        if(AuthService.isLoggedIn()){
+            $state.go('dex_ib.certification_training');
+        }else{
+            $state.go('dex_ib.upgrade');
+        }
+
+    }])
+
+    .controller('DexIBUpgradeCtrl', ['$state', function ($state) {
+
     }])
 
     .controller('CertificationTrainingCtrl', ['$scope', '$filter', '$interval', 'TrainingService', '$state', function ($scope, $filter, $interval, TrainingService, $state) {
@@ -86,8 +111,6 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
         };
 
         vm.unlock = function(id){
-            TrainingService.unlockTraining(id)
-                .then(success, error);
 
             function success(){
                 $scope.currentVideo.completed = 1;
@@ -96,6 +119,9 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
             function error(){
 
             }
+
+            TrainingService.unlockTraining(id)
+                .then(success, error);
         };
 
         vm.init = function () {
@@ -129,7 +155,7 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
 
         $scope.canReproduce = function (training) {
 
-            return $scope.trainings.indexOf(training) == 0 || $scope.trainings[$scope.trainings.indexOf(training) - 1].completed;
+            return $scope.trainings.indexOf(training) === 0 || $scope.trainings[$scope.trainings.indexOf(training) - 1].completed;
         };
 
         $scope.isTrainingComplete = function () {

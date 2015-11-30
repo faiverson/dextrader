@@ -49,8 +49,14 @@ class PasswordController extends Controller
 		$this->validate($request, ['email' => 'required|email']);
 
 		view()->composer('emails.password', function($view) {
+			$logo = str_replace(
+					'%PUBLIC%',
+					\Request::getSchemeAndHttpHost(),
+					Config::get('beautymail.view.logo')
+			);
+			
 			$view->with([
-				'logo'   => Config::get('beautymail.view.logo'),
+				'logo'   => $logo,
 			]);
 		});
 

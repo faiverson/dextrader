@@ -34,7 +34,6 @@ angular.module('app', [
             positionY: 'top'
         });
 
-
         localStorageServiceProvider
             .setPrefix('app');
 
@@ -47,8 +46,11 @@ angular.module('app', [
 
     .controller('AppCtrl', ['$scope', 'AuthService', '$state', function AppCtrl($scope, AuthService, $state) {
         $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+            var perm = toState.data.permission;
+            var redirectTo = toState.data.redirectTo;
 
-            if (!AuthService.isLoggedIn() && toState.name !== 'login') {
+
+            if (!AuthService.isLoggedIn() && toState.name !== 'login' && angular.isDefined(perm)) {
                 event.preventDefault();
                 $state.go('login');
             }
@@ -56,6 +58,16 @@ angular.module('app', [
             if (AuthService.isLoggedIn() && toState.name === 'login') {
                 event.preventDefault();
                 $state.go('dashboard');
+            }
+
+            if (AuthService.isLoggedIn() && !AuthService.userHasPermission(perm)){
+                event.preventDefault();
+
+                if(angular.isDefined(redirectTo)){
+                    $state.go(redirectTo);
+                }else{
+                    $state.go('dashboard');
+                }
             }
         });
 

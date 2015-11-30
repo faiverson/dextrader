@@ -4,7 +4,7 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
             .state('login', {
                 url: '/login',
                 templateUrl: 'modules/auth/auth.form.tpl.html',
-                controller: 'AuthController as auth',
+                controller: 'AuthController',
                 data: {
                     pageTitle: 'Login Page',
                     bodyClass: 'page-login'
@@ -18,25 +18,29 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
                     pageTitle: 'Login Page',
                     bodyClass: 'page-login'
                 }
+            })
+            .state('reset_password', {
+                url: '/password/reset/:token',
+                templateUrl: 'modules/auth/auth.reset-password.tpl.html',
+                controller: 'ResetPasswordCtrl',
+                data: {
+                    pageTitle: 'Reset Password',
+                    bodyClass: 'page-login'
+                }
             });
     })
 
-    .controller('AuthController', ['$scope', '$state', 'AuthService', 'Notification',
-        function ($scope, $state, AuthService, Notification) {
+    .controller('AuthController', ['$scope', '$state', 'AuthService', 'Notification', '$uibModal',
+        function ($scope, $state, AuthService, Notification, $uibModal) {
 
             var vm = this;
-
-            //this is because we use syntax Controller as Ctrl
-            $scope.setFromScope = function (scope) {
-                $scope.form = scope;
-            };
 
             $scope.login = function () {
 
                 $scope.$broadcast('show-errors-check-validity');
 
-                if ($scope.form.loginForm.$valid) {
-                    AuthService.login(vm.username, vm.password)
+                if ($scope.loginForm.$valid) {
+                    AuthService.login($scope.username, $scope.password)
                         .then(vm.successLogin, vm.errorLogin);
                 }
 
@@ -54,4 +58,55 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
                 Notification.error(err.error);
             };
 
-        }]);
+
+            $scope.openForgotPassword = function () {
+
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'modules/auth/auth.forgot-password.tpl.html',
+                    controller: 'ForgotPasswordCtrl'
+                });
+
+                modalInstance.result.then(function (email) {
+                    Notification.success('An E-mail has been sent to ' + email + ' with instructions to reset the Password!');
+                }, function () {
+                    //$log.info('Modal dismissed at: ' + new Date());
+                });
+            };
+
+        }])
+
+    .controller('ForgotPasswordCtrl', ['$scope', '$uibModalInstance', 'AuthService', 'Notification', function ($scope, $uibModalInstance, AuthService, Notification) {
+        $scope.close = function () {
+            $uibModalInstance.dismiss('close');
+        };
+
+        $scope.send = function () {
+
+            AuthService.forgotPassword($scope.email)
+                .then(function () {
+                    $uibModalInstance.close($scope.email);
+                }, function (err) {
+                    Notification.error(err.error);
+                });
+        };
+    }])
+
+    .controller('ResetPasswordCtrl', ['$scope', 'AuthService', 'Notification', '$state', '$stateParams', function ($scope, AuthService, Notification, $state, $stateParams) {
+
+        $scope.send = function () {
+
+            AuthService.resetPassword($stateParams.token, $scope.auth.email, $scope.auth.password, $scope.auth.password_confirmation)
+                .then(function (res) {
+                    var user = AuthService.getLoggedInUser();
+
+                    Notification.success('Password has been reset successfully!');
+
+                    Notification.success("Welcome " + user.full_name);
+
+                    $state.go('dashboard');
+
+                }, function (err) {
+                    Notification.error(err.error);
+                });
+        };
+    }]);
