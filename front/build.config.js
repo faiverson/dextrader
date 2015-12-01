@@ -68,7 +68,8 @@ module.exports = {
         input: 'src/index.html',
         output: 'home.php',
         tpl: {
-            modules: 'src/modules/**/*.tpl.html',
+			output: 'templates.js',
+			modules: 'src/modules/**/*.tpl.html',
             common: 'src/common/**/*.tpl.html'
         }
     },
@@ -114,7 +115,7 @@ module.exports = {
                 replacement: 'Dex Trader'
             }
         ],
-        prod: [
+        production: [
             {
                 match: 'SITE_URL',
                 replacement: 'http://dextrader.com'

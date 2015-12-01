@@ -67,6 +67,7 @@ module.exports = {
 		input: 'src/index.html',
 		output: 'home.blade.php',
 		tpl: {
+			output: 'templates.js',
 			modules: 'src/modules/**/*.tpl.html',
 			common: 'src/common/**/*.tpl.html'
 		}

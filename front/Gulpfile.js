@@ -1,4 +1,5 @@
 var gulp = require('gulp'),
+	runSequence = require('run-sequence'),
 	gutil = require('gulp-util'),
 	fs = require('fs'),
 	del = require('del'),
@@ -42,13 +43,28 @@ var gulp = require('gulp'),
 	config = require('./build.config.js');
 
 // FACADES
-gulp.task('default', ['clean:dist', 'jshint', 'js:vendor', 'js:files', 'js:templates', 'css', 'fonts', 'images', 'svg', 'html']);
-// compile all for development env
-gulp.task('dev', ['default']);
-// compile all for production env
-gulp.task('prod', ['env', 'default']);
+gulp.task('default', function(callback) {
+	runSequence('clean:dist',
+		'jshint',
+		['js:vendor', 'js:templates', 'css', 'fonts', 'images', 'svg'],
+		'js:files',
+		'html',
+		callback);
+});
+
+gulp.task('production', function(callback) {
+	runSequence(['env','clean:dist'],
+		'jshint',
+		['js:vendor', 'js:templates', 'css', 'fonts', 'images', 'svg'],
+		'js:files',
+		'compile:js',
+		'compile:clean',
+		'html',
+		callback);
+});
+
 // run a server and a watcher
-gulp.task('run', ['server', 'watch']);
+gulp.task('dev', ['server', 'watch']);
 
 // TASKS
 // set the environment
@@ -86,28 +102,17 @@ gulp.task('clean:test', function () {
 
 // create a file with all JS vendors
 gulp.task('js:vendor', function() {
-	var condition = (environment !== 'dev'),
-		jsDev = lazypipe()
-			.pipe(header, config.banner.full, { pkg: pkg }),
-
-		jsLive = lazypipe()
-			.pipe(rename, { suffix: '.min' })
-			.pipe(uglify, {outSourceMap: config.js.vendor.output + '.map'})
-			.pipe(header, config.banner.min, { pkg: pkg });
-
 	return gulp.src(config.js.vendor.input)
 		.pipe(plumber())
 		.pipe(concat(config.js.vendor.output))
-		.pipe(gulpif(!condition, jsDev()))
-		.pipe(gulpif(condition, jsLive()))
 		.pipe(gulp.dest(config.js.files.output))
 		.on('error', gutil.log);
 });
 
 // Process app's JS into app.js.
 gulp.task('js:files', function () {
-	var condition = (environment !== 'dev'),
-		filename = pkg.name + '-v' + pkg.version + '.js',
+	var condition = (environment === 'dev'),
+		filename = 'app.js',
 		jsLive,
 		banner = '(function ( window, angular, undefined ) {\n';
 		banner +=  '\'use strict\';\n';
@@ -115,10 +120,7 @@ gulp.task('js:files', function () {
 		banner +=  '})( window, window.angular );';
 		jsLive = lazypipe()
 			.pipe(concat, filename)
-			.pipe(wrap, banner)
-			.pipe(header, config.banner.min, { pkg: pkg })
-			.pipe(rename, { suffix: '.min' })
-			.pipe(uglify, {outSourceMap: filename + '.map'});
+			.pipe(wrap, banner);
 
 	return gulp.src(config.js.files.input)
 		.pipe(plumber())
@@ -136,9 +138,39 @@ gulp.task('js:files', function () {
 				spaceBeforeConditional: true,
 				spaceInParen: true
 			}}))
-		.pipe(gulpif(condition, jsLive()))
+		.pipe(gulpif(!condition, jsLive()))
 		.pipe(gulp.dest(config.js.files.output))
 		.on('error', gutil.log);
+});
+
+gulp.task('compile:js', function () {
+	var filename = pkg.name + '-v' + pkg.version + '.js';
+
+	return gulp.src([
+			config.js.files.output + config.js.vendor.output,
+			config.js.files.output + config.html.tpl.output,
+			config.js.files.output + 'app.js'
+		])
+		.pipe(plumber())
+		.pipe(header(config.banner.min, { pkg: pkg }))
+		.pipe(concat(filename))
+		.pipe(rename({
+			suffix: '.min'
+		}))
+		.pipe(uglify({
+			outSourceMap: filename + '.map'
+		}))
+		.pipe(gulp.dest(config.js.files.output));
+});
+
+gulp.task('compile:clean', function () {
+	var filename = pkg.name + '-v' + pkg.version + '.min.js';
+
+	return del.sync([
+		config.js.files.output + '*.js',
+		'!' + config.js.files.output,
+		'!' + config.js.files.output + filename
+	], { force: true});
 });
 
 // start a server localhost in php
@@ -205,16 +237,6 @@ gulp.task('gulpfile', function () {
 });
 
 gulp.task('js:templates', function () {
-	var filename = 'templates.js',
-		condition = (environment !== 'dev'),
-		jsDev = lazypipe()
-			.pipe(gulp.dest, config.js.files.output),
-
-		jsLive = lazypipe()
-			.pipe(rename, { suffix: '.min' })
-			.pipe(uglify)
-			.pipe(gulp.dest, config.js.files.output);
-
 	return gulp.src([config.html.tpl.common, config.html.tpl.modules])
 		.pipe(plumber())
 		.pipe(html2js({
@@ -222,10 +244,8 @@ gulp.task('js:templates', function () {
 			useStrict: true,
 			base: 'src/'
 		}))
-		//.pipe(jade({pretty: true}))
-		.pipe(concat(filename))
-		.pipe(jsDev())
-		.pipe(gulpif(condition, jsLive()))
+		.pipe(concat(config.html.tpl.output))
+		.pipe(gulp.dest(config.js.files.output))
 		.on('error', gutil.log);
 });
 
@@ -233,19 +253,18 @@ gulp.task('css', function () {
 	var filename = 'styles.css',
 		cleancss = new LessPluginCleanCSS({ advanced: true }),
 		autoprefix = new LessPluginAutoPrefix({ browsers: ["last 2 versions"] }),
-		condition = (environment !== 'dev');
+		condition = (environment === 'dev');
 
 	return gulp.src(config.less.input)
 		.pipe(plumber())
-		.pipe(sourcemaps.init())
 		.pipe(concat(filename))
+		.pipe(prettify({indentSize: 4}))
+		.pipe(sourcemaps.init())
 		.pipe(less({
 			paths: ['src/less/'],
-			plugins: (condition ? [autoprefix, cleancss] : [autoprefix])
+			plugins: (condition ? [autoprefix] : [autoprefix, cleancss])
 		}))
-		.pipe(prettify({indentSize: 4}))
 		.pipe(sourcemaps.write('./'))
-		.pipe(gulpif(condition, rename({ suffix: '.min' })))
 		.pipe(gulp.dest(config.less.output))
 		.on('error', gutil.log);
 });
@@ -259,9 +278,7 @@ gulp.task('html', function () {
 	if(condition) {
 		input = [];
 		inputs = [
-			'/front/js/' + config.js.vendor.output,
-			'/front/js/templates.js',
-			'/front/js/' + pkg.name + '-v' + pkg.version + '.js'
+			'/front/js/' + pkg.name + '-v' + pkg.version + '.min.js'
 		];
 	}
 	else {
