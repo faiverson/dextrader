@@ -258,6 +258,35 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
     }])
 
+    .factory('ProvidersService', ['$http', '$q', '$site-configs', '$objects', function ($http, $q, $configs, $objects) {
+        var service = $configs.API_BASE_URL + 'providers';
+
+        function query(params) {
+            var deferred = $q.defer(),
+                endpoint = service;
+
+            if(angular.isDefined(params)){
+                endpoint += '?' + $objects.toUrlString(params);
+            }
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
+        return {
+            query: query
+        };
+    }])
+
     .factory('TrainingService', ['$http', '$q', '$site-configs', 'localStorageService', function ($http, $q, $configs, localStorageService) {
         var service = $configs.API_BASE_URL + 'training';
 

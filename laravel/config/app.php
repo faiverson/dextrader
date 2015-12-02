@@ -214,6 +214,7 @@ return [
 		'Permission' => App\Models\Permission::class,
 		'Product' => App\Models\Product::class,
 		'MarketingLink' => App\Models\MarketingLink::class,
+		'Provider' => App\Models\Provider::class,
 		'Training' => App\Models\Training::class
     ],
 

@@ -1311,10 +1311,27 @@ select {
 }
 
 table th.sortable {
-    cursor: pointer
+    cursor: pointer;
+    position: relative;
 }
 
 table th.sortable:after {
+    position: absolute;
+    top: 15px;
+}
+
+
+table th.sortable-asc:after {
+    content: url('/front/assets/images/ico-sort.png');
+    margin-left: 5px;
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+table th.sortable-desc:after {
     content: url('/front/assets/images/ico-sort.png');
     margin-left: 5px;
 }

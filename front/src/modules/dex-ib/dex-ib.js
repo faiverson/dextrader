@@ -60,9 +60,9 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
     })
 
     .controller('DexIBCtrl', ['$state', 'AuthService', function ($state, AuthService) {
-        if(AuthService.isLoggedIn()){
+        if (AuthService.isLoggedIn()) {
             $state.go('dex_ib.certification_training');
-        }else{
+        } else {
             $state.go('dex_ib.upgrade');
         }
 
@@ -93,30 +93,30 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
 
         };
 
-        vm.startTimer = function(){
+        vm.startTimer = function () {
             vm.stopTime = $interval(vm.updateTime, 1000);
         };
 
-        vm.stopTimer = function(){
+        vm.stopTimer = function () {
             $interval.cancel(vm.stopTime);
         };
 
         vm.updateTime = function () {
             $scope.currentVideo.watched_seconds++;
 
-            if($scope.currentVideo.watched_seconds > $scope.currentVideo.unlock_at){
+            if ($scope.currentVideo.watched_seconds > $scope.currentVideo.unlock_at) {
                 vm.unlock($scope.currentVideo.id);
                 vm.stopTimer();
             }
         };
 
-        vm.unlock = function(id){
+        vm.unlock = function (id) {
 
-            function success(){
+            function success() {
                 $scope.currentVideo.completed = 1;
             }
 
-            function error(){
+            function error() {
 
             }
 
@@ -159,13 +159,13 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
         };
 
         $scope.isTrainingComplete = function () {
-            var completes = $filter('filter')($scope.trainings, { completed: 1 }, true);
+            var completes = $filter('filter')($scope.trainings, {completed: 1}, true);
 
             return angular.isDefined(completes) && completes.length === $scope.trainings.length;
         };
 
-        $scope.nextStep = function(){
-            if($scope.isTrainingComplete()){
+        $scope.nextStep = function () {
+            if ($scope.isTrainingComplete()) {
                 $state.go('dex_ib.live_signals');
             }
         };
@@ -196,8 +196,60 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
 
     }])
 
-    .controller('DexScoreCtrl', ['$scope', function ($scope) {
+    .controller('DexScoreCtrl', ['$scope', 'ProvidersService', 'Notification', function ($scope, ProvidersService, Notification){
+        var vm = this;
 
+        $scope.pagination = {
+            totalItems: 20,
+            currentPage: 1,
+            itemsPerPage: 10,
+            pageChange: function(){
+                vm.getProvider();
+            }
+        };
+
+        $scope.sortBy = {
+            column: 1,
+            dir: 'asc',
+            sort: function(col){
+                if(col === this.column){
+                    this.dir = this.dir === 'asc' ? 'desc' : 'asc';
+                }else{
+                    this.column = col;
+                    this.dir = 'asc';
+                }
+
+                vm.getProvider();
+            }
+        };
+
+        vm.getProvider = function () {
+
+            var params = {
+                start: ($scope.pagination.currentPage -1) * $scope.pagination.itemsPerPage,
+                length: $scope.pagination.itemsPerPage,
+                sortBy: $scope.sortBy.column,
+                sortDir: $scope.sortBy.dir
+            };
+
+            function success(res) {
+                $scope.pagination.totalItems = res.data.totalItems;
+                $scope.providers = res.data.items;
+            }
+
+            function error(err){
+                Notification.error('Ups! there was an error trying to load providers!');
+            }
+
+            ProvidersService.query(params)
+                .then(success, error);
+        };
+
+        vm.init = function () {
+            vm.getProvider();
+        };
+
+        vm.init();
     }])
 
     .controller('DexIBProCtrl', ['$scope', function ($scope) {
