@@ -39,11 +39,15 @@ var gulp = require('gulp'),
     connect = require('connect'),
 	replace = require('gulp-replace-task'),
 	pkg = require('./package.json'),
-	environment = 'dev',
+	dotenv = require('dotenv').config({path: '../laravel/.env'}),
 	config = require('./build.config.js');
 
+gulp.task('test', function () {
+	gutil.log(config.placeholders);
+});
+
 // FACADES
-gulp.task('default', function(callback) {
+gulp.task('build', function(callback) {
 	runSequence('clean:dist',
 		'jshint',
 		['js:vendor', 'js:templates', 'css', 'fonts', 'images', 'svg'],
@@ -53,7 +57,7 @@ gulp.task('default', function(callback) {
 });
 
 gulp.task('production', function(callback) {
-	runSequence(['env','clean:dist'],
+	runSequence(['clean:dist'],
 		'jshint',
 		['js:vendor', 'js:templates', 'css', 'fonts', 'images', 'svg'],
 		'js:files',
@@ -63,15 +67,21 @@ gulp.task('production', function(callback) {
 		callback);
 });
 
+gulp.task('default', ['env']);
+
 // run a server and a watcher
 gulp.task('dev', ['server', 'watch']);
 
 // TASKS
 // set the environment
 gulp.task('env', function() {
-	var task = this.seq.slice(-1)[0];
-	environment = task;
-	gutil.log('Environment: ' + task);
+	environment = process.env.APP_ENV;
+	gutil.log('Environment: ' + environment);
+	if(environment === 'local') {
+		gulp.start('build');
+	} else {
+		gulp.start('production');
+	}
 });
 
 // clean public folder
@@ -111,7 +121,7 @@ gulp.task('js:vendor', function() {
 
 // Process app's JS into app.js.
 gulp.task('js:files', function () {
-	var condition = (environment === 'dev'),
+	var condition = (environment === 'local'),
 		filename = 'app.js',
 		jsLive,
 		banner = '(function ( window, angular, undefined ) {\n';
@@ -253,7 +263,7 @@ gulp.task('css', function () {
 	var filename = 'styles.css',
 		cleancss = new LessPluginCleanCSS({ advanced: true }),
 		autoprefix = new LessPluginAutoPrefix({ browsers: ["last 2 versions"] }),
-		condition = (environment === 'dev');
+		condition = (environment === 'local');
 
 	return gulp.src(config.less.input)
 		.pipe(plumber())
@@ -271,7 +281,7 @@ gulp.task('css', function () {
 
 //// Convert index.jade into index.html.
 gulp.task('html', function () {
-    var condition = environment !== 'dev',
+    var condition = environment !== 'local',
 		input, inputs, sources,
 		appending = '';
 

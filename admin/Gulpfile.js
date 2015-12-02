@@ -1,4 +1,5 @@
 var gulp = require('gulp'),
+	runSequence = require('run-sequence'),
 	gutil = require('gulp-util'),
 	fs = require('fs'),
 	del = require('del'),
@@ -11,51 +12,76 @@ var gulp = require('gulp'),
 	footer = require('gulp-footer'),
 	prefix = require('gulp-autoprefixer'),
 	watch = require('gulp-watch'),
-    jshint = require('gulp-jshint'),
+	jshint = require('gulp-jshint'),
 	stylish = require('jshint-stylish'),
-    less = require('gulp-less'),
+	less = require('gulp-less'),
 	LessPluginCleanCSS = require('less-plugin-clean-css'),
 	LessPluginAutoPrefix = require('less-plugin-autoprefix'),
 	html2js = require('gulp-html2js'),
 	gulpif = require('gulp-if'),
-    concat = require('gulp-concat'),
-    uglify = require('gulp-uglify'),
+	concat = require('gulp-concat'),
+	uglify = require('gulp-uglify'),
 	svgmin = require('gulp-svgmin'),
 	svgstore = require('gulp-svgstore'),
-    htmlmin = require('gulp-htmlmin'),
-    imagemin = require('gulp-imagemin'),
-    cache = require('gulp-cache'),
-    livereload = require('gulp-livereload'),
-    wrap = require('gulp-wrap'),
+	htmlmin = require('gulp-htmlmin'),
+	imagemin = require('gulp-imagemin'),
+	cache = require('gulp-cache'),
+	livereload = require('gulp-livereload'),
+	wrap = require('gulp-wrap'),
 	ngAnnotate = require('gulp-ng-annotate'),
 	markdown = require('gulp-markdown'),
 	sourcemaps = require('gulp-sourcemaps'),
 	prettify = require('gulp-jsbeautifier'),
-    connectPhp = require('gulp-connect-php'),
+	connectPhp = require('gulp-connect-php'),
 	debug = require('gulp-debug'),
-    inject = require('gulp-inject'),
+	inject = require('gulp-inject'),
 	sInject = require('gulp-inject-string'),
+	connect = require('connect'),
 	replace = require('gulp-replace-task'),
-    connect = require('connect'),
 	pkg = require('./package.json'),
-	environment = 'dev',
+	dotenv = require('dotenv').config({path: '../laravel/.env'}),
 	config = require('./build.config.js');
 
+gulp.task('test', function () {
+	gutil.log(config.placeholders);
+});
+
 // FACADES
-gulp.task('default', ['clean:dist', 'jshint', 'js:vendor', 'js:files', 'js:templates', 'css', 'fonts', 'images', 'svg',  'html']);
-// compile all for development env
-gulp.task('dev', ['default']);
-// compile all for production env
-gulp.task('prod', ['env', 'default']);
+gulp.task('build', function(callback) {
+	runSequence('clean:dist',
+		'jshint',
+		['js:vendor', 'js:templates', 'css', 'fonts', 'images', 'svg'],
+		'js:files',
+		'html',
+		callback);
+});
+
+gulp.task('production', function(callback) {
+	runSequence(['clean:dist'],
+		'jshint',
+		['js:vendor', 'js:templates', 'css', 'fonts', 'images', 'svg'],
+		'js:files',
+		'compile:js',
+		'compile:clean',
+		'html',
+		callback);
+});
+
+gulp.task('default', ['env']);
+
 // run a server and a watcher
-gulp.task('run', ['server', 'watch']);
+gulp.task('dev', ['server', 'watch']);
 
 // TASKS
 // set the environment
 gulp.task('env', function() {
-	var task = this.seq.slice(-1)[0];
-	environment = task;
-	gutil.log('Environment: ' + task);
+	environment = process.env.APP_ENV;
+	gutil.log('Environment: ' + environment);
+	if(environment === 'local') {
+		gulp.start('build');
+	} else {
+		gulp.start('production');
+	}
 });
 
 // clean public folder
@@ -86,37 +112,25 @@ gulp.task('clean:test', function () {
 
 // create a file with all JS vendors
 gulp.task('js:vendor', function() {
-	var condition = (environment !== 'dev'),
-		jsDev = lazypipe()
-			.pipe(header, config.banner.full, { pkg: pkg });
-
-		jsLive = lazypipe()
-			.pipe(rename, { suffix: '.min' })
-			.pipe(uglify, {outSourceMap: config.js.vendor.output + '.map'})
-			.pipe(header, config.banner.min, { pkg: pkg });
-
 	return gulp.src(config.js.vendor.input)
 		.pipe(plumber())
 		.pipe(concat(config.js.vendor.output))
-		.pipe(gulpif(!condition, jsDev()))
-		.pipe(gulpif(condition, jsLive()))
 		.pipe(gulp.dest(config.js.files.output))
 		.on('error', gutil.log);
 });
 
 // Process app's JS into app.js.
 gulp.task('js:files', function () {
-	var condition = (environment !== 'dev'),
-		filename = pkg.name + '-v' + pkg.version + '.js',
-		jsLive = lazypipe()
-			.pipe(concat, filename)
-			.pipe(wrap, '(function ( window, angular, undefined ) {\n'
-			+ '\'use strict\';\n'
-			+ '<%= contents %>'
-			+ '})( window, window.angular );')
-			.pipe(header, config.banner.min, { pkg: pkg })
-			.pipe(rename, { suffix: '.min' })
-			.pipe(uglify, {outSourceMap: filename + '.map'});
+	var condition = (environment === 'local'),
+		filename = 'app.js',
+		jsLive,
+		banner = '(function ( window, angular, undefined ) {\n';
+	banner +=  '\'use strict\';\n';
+	banner +=  '<%= contents %>';
+	banner +=  '})( window, window.angular );';
+	jsLive = lazypipe()
+		.pipe(concat, filename)
+		.pipe(wrap, banner);
 
 	return gulp.src(config.js.files.input)
 		.pipe(plumber())
@@ -134,10 +148,39 @@ gulp.task('js:files', function () {
 				spaceBeforeConditional: true,
 				spaceInParen: true
 			}}))
-		.pipe(gulpif(condition, jsLive()))
-		//.pipe(debug({verbose: true}))
+		.pipe(gulpif(!condition, jsLive()))
 		.pipe(gulp.dest(config.js.files.output))
 		.on('error', gutil.log);
+});
+
+gulp.task('compile:js', function () {
+	var filename = pkg.name + '-v' + pkg.version + '.js';
+
+	return gulp.src([
+		config.js.files.output + config.js.vendor.output,
+		config.js.files.output + config.html.tpl.output,
+		config.js.files.output + 'app.js'
+	])
+		.pipe(plumber())
+		.pipe(header(config.banner.min, { pkg: pkg }))
+		.pipe(concat(filename))
+		.pipe(rename({
+			suffix: '.min'
+		}))
+		.pipe(uglify({
+			outSourceMap: filename + '.map'
+		}))
+		.pipe(gulp.dest(config.js.files.output));
+});
+
+gulp.task('compile:clean', function () {
+	var filename = pkg.name + '-v' + pkg.version + '.min.js';
+
+	return del.sync([
+		config.js.files.output + '*.js',
+		'!' + config.js.files.output,
+		'!' + config.js.files.output + filename
+	], { force: true});
 });
 
 // start a server localhost in php
@@ -180,10 +223,10 @@ gulp.task('images', function() {
 	return gulp.src(config.assets.images.input)
 		.pipe(plumber())
 		.pipe(imagemin({
-            optimizationLevel: 5,
-            progressive: true,
-            interlaced: true
-        }))
+			optimizationLevel: 5,
+			progressive: true,
+			interlaced: true
+		}))
 		.pipe(gulp.dest(config.assets.images.output));
 });
 
@@ -204,16 +247,6 @@ gulp.task('gulpfile', function () {
 });
 
 gulp.task('js:templates', function () {
-	var filename = 'templates.js',
-		condition = (environment !== 'dev'),
-		jsDev = lazypipe()
-			.pipe(gulp.dest, config.js.files.output),
-
-		jsLive = lazypipe()
-			.pipe(rename, { suffix: '.min' })
-			.pipe(uglify)
-			.pipe(gulp.dest, config.js.files.output);
-
 	return gulp.src([config.html.tpl.common, config.html.tpl.modules])
 		.pipe(plumber())
 		.pipe(html2js({
@@ -221,10 +254,8 @@ gulp.task('js:templates', function () {
 			useStrict: true,
 			base: 'src/'
 		}))
-		//.pipe(jade({pretty: true}))
-		.pipe(concat(filename))
-		.pipe(jsDev())
-		.pipe(gulpif(condition, jsLive()))
+		.pipe(concat(config.html.tpl.output))
+		.pipe(gulp.dest(config.js.files.output))
 		.on('error', gutil.log);
 });
 
@@ -232,35 +263,32 @@ gulp.task('css', function () {
 	var filename = 'styles.css',
 		cleancss = new LessPluginCleanCSS({ advanced: true }),
 		autoprefix = new LessPluginAutoPrefix({ browsers: ["last 2 versions"] }),
-		condition = (environment !== 'dev');
+		condition = (environment === 'local');
 
 	return gulp.src(config.less.input)
 		.pipe(plumber())
-		.pipe(sourcemaps.init())
 		.pipe(concat(filename))
+		.pipe(prettify({indentSize: 4}))
+		.pipe(sourcemaps.init())
 		.pipe(less({
 			paths: ['src/less/'],
-			plugins: (condition ? [autoprefix, cleancss] : [autoprefix])
+			plugins: (condition ? [autoprefix] : [autoprefix, cleancss])
 		}))
-		.pipe(prettify({indentSize: 4}))
 		.pipe(sourcemaps.write('./'))
-		.pipe(gulpif(condition, rename({ suffix: '.min' })))
 		.pipe(gulp.dest(config.less.output))
 		.on('error', gutil.log);
 });
 
 //// Convert index.jade into index.html.
 gulp.task('html', function () {
-    var condition = environment !== 'dev',
-		input, inputs,
+	var condition = environment !== 'local',
+		input, inputs, sources,
 		appending = '';
 
 	if(condition) {
 		input = [];
 		inputs = [
-			'/admin/js/' + config.js.vendor.output,
-			'/admin/js/templates.js',
-			'/admin/js/' + pkg.name + '-v' + pkg.version + '.js'
+			'/admin/js/' + pkg.name + '-v' + pkg.version + '.min.js'
 		];
 	}
 	else {
@@ -276,7 +304,7 @@ gulp.task('html', function () {
 	}
 
 	sources = gulp.src(input, {read: false});
-    return gulp.src(config.html.input)
+	return gulp.src(config.html.input)
 		// inject common files
 		.pipe(sInject.before('<!-- inject:js -->', appending))
 		// inject each file for dev debug
@@ -300,8 +328,8 @@ gulp.task('html', function () {
 			removeRedundantAttributes: true,
 			collapseWhitespace: true
 		}))
-        .pipe(rename(config.html.output))
-        .pipe(gulp.dest('../laravel/resources/views/admin/'));
+		.pipe(rename(config.html.output))
+		.pipe(gulp.dest('../laravel/resources/views/'));
 });
 
 gulp.task('watch', function () {
@@ -344,15 +372,18 @@ gulp.task('watch', function () {
 			gulp.start('js:templates');
 			gulp.start('html');
 			gulp.start('refresh');
-		}).on('add', function(file) {
+		})
+		.on('add', function(file) {
 			gulp.start('js:templates');
 			gulp.start('html');
 			gulp.start('refresh');
-		}).on('unlink', function(file) {
+		})
+		.on('unlink', function(file) {
 			gulp.start('js:templates');
 			gulp.start('html');
 			gulp.start('refresh');
 		});
+
 	watch([config.html.input])
 		.on('change', function(file) {
 			gulp.start('html');
@@ -401,7 +432,7 @@ gulp.task('watch', function () {
 			gulp.start('refresh');
 		});
 
-	watch('src/**/*.less', 'src/**/*.css')
+	watch(['src/**/*.less', 'src/**/*.css'])
 		.on('change', function(file) {
 			gulp.start('css');
 			gulp.start('refresh');

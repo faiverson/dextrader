@@ -99,34 +99,14 @@ module.exports = {
 		coverage: 'test/coverage/',
 		results: 'test/results/'
 	},
-	placeholders : {
-		dev: [
-			{
-				match: 'SITE_URL',
-				replacement: 'http://localhost/admin'
-			},
-			{
-				match: 'API_URL',
-				replacement: 'http://localhost:8000/api/'
-			},
-			{
-				match: 'SITE_NAME',
-				replacement: 'Dex Trader - BackOffice'
-			}
-		],
-		prod: [
-			{
-				match: 'SITE_URL',
-				replacement: 'http://dextrader.com'
-			},
-			{
-				match: 'API_URL',
-				replacement: 'http://dextrader.com/api/'
-			},
-			{
-				match: 'SITE_NAME',
-				replacement: 'Dex Trader'
-			}
-		]
-	}
+	placeholders : [
+		{
+			match: 'SITE_URL',
+			replacement: process.env.URL
+		},
+		{
+			match: 'API_URL',
+			replacement: process.env.URL + '/api/'
+		}
+	]
 };
