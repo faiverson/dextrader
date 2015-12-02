@@ -83,10 +83,10 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
 
         $scope.isLoggedIn = AuthService.isLoggedIn;
 
-        if(AuthService.isLoggedIn()){
-            $state.go('affiliates.how_it_works');
-        }else{
+        if (!AuthService.isLoggedIn()) {
             $state.go('affiliates.upgrade');
+        }else{
+            $state.go('affiliates.how_it_works');
         }
 
     }])
@@ -228,7 +228,60 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
         vm.init();
     }])
 
-    .controller('CommissionsCtrl', ['$scope', function ($scope) {
+    .controller('CommissionsCtrl', ['$scope', 'CommissionService', 'Notification', function ($scope, CommissionService, Notification) {
+
+        var vm = this;
+
+        $scope.pagination = {
+            totalItems: 20,
+            currentPage: 1,
+            itemsPerPage: 5
+        };
+
+        $scope.filters = {
+            from: {
+                format: 'dd MMM yyyy'
+            },
+            to: {
+                format: 'dd MMM yyyy'
+            },
+            apply: function () {
+                //TODO call api
+            }
+        };
+
+        vm.getCommissionTotals = function () {
+            function success(res) {
+                $scope.commissionTotals = res.data;
+            }
+
+            function error(res) {
+                Notification.error('Ups! there was an error trying to load commission totals!');
+            }
+
+            CommissionService.getCommissionTotals()
+                .then(success, error);
+        };
+
+        vm.getCommissions = function () {
+            function success(res) {
+                $scope.commissions = res.data;
+            }
+
+            function error(res) {
+                Notification.error('Ups! there was an error trying to load commissions!');
+            }
+
+            CommissionService.getCommissions()
+                .then(success, error);
+        };
+
+        vm.init = function () {
+            vm.getCommissionTotals();
+            vm.getCommissions();
+        };
+
+        vm.init();
 
     }])
 

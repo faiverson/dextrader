@@ -83,6 +83,8 @@ angular.module('app.shared-directives', [])
                 if(angular.isDefined($attrs.userCan)){
                     if(!AuthService.userHasPermission($attrs.userCan)){
                         $elem.addClass('user-disable-action');
+                    }else{
+                        $elem.removeClass('user-disable-action');
                     }
                 }
             }

@@ -824,12 +824,12 @@ input {
     top: 10px;
 }
 
-table {
+.base-table {
     width: 100%;
     border-spacing: 0;
 }
 
-table th {
+.base-table th {
     text-align: left;
     font-weight: 400;
     color: #757575;
@@ -837,30 +837,30 @@ table th {
     background-color: #eaeaea;
 }
 
-table.minitable {
+.base-table.minitable {
     font-size: 13px
 }
 
-table.minitable th {
+.base-table.minitable th {
     padding: 8px 10px
 }
 
-table td {
+.base-table td {
     font-weight: 700;
     padding: 15px 10px;
     padding-right: 5px;
 }
 
-table.minitable td {
+.base-table.minitable td {
     font-weight: 500;
     padding: 8px 10px;
 }
 
-table tr:nth-child(2n+2) {
+.base-table tr:nth-child(2n+2) {
     background-color: #f8f8f8
 }
 
-table.minitable tr:nth-child(2n+2) {
+.base-table.minitable tr:nth-child(2n+2) {
     background-color: #fff
 }
 

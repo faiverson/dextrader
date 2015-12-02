@@ -43,7 +43,7 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
                 controller: 'DexScoreCtrl',
                 data: {
                     pageTitle: 'Dex IB - Dex Score',
-                    permission: 'product.ib.live_signal',
+                    permission: 'product.ib.training',
                     redirectTo: 'dex_ib.live_signals'
                 }
             })
