@@ -12,7 +12,8 @@
 		"tymon/jwt-auth": "0.5.*",
 		"zizaco/entrust": "dev-laravel-5",
 		"sofa/eloquence": "~5.1@dev",
-		"nicolaslopezj/searchable": "1.*"
+		"nicolaslopezj/searchable": "1.*",
+        "anlutro/curl": "^1.4"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",

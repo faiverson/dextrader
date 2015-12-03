@@ -16,6 +16,18 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\Inspire::class,
     ];
 
+	protected $bootstrappers = [
+		'Illuminate\Foundation\Bootstrap\DetectEnvironment',
+		'Illuminate\Foundation\Bootstrap\LoadConfiguration',
+		//'Illuminate\Foundation\Bootstrap\ConfigureLogging',
+		'App\Bootstrap\ConfigureLogging',
+		'Illuminate\Foundation\Bootstrap\HandleExceptions',
+		'Illuminate\Foundation\Bootstrap\RegisterFacades',
+		'Illuminate\Foundation\Bootstrap\SetRequestForConsole',
+		'Illuminate\Foundation\Bootstrap\RegisterProviders',
+		'Illuminate\Foundation\Bootstrap\BootProviders',
+	];
+
     /**
      * Define the application's command schedule.
      *

@@ -97,7 +97,7 @@ return [
     |
     */
 
-    'log' => 'single',
+    'log' => 'custom',
 
     /*
     |--------------------------------------------------------------------------
@@ -208,13 +208,15 @@ return [
 		'Entrust' => Zizaco\Entrust\EntrustFacade::class,
 		'Token' => App\Helpers\Token::class,
 		'Files' => App\Helpers\Files::class,
+		'cURL' => anlutro\cURL\Laravel\cURL::class,
 
 		'User' => App\Models\User::class,
 		'Role' => App\Models\Role::class,
 		'Permission' => App\Models\Permission::class,
 		'Product' => App\Models\Product::class,
 		'MarketingLink' => App\Models\MarketingLink::class,
-		'Training' => App\Models\Training::class
+		'Training' => App\Models\Training::class,
+		'Settings' => App\Models\UserSettings::class
     ],
 
 ];
