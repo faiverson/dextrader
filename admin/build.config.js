@@ -22,7 +22,7 @@ module.exports = {
     port: 8000,
     paths: {
         input: 'src/**/*',
-        output: '../public_html/admin/',
+        output: '../public_html/abo/',
         server_path: '../public_html'
     },
     js: {
@@ -53,7 +53,7 @@ module.exports = {
                 '!src/**/*.spec.js',
                 '!src/**/*.scenario.js'
             ],
-            output: '../public_html/admin/js/'
+            output: '../public_html/abo/js/'
         }
     },
     less: {
@@ -62,11 +62,11 @@ module.exports = {
             'src/common/**/*.less',
             'src/modules/**/*.less'
         ],
-        output: '../public_html/admin/css/'
+        output: '../public_html/abo/css/'
     },
     html: {
         input: 'src/index.html',
-        output: 'home.blade.php',
+        output: 'admin.blade.php',
         tpl: {
             output: 'templates.js',
             modules: 'src/modules/**/*.tpl.html',
@@ -76,15 +76,15 @@ module.exports = {
     assets: {
         fonts: {
             input: ['src/assets/fonts/**/*.{ttf,woff,woff2,eof,eot}'],
-            output: '../public_html/admin/assets/fonts/'
+            output: '../public_html/abo/assets/fonts/'
         },
         images: {
             input: ['src/assets/**/*.{png,gif,jpeg,jpg}'],
-            output: '../public_html/admin/assets/'
+            output: '../public_html/abo/assets/'
         },
         svg: {
             input: 'src/assets/**/*.svg',
-            output: '../public_html/admin/assets/'
+            output: '../public_html/abo/assets/'
         }
     },
     docs: {

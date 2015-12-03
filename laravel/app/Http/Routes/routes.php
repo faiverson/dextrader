@@ -10,6 +10,8 @@ Route::group(['namespace' => 'Auth', 'prefix' => 'api'], function () {
 	Route::post('/password/reset', 'PasswordController@postReset');
 });
 
+
+
 //Event::listen('illuminate.query', function($query, $params)
 //{
 //	print $query.'<br>';

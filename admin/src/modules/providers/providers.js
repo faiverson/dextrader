@@ -53,7 +53,7 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
 
                         $scope.upload($scope.file)
                             .then(function (resp) {
-                                $scope.provider.image = resp.data.data.filename;
+                                $scope.provider.image =  resp.data.data.filename;
                                 $scope.save();
                             }, function (resp) {
                                 Notification.error('Ups! something went wrong trying to save the image!');
@@ -83,7 +83,7 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
                 return Upload.upload({
                     url: 'api/uploads',
                     data: {file: file},
-                    headers: {'Authentication': AuthService.getUserToken()},
+                    headers: {'Authentication': AuthService.getUserToken()}
                 });
             };
 

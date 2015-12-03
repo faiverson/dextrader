@@ -41,7 +41,7 @@ class Kernel extends HttpKernel
 	protected $bootstrappers = [
 		'Illuminate\Foundation\Bootstrap\DetectEnvironment',
 		'Illuminate\Foundation\Bootstrap\LoadConfiguration',
-		//'Illuminate\Foundation\Bootstrap\ConfigureLogging',
+//		'Illuminate\Foundation\Bootstrap\ConfigureLogging',
 		'App\Bootstrap\ConfigureLogging',
 		'Illuminate\Foundation\Bootstrap\HandleExceptions',
 		'Illuminate\Foundation\Bootstrap\RegisterFacades',

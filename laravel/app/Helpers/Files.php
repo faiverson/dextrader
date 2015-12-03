@@ -40,7 +40,7 @@ class Files {
 			$file = $request->file($formfield);
 			$filename = $file->getClientOriginalName();
 		}
-		return $file->move(base_path() . '/public/files/' . $subfolder, $filename);
+		return $file->move(base_path() . '/../public_html/images/' . $subfolder, $filename);
 	}
 
 	public static function getMimeType($extension)

@@ -6,6 +6,7 @@ use anlutro\cURL\Laravel\cURL;
 use User;
 use Settings;
 use Log;
+use Config;
 /*
 This class deals with eWallet iPayout systems
 */
@@ -15,16 +16,18 @@ class eWallet
 	protected $merchantGUID;
 	protected $merchantPassword;
 	protected $eWalletAPIURL;
+	protected $merchantLogin;
 	protected $user;
 	protected $curl;
 	protected $userId;
 
 	public function __construct($user)
 	{
-		$this->merchantName = 'Dex Trader';
-		$this->merchantGUID = 'ddd85e30-a29e-4baf-a84c-0ac4116e3405';
-		$this->eWalletURL = "https://testewallet.com/eWalletWS/ws_Adapter.aspx";
-		$this->merchantPassword = 'umwves16Jg';
+		$this->merchantName = Config('ewallet.merchant');
+		$this->merchantGUID = Config('ewallet.guid');
+		$this->eWalletURL = Config('ewallet.url');
+		$this->merchantPassword = Config('ewallet.password');
+		$this->merchantLogin = Config('ewallet.login');
 		$this->user = $user;
 		$this->userId = $user->id;
 	}
