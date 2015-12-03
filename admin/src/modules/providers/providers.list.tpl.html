@@ -33,7 +33,7 @@
         </thead>
         <tbody>
         <tr data-ng-repeat="provider in providers">
-            <td><img data-ng-src="{{provider.image}}"></td>
+            <td><img data-ng-src="/images/{{provider.image}}" class="img-responsive" width="125"></td>
             <td data-ng-bind="provider.min_deposit | currency: '$'"></td>
             <td data-ng-bind="(provider.us_traders && 'Yes' || 'No')"></td>
             <td class="link">

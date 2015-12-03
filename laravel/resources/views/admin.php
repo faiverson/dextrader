@@ -35,8 +35,8 @@
 <script type="text/javascript" src="/admin/js/vendor.js"></script>
 <script type="text/javascript" src="/admin/js/templates.js"></script>
 <script type="text/javascript" src="/admin/js/modules/app.js"></script>
-<script type="text/javascript" src="/admin/js/common/helpers/shared-helpers.js"></script>
 <script type="text/javascript" src="/admin/js/common/directives/shared-directives.js"></script>
+<script type="text/javascript" src="/admin/js/common/helpers/shared-helpers.js"></script>
 <script type="text/javascript" src="/admin/js/common/services/http-services.js"></script>
 <script type="text/javascript" src="/admin/js/common/services/site-configs.js"></script>
 <script type="text/javascript" src="/admin/js/modules/auth/auth.js"></script>

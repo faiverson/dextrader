@@ -76,12 +76,22 @@
                     <div class="panel-heading">Provider Image</div>
                     <div class="panel-body">
 
-                        <div class="button" ngf-select ng-model="file" name="file" ngf-pattern="'image/*'"
-                             accept="image/*" ngf-max-size="20MB" ngf-min-height="100"
-                             ngf-resize="{width: 100, height: 100}">Select</div>
+                        <div class="upload-container">
+                            <div ngf-thumbnail="file || '/admin/assets/images/image-placeholder.gif'"
+                                 ngf-as-background="true"
+                                 class="upload-preview">
+                            </div>
 
-                        {{file}}
-                        <div ngf-drop ng-model="file" class="drop-box">Drop an image here</div>
+                            <div class="button btn-upload" ngf-select ng-model="file" name="file" ngf-pattern="'image/*'"
+                                 accept="image/*" ngf-max-size="20MB" ngf-min-height="100"
+                                 ngf-resize="{width: 125, height: 55, quality: 1, type: 'image/jpg', centerCrop: true}" >Change Image</div>
+
+                            <div ngf-drop ng-model="file"
+                                 ngf-resize="{width: 125, height: 55, quality: 1, type: 'image/jpg', centerCrop: true}"
+                                 ngf-drag-over-class="{pattern: 'image/*', accept:'acceptClass', reject:'rejectClass', delay:100}"
+                                 class="drop-box">Or drop an image here</div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -89,7 +99,7 @@
                 <div class="panel panel-default">
                     <div class="panel-body text-right">
                         <button class="btn btn-success" data-ng-click="uploadAndSave()">Save</button>
-                        <button class="btn btn-danger" ui-sref="users">Cancel</button>
+                        <button class="btn btn-danger" ui-sref="providers.list">Cancel</button>
                     </div>
                 </div>
             </div>
