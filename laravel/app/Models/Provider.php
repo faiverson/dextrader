@@ -12,7 +12,7 @@ class Provider extends Model
 
     protected $table = 'providers';
 
-    protected $hidden = ['id', 'updated_at', 'created_at'];
+    protected $hidden = ['updated_at', 'created_at'];
 
     protected $maps = [
         'provider_id' => 'id',

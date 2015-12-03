@@ -1,16 +1,19 @@
 angular.module('app.views', ['app.home', 'app.auth', 'ui.router']);
 
 angular.module('app', [
-    'templates-app',
-    'app.header',
-    'app.footer',
-    'app.home',
-    'app.auth',
-    'ui.bootstrap.tpls',
-    'ui.bootstrap',
-    'app.http-services',
-    'LocalStorageModule'
-])
+        'templates-app',
+        'app.header',
+        'app.footer',
+        'app.home',
+        'app.auth',
+        'app.providers',
+        'ui-notification',
+        'app.shared-directives',
+        'ui.bootstrap.tpls',
+        'ui.bootstrap',
+        'app.http-services',
+        'LocalStorageModule'
+    ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider) {
 

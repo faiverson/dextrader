@@ -1,0 +1,99 @@
+<div class="provider-form">
+    <h1>Provider</h1>
+
+    <form name="providerForm" novalidate="novalidate">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Provider Information</div>
+                    <div class="panel-body">
+                        <div class="form-group" data-show-errors>
+                            <label for="name">Name</label>
+                            <input type="text"
+                                   name="name"
+                                   class="form-control"
+                                   id="name"
+                                   data-ng-model="provider.name"
+                                   placeholder="Name" required>
+                        </div>
+                        <div class="form-group" data-show-errors>
+                            <label for="web_site">Web Site</label>
+                            <input type="text"
+                                   name="web_site"
+                                   class="form-control"
+                                   id="web_site"
+                                   data-ng-model="provider.web_site"
+                                   placeholder="Web Site" required>
+                        </div>
+                        <div class="form-group" data-show-errors>
+                            <label for="min_deposit">Min Deposit</label>
+                            <input type="number"
+                                   name="min_deposit"
+                                   class="form-control"
+                                   id="min_deposit"
+                                   placeholder="Min Deposit"
+                                   data-ng-model="provider.min_deposit"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label>US Traders</label>
+
+                            <div class="row">
+                                <div class="checkbox col-md-2">
+                                    <label>
+                                        <input type="radio"
+                                               value="0"
+                                               data-ng-model="provider.us_traders"/>
+                                        Yes
+                                    </label>
+                                </div>
+                                <div class="checkbox col-md-2" style="margin-top: 10px;">
+                                    <label>
+                                        <input type="radio"
+                                               value="1"
+                                               data-ng-model="provider.us_traders" />
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+                            {{selectedRoles}}
+                        </div>
+                        <div class="form-group" data-show-errors>
+                            <label for="review">Review</label>
+                            <textarea class="form-control"
+                                      name="review"
+                                      required
+                                      id="review"
+                                      data-ng-model="provider.review"
+                                      rows="3">
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Provider Image</div>
+                    <div class="panel-body">
+
+                        <div class="button" ngf-select ng-model="file" name="file" ngf-pattern="'image/*'"
+                             accept="image/*" ngf-max-size="20MB" ngf-min-height="100"
+                             ngf-resize="{width: 100, height: 100}">Select</div>
+
+                        <div ngf-drop ng-model="file" class="well drop-box">
+                            <img data-ng-src="public/files/{{provider.image}}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body text-right">
+                        <button class="btn btn-success" data-ng-click="uploadAndSave()">Save</button>
+                        <button class="btn btn-danger" ui-sref="users">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

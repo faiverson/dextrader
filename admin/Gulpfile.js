@@ -70,7 +70,7 @@ gulp.task('production', function(callback) {
 gulp.task('default', ['env']);
 
 // run a server and a watcher
-gulp.task('dev', ['server', 'watch']);
+gulp.task('dev', ['env', 'server', 'watch']);
 
 // TASKS
 // set the environment
@@ -135,7 +135,7 @@ gulp.task('js:files', function () {
 	return gulp.src(config.js.files.input)
 		.pipe(plumber())
 		.pipe(replace({
-			patterns: config.placeholders[environment]
+			patterns: config.placeholders
 		}))
 		.pipe(ngAnnotate())
 		.pipe(prettify({
@@ -336,113 +336,97 @@ gulp.task('watch', function () {
 	livereload.listen();
 
 	watch('./Gulpfile.js')
-		.on('change', function(file) {
-			gulp.start('gulpfile');
-		});
+			.on('change', function (file) {
+				gulp.start('gulpfile');
+			});
 
 	watch(config.js.files.input)
-		.on('change', function(file) {
-			gulp.start('jshint');
-			gulp.start('js:files');
-			gulp.start('refresh');
-		}).on('add', function(file) {
-			gulp.start('jshint');
-			gulp.start('js:files');
-			gulp.start('refresh');
-		}).on('unlink', function(file) {
-			gulp.start('jshint');
-			gulp.start('js:files');
-			gulp.start('refresh');
-		});
+			.on('change', function (file) {
+				runSequence('jshint', 'js:files', 'refresh');
+			})
+			.on('add', function (file) {
+				runSequence('jshint', 'js:files', 'refresh');
+			})
+			.on('unlink', function (file) {
+				runSequence('jshint', 'js:files', 'refresh');
+			});
 
 	watch(config.js.vendor.input)
-		.on('change', function(file) {
-			gulp.start('js:vendor');
-			gulp.start('refresh');
-		}).on('add', function(file) {
-			gulp.start('js:vendor');
-			gulp.start('refresh');
-		}).on('unlink', function(file) {
-			gulp.start('js:vendor');
-			gulp.start('refresh');
-		});
+			.on('change', function (file) {
+				runSequence('js:vendor', 'refresh');
+			})
+			.on('add', function (file) {
+				runSequence('js:vendor', 'refresh');
+			})
+			.on('unlink', function (file) {
+				runSequence('js:vendor', 'refresh');
+			});
 
 	watch([config.html.tpl.common, config.html.tpl.modules])
-		.on('change', function(file) {
-			gulp.start('js:templates');
-			gulp.start('html');
-			gulp.start('refresh');
-		})
-		.on('add', function(file) {
-			gulp.start('js:templates');
-			gulp.start('html');
-			gulp.start('refresh');
-		})
-		.on('unlink', function(file) {
-			gulp.start('js:templates');
-			gulp.start('html');
-			gulp.start('refresh');
-		});
+			.on('change', function (file) {
+				runSequence('js:templates', 'html', 'refresh');
+			})
+			.on('add', function (file) {
+				runSequence('js:templates', 'html', 'refresh');
+			})
+			.on('unlink', function (file) {
+				runSequence('js:templates', 'html', 'refresh');
+			});
 
 	watch([config.html.input])
-		.on('change', function(file) {
-			gulp.start('html');
-			gulp.start('refresh');
-		}).on('add', function(file) {
-			gulp.start('html');
-			gulp.start('refresh');
-		}).on('unlink', function(file) {
-			gulp.start('html');
-			gulp.start('refresh');
-		});
+			.on('change', function (file) {
+				runSequence('html', 'refresh');
+			})
+			.on('add', function (file) {
+				runSequence('html', 'refresh');
+			})
+			.on('unlink', function (file) {
+				runSequence('html', 'refresh');
+			});
 
 	watch(config.assets.images.input)
-		.on('change', function(file) {
-			gulp.start('images');
-			gulp.start('refresh');
-		}).on('add', function(file) {
-			gulp.start('images');
-			gulp.start('refresh');
-		}).on('unlink', function(file) {
-			gulp.start('images');
-			gulp.start('refresh');
-		});
+			.on('change', function (file) {
+				runSequence('images', 'refresh');
+			})
+			.on('add', function (file) {
+				runSequence('images', 'refresh');
+			})
+			.on('unlink', function (file) {
+				runSequence('images', 'refresh');
+			});
 
 	watch(config.assets.svg.input)
-		.on('change', function(file) {
-			gulp.start('svg');
-			gulp.start('refresh');
-		}).on('add', function(file) {
-			gulp.start('svg');
-			gulp.start('refresh');
-		}).on('unlink', function(file) {
-			gulp.start('svg');
-			gulp.start('refresh');
-		});
+			.on('change', function (file) {
+				runSequence('svg', 'refresh');
+			})
+			.on('add', function (file) {
+				runSequence('svg', 'refresh');
+			})
+			.on('unlink', function (file) {
+				runSequence('svg', 'refresh');
+			});
 
 	watch(config.assets.fonts.input)
-		.on('change', function(file) {
-			gulp.start('fonts');
-			gulp.start('refresh');
-		}).on('add', function(file) {
-			gulp.start('fonts');
-			gulp.start('refresh');
-		}).on('unlink', function(file) {
-			gulp.start('fonts');
-			gulp.start('refresh');
-		});
+			.on('change', function (file) {
+				runSequence('fonts', 'refresh');
+			})
+			.on('add', function (file) {
+				runSequence('fonts', 'refresh');
+			})
+			.on('unlink', function (file) {
+				runSequence('fonts', 'refresh');
+			});
 
 	watch(['src/**/*.less', 'src/**/*.css'])
-		.on('change', function(file) {
-			gulp.start('css');
-			gulp.start('refresh');
-		}).on('add', function(file) {
-			gulp.start('css');
-			gulp.start('refresh');
-		}).on('unlink', function(file) {
-			gulp.start('css');
-			gulp.start('refresh');
-		});
+			.on('change', function (file) {
+				runSequence('css', 'refresh');
+			})
+			.on('add', function (file) {
+				runSequence('css', 'refresh');
+			})
+			.on('unlink', function (file) {
+				runSequence('css', 'refresh');
+			});
 });
 
 // Run livereload after file change

@@ -1,6 +1,8 @@
 <?php
 namespace App\Helpers;
 
+use Illuminate\Http\Request;
+
 class Files {
 
 	/**
@@ -30,6 +32,15 @@ class Files {
 			$filename = $file->getClientOriginalName();
 		}
 		return $file->move(base_path() . '/resources/files/' . $subfolder, $filename);
+	}
+
+	public static function savePublic(Request $request, $formfield = 'file', $subfolder = '', $filename = null)
+	{
+		if(!$filename) {
+			$file = $request->file($formfield);
+			$filename = $file->getClientOriginalName();
+		}
+		return $file->move(base_path() . '/public/files/' . $subfolder, $filename);
 	}
 
 	public static function getMimeType($extension)
