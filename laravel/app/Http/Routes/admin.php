@@ -1,7 +1,7 @@
 <?php
-Route::get('/abo', function () {
+Route::get('/abo/{lala}', function () {
 	return view('admin.admin');
-});
+})->where(['lala' => '.*']);
 
 Route::group(['namespace' => 'Admin', 'prefix' => 'abo/api'], function () {
 	Route::post('/login', 'AuthController@login');

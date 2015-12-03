@@ -81,7 +81,7 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
 
             $scope.upload = function (file) {
                 return Upload.upload({
-                    url: 'api/uploads',
+                    url: '/api/files/uploads',
                     data: {file: file},
                     headers: {'Authentication': AuthService.getUserToken()}
                 });

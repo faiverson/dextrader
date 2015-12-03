@@ -40,7 +40,7 @@ class RouteServiceProvider extends ServiceProvider
 //		echo $request->path();
 //		echo '<br>'.$request->url();exit;
 		$this->loadRoutesFrom(app_path('Http/Routes/routes.php'));
-		if ($request->is('abo*')) {
+		if ($request->is('abo*') || $request->is('abo/*')) {
 			$this->loadRoutesFrom(app_path('Http/Routes/admin.php'));
 		}
 
