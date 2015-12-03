@@ -66,7 +66,7 @@ module.exports = {
     },
     html: {
         input: 'src/index.html',
-        output: 'admin.php',
+        output: 'admin/admin.php',
         tpl: {
             output: 'templates.js',
             modules: 'src/modules/**/*.tpl.html',

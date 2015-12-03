@@ -18,7 +18,7 @@ angular.module('app', [
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {
 
-        $urlRouterProvider.otherwise('dashboard');
+        $urlRouterProvider.otherwise('/dashboard');
         showErrorsConfigProvider.showSuccess(true);
         $httpProvider.interceptors.push('httpRequestInterceptor');
         NotificationProvider.setOptions({
@@ -34,7 +34,10 @@ angular.module('app', [
         localStorageServiceProvider
             .setPrefix('admin');
 
-        $locationProvider.html5Mode(true);
+        $locationProvider.html5Mode({
+            enabled: true,
+            requireBase: true
+        });
     })
 
     .run(function run() {

@@ -1,6 +1,6 @@
 <?php
 Route::get('/abo', function () {
-	return view('admin.home');
+	return view('admin.admin');
 });
 
 Route::group(['namespace' => 'Admin', 'prefix' => 'abo/api'], function () {

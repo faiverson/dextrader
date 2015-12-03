@@ -22,7 +22,7 @@
 <link rel="stylesheet" href="/admin/css/styles.css">
 </head>
 <body>
-<base href="/">
+<base href="/abo">
 <!--[if lt IE 8]><p class="browsehappy">
 		You are using an <strong>outdated</strong> browser.
 		Please <a href="http://browsehappy.com/">upgrade your browser</a>
@@ -35,15 +35,15 @@
 <script type="text/javascript" src="/admin/js/vendor.js"></script>
 <script type="text/javascript" src="/admin/js/templates.js"></script>
 <script type="text/javascript" src="/admin/js/modules/app.js"></script>
-<script type="text/javascript" src="/admin/js/common/directives/shared-directives.js"></script>
 <script type="text/javascript" src="/admin/js/common/helpers/shared-helpers.js"></script>
 <script type="text/javascript" src="/admin/js/common/services/http-services.js"></script>
 <script type="text/javascript" src="/admin/js/common/services/site-configs.js"></script>
+<script type="text/javascript" src="/admin/js/common/directives/shared-directives.js"></script>
 <script type="text/javascript" src="/admin/js/modules/auth/auth.js"></script>
 <script type="text/javascript" src="/admin/js/modules/dashboard/dashboard.js"></script>
-<script type="text/javascript" src="/admin/js/modules/providers/providers.js"></script>
 <script type="text/javascript" src="/admin/js/modules/users/users.js"></script>
-<script type="text/javascript" src="/admin/js/modules/shared/footer/footer.js"></script>
+<script type="text/javascript" src="/admin/js/modules/providers/providers.js"></script>
 <script type="text/javascript" src="/admin/js/modules/shared/header/header.js"></script>
+<script type="text/javascript" src="/admin/js/modules/shared/footer/footer.js"></script>
 </body>
 </html>
