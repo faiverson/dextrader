@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserSettings;
 use Auth;
 use User;
 use Datatables;
@@ -11,6 +12,8 @@ use Validator;
 use DB;
 use Beautymail;
 use Hash;
+use Token;
+use App\Libraries\eWallet\eWallet;
 
 class UsersController extends Controller
 {
@@ -182,28 +185,33 @@ class UsersController extends Controller
     }
 
 	/**
-	 * Generate and email and a token
+	 * Create an eWallet account
 	 *
-	 * @param  int $id
+	 * @param  Request $request object
 	 * @return \Illuminate\Http\Response
 	 */
-	public function emailPassword(Request $request)
+	public function createEwallet(Request $request)
 	{
-//		$this->validate($request, ['email' => 'required|email']);
-//		$email = $request->email;
-//		$user = User::where('email', $email)->first();
-//		dd();
-//		if($user) {
-//			$token = Hash::make($email . '-' . time());
-//			DB::table('password_resets')
-//				->insert([
-//					'email' => $email
-//				]);
-//		}
-//		else {
-//			return response()->error('The email does not exist.');
-//		}
-//
-//		return response()->ok();
+		$user = $request->user();
+		$userId = $user->id;
+		$eWallet = new eWallet($user);
+		$response = $eWallet->create();
+		// if the user account was created
+		if($response['code'] == 'NO_ERROR') {
+			// check if there is set in the system
+			$settings = UserSettings::where('user_id', $userId)->where('key', 'ewallet')->first();
+			if(empty($settings)) {
+				UserSettings::create([
+					'user_id' => $userId,
+					'key' => 'ewallet',
+					'value' => $user->username
+				]);
+			}
+			else {
+				$settings->value = $user->username;
+				$settings->save();
+			}
+		}
+		return response()->ok($response);
 	}
 }

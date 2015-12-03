@@ -79,6 +79,9 @@ class User extends Model implements AuthenticatableContract,
 		return preg_replace("/(\d{3})(\d{3})(\d{4})/", "$1/$2/$3", $this->attributes['phone']);
 	}
 
-
+//	public function settings()
+//	{
+//		return $this->hasMany(Settings::class, 'users_settings', 'id', 'user_id');
+//	}
 
 }

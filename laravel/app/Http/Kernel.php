@@ -37,4 +37,15 @@ class Kernel extends HttpKernel
 		'is.user' => \App\Http\Middleware\IsUser::class,
 		'role' => \App\Http\Middleware\Roles::class,
     ];
+
+	protected $bootstrappers = [
+		'Illuminate\Foundation\Bootstrap\DetectEnvironment',
+		'Illuminate\Foundation\Bootstrap\LoadConfiguration',
+		//'Illuminate\Foundation\Bootstrap\ConfigureLogging',
+		'App\Bootstrap\ConfigureLogging',
+		'Illuminate\Foundation\Bootstrap\HandleExceptions',
+		'Illuminate\Foundation\Bootstrap\RegisterFacades',
+		'Illuminate\Foundation\Bootstrap\RegisterProviders',
+		'Illuminate\Foundation\Bootstrap\BootProviders',
+	];
 }
