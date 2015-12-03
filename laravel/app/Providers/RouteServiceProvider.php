@@ -37,6 +37,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map(Router $router, Request $request)
     {
+//		echo $request->path();
+//		echo '<br>'.$request->url();exit;
 		$this->loadRoutesFrom(app_path('Http/Routes/routes.php'));
 		if ($request->is('abo*')) {
 			$this->loadRoutesFrom(app_path('Http/Routes/admin.php'));

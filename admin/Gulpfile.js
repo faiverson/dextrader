@@ -39,6 +39,7 @@ var gulp = require('gulp'),
 	connect = require('connect'),
 	replace = require('gulp-replace-task'),
 	pkg = require('./package.json'),
+	environment,
 	dotenv = require('dotenv').config({path: '../laravel/.env'}),
 	config = require('./build.config.js');
 
