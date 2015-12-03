@@ -25,22 +25,14 @@ class Files {
 		return response(file_get_contents($path), 200)->header('Content-Type', $mime);
 	}
 
-	public static function save(Request $request, $formfield = 'file', $subfolder = '', $filename = null)
+	public static function save(Request $request, $formfield = 'file', $private = true, $subfolder = '', $filename = null)
 	{
 		if(!$filename) {
 			$file = $request->file($formfield);
 			$filename = $file->getClientOriginalName();
 		}
-		return $file->move(base_path() . '/resources/files/' . $subfolder, $filename);
-	}
-
-	public static function savePublic(Request $request, $formfield = 'file', $subfolder = '', $filename = null)
-	{
-		if(!$filename) {
-			$file = $request->file($formfield);
-			$filename = $file->getClientOriginalName();
-		}
-		return $file->move(base_path() . '/../public_html/images/' . $subfolder, $filename);
+		$path = $private ? '/resources/files/' : '/../public_html/assets/';
+		return $file->move(base_path() . $path . $subfolder, $filename);
 	}
 
 	public static function getMimeType($extension)
