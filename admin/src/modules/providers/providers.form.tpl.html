@@ -80,9 +80,8 @@
                              accept="image/*" ngf-max-size="20MB" ngf-min-height="100"
                              ngf-resize="{width: 100, height: 100}">Select</div>
 
-                        <div ngf-drop ng-model="file" class="well drop-box">
-                            <img data-ng-src="public/files/{{provider.image}}">
-                        </div>
+                        {{file}}
+                        <div ngf-drop ng-model="file" class="drop-box">Drop an image here</div>
                     </div>
                 </div>
             </div>
@@ -90,7 +89,7 @@
                 <div class="panel panel-default">
                     <div class="panel-body text-right">
                         <button class="btn btn-success" data-ng-click="uploadAndSave()">Save</button>
-                        <button class="btn btn-danger" ui-sref="providers.list">Cancel</button>
+                        <button class="btn btn-danger" ui-sref="users">Cancel</button>
                     </div>
                 </div>
             </div>

@@ -67,6 +67,7 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
             $scope.save = function () {
 
                 function success(res) {
+                    Notification.success('Provider created successfully!');
                     $state.go('providers.list');
                 }
 
@@ -101,6 +102,7 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
 
             vm.init();
         }])
+
     .controller('ProvidersListCtrl', ['$scope', 'ProvidersService', 'Notification', function ($scope, ProvidersService, Notification) {
         var vm = this;
 
