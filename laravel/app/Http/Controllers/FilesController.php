@@ -8,7 +8,7 @@ use Files;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class UploadsController extends Controller
+class FilesController extends Controller
 {
     /**
      * Store a newly created resource in storage.
@@ -18,7 +18,8 @@ class UploadsController extends Controller
      */
     public function store(Request $request)
     {
-        if(Files::savePublic($request)){
+		$path = $request->path ? 'images/' . $request->path . '/' : 'images/';
+        if(Files::save($request, 'file', false, $path)){
             $file = $request->file('file');
             $filename = $file->getClientOriginalName();
 
