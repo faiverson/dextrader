@@ -1,104 +1,63 @@
-<section id="content">
+<section id="content" class="dex-score">
     <h2 class="spaced">Trading Signals Providers</h2>
 
-    <table class="table-dexscore">
+    <table class="base-table table-dexscore">
         <thead>
         <tr>
-            <th class="sortable">Broker</th>
-            <th class="sortable">Min Deposit</th>
-            <th class="sortable">US Traders</th>
+            <th sortable="1"
+                current-sort="sortBy.column"
+                current-dir="sortBy.dir"
+                data-ng-click="sortBy.sort(1)">Broker</th>
+            <th sortable="2"
+                current-sort="sortBy.column"
+                current-dir="sortBy.dir"
+                data-ng-click="sortBy.sort(2)">Min Deposit</th>
+            <th sortable="3"
+                current-sort="sortBy.column"
+                current-dir="sortBy.dir"
+                data-ng-click="sortBy.sort(3)">US Traders</th>
             <th>Review</th>
-            <th class="sortable">Visit Website</th>
+            <th sortable="4"
+                current-sort="sortBy.column"
+                current-dir="sortBy.dir"
+                data-ng-click="sortBy.sort(4)">Visit Website</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td><img src="/front/assets/images/broker-1.png"></td>
-            <td>$200</td>
-            <td>Yes</td>
-            <td class="link">Read Review</td>
-            <td class="link">24options.com</td>
+        <tr data-ng-repeat="provider in providers">
+            <td><img data-ng-src="{{provider.image}}"></td>
+            <td data-ng-bind="provider.min_deposit | currency: '$'"></td>
+            <td data-ng-bind="(provider.us_traders && 'Yes' || 'No')"></td>
+            <td class="link">
+                <a href="#" data-ng-click="openProviderReview(provider)">
+                    Read Review
+                </a>
+            </td>
+            <td class="link">
+                <a href="{{provider.web_site}}" target="_blank" class="web-site">
+                    <span>{{provider.web_site}}</span>
+                </a>
+            </td>
         </tr>
-        <tr>
-            <td><img src="/front/assets/images/broker-2.png"></td>
-            <td>$100</td>
-            <td>No</td>
-            <td class="link">Read Review</td>
-            <td class="link">bancdebinary.com</td>
-        </tr>
-        <tr>
-            <td><img src="/front/assets/images/broker-3.png"></td>
-            <td>$150</td>
-            <td>Yes</td>
-            <td class="link">Read Review</td>
-            <td class="link">stockpair.net</td>
-        </tr>
-        <tr>
-            <td><img src="/front/assets/images/broker-4.png"></td>
-            <td>$200</td>
-            <td>Yes</td>
-            <td class="link">Read Review</td>
-            <td class="link">bosscapital.com</td>
-        </tr>
-        <tr>
-            <td><img src="/front/assets/images/broker-5.png"></td>
-            <td>$250</td>
-            <td>No</td>
-            <td class="link">Read Review</td>
-            <td class="link">binaryoptionrobot.com</td>
-        </tr>
-        <tr>
-            <td><img src="/front/assets/images/broker-6.png"></td>
-            <td>$300</td>
-            <td>No</td>
-            <td class="link">Read Review</td>
-            <td class="link">bestocopy.com</td>
-        </tr>
-        <tr>
-            <td><img src="/front/assets/images/broker-7.png"></td>
-            <td>$200</td>
-            <td>Yes</td>
-            <td class="link">Read Review</td>
-            <td class="link">binaryoptionrobot.com</td>
-        </tr>
-        <tr>
-            <td><img src="/front/assets/images/broker-8.png"></td>
-            <td>$100</td>
-            <td>Yes</td>
-            <td class="link">Read Review</td>
-            <td class="link">24option.com</td>
-        </tr>
-        <tr>
-            <td><img src="/front/assets/images/broker-9.png"></td>
-            <td>$150</td>
-            <td>Yes</td>
-            <td class="link">Read Review</td>
-            <td class="link">bancdebinary.com</td>
-        </tr>
-        <tr>
-            <td><img src="/front/assets/images/broker-10.png"></td>
-            <td>$200</td>
-            <td>No</td>
-            <td class="link">Read Review</td>
-            <td class="link">options.10trade.com</td>
-        </tr>
+
         </tbody>
     </table>
-    <div class="table-nav">
-        <div class="table-nav-pagination">
-            <a href="#">1</a>
-            <a class="active" href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">5</a>
-            <a href="#">6</a>
-            <a href="#">7</a>
-            <span>...</span>
-            <a href="#">16</a>
+    <div class="table-nav row">
+        <div class="col-md-8">
+            <uib-pagination direction-links="false"
+                            total-items="pagination.totalItems"
+                            ng-model="pagination.currentPage"
+                            items-per-page="pagination.itemsPerPage"
+                            ng-change="pagination.pageChange()"
+                            num-pages="smallnumPages"></uib-pagination>
         </div>
-        <div class="table-nav-buttons clearfix">
-            <a class="table-nav-prev button" href="#">Previous</a>
-            <a class="table-nav-next button" href="#">Next</a>
+
+        <div class="col-md-4">
+            <uib-pager total-items="pagination.totalItems"
+                       items-per-page="pagination.itemsPerPage"
+                       ng-model="pagination.currentPage"
+                       ng-change="pagination.pageChange()">
+            </uib-pager>
         </div>
     </div>
     <div class="spacer-big"></div>

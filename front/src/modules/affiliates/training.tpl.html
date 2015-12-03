@@ -22,7 +22,7 @@
             <a class="title" href="#">Affiliate Training</a>
             <a class="video-playlist-item video-stopped"
                href="#"
-               data-ng-class="[{'video-playing': training.playing}, {'active': currentVideo.id == training.id}]"
+               data-ng-class="[{'video-playing': training.playing}, {'active': currentVideo.video_id == training.video_id}]"
                data-ng-click="setVideo(training)"
                data-ng-repeat="training in trainings">{{::training.title}}<span data-ng-bind="::training.time"></span></a>
         </div>

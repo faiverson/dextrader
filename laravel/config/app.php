@@ -216,7 +216,8 @@ return [
 		'Product' => App\Models\Product::class,
 		'MarketingLink' => App\Models\MarketingLink::class,
 		'Training' => App\Models\Training::class,
-		'Settings' => App\Models\UserSettings::class
+		'Settings' => App\Models\UserSettings::class,
+		'Provider' => App\Models\Provider::class,
     ],
 
 ];

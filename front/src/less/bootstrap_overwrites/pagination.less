@@ -1,0 +1,66 @@
+.pagination {
+
+  .active > a,
+  .active > span,
+  .active > a:hover,
+  .active > span:hover,
+  .active > a:focus,
+  .active > span:focus{
+    border: 2px solid #ff4e00;
+    background: #ffffff;
+    color: #212c37;
+  }
+
+  li {
+    a {
+      color: #212c37;
+      display: inline-block;
+      height: 40px;
+      width: 40px;
+      padding: 6px;
+      text-align: center;
+      border: 2px solid transparent;
+      font-size: 20px;
+      margin: 0 3px;
+    }
+
+    a:hover {
+      border: 2px solid #ff4e00;
+      background: #ffffff;
+    }
+  }
+
+}
+
+.pager {
+  li {
+    a {
+      border: 0;
+      background: transparent url('/front/assets/images/bigarr-left.png') center left no-repeat;
+      text-align: center;
+      padding: 15px 20px;
+      font-weight: 300;
+      font-size: 17px;
+    }
+
+    a:hover {
+      background-color: transparent;
+    }
+  }
+
+  .next > a,
+  .next > span {
+    padding-right: 40px;
+    float: none;
+    background: transparent url('/front/assets/images/bigarr-right.png') center right no-repeat;
+  }
+
+  .previous > a,
+  .previous > span {
+    border-right: 1px solid #eaeaea;
+    border-radius: 0;
+    padding-left: 40px;
+    float: none;
+    background: transparent url('/front/assets/images/bigarr-left.png') center left no-repeat;
+  }
+}

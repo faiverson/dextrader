@@ -65,8 +65,6 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 permissions = permissions.concat(role.permissions);
             });
 
-            console.log(permissions);
-
             return permissions;
         }
 
@@ -260,6 +258,35 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
     }])
 
+    .factory('ProvidersService', ['$http', '$q', '$site-configs', '$objects', function ($http, $q, $configs, $objects) {
+        var service = $configs.API_BASE_URL + 'providers';
+
+        function query(params) {
+            var deferred = $q.defer(),
+                endpoint = service;
+
+            if(angular.isDefined(params)){
+                endpoint += '?' + $objects.toUrlString(params);
+            }
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
+        return {
+            query: query
+        };
+    }])
+
     .factory('TrainingService', ['$http', '$q', '$site-configs', 'localStorageService', function ($http, $q, $configs, localStorageService) {
         var service = $configs.API_BASE_URL + 'training';
 
@@ -307,8 +334,11 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             }
 
             function success(res) {
-                // Set the token into local storage
-                localStorageService.set('token', res.data.data.token);
+
+                if(angular.isDefined(res.data.data) && angular.isDefined(res.data.data.token)){
+                    // Set the token into local storage
+                    localStorageService.set('token', res.data.data.token);
+                }
 
                 deferred.resolve(res.data);
             }
@@ -326,6 +356,64 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             queryAffiliates: queryAffiliates,
             queryDexIB: queryDexIB,
             unlockTraining: unlockTraining
+        };
+    }])
+
+    .factory('CommissionService', ['$http', '$q', '$site-configs', function ($http, $q, $configs) {
+        var service = 'commissions';
+
+        function getCommissionTotals() {
+            var endpoint = service,
+                deferred = $q.defer();
+
+            setTimeout(function () {
+                deferred.resolve({
+                    data: {
+                        'today': 1231,
+                        'yesterday': 324.34,
+                        'last_week': 123345,
+                        'last_month': 423433,
+                        'last_year': 124234,
+                        'all_time': 3242344
+                    }
+                });
+            }, 500);
+
+            return deferred.promise;
+
+        }
+
+        function getCommissions() {
+            var endpoint = service,
+                deferred = $q.defer();
+
+            setTimeout(function () {
+                deferred.resolve({
+                    data: [
+                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
+                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
+                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
+                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
+                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
+                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
+                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
+                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
+                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
+                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
+                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
+                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
+                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45}
+                    ]
+                });
+            }, 500);
+
+            return deferred.promise;
+
+        }
+
+        return {
+            getCommissionTotals: getCommissionTotals,
+            getCommissions: getCommissions
         };
     }])
 

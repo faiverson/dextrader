@@ -80,11 +80,39 @@ angular.module('app.shared-directives', [])
             restrict: 'A',
             link: function ($scope, $elem, $attrs) {
 
-                if(angular.isDefined($attrs.userCan)){
-                    if(!AuthService.userHasPermission($attrs.userCan)){
+                if (angular.isDefined($attrs.userCan)) {
+                    if (!AuthService.userHasPermission($attrs.userCan)) {
                         $elem.addClass('user-disable-action');
+                    } else {
+                        $elem.removeClass('user-disable-action');
                     }
                 }
+            }
+        };
+    }])
+    .directive('sortable', [function () {
+        return {
+            restrict: 'A',
+            scope: {
+                currentSort: '=',
+                currentDir: '='
+            },
+            link: function ($scope, $elem, $attrs) {
+
+                $elem.addClass('sortable');
+
+                $scope.$watchCollection('[currentSort, currentDir]', function () {
+                    $elem.removeClass('sortable-asc');
+                    $elem.removeClass('sortable-desc');
+
+                    if ($scope.currentSort.toString() === $attrs.sortable) {
+                        if ($scope.currentDir === 'asc') {
+                            $elem.addClass('sortable-asc');
+                        } else {
+                            $elem.addClass('sortable-desc');
+                        }
+                    }
+                });
             }
         };
     }]);
