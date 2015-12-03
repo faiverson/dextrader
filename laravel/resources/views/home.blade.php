@@ -19,16 +19,17 @@
 <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png">
 <!--[if IE]><link rel="shortcut icon" href="favicon.ico"><![endif]-->
 <link rel="icon" type="image/png" href="favicon.png">
-<link rel="stylesheet" href="admin/css/styles.css">
+<link rel="stylesheet" href="/admin/css/styles.css">
 </head>
 <body>
+<base href="/">
 <!--[if lt IE 8]><p class="browsehappy">
 		You are using an <strong>outdated</strong> browser.
 		Please <a href="http://browsehappy.com/">upgrade your browser</a>
 		to improve your experience.
 	</p><![endif]-->
 <div data-ng-include="'modules/shared/header/header.tpl.html'"></div>
-<div ui-view></div>
+<div ui-view class="container"></div>
 <div data-ng-include="'modules/shared/footer/footer.tpl.html'"></div>
 <script type="text/javascript" src="http://localhost:35729/livereload.js"></script>
 <script type="text/javascript" src="/admin/js/vendor.js"></script>
@@ -38,9 +39,10 @@
 <script type="text/javascript" src="/admin/js/common/helpers/shared-helpers.js"></script>
 <script type="text/javascript" src="/admin/js/common/services/http-services.js"></script>
 <script type="text/javascript" src="/admin/js/common/services/site-configs.js"></script>
+<script type="text/javascript" src="/admin/js/modules/auth/auth.js"></script>
+<script type="text/javascript" src="/admin/js/modules/dashboard/dashboard.js"></script>
 <script type="text/javascript" src="/admin/js/modules/providers/providers.js"></script>
 <script type="text/javascript" src="/admin/js/modules/users/users.js"></script>
-<script type="text/javascript" src="/admin/js/modules/auth/auth.js"></script>
 <script type="text/javascript" src="/admin/js/modules/shared/footer/footer.js"></script>
 <script type="text/javascript" src="/admin/js/modules/shared/header/header.js"></script>
 </body>

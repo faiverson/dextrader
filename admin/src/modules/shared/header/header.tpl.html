@@ -1,32 +1,54 @@
-<div class="navbar navbar-default navbar-fixed-top" data-ng-controller="HeaderCtrl">
+<nav class="navbar navbar-default navbar-fixed-top header" data-ng-controller="HeaderCtrl">
     <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-            <button type="button" data-toggle="collapse" data-target="#main-navbar" class="navbar-toggle"><span
-                    class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span
-                    class="icon-bar"></span></button>
+            <button type="button"
+                    class="navbar-toggle collapsed"
+                    data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1"
+                    aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="dashboard">
+                <img height="20" src="/admin/assets/images/logo.png">
+            </a>
         </div>
-        <div id="main-navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav" ng-if="isLoggedIn">
-                <li>
-                    <a href="#" ui-sref="users">
-                        <i class="fa fa-fw fa-close"></i>
-                        Users
-                    </a>
-                </li>
-                <li>
-                    <a href="#" ui-sref="providers.list">
-                        <i class="fa fa-fw fa-close"></i>
-                        Providers
-                    </a>
-                </li>
-                <li>
-                    <a href="#" data-ng-click="logout()">
-                        <i class="fa fa-fw fa-close"></i>
-                        Logout
-                    </a>
-                </li>
 
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav" data-ng-if="isLoggedIn()">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Users <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a ui-sref="users">List</a></li>
+                        <li><a ui-sref="users-new">Add new</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Providers <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a ui-sref="providers.list">List</a></li>
+                        <li><a ui-sref="providers.new">Add new</a></li>
+                    </ul>
+                </li>
             </ul>
-        </div>
-    </div>
-</div>
+
+            <ul class="nav navbar-nav navbar-right" data-ng-if="isLoggedIn()">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Profile <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Edit Profile</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#" data-ng-click="logout()">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>

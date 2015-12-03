@@ -19,8 +19,8 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
             });
     })
 
-    .controller('AuthController', ['$scope', '$state', 'AuthService', '$rootScope',
-        function ($scope, $state, AuthService, $rootScope) {
+    .controller('AuthController', ['$scope', '$state', 'AuthService', 'Notification',
+        function ($scope, $state, AuthService, Notification) {
 
             var vm = this;
 
@@ -41,9 +41,7 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
             vm.successLogin = function () {
                 var user = AuthService.getLoggedInUser();
 
-                $rootScope.$broadcast('user-login-success');
-
-                //message
+                Notification.success('Welcome ' + user.full_name);
 
                 $state.go('users');
             };

@@ -6,6 +6,7 @@ angular.module('app', [
         'app.footer',
         'app.home',
         'app.auth',
+        'app.dashboard',
         'app.providers',
         'ui-notification',
         'app.shared-directives',
@@ -15,14 +16,25 @@ angular.module('app', [
         'LocalStorageModule'
     ])
 
-    .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider) {
+    .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {
 
-        $urlRouterProvider.otherwise('/login');
+        $urlRouterProvider.otherwise('dashboard');
         showErrorsConfigProvider.showSuccess(true);
         $httpProvider.interceptors.push('httpRequestInterceptor');
+        NotificationProvider.setOptions({
+            delay: 10000,
+            startTop: 20,
+            startRight: 10,
+            verticalSpacing: 20,
+            horizontalSpacing: 20,
+            positionX: 'center',
+            positionY: 'top'
+        });
 
         localStorageServiceProvider
-            .setPrefix('app');
+            .setPrefix('admin');
+
+        $locationProvider.html5Mode(true);
     })
 
     .run(function run() {
@@ -31,10 +43,28 @@ angular.module('app', [
 
     .controller('AppCtrl', ['$scope', 'AuthService', '$state', function AppCtrl($scope, AuthService, $state) {
         $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+            var perm = toState.data.permission;
+            var redirectTo = toState.data.redirectTo;
 
-            if (!AuthService.isLoggedIn() && toState.name !== 'login') {
+
+            if (!AuthService.isLoggedIn() && toState.name !== 'login' && angular.isDefined(perm)) {
                 event.preventDefault();
                 $state.go('login');
+            }
+
+            if (AuthService.isLoggedIn() && toState.name === 'login') {
+                event.preventDefault();
+                $state.go('dashboard');
+            }
+
+            if (AuthService.isLoggedIn() && !AuthService.userHasPermission(perm)) {
+                event.preventDefault();
+
+                if (angular.isDefined(redirectTo)) {
+                    $state.go(redirectTo);
+                } else {
+                    $state.go('dashboard');
+                }
             }
         });
 
@@ -42,13 +72,8 @@ angular.module('app', [
             if (angular.isDefined(toState.data.pageTitle)) {
                 $scope.pageTitle = toState.data.pageTitle;
             }
-        });
 
-        $scope.links = [
-            {
-                state: 'home',
-                text: 'Home',
-                icon: 'home'
-            }
-        ];
+            $scope.bodyClass = toState.data.bodyClass || '';
+        });
     }]);
+
