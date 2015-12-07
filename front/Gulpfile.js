@@ -40,6 +40,7 @@ var gulp = require('gulp'),
     replace = require('gulp-replace-task'),
     pkg = require('./package.json'),
     dotenv = require('dotenv').config({path: '../laravel/.env'}),
+	environment,
     config = require('./build.config.js');
 
 gulp.task('test', function () {
@@ -70,7 +71,13 @@ gulp.task('production', function (callback) {
 gulp.task('default', ['env']);
 
 // run a server and a watcher
-gulp.task('dev', ['env', 'server', 'watch']);
+gulp.task('dev', function (callback) {
+	runSequence(
+		'env',
+		'server',
+		'watch',
+		callback);
+});
 
 // TASKS
 // set the environment
