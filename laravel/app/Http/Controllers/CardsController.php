@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use CreditCard;
+use App\Models\UserSettings;
 use User;
 use Illuminate\Http\Request;
+use App\Http\Requests;
 use Validator;
+use DB;
 use Cards;
 use Encrypt;
 

@@ -19,5 +19,8 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 		Route::post('/users/{id}/cards', 'CardsController@store')->where('id', '[0-9]+');
 		Route::put('/users/{id}/cards/{card_id}', 'CardsController@update')->where('id', '[0-9]+')->where('card_id', '[0-9]+');
 		Route::delete('/users/{id}/cards/{card_id}', 'CardsController@destroy')->where('id', '[0-9]+');
+
+		Route::get('/users/{id}/purchases', 'PurchasesController@index')->where('id', '[0-9]+');
+
 	});
 });

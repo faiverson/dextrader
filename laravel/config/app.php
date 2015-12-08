@@ -221,6 +221,7 @@ return [
 		'Settings' => App\Models\UserSettings::class,
 		'Provider' => App\Models\Provider::class,
 		'CreditCard'  => App\Models\CreditCard::class,
+		'Purchase'  => App\Models\Purchase::class,
     ],
 
 ];
