@@ -15,12 +15,12 @@ class Commissions extends Migration
 		Schema::create('commissions', function (Blueprint $table) {
 			$table->bigIncrements('id');
 
-			$table->bigInteger('enroller_id')->unsigned();
-			$table->foreign('enroller_id')
+			$table->bigInteger('from_user_id')->unsigned();
+			$table->foreign('from_user_id')
 				->references('id')->on('users');
 
-			$table->bigInteger('user_id')->unsigned();
-			$table->foreign('user_id')
+			$table->bigInteger('to_user_id')->unsigned();
+			$table->foreign('to_user_id')
 				->references('id')->on('users');
 
 			$table->bigInteger('purchase_id')->unsigned();

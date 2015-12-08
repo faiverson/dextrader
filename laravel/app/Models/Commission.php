@@ -28,7 +28,7 @@ class Commission extends Model
      *
      * @var array
      */
-	protected $fillable = ['id', 'amount', 'user_id', 'enroller_id'];
+	protected $fillable = ['id', 'amount', 'from_user_id', 'to_user_id', 'purchase_id', 'created_at', 'updated_at'];
 
 	protected $appends = array('commission_id');
 

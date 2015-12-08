@@ -12,6 +12,7 @@ class MarketingLinks extends Migration
      */
     public function up()
     {
+		// funnels URLs
 		Schema::create('marketing_links', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('title')->nullable(false);

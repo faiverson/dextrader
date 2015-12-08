@@ -10,6 +10,7 @@ use Validator;
 use Purchase;
 use Token;
 use Commission;
+use Product;
 
 class PurchasesController extends Controller
 {
@@ -36,7 +37,8 @@ class PurchasesController extends Controller
     {
         $rules = [
 			'card_id' => 'required|exists:credit_cards,id',
-			'product_id' => 'required|exists:products,id'
+			'product_id' => 'required|exists:products,id',
+			'mk_id' => 'required|exists:marketing_links,id'
 		];
 		$fields = $request->all();
 		if(!empty($fields['enroller_id'])) {
@@ -59,20 +61,27 @@ class PurchasesController extends Controller
 			'user_id' => $user_id,
 			'enroller_id' => $fields['enroller_id'],
 			'card_id' => $fields['card_id'],
-			'product_id' => $fields['product_id']
+			'product_id' => $fields['product_id'],
+			'funnel_id' => $fields['mk_id']
 		]);
 
-//		$this->apply_commissions($purchase);
-
+		$this->apply_commissions($purchase);
         return response()->added();
     }
 
 	public function apply_commissions($purchase)
 	{
-		Commission::create([
-			'user_id' => $purchase->user_id,
-			'amount' => $purchase->user_id * Config::get('dextrader.comms')
-		]);
+		$product = Product::find($purchase->product_id);
+		if($product) {
+			// the enroller taken by the purchase give us the chance
+			// to set different people if that's the case
+			Commission::create([
+				'from_user_id' => $purchase->user_id,
+				'to_user_id' => $purchase->enroller_id,
+				'purchase_id' => $purchase->id,
+				'amount' => $product->amount * Config::get('dextrader.comms'),
+			]);
+		}
 	}
 
     /**
