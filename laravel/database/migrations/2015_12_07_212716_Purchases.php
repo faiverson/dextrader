@@ -32,7 +32,7 @@ class Purchases extends Migration
 				->references('id')->on('credit_cards')
 				->onUpdate('cascade')->onDelete('cascade');
 
-			$table->smallInteger('funnel_id')->unsigned();
+			$table->integer('funnel_id')->unsigned();
 			$table->foreign('funnel_id')
 				->references('id')->on('marketing_links')
 				->onUpdate('cascade')->onDelete('cascade');
