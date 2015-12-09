@@ -18,6 +18,8 @@ class Provider extends Model
         'provider_id' => 'id',
     ];
 
+    protected $fillable = ['id', 'image', 'name', 'us_traders', 'min_deposit', 'review', 'web_site'];
+
     protected $appends = array('provider_id');
 
     public function getProviderIdAttribute()

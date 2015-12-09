@@ -35,7 +35,7 @@ angular.module('app', [
         });
 
         localStorageServiceProvider
-            .setPrefix('app');
+            .setPrefix('dextrader');
 
         $locationProvider.html5Mode(true);
     })
