@@ -35,7 +35,6 @@ class CardsController extends Controller
      */
     public function store(Request $request)
     {
-        $cc = new CreditCard();
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'month' => ['regex:/^(0?[1-9]|1[012])$/'],
@@ -47,11 +46,19 @@ class CardsController extends Controller
             return response()->error($validator->errors()->all());
         }
 
+		$cc = new CreditCard;
 		$number = $request->input('number');
-		$card = Cards::validCreditCard($number);
+		$type = $request->input('type');
+		$card = Cards::validCreditCard($number, $type);
 		if (!$card['valid']) {
 			return response()->error('The credit card number is not valid number');
 		}
+
+		// check if the card is unique
+		if(CreditCard::where('number', Encrypt::encrypt($number))->count() > 0) {
+			return response()->error('The credit card is in the system');
+		}
+
 		$cc->user_id = $request->id;
 		$cc->name = $request->input('name');
 		$cc->exp_month = $request->input('month');
@@ -59,7 +66,7 @@ class CardsController extends Controller
 		$cc->number = Encrypt::encrypt($number);
 		$cc->first_six = substr($number, 0, 6);
 		$cc->last_four = substr($number, -4);
-		$cc->network = $card['type'];
+		$cc->network = $type ? $type : $card['type'];
         $cc->save();
         return response()->added();
     }
@@ -72,14 +79,6 @@ class CardsController extends Controller
      */
     public function update(Request $request)
     {
-		$id = $request->id;
-		$card_id = $request->card_id;
-		$cc = CreditCard::where('id', $card_id)->where('user_id', $id)->first();
-
-		if(empty($cc)) {
-			return response()->error('The credit card does not belong to the user or is not in the system');
-		}
-
 		$validator = Validator::make($request->all(), [
 			'name' => 'required',
 			'month' => ['regex:/^(0?[1-9]|1[012])$/'],
@@ -91,10 +90,24 @@ class CardsController extends Controller
 			return response()->error($validator->errors()->all());
 		}
 
+		$id = $request->id;
+		$card_id = $request->card_id;
+		$cc = CreditCard::where('id', $card_id)->where('user_id', $id)->first();
+		if(empty($cc)) {
+			return response()->error('The credit card does not belong to the user or is not in the system');
+		}
+
 		$number = $request->input('number');
-		$card = Cards::validCreditCard($number);
+		$type = $request->input('type');
+		$card = Cards::validCreditCard($number, $type);
+		// check if the number is valid
 		if (!$card['valid']) {
 			return response()->error('The credit card number is not valid number');
+		}
+
+		// check if the card is unique
+		if(CreditCard::where('id', '!=', $card_id)->where('number', Encrypt::encrypt($number))->count() > 0) {
+			return response()->error('The credit card is in the system');
 		}
 
 		$cc->name = $request->input('name');
@@ -104,7 +117,7 @@ class CardsController extends Controller
 		$cc->network = $request->input('network');
 		$cc->first_six = substr($number, 0, 6);
 		$cc->last_four = substr($number, -4);
-		$cc->network = $card['type'];
+		$cc->network = $type ? $type : $card['type'];
 		$cc->save();
         return response()->ok();
     }

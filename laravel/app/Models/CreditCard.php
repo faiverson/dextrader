@@ -44,11 +44,21 @@ class CreditCard extends Model
      *
      * @var array
      */
-    protected $hidden = ['id', 'deleted_at'];
+    protected $hidden = ['id', 'number', 'deleted_at', 'updated_at'];
 
 	public function getCcAttribute()
 	{
 		return $this->attributes['id'];
+	}
+
+	public function getExpMonthAttribute()
+	{
+		return $this->attributes['exp_month'] < 10 ? '0' . $this->attributes['exp_month'] : (string) $this->attributes['exp_month'];
+	}
+
+	public function getExpYearAttribute()
+	{
+		return $this->attributes['exp_year'] < 10 ? '0' . $this->attributes['exp_year'] : (string) $this->attributes['exp_year'];
 	}
 
 }
