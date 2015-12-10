@@ -3,10 +3,12 @@
 namespace App\Exceptions;
 
 use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Log;
+use Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Database\QueryException as QueryException;
 
 class Handler extends ExceptionHandler
 {
@@ -42,6 +44,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+		Log::info('Exception ');
 		if ($e instanceof Tymon\JWTAuth\Exceptions\TokenExpiredException) {
 			return response()->error('Token Expired' , $e->getStatusCode());
 		}
@@ -51,10 +54,13 @@ class Handler extends ExceptionHandler
 		else if ($e instanceof ModelNotFoundException) {
 			$e = new NotFoundHttpException($e->getMessage(), $e);
 		}
-		else if ($this->isHttpException($e))
-		{
-			return response()->view('home');
+		else if ($e instanceof QueryException) {
+			return response()->error('There was a problem saving in database. Please contact support immediately!');
 		}
+//		else if ($this->isHttpException($e))
+//		{
+//			return response()->view('home');
+//		}
 
 //		return response()->error($e->getMessage(), $e->getStatusCode());
         return parent::render($request, $e);

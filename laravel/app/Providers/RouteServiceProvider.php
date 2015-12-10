@@ -68,6 +68,10 @@ class RouteServiceProvider extends ServiceProvider
 			if ($request->is('api/training*')) {
 				$this->loadRoutesFrom(app_path('Http/Routes/trainings.php'));
 			}
+
+			if ($request->is('api/billing*') || $request->is('api/purchases*')) {
+				$this->loadRoutesFrom(app_path('Http/Routes/billings.php'));
+			}
 		});
     }
 }

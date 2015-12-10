@@ -38,7 +38,6 @@ class ProvidersController extends Controller
             "items" => $providers
         );
 
-
         return response()->ok($data);
     }
 

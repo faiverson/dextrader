@@ -208,7 +208,9 @@ return [
 		'Entrust' => Zizaco\Entrust\EntrustFacade::class,
 		'Token' => App\Helpers\Token::class,
 		'Files' => App\Helpers\Files::class,
+		'Cards' => App\Helpers\Cards::class,
 		'cURL' => anlutro\cURL\Laravel\cURL::class,
+		'Encrypt' => App\Helpers\Encrypt::class,
 
 		'User' => App\Models\User::class,
 		'Role' => App\Models\Role::class,
@@ -218,6 +220,9 @@ return [
 		'Training' => App\Models\Training::class,
 		'Settings' => App\Models\UserSettings::class,
 		'Provider' => App\Models\Provider::class,
+		'CreditCard'  => App\Models\CreditCard::class,
+		'Commission' => App\Models\Commission::class,
+		'Purchase'  => App\Models\Purchase::class,
     ],
 
 ];

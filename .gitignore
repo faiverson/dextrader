@@ -3,6 +3,7 @@
 Homestead.yaml
 Homestead.json
 .env
+.editorconfig
+/laravel/.env
 .idea/
 public_html/*
-laravel/resources/views/home.php
