@@ -1,6 +1,6 @@
 angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.shared-helpers'])
 
-    .factory('AuthService', ['$http', '$q', '$site-configs', 'localStorageService', 'jwtHelper', '$objects', '$filter', function ($http, $q, $configs, localStorageService, jwtHelper, $objects, $filter) {
+    .factory('AuthService', ['$http', '$q', '$site-configs', 'localStorageService', 'jwtHelper', '$objects', '$filter', '$rootScope', function ($http, $q, $configs, localStorageService, jwtHelper, $objects, $filter, $rootScope) {
 
         function login(username, password) {
             var endpoint = $configs.API_BASE_URL + 'login';
@@ -11,6 +11,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
 
                     // Set the token into local storage
                     localStorageService.set('token', res.data.data.token);
+                    $rootScope.$broadcast("user-has-change");
 
                     deferred.resolve();
                 } else {
@@ -117,6 +118,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
 
                     // Set the token into local storage
                     localStorageService.set('token', res.data.data.token);
+                    $rootScope.$broadcast("user-has-change");
 
                     deferred.resolve();
                 } else {
@@ -443,7 +445,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
     }])
 
-    .factory('TrainingService', ['$http', '$q', '$site-configs', 'localStorageService', function ($http, $q, $configs, localStorageService) {
+    .factory('TrainingService', ['$http', '$q', '$site-configs', 'localStorageService', '$rootScope', function ($http, $q, $configs, localStorageService, $rootScope) {
         var service = $configs.API_BASE_URL + 'training';
 
         function queryAffiliates() {
@@ -494,6 +496,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 if (angular.isDefined(res.data.data) && angular.isDefined(res.data.data.token)) {
                     // Set the token into local storage
                     localStorageService.set('token', res.data.data.token);
+                    $rootScope.$broadcast("user-has-change");
                 }
 
                 deferred.resolve(res.data);

@@ -80,13 +80,21 @@ angular.module('app.shared-directives', [])
             restrict: 'A',
             link: function ($scope, $elem, $attrs) {
 
-                if (angular.isDefined($attrs.userCan)) {
-                    if (!AuthService.userHasPermission($attrs.userCan)) {
-                        $elem.addClass('user-disable-action');
-                    } else {
-                        $elem.removeClass('user-disable-action');
+                $scope.$on("user-has-change", function (nv, ov) {
+                    evaluatePerm();
+                });
+
+                function evaluatePerm() {
+                    if (angular.isDefined($attrs.userCan)) {
+                        if (!AuthService.userHasPermission($attrs.userCan)) {
+                            $elem.addClass('user-disable-action');
+                        } else {
+                            $elem.removeClass('user-disable-action');
+                        }
                     }
                 }
+
+                evaluatePerm();
             }
         };
     }])
