@@ -24,7 +24,7 @@ class MerchantCharges extends Migration
 			$table->string('username', 50)->nullable(false)->unique('username');
 			$table->string('email')->nullable(false)->unique('email');
 			$table->string('phone', 15);
-			$table->string('ip', 15);
+			$table->text('data'); // like IP, browser, etc
 
 			$table->timestamps();
 		});
@@ -63,6 +63,8 @@ class MerchantCharges extends Migration
      */
     public function down()
     {
-        //
-    }
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+		Schema::drop('leads');
+		Schema::drop('merchant_charges');
+		DB::statement('SET FOREIGN_KEY_CHECKS = 1');    }
 }

@@ -55,7 +55,7 @@ class Handler extends ExceptionHandler
 			$e = new NotFoundHttpException($e->getMessage(), $e);
 		}
 		else if ($e instanceof QueryException) {
-			return response()->error('There was a problem saving in database. Please contact support immediately!');
+			//return response()->error('There was a problem saving in database. Please contact support immediately!');
 		}
 //		else if ($this->isHttpException($e))
 //		{

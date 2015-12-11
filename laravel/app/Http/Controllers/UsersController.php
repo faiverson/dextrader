@@ -110,7 +110,7 @@ class UsersController extends Controller
 		$user->phone = $request->input('phone');
         $user->password = bcrypt($request->input('password'));
         $user->save();
-        return response()->added();
+        return response()->ok((array('user_id' => $user->id)));
     }
 
     /**
