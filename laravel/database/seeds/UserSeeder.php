@@ -60,7 +60,7 @@ class UserSeeder extends Seeder
 	{
 		$faker = Faker::create();
 		// common users
-		$total_batch = 10;
+		$total_batch = 2;
 		foreach(range(1, $total_batch) as $batch) {
 			$this->command->info("Starting batch " . $batch . " of " . $total_batch);
 			$users = [];

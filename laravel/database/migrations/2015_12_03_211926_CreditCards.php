@@ -26,6 +26,7 @@ class CreditCards extends Migration
 			$table->integer('first_six')->nullable(false);
 			$table->integer('last_four')->nullable(false);
 			$table->string('network', 15)->nullable(false);
+			$table->boolean('default_card')->nullable(false)->default(true);
 			$table->softDeletes();
 			$table->timestamps();
 		});
@@ -44,7 +45,8 @@ class CreditCards extends Migration
 			$table->string('state', 100)->nullable(false);
 			$table->string('country', 100)->nullable(false);
 			$table->integer('zip')->nullable(false);
-			$table->integer('phone')->nullable();
+			$table->string('phone', 15);
+			$table->boolean('default_address')->nullable(false)->default(true);
 			$table->timestamps();
 		});
     }
