@@ -51,6 +51,15 @@ class UserSeeder extends Seeder
 			'password' => bcrypt('editor')
 		])->attachRoles([$role, $roleAdmin]);
 
+		$roleIB = Role::where('name', 'IB')->first();
+		User::create([
+				'first_name' => 'Dex',
+				'last_name' => 'IB',
+				'username' => 'dexib',
+				'email' => 'dexib@dexib.com',
+				'password' => bcrypt('password')
+		])->attachRoles([$role, $roleIB]);
+
 		if (App::Environment() === 'local') {
 			$this->fakeUsers();
 		}

@@ -60,6 +60,8 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
     })
 
     .controller('DexIBCtrl', ['$state', 'AuthService', function ($state, AuthService) {
+        $scope.isLoggedIn = AuthService.isLoggedIn;
+
         if (AuthService.isLoggedIn()) {
             $state.go('dex_ib.certification_training');
         } else {
