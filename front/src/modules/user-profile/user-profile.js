@@ -1,4 +1,4 @@
-angular.module('app.user-profile', ['ui.router'])
+angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.mask'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('user', {
@@ -28,9 +28,9 @@ angular.module('app.user-profile', ['ui.router'])
                 }
             })
             .state('user.billing', {
-                url: '/settings',
+                url: '/billing',
                 templateUrl: 'modules/user-profile/user.profile.billing.tpl.html',
-                controller: 'UserProfileSettingsCtrl',
+                controller: 'BillingCtrl',
                 data: {
                     pageTitle: 'User Settings'
                 }
@@ -60,11 +60,11 @@ angular.module('app.user-profile', ['ui.router'])
             }
         };
 
-        vm.successSaveUser = function success(res){
+        vm.successSaveUser = function success(res) {
             Notification.success("User settings changed successfully!");
         };
 
-        vm.errorSaveUser = function error(err){
+        vm.errorSaveUser = function error(err) {
             Notification.error("Ups! something went wrong, try again!");
         };
 
@@ -87,4 +87,138 @@ angular.module('app.user-profile', ['ui.router'])
         };
 
         vm.init();
-    }]);
+    }])
+
+    .controller('BillingCtrl', ['$scope', 'CreditCardService', 'Notification', '$uibModal', function ($scope, CreditCardService, Notification, $uibModal) {
+        var vm = this;
+        $scope.creditCards = [];
+
+        $scope.openFormCreditCard = function (cc_id) {
+
+            var modalInstance = $uibModal.open({
+                templateUrl: 'modules/user-profile/user.profile.credit-card-form.tpl.html',
+                controller: 'CreditCardFormCtrl',
+                resolve: {
+                    cc_id: function () {
+                        return cc_id;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (email) {
+                vm.getUserCreditCards();
+            }, function () {
+                //$log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+        vm.getUserCreditCards = function () {
+
+            function success(res) {
+                $scope.creditCards = res.data;
+            }
+
+            function error(err) {
+                Notification.error('Ups! there was an error trying to load credit cards');
+            }
+
+            CreditCardService.query()
+                .then(success, error);
+        };
+
+        vm.init = function () {
+            vm.getUserCreditCards();
+        };
+
+        vm.init();
+
+    }])
+
+    .controller('CreditCardFormCtrl', ['$scope', '$uibModalInstance', 'Notification', 'cc_id', 'CreditCardService', '$filter',
+        function ($scope, $uibModalInstance, Notification, cc_id, CreditCardService, $filter) {
+            var vm = this;
+            $scope.card = {};
+            $scope.networks = ['mastercard', 'visa', 'amex', 'dinersclub', 'discover', 'jcb'];
+
+            vm.init = function () {
+                if (angular.isDefined(cc_id)) {
+                    CreditCardService.getOne(cc_id)
+                        .then(vm.getCardSuccess, vm.getCardError);
+                }
+
+                vm.feelExpMonth();
+                vm.feelExpYear();
+            };
+
+            vm.getCardSuccess = function (res) {
+                $scope.card = res.data;
+
+                $scope.exp_month = $filter('filter')($scope.months, {id: parseInt($scope.card.exp_month, 10)}, true)[0];
+                $scope.exp_year = $filter('filter')($scope.years, {id: parseInt($scope.card.exp_year)}, true)[0];
+            };
+
+            vm.getCardError = function (err) {
+                Notification.error('Ups! there was an error trying to load the card info!');
+            };
+
+            vm.feelExpMonth = function () {
+                var date = moment([moment().year(), 0]);
+                $scope.months = [];
+
+                for (var i = 1; i <= 12; i++) {
+                    var month = {
+                        id: i,
+                        name: date.format('M (MMM)')
+                    };
+
+                    $scope.months.push(month);
+
+                    date.add(1, 'M');
+                }
+            };
+
+            vm.feelExpYear = function () {
+                var ini = parseInt(moment().format('YY'), 10);
+                $scope.years = [];
+
+                for (var i = ini; i <= (ini + 14); i++) {
+                    var year = {
+                        id: i,
+                        name: i
+                    };
+
+                    $scope.years.push(year);
+                }
+            };
+
+            vm.saveSuccess = function (res) {
+                Notification.success('Credit Card saved succssfully!');
+                $uibModalInstance.close(res.data);
+            };
+
+            vm.saveError = function (err) {
+                Notification.error(err.data.error);
+            };
+
+            $scope.selectCCType = function (network) {
+                $scope.card.network = network;
+            };
+
+            $scope.close = function () {
+                $uibModalInstance.dismiss('close');
+            };
+
+            $scope.save = function () {
+                $scope.$broadcast('show-errors-check-validity');
+
+                if ($scope.ccForm.$valid) {
+                    $scope.card.month = $scope.exp_month.id;
+                    $scope.card.year = $scope.exp_year.id;
+
+                    CreditCardService.save($scope.card)
+                        .then(vm.saveSuccess, vm.saveError);
+                }
+            };
+
+            vm.init();
+        }]);

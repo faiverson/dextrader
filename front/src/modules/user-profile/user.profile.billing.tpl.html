@@ -94,39 +94,16 @@
     <div id="billing-methods" class="content-right">
         <h3>Payment Methods</h3>
 
-        <div class="cc">
-            <a class="edit" href="#">EDIT</a>
-            <h3><img src="/front/assets/images/ico-visa.png"> ****  ****  ****  4257</h3>
+        <div class="cc" data-ng-repeat="cc in creditCards">
+            <a class="edit" href="#" data-ng-click="openFormCreditCard(cc.cc_id)">EDIT</a>
+            <h3><img ng-src="/front/assets/images/creditcards/{{cc.network}}.png" width="25"> ****  ****  ****  {{cc.last_four}}</h3>
             <div class="cc-info">
-                <div><span>Expires: </span>09/18</div>
-                <div><strong>John Stalvey</strong>, 3116 Capital Cir NE</div>
+                <div><span>Expires: </span>{{cc.exp_month}}/{{cc.exp_year}}</div>
+                <!--<div><strong>John Stalvey</strong>, 3116 Capital Cir NE</div>-->
+                <div>{{cc.name}}</div>
             </div>
         </div>
-        <div class="cc">
-            <a class="edit" href="#">EDIT</a>
-            <h3><img src="/front/assets/images/ico-visa.png"> ****  ****  ****  8941</h3>
-            <div class="cc-info">
-                <div><span>Expires: </span>05/18</div>
-                <div><strong>Douglas Wellens</strong>, 641 PHLOX WAY NW</div>
-            </div>
-        </div>
-        <div class="cc">
-            <a class="edit" href="#">EDIT</a>
-            <h3><img src="/front/assets/images/ico-visa.png"> ****  ****  ****  4257</h3>
-            <div class="cc-info">
-                <div><span>Expires: </span>09/18</div>
-                <div><strong>John Stalvey</strong>, 3116 Capital Cir NE</div>
-            </div>
-        </div>
-        <div class="cc">
-            <a class="edit" href="#">EDIT</a>
-            <h3><img src="/front/assets/images/ico-visa.png"> ****  ****  ****  8941</h3>
-            <div class="cc-info">
-                <div><span>Expires: </span>05/18</div>
-                <div><strong>Douglas Wellens</strong>, 641 PHLOX WAY NW</div>
-            </div>
-        </div>
-        <a id="addcard" href="#" class="submitbutton bg-orange">Add New Card</a>
+        <a id="addcard" href="#" class="submitbutton bg-orange" data-ng-click="openFormCreditCard()">Add New Card</a>
     </div>
     <div class="clear"></div>
 </section>

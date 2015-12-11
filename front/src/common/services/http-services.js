@@ -233,6 +233,84 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
     }])
 
+    .factory('CreditCardService', ['$http', '$q', '$site-configs', 'AuthService', function ($http, $q, $configs, AuthService) {
+
+        var service = $configs.API_BASE_URL + 'users/' + AuthService.getLoggedInUser().user_id + '/cards';
+
+        function query() {
+            var endpoint = service,
+                deferred = $q.defer();
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+
+        }
+
+        function getOne(id) {
+            var endpoint = service,
+                deferred = $q.defer();
+
+            if(angular.isUndefined(id)){
+                deferred.reject('Card id is required!');
+            }
+
+            endpoint += '/' + id;
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
+        function save(data){
+            var endpoint = service,
+                deferred = $q.defer();
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+
+            if(angular.isDefined(data.cc_id)){
+                endpoint += '/' + data.cc_id;
+
+                $http.put(endpoint, data)
+                    .then(success, error);
+            }else{
+                $http.post(endpoint, data)
+                    .then(success, error);
+            }
+
+            return deferred.promise;
+        }
+
+        return {
+            query: query,
+            getOne: getOne,
+            save: save
+        };
+    }])
+
     .factory('MarketingLinksService', ['$http', '$q', '$site-configs', function ($http, $q, $configs) {
         var service = $configs.API_BASE_URL + 'marketing-links';
 
@@ -265,7 +343,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             var deferred = $q.defer(),
                 endpoint = service;
 
-            if(angular.isDefined(params)){
+            if (angular.isDefined(params)) {
                 endpoint += '?' + $objects.toUrlString(params);
             }
 
@@ -335,7 +413,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
 
             function success(res) {
 
-                if(angular.isDefined(res.data.data) && angular.isDefined(res.data.data.token)){
+                if (angular.isDefined(res.data.data) && angular.isDefined(res.data.data.token)) {
                     // Set the token into local storage
                     localStorageService.set('token', res.data.data.token);
                 }
@@ -390,19 +468,149 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             setTimeout(function () {
                 deferred.resolve({
                     data: [
-                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
-                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
-                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
-                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
-                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
-                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
-                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
-                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
-                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
-                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
-                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
-                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45},
-                        { date: new Date(), status: 'Pending', customer: 'Pepe Torres', enroller: 'Juan Borda', product: 'Basic Traffic Package', retail: 220, commission: 50, p: 5, income: 45}
+                        {
+                            date: new Date(),
+                            status: 'Pending',
+                            customer: 'Pepe Torres',
+                            enroller: 'Juan Borda',
+                            product: 'Basic Traffic Package',
+                            retail: 220,
+                            commission: 50,
+                            p: 5,
+                            income: 45
+                        },
+                        {
+                            date: new Date(),
+                            status: 'Pending',
+                            customer: 'Pepe Torres',
+                            enroller: 'Juan Borda',
+                            product: 'Basic Traffic Package',
+                            retail: 220,
+                            commission: 50,
+                            p: 5,
+                            income: 45
+                        },
+                        {
+                            date: new Date(),
+                            status: 'Pending',
+                            customer: 'Pepe Torres',
+                            enroller: 'Juan Borda',
+                            product: 'Basic Traffic Package',
+                            retail: 220,
+                            commission: 50,
+                            p: 5,
+                            income: 45
+                        },
+                        {
+                            date: new Date(),
+                            status: 'Pending',
+                            customer: 'Pepe Torres',
+                            enroller: 'Juan Borda',
+                            product: 'Basic Traffic Package',
+                            retail: 220,
+                            commission: 50,
+                            p: 5,
+                            income: 45
+                        },
+                        {
+                            date: new Date(),
+                            status: 'Pending',
+                            customer: 'Pepe Torres',
+                            enroller: 'Juan Borda',
+                            product: 'Basic Traffic Package',
+                            retail: 220,
+                            commission: 50,
+                            p: 5,
+                            income: 45
+                        },
+                        {
+                            date: new Date(),
+                            status: 'Pending',
+                            customer: 'Pepe Torres',
+                            enroller: 'Juan Borda',
+                            product: 'Basic Traffic Package',
+                            retail: 220,
+                            commission: 50,
+                            p: 5,
+                            income: 45
+                        },
+                        {
+                            date: new Date(),
+                            status: 'Pending',
+                            customer: 'Pepe Torres',
+                            enroller: 'Juan Borda',
+                            product: 'Basic Traffic Package',
+                            retail: 220,
+                            commission: 50,
+                            p: 5,
+                            income: 45
+                        },
+                        {
+                            date: new Date(),
+                            status: 'Pending',
+                            customer: 'Pepe Torres',
+                            enroller: 'Juan Borda',
+                            product: 'Basic Traffic Package',
+                            retail: 220,
+                            commission: 50,
+                            p: 5,
+                            income: 45
+                        },
+                        {
+                            date: new Date(),
+                            status: 'Pending',
+                            customer: 'Pepe Torres',
+                            enroller: 'Juan Borda',
+                            product: 'Basic Traffic Package',
+                            retail: 220,
+                            commission: 50,
+                            p: 5,
+                            income: 45
+                        },
+                        {
+                            date: new Date(),
+                            status: 'Pending',
+                            customer: 'Pepe Torres',
+                            enroller: 'Juan Borda',
+                            product: 'Basic Traffic Package',
+                            retail: 220,
+                            commission: 50,
+                            p: 5,
+                            income: 45
+                        },
+                        {
+                            date: new Date(),
+                            status: 'Pending',
+                            customer: 'Pepe Torres',
+                            enroller: 'Juan Borda',
+                            product: 'Basic Traffic Package',
+                            retail: 220,
+                            commission: 50,
+                            p: 5,
+                            income: 45
+                        },
+                        {
+                            date: new Date(),
+                            status: 'Pending',
+                            customer: 'Pepe Torres',
+                            enroller: 'Juan Borda',
+                            product: 'Basic Traffic Package',
+                            retail: 220,
+                            commission: 50,
+                            p: 5,
+                            income: 45
+                        },
+                        {
+                            date: new Date(),
+                            status: 'Pending',
+                            customer: 'Pepe Torres',
+                            enroller: 'Juan Borda',
+                            product: 'Basic Traffic Package',
+                            retail: 220,
+                            commission: 50,
+                            p: 5,
+                            income: 45
+                        }
                     ]
                 });
             }, 500);

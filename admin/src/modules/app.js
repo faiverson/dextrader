@@ -13,7 +13,8 @@ angular.module('app', [
         'ui.bootstrap.tpls',
         'ui.bootstrap',
         'app.http-services',
-        'LocalStorageModule'
+        'LocalStorageModule',
+        'app.user-profile'
     ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {

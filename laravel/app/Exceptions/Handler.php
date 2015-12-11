@@ -68,7 +68,7 @@ class Handler extends ExceptionHandler
 
 	protected function renderHttpException(HttpException $e)
 	{
-		dd('asas');
+		//dd('asas');
 		if (view()->exists('errors.' . $e->getStatusCode())) {
 			response()->error($e->getMessage(), $e->getStatusCode());
 			return response()->view('errors.'.$e->getStatusCode(), [], $e->getStatusCode());

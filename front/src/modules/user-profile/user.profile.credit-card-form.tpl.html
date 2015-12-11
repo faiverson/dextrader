@@ -1,0 +1,103 @@
+<div class="modal-header">
+    <button type="button" class="close" data-ng-click="close()" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <h3 class="modal-title">{{card.cc_id && card.name || 'New Credit Card!'}}</h3>
+</div>
+<div class="modal-body">
+    <form id="ccForm" name="ccForm" class="credit-card-form" novalidate="novalidate">
+        <div class="credit-cards text-center">
+            <a href="#" data-ng-click="selectCCType(network)"
+               class="credit-card"
+               data-ng-class="{'active': network == card.network}"
+               data-ng-repeat="network in networks">
+                <img data-ng-src="/front/assets/images/creditcards/{{network}}.png" width="30">
+            </a>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group has-feedback" data-show-errors>
+                    <input type="text"
+                           name="name"
+                           class="form-control"
+                           id="name"
+                           required
+                           data-ng-model="card.name"
+                           placeholder="Name">
+                    <span class="glyphicon glyphicon-pencil form-control-feedback" aria-hidden="true"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group has-feedback" data-show-errors data-ng-if="!card.cc_id">
+                    <input type="text"
+                           ui-mask="9999 9999 9999 9999"
+                           ui-mask-placeholder=""
+                           ui-mask-placeholder-char="*"
+                           required
+                           name="number"
+                           class="form-control"
+                           id="number"
+                           data-ng-model="card.number"
+                           placeholder="Enter CC number">
+                    <span class="glyphicon glyphicon-credit-card form-control-feedback" aria-hidden="true"></span>
+                </div>
+                <div class="form-group has-feedback" data-show-errors data-ng-if="card.cc_id">
+                    <input type="text"
+                           required
+                           name="rd_number"
+                           class="form-control"
+                           id="rd_number"
+                           readonly="readonly"
+                           value="**** **** **** {{card.last_four}}"
+                           placeholder="Enter CC number">
+                    <span class="glyphicon glyphicon-credit-card form-control-feedback" aria-hidden="true"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group has-feedback">
+                    <ui-select ng-model="$parent.exp_month">
+                        <ui-select-match placeholder="Exp Month">
+                            <span ng-bind="$select.selected.name"></span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="month in (months | filter: $select.search) track by month.id">
+                            <span ng-bind="month.name"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group has-feedback">
+                    <ui-select ng-model="$parent.exp_year">
+                        <ui-select-match placeholder="Exp Year">
+                            <span ng-bind="$select.selected.name"></span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="year in (years | filter: $select.search) track by year.id">
+                            <span ng-bind="year.name"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group has-feedback" data-show-errors>
+                    <input type="text"
+                           name="cc_number"
+                           class="form-control"
+                           id="cvv_code"
+                           data-ng-model="card.cvv_code"
+                           placeholder="CVV">
+                    <span class="glyphicon glyphicon-lock form-control-feedback" aria-hidden="true"></span>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="submit" data-ng-disabled="ccForm.$invalid" class="btn btn-warning"
+            data-ng-click="save()">Save
+    </button>
+    <button type="button" class="btn btn-default"
+            data-ng-click="close()">Cancel
+    </button>
+</div>

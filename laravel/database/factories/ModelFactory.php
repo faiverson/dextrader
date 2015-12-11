@@ -38,7 +38,7 @@ $factory->define(App\Models\MarketingLink::class, function (Faker\Generator $fak
 $factory->define(App\Models\Provider::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->company,
-        'image' => $faker->imageUrl(125, 55),
+        'image' => 'do-not-delete-broker-seed.png',
         'us_traders' => $faker->boolean($chanceOfGettingTrue = 70),
         'min_deposit' => $faker->numberBetween(100, 999),
         'review' => $faker->text(1000),

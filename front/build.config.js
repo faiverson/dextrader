@@ -43,7 +43,12 @@ module.exports = {
                 'vendor/angular-jwt/dist/angular-jwt.js',
                 'vendor/angular-ui-notification/dist/angular-ui-notification.js',
                 'vendor/angular-youtube-mb/dist/angular-youtube-embed.min.js',
-                'vendor/angular-animate/angular-animate.js'
+                'vendor/angular-animate/angular-animate.js',
+                'vendor/ui-select/dist/select.js',
+                'vendor/angular-sanitize/angular-sanitize.js',
+                'vendor/angular-moment/angular-moment.js',
+                'vendor/moment/min/moment.min.js',
+                'vendor/angular-ui-mask/dist/mask.js'
             ],
             output: 'vendor.js'
         },

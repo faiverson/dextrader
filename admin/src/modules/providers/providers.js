@@ -43,6 +43,8 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
 
             var vm = this;
 
+            $scope.image = '/admin/assets/images/image-placeholder.gif';
+
             $scope.uploadAndSave = function () {
                 $scope.$broadcast('show-errors-check-validity');
 
@@ -91,6 +93,7 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
                 ProvidersService.getOne(id)
                     .then(function (res) {
                         $scope.provider = res.data;
+                        $scope.image = '/assets/images/' + $scope.provider.image;
                     });
             };
 
