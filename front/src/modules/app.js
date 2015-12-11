@@ -1,23 +1,26 @@
 angular.module('app.views', ['app.auth', 'ui.router']);
 
 angular.module('app', [
-    'templates-app',
-    'app.header',
-    'app.footer',
-    'app.auth',
-    'app.dashboard',
-    'app.user-profile',
-    'app.affiliates',
-    'app.dex_ib',
-    'ui-notification',
-    'ui.bootstrap.tpls',
-    'ui.bootstrap',
-    'app.http-services',
-    'app.shared-directives',
-    'app.shared-filters',
-    'LocalStorageModule',
-    'ngAnimate'
-])
+        'templates-app',
+        'app.header',
+        'app.footer',
+        'app.auth',
+        'app.dashboard',
+        'app.user-profile',
+        'app.affiliates',
+        'app.dex_ib',
+        'ui-notification',
+        'ui.bootstrap.tpls',
+        'ui.bootstrap',
+        'app.http-services',
+        'app.shared-directives',
+        'app.shared-filters',
+        'LocalStorageModule',
+        'ngAnimate',
+        'app.privacy',
+        'app.disclosure',
+        'app.term-and-conditions'
+    ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {
 
@@ -40,8 +43,7 @@ angular.module('app', [
         $locationProvider.html5Mode(true);
     })
 
-    .run(function run() {
-
+    .run(function () {
     })
 
     .controller('AppCtrl', ['$scope', 'AuthService', '$state', function AppCtrl($scope, AuthService, $state) {
@@ -60,12 +62,12 @@ angular.module('app', [
                 $state.go('dashboard');
             }
 
-            if (AuthService.isLoggedIn() && !AuthService.userHasPermission(perm)){
+            if (AuthService.isLoggedIn() && !AuthService.userHasPermission(perm)) {
                 event.preventDefault();
 
-                if(angular.isDefined(redirectTo)){
+                if (angular.isDefined(redirectTo)) {
                     $state.go(redirectTo);
-                }else{
+                } else {
                     $state.go('dashboard');
                 }
             }

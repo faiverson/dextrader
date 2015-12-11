@@ -1,7 +1,8 @@
 <?php
-Route::get('/', function () {
+
+Route::get('/{url}', function () {
 	return view('home');
-});
+})->where(['url' => '^((?!api).)*$']);
 
 Route::group(['namespace' => 'Auth', 'prefix' => 'api'], function () {
 	Route::post('/login', 'AuthController@login');

@@ -71,13 +71,7 @@ gulp.task('production', function (callback) {
 gulp.task('default', ['env']);
 
 // run a server and a watcher
-gulp.task('dev', function (callback) {
-	runSequence(
-		'env',
-		'server',
-		'watch',
-		callback);
-});
+gulp.task('dev', ['env', 'server', 'watch']);
 
 // TASKS
 // set the environment
