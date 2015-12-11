@@ -35,7 +35,7 @@ class Kernel extends HttpKernel
 //		'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
 		'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
 		'is.user' => \App\Http\Middleware\IsUser::class,
-		'role' => \App\Http\Middleware\Roles::class,
+		'perms' => \App\Http\Middleware\Permissions::class,
     ];
 
 	protected $bootstrappers = [

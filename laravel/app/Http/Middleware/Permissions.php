@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
+use Role;
 /**
  * Class Roles
  *
@@ -11,7 +12,7 @@ use Illuminate\Contracts\Auth\Guard;
  *
  * @package App\Http\Middleware
  */
-class Roles
+class Permissions
 {
 	protected $auth;
 
@@ -33,9 +34,9 @@ class Roles
 	 * @param  $roles
 	 * @return mixed
 	 */
-	public function handle($request, Closure $next, $roles)
+	public function handle($request, Closure $next, $perms)
 	{
-		if (!$request->user()->hasRole(explode('|', $roles))) {
+		if (!$request->user()->can(explode('|', $perms))) {
 			return response()->error('The account being accessed does not have sufficient permissions to execute this operation', 403);
 		}
 
