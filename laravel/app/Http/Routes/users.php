@@ -20,6 +20,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 		Route::delete('/users/{id}/cards/{card_id}', 'CardsController@destroy')->where('id', '[0-9]+')->where('card_id', '[0-9]+');
 
 		Route::get('/users/{id}/billing-address', 'BillingAddressController@index')->where('id', '[0-9]+');
+		Route::get('/users/{id}/billing-address/{address_id}', 'BillingAddressController@show')->where('id', '[0-9]+')->where('address_id', '[0-9]+');
 		Route::post('/users/{id}/billing-address', 'BillingAddressController@store')->where('id', '[0-9]+');
 		Route::put('/users/{id}/billing-address/{address_id}', 'BillingAddressController@update')->where('id', '[0-9]+')->where('address_id', '[0-9]+');
 		Route::delete('/users/{id}/billing-address/{address_id}', 'BillingAddressController@destroy')->where('id', '[0-9]+')->where('address_id', '[0-9]+');

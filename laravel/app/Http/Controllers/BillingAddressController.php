@@ -25,6 +25,20 @@ class BillingAddressController extends Controller
 		return response()->ok($bAddress);
 	}
 
+	/**
+	 * Show a user address
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show(Request $request)
+	{
+		$id = $request->id;
+		$address_id = $request->address_id;
+		$bAddress = BillingAddress::where('user_id', $id)->where('address_id', $address_id)->first();
+		return response()->ok($bAddress);
+	}
+
     /**
      * Store a newly created resource in storage.
      *

@@ -89,50 +89,86 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
         vm.init();
     }])
 
-    .controller('BillingCtrl', ['$scope', 'CreditCardService', 'Notification', '$uibModal', function ($scope, CreditCardService, Notification, $uibModal) {
-        var vm = this;
-        $scope.creditCards = [];
+    .controller('BillingCtrl', ['$scope', 'CreditCardService', 'BillingAddressService', 'Notification', '$uibModal',
+        function ($scope, CreditCardService, BillingAddressService, Notification, $uibModal) {
+            var vm = this;
+            $scope.creditCards = [];
+            $scope.addresses = [];
 
-        $scope.openFormCreditCard = function (cc_id) {
+            $scope.openFormCreditCard = function (cc_id) {
 
-            var modalInstance = $uibModal.open({
-                templateUrl: 'modules/user-profile/user.profile.credit-card-form.tpl.html',
-                controller: 'CreditCardFormCtrl',
-                resolve: {
-                    cc_id: function () {
-                        return cc_id;
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'modules/user-profile/user.profile.credit-card-form.tpl.html',
+                    controller: 'CreditCardFormCtrl',
+                    resolve: {
+                        cc_id: function () {
+                            return cc_id;
+                        }
                     }
+                });
+
+                modalInstance.result.then(function (email) {
+                    vm.getUserCreditCards();
+                }, function () {
+                    //$log.info('Modal dismissed at: ' + new Date());
+                });
+            };
+
+            $scope.openFormBillingAddress = function (address_id) {
+
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'modules/user-profile/user.profile.billing-address-form.tpl.html',
+                    controller: 'BillingAddressFormCtrl',
+                    resolve: {
+                        address_id: function () {
+                            return address_id;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (email) {
+                    vm.getUserBillingAddress();
+                }, function () {
+                    //$log.info('Modal dismissed at: ' + new Date());
+                });
+            };
+
+            vm.getUserCreditCards = function () {
+
+                function success(res) {
+                    $scope.creditCards = res.data;
                 }
-            });
 
-            modalInstance.result.then(function (email) {
+                function error(err) {
+                    Notification.error('Ups! there was an error trying to load credit cards');
+                }
+
+                CreditCardService.query()
+                    .then(success, error);
+            };
+
+            vm.getUserBillingAddress = function () {
+
+                function success(res) {
+                    $scope.addresses = res.data;
+                }
+
+                function error(err) {
+                    Notification.error('Ups! there was an error trying to load billing addresses');
+                }
+
+                BillingAddressService.query()
+                    .then(success, error);
+            };
+
+            vm.init = function () {
                 vm.getUserCreditCards();
-            }, function () {
-                //$log.info('Modal dismissed at: ' + new Date());
-            });
-        };
+                vm.getUserBillingAddress();
+            };
 
-        vm.getUserCreditCards = function () {
+            vm.init();
 
-            function success(res) {
-                $scope.creditCards = res.data;
-            }
-
-            function error(err) {
-                Notification.error('Ups! there was an error trying to load credit cards');
-            }
-
-            CreditCardService.query()
-                .then(success, error);
-        };
-
-        vm.init = function () {
-            vm.getUserCreditCards();
-        };
-
-        vm.init();
-
-    }])
+        }])
 
     .controller('CreditCardFormCtrl', ['$scope', '$uibModalInstance', 'Notification', 'cc_id', 'CreditCardService', '$filter',
         function ($scope, $uibModalInstance, Notification, cc_id, CreditCardService, $filter) {
@@ -216,6 +252,54 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
                     $scope.card.year = $scope.exp_year.id;
 
                     CreditCardService.save($scope.card)
+                        .then(vm.saveSuccess, vm.saveError);
+                }
+            };
+
+            vm.init();
+        }])
+
+    .controller('BillingAddressFormCtrl', ['$scope', '$uibModalInstance', 'Notification', 'address_id', 'BillingAddressService', '$filter',
+        function ($scope, $uibModalInstance, Notification, address_id, BillingAddressService, $filter) {
+            var vm = this;
+            $scope.address = {};
+
+            vm.init = function () {
+                if (angular.isDefined(address_id)) {
+                    BillingAddressService.getOne(address_id)
+                        .then(vm.getAddressSuccess, vm.getAddressError);
+                }
+            };
+
+            vm.getAddressSuccess = function (res) {
+                $scope.address = res.data;
+                $scope.address.phone = parseInt($scope.address.phone, 10);
+
+            };
+
+            vm.getAddressError = function (err) {
+                Notification.error('Ups! there was an error trying to load the address info!');
+            };
+
+            vm.saveSuccess = function (res) {
+                Notification.success('Address saved successfully!');
+                $uibModalInstance.close(res.data);
+            };
+
+            vm.saveError = function (err) {
+                Notification.error(err.data.error);
+            };
+
+            $scope.close = function () {
+                $uibModalInstance.dismiss('close');
+            };
+
+            $scope.save = function () {
+                $scope.$broadcast('show-errors-check-validity');
+
+                if ($scope.addressForm.$valid) {
+
+                    BillingAddressService.save($scope.address)
                         .then(vm.saveSuccess, vm.saveError);
                 }
             };

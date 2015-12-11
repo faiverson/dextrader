@@ -1,4 +1,4 @@
-<section id="content">
+<section id="content" class="billing-section">
     <h2 class="spaced">Billing Settings &amp; Info</h2>
     <div id="billing-subscriptions" class="content-left">
         <div>
@@ -92,18 +92,40 @@
         </div>
     </div>
     <div id="billing-methods" class="content-right">
-        <h3>Payment Methods</h3>
-
-        <div class="cc" data-ng-repeat="cc in creditCards">
-            <a class="edit" href="#" data-ng-click="openFormCreditCard(cc.cc_id)">EDIT</a>
-            <h3><img ng-src="/front/assets/images/creditcards/{{cc.network}}.png" width="25"> ****  ****  ****  {{cc.last_four}}</h3>
-            <div class="cc-info">
-                <div><span>Expires: </span>{{cc.exp_month}}/{{cc.exp_year}}</div>
-                <!--<div><strong>John Stalvey</strong>, 3116 Capital Cir NE</div>-->
-                <div>{{cc.name}}</div>
-            </div>
-        </div>
-        <a id="addcard" href="#" class="submitbutton bg-orange" data-ng-click="openFormCreditCard()">Add New Card</a>
+        <uib-tabset>
+            <uib-tab heading="Payment Methods">
+                <div class="cc" data-ng-repeat="cc in creditCards">
+                    <a class="edit" href="#" data-ng-click="openFormCreditCard(cc.cc_id)">EDIT</a>
+                    <h3><img ng-src="/front/assets/images/creditcards/{{cc.network}}.png" width="25"> ****  ****  ****  {{cc.last_four}}</h3>
+                    <div class="cc-info">
+                        <div><span>Expires: </span>{{cc.exp_month}}/{{cc.exp_year}}</div>
+                        <!--<div><strong>John Stalvey</strong>, 3116 Capital Cir NE</div>-->
+                        <div>{{cc.name}}</div>
+                    </div>
+                </div>
+                <div class="cc" data-ng-if="creditCards.length == 0">
+                    <h3>No credit cards were found</h3>
+                </div>
+                <a id="addcard" href="#" class="submitbutton bg-orange" data-ng-click="openFormCreditCard()">Add New Card</a>
+            </uib-tab>
+            <uib-tab heading="Billing Address">
+                <div class="cc address" data-ng-repeat="address in addresses">
+                    <a class="edit" href="#" data-ng-click="openFormBillingAddress(address.address_id)">EDIT</a>
+                    <h3>{{address.address}}</h3>
+                    <span class="small" ng-if="address.address2">{{address.address2}}</span>
+                    <span class="small">{{address.city}} - {{address.state}} - {{address.country}}</span>
+                    <div class="cc-info">
+                        <div><span>Name: </span>{{address.name}}</div>
+                        <div><span>ZIP: </span>{{address.zip}}</div>
+                        <div><span>Phone: </span>{{address.phone}}</div>
+                    </div>
+                </div>
+                <div class="cc" data-ng-if="addresses.length == 0">
+                    <h3>No billing addresses were found</h3>
+                </div>
+                <a href="#" class="submitbutton bg-orange btn-addbilling" data-ng-click="openFormBillingAddress()">Add New Address</a>
+            </uib-tab>
+        </uib-tabset>
     </div>
     <div class="clear"></div>
 </section>
