@@ -1,4 +1,3 @@
 <?php
-Route::group(['middleware' => 'jwt.auth'], function () {
-	Route::post('/sales/', 'PurchasesController@checkout');
-});
+Route::post('/sales', ['middleware' => 'page:checkout', 'uses' => 'PurchasesController@checkout']);
+

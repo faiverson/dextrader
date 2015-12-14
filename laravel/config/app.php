@@ -224,6 +224,7 @@ return [
 		'BillingAddress' => App\Models\BillingAddress::class,
 		'Commission' => App\Models\Commission::class,
 		'Purchase'  => App\Models\Purchase::class,
+		'Page'  => App\Models\Page::class,
     ],
 
 ];

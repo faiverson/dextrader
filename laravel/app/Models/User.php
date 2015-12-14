@@ -57,7 +57,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token', 'active' , 'deleted_at'];
+    protected $hidden = ['id', 'password', 'remember_token', 'active' , 'deleted_at'];
 
 	public function setPhoneAttribute($value)
 	{

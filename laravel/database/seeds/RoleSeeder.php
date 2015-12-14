@@ -46,6 +46,7 @@ class RoleSeeder extends Seeder
 			'description' => 'Allow to login as a user in the system',
 		]);
 
+
 		Permission::reguard();
 		$this->command->info("Starting to seed roles");
 		Role::unguard();

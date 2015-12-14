@@ -96,6 +96,38 @@ class AuthController extends Controller
 		return response()->error("The credentials are wrong", 400);
 	}
 
+	public function pages(Request $request)
+	{
+		$domain = $request->input('domain');
+		$password = $request->input('password');
+		if($domain  && $password) {
+			try {
+				$page = DB::table('pages')
+					->select('id', 'password')
+					->where('active', 1)
+					->where('domain', $domain)
+					->first();
+				if(empty($page)) {
+					return response()->error('Invalid Credentials', 401);
+				}
+
+				if(!Hash::check($password, $page->password)) {
+					return response()->error('Wrong Password', 401);
+				}
+
+				$token = Token::page($page->id, '+20 years', 'page_dextrader');
+				if($token) {
+					return response()->ok(compact('token'));
+				}
+				return response()->error('Invalid Credentials', 401);
+			}
+			catch (JWTException $e) {
+				return response()->error('Could not create a token', $e->getStatusCode());
+			}
+		}
+		return response()->error("The credentials are wrong", 400);
+	}
+
 	public function logout(Request $request)
 	{
 		$response = Token::deprecate($request);

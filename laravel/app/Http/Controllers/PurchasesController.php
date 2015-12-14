@@ -33,7 +33,7 @@ class PurchasesController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function purchase(Request $request)
+    public function checkout(Request $request)
     {
         $rules = [
 			'card_id' => 'required|exists:credit_cards,id',
