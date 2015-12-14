@@ -1,0 +1,261 @@
+<header>
+    <div id="header-content">
+        <div id="logo"><a href="#"><img src="/assets/images/logo-ib.png" alt="DEX Trader"></a></div>
+        <div id="secure-ib">
+            <img src="/assets/images/secure-ib.png">
+        </div>
+
+        <div class="clear"></div>
+    </div>
+</header>
+
+<section id="content">
+    <div id="co-title" class="clearfix spaced">
+        <h2 class="left">Checkout Page</h2>
+
+        <div class="right">Order Details</div>
+    </div>
+    <!-- form start -->
+    <form id="formCheckout" name="formCheckout" novalidate="novalidate">
+        <div id="checkout-forms" class="checkout-forms content-left">
+            <div>
+                <h3 id="co-f1">Account Details</h3>
+
+                <div class="form-wrapper">
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="email">Email</label>
+                        <input type="email"
+                               name="email"
+                               class="form-control"
+                               id="email"
+                               required
+                               data-ng-model="formData.email">
+                    </div>
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="first_name">Password</label>
+                        <input type="password"
+                               name="password"
+                               class="form-control"
+                               id="password"
+                               required
+                               data-ng-model="formData.password">
+                    </div>
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="first_name">First Name</label>
+                        <input type="text"
+                               name="first_name"
+                               class="form-control"
+                               id="first_name"
+                               required
+                               data-ng-model="formData.first_name">
+                    </div>
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="last_name">Last Name</label>
+                        <input type="text"
+                               name="last_name"
+                               class="form-control"
+                               id="last_name"
+                               required
+                               data-ng-model="formData.last_name">
+                    </div>
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="phone">Mobile Phone</label>
+                        <input type="text"
+                               name="phone"
+                               class="form-control"
+                               id="phone"
+                               data-ng-model="formData.phone">
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h3 id="co-f2">Billing Address</h3>
+
+                <div class="form-wrapper">
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="country">Country</label>
+                        <select name="country" id="country" required data-ng-model="formData.country" class="form-control">
+                            <option>Select Your Country</option>
+                        </select>
+                    </div>
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="state">State/Province</label>
+                        <select name="state" id="state" required data-ng-model="formData.state" class="form-control">
+                            <option>Select State</option>
+                        </select>
+                    </div>
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="city">City</label>
+                        <select name="city" id="city" required data-ng-model="formData.city" class="form-control">
+                            <option>Select Your City</option>
+                        </select>
+                    </div>
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="zip">Zip/Postal Code</label>
+                        <input type="number"
+                               name="zip"
+                               class="form-control"
+                               id="zip"
+                               required
+                               maxlength="6"
+                               data-ng-minlength="4"
+                               data-ng-maxlength="6"
+                               data-ng-model="formData.zip">
+                    </div>
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="company_name">Company Name <span>(optional)</span></label>
+                        <input type="text"
+                               name="company_name"
+                               class="form-control"
+                               id="company_name"
+                               data-ng-model="formData.company_name">
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="clearfix">
+                    <h3 id="co-f3" class="left">Payment Information</h3>
+
+                    <div class="right">
+                        <img src="/assets/images/ico-cc-1.png">
+                        <img src="/assets/images/ico-cc-2.png">
+                        <img src="/assets/images/ico-cc-3.png">
+                    </div>
+                </div>
+                <div class="form-wrapper">
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="card_number">Card Number</label>
+                        <input type="text"
+                               ui-mask="9999 9999 9999 9999"
+                               ui-mask-placeholder=""
+                               ui-mask-placeholder-char="*"
+                               name="card_number"
+                               class="form-control"
+                               id="card_number"
+                               required
+                               data-ng-model="formData.cc_number">
+                    </div>
+
+                    <div class="form-group has-feedback" data-show-errors>
+                        <div>
+                            <label for="cc-exp">Expiration</label>
+
+                            <div>
+                                <select id="cc-exp"
+                                        class="form-control halfsize"
+                                        name="cc-exp"
+                                        data-ng-model="formData.cc_exp_month"
+                                        ng-options="month for month in months"
+                                        required>
+                                    <option value="">-- Exp Month --</option>
+                                </select>
+                                <select name="cc-exp2"
+                                        class="form-control halfsize"
+                                        ng-options="year for year in years"
+                                        data-ng-model="formData.cc_exp_year"
+                                        required>
+                                    <option value="">-- Exp Year --</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback" data-show-errors>
+                        <div>
+                            <label for="cc-cvv">Security Code {{formData.cc_cvv}}</label>
+                            <input type="number" name="cc-cvv" id="cc-cvv"
+                                   class="form-control"
+                                   placeholder="CVV"
+                                   required
+                                   maxlength="3"
+                                   data-ng-minlength="3"
+                                   data-ng-model="formData.cc_cvv">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="checkbox"
+                       name="terms"
+                       id="terms"
+                       data-ng-model="formData.terms"
+                       required>
+                <label for="terms" uib-tooltip="Check terms!" tooltip-is-open="showAgreementWarning" tooltip-class="warning">
+                    I agree to the payment terms as stated above
+                </label>
+            </div>
+            <button class="btn btn-warning btn-block"
+                    data-ng-click="send()">Create Account</button>
+            <!--<a href="#" class="submitbutton bg-orange align-center">Create Account</a>-->
+        </div>
+        <div id="checkout-info" class="content-right">
+            <div style="background: #f6f1eb">
+                <h3>Dex Signals Monthly International</h3>
+
+                <p>
+                    Getting Binary Option Signals From Dex
+                    Signals Helps Both The Novice And
+                    Experienced Binary Option Traders Stop Guessing And Start Winning!
+
+                </p>
+
+                <div class="form-wrapper">
+                    <select name="currency">
+                        <option>USD</option>
+                    </select>
+                </div>
+            </div>
+            <div class="checkout-prices">
+                <div class="clearfix">
+                    <div class="left">Initial Payment</div>
+                    <div class="right">$7.00</div>
+                </div>
+                <div class="clearfix">
+                    <div class="left">Tax</div>
+                    <div class="right">$0.00</div>
+                </div>
+                <div id="checkout-total" class="clearfix">
+                    <div class="left">Today's Payment</div>
+                    <div class="right">$7.00</div>
+                </div>
+                <p>
+                    Immediate access to this product or service is available once payment is approved.
+                </p>
+            </div>
+            <div class="checkout-prices">
+                <h3>Future Payments</h3>
+
+                <div id="checkout-price-monthly" class="clearfix">
+                    <div class="left">
+                        Monthly Payment of
+                    </div>
+                    <div class="right">
+                        $197.00
+                    </div>
+                </div>
+                <p>
+                    *<br>
+                    Next payment will be billed on 12/15/2015.
+                    Amount includes taxes subject to change based on customer location and rate
+                    adjustments.
+                </p>
+            </div>
+        </div>
+    </form>
+    <!-- form end -->
+    <div class="content-right">
+        <div class="arrow_box quote">
+            <img class="quote-img" src="/assets/images/ico-quote.png">
+            These guys know their stuff and provide very good, reliable trading signals. They also taught me how to
+            manage my money and not over trade.
+        </div>
+        <div class="quote-author">
+            <img src="/assets/images/test-4.png">
+            Akpo Khan
+        </div>
+        <div class="quote-nav clearfix">
+            <a href="#" class="nav-prev left">&nbsp;</a>
+            <a href="#" class="nav-next right">&nbsp;</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+</section>
