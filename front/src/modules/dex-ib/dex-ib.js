@@ -59,7 +59,7 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
             });
     })
 
-    .controller('DexIBCtrl', ['$state', 'AuthService', function ($state, AuthService) {
+    .controller('DexIBCtrl', ['$scope', '$state', 'AuthService', function ($scope, $state, AuthService) {
         $scope.isLoggedIn = AuthService.isLoggedIn;
 
         if (AuthService.isLoggedIn()) {

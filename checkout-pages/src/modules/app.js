@@ -10,7 +10,8 @@ angular.module('app', [
         'app.shared-directives',
         'LocalStorageModule',
         'ngAnimate',
-        'app.home'
+        'app.home',
+        'app.checkout'
     ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {
