@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
 		$this->call('MarketingLinksSeeder');
 		$this->call('ProvidersSeeder');
 		$this->call('TrainingsSeeder');
+		$this->call('PagesSeeder');
 		Model::reguard();
     }
 }

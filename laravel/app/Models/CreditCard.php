@@ -30,7 +30,7 @@ class CreditCard extends Model
      *
      * @var array
      */
-	protected $fillable = ['id', 'name', 'exp_month', 'exp_year', 'number', 'last_four', 'first_six', 'network'];
+	protected $fillable = ['id', 'user_id', 'name', 'exp_month', 'exp_year', 'number', 'last_four', 'first_six', 'network'];
 
 	protected $appends = array('cc_id');
 

@@ -1,9 +1,8 @@
 <?php
+
 Route::get('/secure/{url?}', function () {
-	return view('sales');
+    return view('sales');
 })->where(['url' => '.*']);
 
+Route::post('/sales', ['middleware' => 'page:checkout', 'uses' => 'PurchasesController@checkout']);
 
-Route::group(['middleware' => 'jwt.auth'], function () {
-	Route::post('/sales/', 'PurchasesController@checkout');
-});

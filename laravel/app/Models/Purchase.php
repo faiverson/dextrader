@@ -28,7 +28,28 @@ class Purchase extends Model
      *
      * @var array
      */
-	protected $fillable = ['id', 'card_id', 'user_id', 'enroller_id', 'product_id'];
+	protected $fillable = [
+		'id',
+		'user_id',
+		'enroller_id',
+		'funnel_id',
+		'product_id',
+		'product_amount',
+		'billing_address',
+		'billing_address2',
+		'billing_city',
+		'billing_state',
+		'billing_country',
+		'billing_zip',
+		'billing_phone',
+		'card_name',
+		'card_exp_month',
+		'card_exp_year',
+		'card_network',
+		'card_first_six',
+		'card_last_four',
+		'info'
+	];
 
 	protected $appends = array('purchase_id');
 

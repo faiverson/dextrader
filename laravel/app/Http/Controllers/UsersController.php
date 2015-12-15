@@ -17,36 +17,6 @@ use App\Libraries\eWallet\eWallet;
 
 class UsersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function contact(Request $request)
-    {
-        $name = $request->get('name');
-        $phone = $request->get('phone');
-        $email = $request->get('email');
-        $subject = $request->get('subject');
-        $msg = $request->get('message');
-        $params = array(
-            'name' => $name,
-            'phone' => $phone,
-            'email' => $email,
-            'subject' => $subject,
-            'msg' => $msg
-        );
-        $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-        $beautymail->send('emails.contact', $params, function ($message) {
-            $message
-                ->from('system@xxx.com.ar')
-                ->to('info@xxx.com.ar')
-                ->subject('Yey! A new question!');
-        });
-
-        return array('success' => true);
-    }
-
     public function show($id)
     {
 		$user = Auth::user();

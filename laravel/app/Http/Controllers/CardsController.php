@@ -92,7 +92,6 @@ class CardsController extends Controller
 		$cc->network = $type ? $type : $card['type'];
         $cc->save();
 
-
         return response()->added();
     }
 

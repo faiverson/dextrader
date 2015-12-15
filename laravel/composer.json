@@ -13,7 +13,8 @@
 		"zizaco/entrust": "dev-laravel-5",
 		"sofa/eloquence": "~5.1@dev",
 		"nicolaslopezj/searchable": "1.*",
-        "anlutro/curl": "^1.4"
+        "anlutro/curl": "^1.4",
+		"torann/geoip": "0.2.*@dev"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",
