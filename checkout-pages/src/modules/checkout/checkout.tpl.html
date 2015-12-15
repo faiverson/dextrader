@@ -94,19 +94,19 @@
                                data-ng-model="formData.address">
                     </div>
                     <div class="form-group has-feedback" data-show-errors>
-                        <label for="country">Country</label>
+                        <label for="dex_country">Country</label>
                         <script type="text/ng-template" id="countryTemplate.html">
                             <a>
                                 <span class="flag-icon flag-icon-{{match.model.code2 | lowercase}}"></span>
                                 <span ng-bind-html="match.model.name | uibTypeaheadHighlight:query"></span>
                             </a>
                         </script>
-                        <input type="text" name="country" id="country"
+                        <input type="text" name="dex_country" id="dex_country"
                                ng-model="country"
                                typeahead-on-select="selectCountry($item, $model, $label)"
                                typeahead-min-length="3"
                                typeahead-wait-ms="500"
-                               autocomplete="off"
+                               autocomplete="false"
                                required
                                typeahead-template-url="countryTemplate.html"
                                placeholder="Start typing your country"
@@ -114,19 +114,19 @@
                                class="form-control">
                     </div>
                     <div class="form-group has-feedback" data-show-errors>
-                        <label for="city">City</label>
+                        <label for="dex_city">City</label>
                         <script type="text/ng-template" id="cityTemplate.html">
                             <a>
                                 <span class="flag-icon flag-icon-{{match.model.code2 | lowercase}}"></span>
                                 <span ng-bind-html="match.model.name | uibTypeaheadHighlight:query"></span>
                             </a>
                         </script>
-                        <input type="text" name="city" id="city" data-ng-disabled="formCheckout.country.$invalid"
+                        <input type="text" name="dex_city" id="dex_city" data-ng-disabled="formCheckout.country.$invalid"
                                ng-model="selectedCity"
                                typeahead-on-select="selectCity($item, $model, $label)"
                                typeahead-min-length="3"
                                typeahead-wait-ms="500"
-                               autocomplete="off"
+                               autocomplete="false"
                                required
                                typeahead-template-url="cityTemplate.html"
                                placeholder="Start typing your city"
@@ -134,10 +134,11 @@
                                class="form-control">
                     </div>
                     <div class="form-group has-feedback" data-show-errors>
-                        <label for="state">State/Province</label>
+                        <label for="dex_state">State/Province</label>
                         <input type="text"
-                               name="state"
-                               id="state"
+                               name="dex_state"
+                               id="dex_state"
+                               aria-autocomplete="none"
                                data-ng-disabled="formCheckout.city.$invalid"
                                class="form-control"
                                required

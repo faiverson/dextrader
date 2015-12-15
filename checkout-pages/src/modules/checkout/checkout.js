@@ -114,7 +114,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
 
             $scope.getToken = function () {
                 PageService.getToken()
-                    .then(function(res){
+                    .then(function (res) {
                         $scope.token = res.data.token;
                     });
             };
@@ -125,9 +125,16 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             };
 
             vm.error = function (err) {
-                if(angular.isDefined(err.data.error)){
-                    Notification.error(err.data.error);
-                }else{
+                if (angular.isDefined(err.data.error)) {
+                    if (angular.isArray(err.data.error)) {
+                        angular.forEach(err.data.error, function (e) {
+                            Notification.error(e);
+                        });
+                    } else {
+                        Notification.error(err.data.error);
+                    }
+
+                } else {
                     Notification.error('Ups! something went wrong! please try again!');
                 }
 

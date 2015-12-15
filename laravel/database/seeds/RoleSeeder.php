@@ -46,6 +46,33 @@ class RoleSeeder extends Seeder
 			'description' => 'Allow to login as a user in the system',
 		]);
 
+		//product permissions
+		$ib = Permission::create([
+				'name' => 'product.ib',
+				'display_name' => 'View IB',
+				'description' => 'Allow to view IB section',
+		]);
+		$training = Permission::create([
+				'name' => 'product.ib.training',
+				'display_name' => 'Training Certification Viewed',
+				'description' => 'Allow to view IB section',
+		]);
+		$pro = Permission::create([
+				'name' => 'product.ib.pro',
+				'display_name' => 'View IB PRO',
+				'description' => 'Allow to view IB Pro section',
+		]);
+		$na = Permission::create([
+				'name' => 'product.na',
+				'display_name' => 'View NA',
+				'description' => 'Allow to view NA section',
+		]);
+		$fx = Permission::create([
+				'name' => 'product.fx',
+				'display_name' => 'View FX',
+				'description' => 'Allow to view FX section',
+		]);
+
 
 		Permission::reguard();
 		$this->command->info("Starting to seed roles");
@@ -55,19 +82,19 @@ class RoleSeeder extends Seeder
             'name' => 'owner',
 			'display_name' => 'Application God',
 			'description' => 'This role can do everything',
-        ])->attachPermissions(array($uAdd, $uUpdate, $uDelete, $uView, $uLogin, $uProfile));
+        ])->attachPermissions(array($uAdd, $uUpdate, $uDelete, $uView, $uLogin, $uProfile, $ib, $training, $pro, $na, $fx));
 
         Role::create([
 			'name' => 'admin',
 			'display_name' => 'Aministrator',
 			'description' => 'This role is an admin'
-        ])->attachPermissions(array($uAdd, $uUpdate, $uDelete, $uView, $uLogin, $uProfile));
+        ])->attachPermissions(array($uAdd, $uUpdate, $uDelete, $uView, $uLogin, $uProfile, $ib, $training, $pro, $na, $fx));
 
 		Role::create([
 			'name' => 'editor',
 			'display_name' => 'Editor',
 			'description' => 'This role is an editor'
-		])->attachPermissions(array($uView, $uProfile));
+		])->attachPermissions(array($uView, $uProfile, $ib, $training, $pro, $na, $fx));
 
         Role::create([
 			'name' => 'user',
@@ -86,6 +113,36 @@ class RoleSeeder extends Seeder
 			'display_name' => 'Lead',
 			'description' => ''
 		]);
+
+		Role::create([
+				'name' => 'IB',
+				'display_name' => 'IB product',
+				'description' => 'This role is related to the IB product',
+		])->attachPermission($ib);
+
+		Role::create([
+				'name' => 'certification.training',
+				'display_name' => 'IB Certification Training',
+				'description' => 'When the user has viewed the Certification Training',
+		])->attachPermission($training);
+
+		Role::create([
+				'name' => 'PRO',
+				'display_name' => 'IB PRO product',
+				'description' => 'This role is related to the IB PRO product',
+		])->attachPermission($pro);
+
+		Role::create([
+				'name' => 'NA',
+				'display_name' => 'NA product',
+				'description' => 'This role is related to the NA product',
+		])->attachPermission($na);
+
+		Role::create([
+				'name' => 'FX',
+				'display_name' => 'FX product',
+				'description' => 'This role is related to the FX product',
+		])->attachPermission($fx);
 		Role::reguard();
     }
 }
