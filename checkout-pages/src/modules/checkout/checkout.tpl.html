@@ -32,6 +32,14 @@
                                data-ng-model="formData.email">
                     </div>
                     <div class="form-group has-feedback" data-show-errors>
+                        <label for="email">Username</label>
+                        <input type="text"
+                               name="username"
+                               class="form-control"
+                               id="username"
+                               data-ng-model="formData.username">
+                    </div>
+                    <div class="form-group has-feedback" data-show-errors>
                         <label for="first_name">Password</label>
                         <input type="password"
                                name="password"
@@ -44,6 +52,7 @@
                         <label for="first_name">First Name</label>
                         <input type="text"
                                name="first_name"
+                               data-ng-blur="autoCompleteBillingName()"
                                class="form-control"
                                id="first_name"
                                required
@@ -53,6 +62,7 @@
                         <label for="last_name">Last Name</label>
                         <input type="text"
                                name="last_name"
+                               data-ng-blur="autoCompleteBillingName()"
                                class="form-control"
                                id="last_name"
                                required
@@ -60,8 +70,10 @@
                     </div>
                     <div class="form-group has-feedback" data-show-errors>
                         <label for="phone">Mobile Phone</label>
-                        <input type="text"
+                        <input type="number"
                                name="phone"
+                               data-ng-minlength="10"
+                               data-ng-maxlength="12"
                                class="form-control"
                                id="phone"
                                data-ng-model="formData.phone">
@@ -72,6 +84,15 @@
                 <h3 id="co-f2">Billing Address</h3>
 
                 <div class="form-wrapper">
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="phone">Address</label>
+                        <input type="text"
+                               name="address"
+                               class="form-control"
+                               required
+                               id="address"
+                               data-ng-model="formData.address">
+                    </div>
                     <div class="form-group has-feedback" data-show-errors>
                         <label for="country">Country</label>
                         <script type="text/ng-template" id="countryTemplate.html">
@@ -134,14 +155,6 @@
                                data-ng-maxlength="6"
                                data-ng-model="formData.zip">
                     </div>
-                    <div class="form-group has-feedback" data-show-errors>
-                        <label for="company_name">Company Name <span>(optional)</span></label>
-                        <input type="text"
-                               name="company_name"
-                               class="form-control"
-                               id="company_name"
-                               data-ng-model="formData.company_name">
-                    </div>
                 </div>
             </div>
             <div>
@@ -156,6 +169,15 @@
                 </div>
                 <div class="form-wrapper">
                     <div class="form-group has-feedback" data-show-errors>
+                        <label for="card_name">Full Name</label>
+                        <input type="text"
+                               name="card_name"
+                               class="form-control"
+                               id="card_name"
+                               required
+                               data-ng-model="formData.card_name">
+                    </div>
+                    <div class="form-group has-feedback" data-show-errors>
                         <label for="card_number">Card Number</label>
                         <input type="text"
                                ui-mask="9999 9999 9999 9999"
@@ -165,7 +187,7 @@
                                class="form-control"
                                id="card_number"
                                required
-                               data-ng-model="formData.cc_number">
+                               data-ng-model="formData.number">
                     </div>
 
                     <div class="form-group has-feedback" data-show-errors>
@@ -176,7 +198,7 @@
                                 <select id="cc-exp"
                                         class="form-control halfsize"
                                         name="cc-exp"
-                                        data-ng-model="formData.cc_exp_month"
+                                        data-ng-model="formData.month"
                                         ng-options="month for month in months"
                                         required>
                                     <option value="">-- Exp Month --</option>
@@ -184,7 +206,7 @@
                                 <select name="cc-exp2"
                                         class="form-control halfsize"
                                         ng-options="year for year in years"
-                                        data-ng-model="formData.cc_exp_year"
+                                        data-ng-model="formData.year"
                                         required>
                                     <option value="">-- Exp Year --</option>
                                 </select>
@@ -193,15 +215,25 @@
                     </div>
                     <div class="form-group has-feedback" data-show-errors>
                         <div>
-                            <label for="cc-cvv">Security Code {{formData.cc_cvv}}</label>
+                            <label for="cc-cvv">Security Code</label>
                             <input type="number" name="cc-cvv" id="cc-cvv"
                                    class="form-control"
                                    placeholder="CVV"
                                    required
                                    maxlength="3"
                                    data-ng-minlength="3"
-                                   data-ng-model="formData.cc_cvv">
+                                   data-ng-model="formData.cvv">
                         </div>
+                    </div>
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="billing_phone">Billing Phone</label>
+                        <input type="number"
+                               name="phone"
+                               data-ng-minlength="10"
+                               data-ng-maxlength="12"
+                               class="form-control"
+                               id="billing_phone"
+                               data-ng-model="formData.billing_phone">
                     </div>
                 </div>
             </div>

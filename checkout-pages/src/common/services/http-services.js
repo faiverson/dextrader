@@ -1,9 +1,9 @@
 angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.shared-helpers'])
 
     .factory('SalesService', ['$q', '$site-configs', '$http', function ($q, $config, $http) {
-        var service = 'sales';
+        var service = $config.API_BASE_URL + 'sales';
 
-        function send(data) {
+        function send(data, token) {
             var endpoint = service,
                 deferred = $q.defer();
 
@@ -15,7 +15,12 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 deferred.reject(err);
             }
 
-            $http.post(endpoint, data).then(success, error);
+            $http({
+                method: "POST",
+                url: endpoint,
+                data: data,
+                headers: {'Authorization': 'Bearer ' + token}
+            }).then(success, error);
 
             return deferred.promise;
 
@@ -23,6 +28,34 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
 
         return {
             send: send
+        };
+
+    }])
+    .factory('PageService', ['$q', '$site-configs', '$http', function ($q, $config, $http) {
+        var service = $config.API_BASE_URL + 'pages';
+
+        function getToken() {
+            var endpoint = service,
+                deferred = $q.defer(),
+                data = { 'domain': 'sales', 'password': 'sAles_dexTr4d3r' };
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+
+            $http.post(endpoint, data).then(success, error);
+
+            return deferred.promise;
+
+        }
+
+        return {
+            getToken: getToken
         };
 
     }])
