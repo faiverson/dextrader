@@ -26,16 +26,29 @@ class Purchases extends Migration
 			$table->foreign('product_id')
 				->references('id')->on('products')
 				->onUpdate('cascade')->onDelete('cascade');
-
-			$table->bigInteger('card_id')->unsigned();
-			$table->foreign('card_id')
-				->references('id')->on('credit_cards')
-				->onUpdate('cascade')->onDelete('cascade');
+			$table->decimal('product_amount', 10, 2)->nullable(false);
 
 			$table->integer('funnel_id')->unsigned();
 			$table->foreign('funnel_id')
 				->references('id')->on('marketing_links')
 				->onUpdate('cascade')->onDelete('cascade');
+
+			$table->string('card_name', 150)->nullable(false);
+			$table->smallInteger('card_exp_month')->nullable(false);
+			$table->smallInteger('card_exp_year')->nullable(false);
+			$table->integer('card_first_six')->nullable(false);
+			$table->integer('card_last_four')->nullable(false);
+			$table->string('card_network', 15)->nullable(false);
+
+			$table->string('billing_address', 200)->nullable(false);
+			$table->string('billing_address2', 200)->nullable();
+			$table->string('billing_city', 100)->nullable(false);
+			$table->string('billing_state', 100)->nullable(false);
+			$table->string('billing_country', 100)->nullable(false);
+			$table->integer('billing_zip')->nullable(false);
+			$table->string('billing_phone', 15);
+
+			$table->text('info')->nullable();
 
 			$table->dateTime('refunded_at')->nulleable(false)->default(null);
 			$table->dateTime('cancelled_at')->nulleable(false)->default(null);

@@ -152,7 +152,9 @@ return [
 		Snowfire\Beautymail\BeautymailServiceProvider::class,
 		Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
 		Zizaco\Entrust\EntrustServiceProvider::class,
-    ],
+		Torann\GeoIP\GeoIPServiceProvider::class,
+
+	],
 
     /*
     |--------------------------------------------------------------------------
@@ -211,6 +213,7 @@ return [
 		'Cards' => App\Helpers\Cards::class,
 		'cURL' => anlutro\cURL\Laravel\cURL::class,
 		'Encrypt' => App\Helpers\Encrypt::class,
+		'GeoIP' => Torann\GeoIP\GeoIPFacade::class,
 
 		'User' => App\Models\User::class,
 		'Role' => App\Models\Role::class,

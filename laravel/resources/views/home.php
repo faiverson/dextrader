@@ -46,6 +46,9 @@
 <script type="text/javascript" src="/front/js/modules/auth/auth.js"></script>
 <script type="text/javascript" src="/front/js/modules/dashboard/dashboard.js"></script>
 <script type="text/javascript" src="/front/js/modules/dex-ib/dex-ib.js"></script>
+<script type="text/javascript" src="/front/js/modules/disclosure/disclosure.js"></script>
+<script type="text/javascript" src="/front/js/modules/privacy/privacy.js"></script>
+<script type="text/javascript" src="/front/js/modules/terms-and-conditions/terms-and-conditions.js"></script>
 <script type="text/javascript" src="/front/js/modules/user-profile/user-profile.js"></script>
 <script type="text/javascript" src="/front/js/modules/affiliates/resources/resources.js"></script>
 <script type="text/javascript" src="/front/js/modules/shared/footer/footer.js"></script>

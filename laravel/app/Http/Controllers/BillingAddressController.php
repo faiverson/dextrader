@@ -49,7 +49,6 @@ class BillingAddressController extends Controller
     {
 		$user_id = $request->id;
 		$rules = [
-			'name' => 'required',
 			'address' => 'required',
 			'city' => 'required',
 			'state' => 'required',
@@ -94,7 +93,6 @@ class BillingAddressController extends Controller
 		$address_id = $request->address_id;
 		$fields = $request->all();
 		$rules = [
-			'name' => 'required',
 			'address' => 'required',
 			'city' => 'required',
 			'state' => 'required',

@@ -29,7 +29,7 @@ class BillingAddress extends Model
      *
      * @var array
      */
-	protected $fillable = ['id', 'user_id', 'name', 'address', 'address2', 'city', 'state', 'country', 'zip', 'phone', 'default_address'];
+	protected $fillable = ['id', 'user_id', 'address', 'address2', 'city', 'state', 'country', 'zip', 'phone', 'default_address'];
 
 	protected $appends = array('address_id');
 

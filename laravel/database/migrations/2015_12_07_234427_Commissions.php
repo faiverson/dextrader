@@ -24,7 +24,7 @@ class Commissions extends Migration
 			$table->bigInteger('purchase_id')->unsigned();
 			$table->foreign('purchase_id')->references('id')->on('purchases');
 
-			$table->decimal('amount', 10, 2)->nullable(false);
+			$table->decimal('amount', 10, 2)->signed()->nullable(false);
 			$table->timestamp('payout_dt')->nullable();
 			$table->timestamp('refund_dt')->nullable();
 			$table->bigInteger('refund_by')->unsigned();

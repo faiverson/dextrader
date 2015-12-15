@@ -38,7 +38,6 @@ class CreditCards extends Migration
 				->references('id')->on('users')
 				->onUpdate('cascade')->onDelete('cascade');
 
-			$table->string('name', 150)->nullable(false);
 			$table->string('address', 200)->nullable(false);
 			$table->string('address2', 200)->nullable();
 			$table->string('city', 100)->nullable(false);
