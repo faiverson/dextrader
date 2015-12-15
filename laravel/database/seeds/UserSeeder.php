@@ -51,6 +51,14 @@ class UserSeeder extends Seeder
 			'password' => bcrypt('editor')
 		])->attachRoles([$role, $roleAdmin]);
 
+		User::create([
+			'first_name' => 'jason',
+			'last_name' => 'cullins',
+			'username' => 'jcullins',
+			'email' => 'jason.cullins@innovationstechgroup.com',
+			'password' => bcrypt('jcullins')
+		])->attachRoles([$roleAdmin]);
+
 		$roleIB = Role::where('name', 'IB')->first();
 		User::create([
 				'first_name' => 'Dex',
