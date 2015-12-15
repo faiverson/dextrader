@@ -2,7 +2,7 @@
 
 Route::get('/{url}', function () {
 	return view('home');
-})->where(['url' => '^((?!(abo|api)).)*$']);
+})->where(['url' => '^((?!(abo|api|secure)).)*$']);
 
 Route::group(['namespace' => 'Auth', 'prefix' => 'api'], function () {
 	Route::post('/login', 'AuthController@login');

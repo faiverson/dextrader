@@ -1,8 +1,8 @@
 <header>
     <div id="header-content">
-        <div id="logo"><a href="#"><img src="/assets/images/logo-ib.png" alt="DEX Trader"></a></div>
+        <div id="logo"><a href="#"><img src="/sales/assets/images/logo-ib.png" alt="DEX Trader"></a></div>
         <div id="secure-ib">
-            <img src="/assets/images/secure-ib.png">
+            <img src="/sales/assets/images/secure-ib.png">
         </div>
 
         <div class="clear"></div>
@@ -16,7 +16,7 @@
         <div class="right">Order Details</div>
     </div>
     <!-- form start -->
-    <form id="formCheckout" name="formCheckout" novalidate="novalidate">
+    <form id="formCheckout" name="formCheckout" novalidate="novalidate" autocomplete="off">
         <div id="checkout-forms" class="checkout-forms content-left">
             <div>
                 <h3 id="co-f1">Account Details</h3>
@@ -74,21 +74,53 @@
                 <div class="form-wrapper">
                     <div class="form-group has-feedback" data-show-errors>
                         <label for="country">Country</label>
-                        <select name="country" id="country" required data-ng-model="formData.country" class="form-control">
-                            <option>Select Your Country</option>
-                        </select>
-                    </div>
-                    <div class="form-group has-feedback" data-show-errors>
-                        <label for="state">State/Province</label>
-                        <select name="state" id="state" required data-ng-model="formData.state" class="form-control">
-                            <option>Select State</option>
-                        </select>
+                        <script type="text/ng-template" id="countryTemplate.html">
+                            <a>
+                                <span class="flag-icon flag-icon-{{match.model.code2 | lowercase}}"></span>
+                                <span ng-bind-html="match.model.name | uibTypeaheadHighlight:query"></span>
+                            </a>
+                        </script>
+                        <input type="text" name="country" id="country"
+                               ng-model="country"
+                               typeahead-on-select="selectCountry($item, $model, $label)"
+                               typeahead-min-length="3"
+                               typeahead-wait-ms="500"
+                               autocomplete="off"
+                               required
+                               typeahead-template-url="countryTemplate.html"
+                               placeholder="Start typing your country"
+                               uib-typeahead="country.name for country in getCountry($viewValue)"
+                               class="form-control">
                     </div>
                     <div class="form-group has-feedback" data-show-errors>
                         <label for="city">City</label>
-                        <select name="city" id="city" required data-ng-model="formData.city" class="form-control">
-                            <option>Select Your City</option>
-                        </select>
+                        <script type="text/ng-template" id="cityTemplate.html">
+                            <a>
+                                <span class="flag-icon flag-icon-{{match.model.code2 | lowercase}}"></span>
+                                <span ng-bind-html="match.model.name | uibTypeaheadHighlight:query"></span>
+                            </a>
+                        </script>
+                        <input type="text" name="city" id="city" data-ng-disabled="formCheckout.country.$invalid"
+                               ng-model="selectedCity"
+                               typeahead-on-select="selectCity($item, $model, $label)"
+                               typeahead-min-length="3"
+                               typeahead-wait-ms="500"
+                               autocomplete="off"
+                               required
+                               typeahead-template-url="cityTemplate.html"
+                               placeholder="Start typing your city"
+                               uib-typeahead="city.name for city in getCity($viewValue)"
+                               class="form-control">
+                    </div>
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="state">State/Province</label>
+                        <input type="text"
+                               name="state"
+                               id="state"
+                               data-ng-disabled="formCheckout.city.$invalid"
+                               class="form-control"
+                               required
+                               data-ng-model="formData.state" />
                     </div>
                     <div class="form-group has-feedback" data-show-errors>
                         <label for="zip">Zip/Postal Code</label>
@@ -117,9 +149,9 @@
                     <h3 id="co-f3" class="left">Payment Information</h3>
 
                     <div class="right">
-                        <img src="/assets/images/ico-cc-1.png">
-                        <img src="/assets/images/ico-cc-2.png">
-                        <img src="/assets/images/ico-cc-3.png">
+                        <img src="/sales/assets/images/ico-cc-1.png">
+                        <img src="/sales/assets/images/ico-cc-2.png">
+                        <img src="/sales/assets/images/ico-cc-3.png">
                     </div>
                 </div>
                 <div class="form-wrapper">
@@ -244,12 +276,12 @@
     <!-- form end -->
     <div class="content-right">
         <div class="arrow_box quote">
-            <img class="quote-img" src="/assets/images/ico-quote.png">
+            <img class="quote-img" src="/sales/assets/images/ico-quote.png">
             These guys know their stuff and provide very good, reliable trading signals. They also taught me how to
             manage my money and not over trade.
         </div>
         <div class="quote-author">
-            <img src="/assets/images/test-4.png">
+            <img src="/sales/assets/images/test-4.png">
             Akpo Khan
         </div>
         <div class="quote-nav clearfix">

@@ -40,8 +40,13 @@ class RouteServiceProvider extends ServiceProvider
 //		echo $request->path();
 //		echo '<br>'.$request->url();exit;
 		$this->loadRoutesFrom(app_path('Http/Routes/routes.php'));
+
 		if ($request->is('abo*') || $request->is('abo/*')) {
 			$this->loadRoutesFrom(app_path('Http/Routes/admin.php'));
+		}
+
+		if ($request->is('secure*') || $request->is('secure/*')) {
+			$this->loadRoutesFrom(app_path('Http/Routes/sales.php'));
 		}
 
 		$router->group(['prefix' => 'api'], function () use($request) {
@@ -75,6 +80,10 @@ class RouteServiceProvider extends ServiceProvider
 
 			if ($request->is('api/sales*')) {
 				$this->loadRoutesFrom(app_path('Http/Routes/sales.php'));
+			}
+
+			if ($request->is('api/countries*')) {
+				$this->loadRoutesFrom(app_path('Http/Routes/countries.php'));
 			}
 		});
     }

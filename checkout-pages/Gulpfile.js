@@ -290,15 +290,15 @@ gulp.task('html', function () {
     if (condition) {
         input = [];
         inputs = [
-            'build/js/' + pkg.name + '-v' + pkg.version + '.min.js'
+            '/sales/js/' + pkg.name + '-v' + pkg.version + '.min.js'
         ];
     }
     else {
         input = config.js.files.input;
         inputs = [
             'http://localhost:35729/livereload.js',
-            '/js/' + config.js.vendor.output,
-            '/js/templates.js'
+            '/sales/js/' + config.js.vendor.output,
+            '/sales/js/templates.js'
         ];
     }
     for (var f in inputs) {
@@ -315,7 +315,7 @@ gulp.task('html', function () {
             removeTags: true,
             empty: true,
             transform: function (filepath, file, index, length, targetFile) {
-                return '<script type="text/javascript" src="' + filepath.replace('/src/', '/js/') + '"></script>';
+                return '<script type="text/javascript" src="' + filepath.replace('/src/', '/sales/js/') + '"></script>';
             }
         }))
         .pipe(prettify({
@@ -331,7 +331,7 @@ gulp.task('html', function () {
             collapseWhitespace: true
         }))
         .pipe(rename(config.html.output))
-        .pipe(gulp.dest('build/'));
+        .pipe(gulp.dest('../laravel/resources/views/'));
 });
 
 gulp.task('watch', function () {

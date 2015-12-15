@@ -22,5 +22,6 @@ angular.module('app.shared-helpers', [])
                 return url;
             }
         };
-    });
+    })
+    .factory('');
 

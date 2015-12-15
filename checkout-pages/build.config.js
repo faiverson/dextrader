@@ -22,8 +22,8 @@ module.exports = {
     port: 8000,
     paths: {
         input: 'src/**/*',
-        output: 'build',
-        server_path: 'build'
+        output: '../public_html/sales/',
+        server_path: '../public_html'
     },
     js: {
         vendor: {
@@ -52,7 +52,7 @@ module.exports = {
                 '!src/**/*.spec.js',
                 '!src/**/*.scenario.js'
             ],
-            output: 'build/js/'
+            output: '../public_html/sales/js/'
         }
     },
     less: {
@@ -61,11 +61,11 @@ module.exports = {
             'src/common/**/*.less',
             'src/modules/**/*.less'
         ],
-        output: 'build/css/'
+        output: '../public_html/sales/css/'
     },
     html: {
         input: 'src/index.html',
-        output: 'index.html',
+        output: 'sales.php',
         tpl: {
 			output: 'templates.js',
 			modules: 'src/modules/**/*.tpl.html',
@@ -75,15 +75,15 @@ module.exports = {
     assets: {
         fonts: {
             input: ['src/assets/fonts/**/*.{ttf,woff,woff2,eof,eot}'],
-            output: 'build/assets/fonts/'
+            output: '../public_html/sales/assets/fonts/'
         },
         images: {
             input: ['src/assets/**/*.{png,gif,jpeg,jpg}'],
-            output: 'build/assets/'
+            output: '../public_html/sales/assets/'
         },
         svg: {
             input: 'src/assets/**/*.svg',
-            output: 'build/assets/'
+            output: '../public_html/sales/assets/'
         }
     },
     docs: {

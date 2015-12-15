@@ -11,7 +11,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask'])
             });
     })
 
-    .controller('CheckoutCtrl', ['$scope', 'SalesService', function ($scope, SalesService) {
+    .controller('CheckoutCtrl', ['$scope', 'SalesService', 'CountriesService', '$q', function ($scope, SalesService, CountriesService, $q) {
         var vm = this;
         $scope.formData = {};
 
@@ -47,6 +47,46 @@ angular.module('app.checkout', ['ui.router', 'ui.mask'])
                 $scope.$broadcast('show-errors-check-validity');
             }
 
+        };
+
+        $scope.getCountry = function (q) {
+            var deferred = $q.defer();
+
+            CountriesService.queryCountries(q)
+                .then(function (res) {
+                        deferred.resolve(res.data);
+                    },
+                    function (err) {
+                        deferred.reject(err);
+                    });
+
+            return deferred.promise;
+        };
+
+        $scope.selectCountry = function ($item, $model, $label) {
+            $scope.formData.country = $item.name;
+            $scope.selectedCountry = $item;
+        };
+
+        $scope.getCity = function (q) {
+            var deferred = $q.defer();
+            var countryCode = $scope.selectedCountry.code;
+
+            CountriesService.queryCities(countryCode, q)
+                .then(function (res) {
+                        deferred.resolve(res.data);
+                    },
+                    function (err) {
+                        deferred.reject(err);
+                    });
+
+            return deferred.promise;
+        };
+
+        $scope.selectCity = function ($item, $model, $label) {
+            $scope.formData.city = $item.name;
+            $scope.selectedCity = $item;
+            $scope.formData.state = $item.district;
         };
 
         vm.success = function (res) {
