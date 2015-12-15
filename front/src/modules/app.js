@@ -19,7 +19,9 @@ angular.module('app', [
         'ngAnimate',
         'app.privacy',
         'app.disclosure',
-        'app.term-and-conditions'
+        'app.term-and-conditions',
+        'app.dex-na',
+        'app.dex-fx'
     ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {

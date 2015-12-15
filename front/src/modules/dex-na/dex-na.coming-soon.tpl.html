@@ -1,0 +1,33 @@
+<section id="content" class="dex-na-coming-soon">
+    <div class="title text-center">
+        <h2 class="spaced">This Product is Coming Soon</h2>
+        <p>Enter Your Contact Information Below To Get On Our ‘Early Bird’ List And Hear About It Before Anyone Else!</p>
+    </div>
+
+    <div id="profile-edit-wrapper">
+        <form name="userForm" novalidate="novalidate">
+            <div class="form-group has-feedback" data-show-errors>
+                <input type="text"
+                       name="email"
+                       class="form-control"
+                       id="email"
+                       required
+                       data-ng-minlength="4"
+                       data-ng-model="user.email"
+                       placeholder="E-Mail">
+                <span class="glyphicon glyphicon-envelope form-control-feedback" aria-hidden="true"></span>
+            </div>
+            <div class="form-group has-feedback" data-show-errors>
+                <input type="text"
+                       name="phone"
+                       class="form-control"
+                       id="phone"
+                       data-ng-minlength="4"
+                       data-ng-model="user.phone"
+                       placeholder="Phone">
+                <span class="glyphicon glyphicon-phone form-control-feedback" aria-hidden="true"></span>
+            </div>
+        </form>
+        <a class="submitbutton bg-orange" href="#" data-ng-click="save()">Join The List</a>
+    </div>
+</section>

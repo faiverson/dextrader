@@ -4,7 +4,7 @@
             <h1>Welcome to<br>the <a href="#">Members</a> Area</h1>
         </div>
         <div class="right">
-            <a id="welcomevideolink" href="#"><span>Click to watch<br>the welcome video</span></a>
+            <a id="welcomevideolink" href="#" data-ng-click="openVideo()"><span>Click to watch<br>the welcome video</span></a>
         </div>
     </div>
     <div>
@@ -37,3 +37,19 @@
         </div>
     </div>
 </section>
+
+<script type="text/ng-template" id="videoModal.html">
+    <div class="modal-header">
+        <button type="button" class="close" data-ng-click="close()" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        <h3 class="modal-title">Welcome!</h3>
+    </div>
+    <div class="modal-body">
+        <youtube-video video-id="video_id"
+                       player-width="'620px'"
+                       player-height="'350px'"
+                       player="ytPlayer"
+                       player-vars="playerVars"></youtube-video>
+    </div>
+</script>
