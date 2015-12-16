@@ -290,15 +290,15 @@ gulp.task('html', function () {
     if (condition) {
         input = [];
         inputs = [
-            '/js/' + pkg.name + '-v' + pkg.version + '.min.js'
+            '/front/js/' + pkg.name + '-v' + pkg.version + '.min.js'
         ];
     }
     else {
         input = config.js.files.input;
         inputs = [
             'http://localhost:35729/livereload.js',
-            '/js/' + config.js.vendor.output,
-            '/js/templates.js'
+            '/front/js/' + config.js.vendor.output,
+            '/front/js/templates.js'
         ];
     }
     for (var f in inputs) {
@@ -315,7 +315,7 @@ gulp.task('html', function () {
             removeTags: true,
             empty: true,
             transform: function (filepath, file, index, length, targetFile) {
-                return '<script type="text/javascript" src="' + filepath.replace('/src/', '/js/') + '"></script>';
+                return '<script type="text/javascript" src="' + filepath.replace('/src/', '/front/js/') + '"></script>';
             }
         }))
         .pipe(prettify({
