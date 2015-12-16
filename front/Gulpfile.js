@@ -331,7 +331,7 @@ gulp.task('html', function () {
             collapseWhitespace: true
         }))
         .pipe(rename(config.html.output))
-        .pipe(gulp.dest('../public_html/'));
+        .pipe(gulp.dest('../public_html/front/'));
 });
 
 gulp.task('watch', function () {
