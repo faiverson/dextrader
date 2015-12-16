@@ -76,6 +76,7 @@ class PurchasesController extends Controller
 		$number = $fields['number'];
 		$type = !empty($fields['type']) ? $fields['type'] : null;
 		$card = Cards::validCreditCard($number, $type);
+		$fields['type'] = $type ? $type: $card['type'];
 		$first_six = substr($number, 0, 6);
 		$last_four = substr($number, -4);
 		if (!$card['valid']) {
@@ -85,10 +86,13 @@ class PurchasesController extends Controller
 			return response()->error('The credit card is in the system! Please contact support immediately!');
 		}
 
+		$fields['enroller'] = !empty($fields['enroller']) ? $fields['enroller'] : '';
 		$enroller_id = $this->getEnroller($fields['enroller']);
 		$product = Product::find($fields['product_id'])->first();
 		$geo = $this->getGeoIP($request);
 		$role = Role::where('name', $product->name)->first(array('id'));
+		$data = !empty($fields['data']) ? $fields['data'] : null;
+
 		DB::beginTransaction();
 		try {
 			$user = User::create([
@@ -101,7 +105,7 @@ class PurchasesController extends Controller
 			]);
 			$user->attachRole($role->id);
 
-			BillingAddress::create([
+			$billing = BillingAddress::create([
 				'user_id' => $user->id,
 				'address' => $fields['address'],
 				'address2' => empty($fields['address2']) ? '' : $fields['address2'],
@@ -111,62 +115,23 @@ class PurchasesController extends Controller
 				'zip' => $fields['zip'],
 				'phone' => empty($fields['billing_phone']) ? null : $fields['billing_phone'],
 			]);
-			CreditCard::create([
+			$cc = CreditCard::create([
 				'user_id' => $user->id,
 				'name' => $fields['card_name'],
 				'exp_month' => $fields['month'],
 				'exp_year' => $fields['year'],
 				'number' => Encrypt::encrypt($number),
-				'network' => $type ? $type : $card['type'],
+				'network' => $fields['type'],
 				'first_six' => $first_six,
 				'last_four' => $last_four
 			]);
-			$purchase = Purchase::create([
-				'user_id' => $user->id,
-				'enroller_id' => $enroller_id,
-				'funnel_id' => $fields['funnel_id'],
-				'product_id' => $fields['product_id'],
-				'product_amount' => $product->amount,
-				// billing address
-				'billing_address' => $fields['address'],
-				'billing_address2' => empty($fields['address2']) ? '' : $fields['address2'],
-				'billing_city' => $fields['city'],
-				'billing_state' => $fields['state'],
-				'billing_country' => $fields['country'],
-				'billing_zip' => $fields['zip'],
-				'billing_phone' => empty($fields['billing_phone']) ? null : $fields['billing_phone'],
-				// CC data
-				'card_name' => $fields['card_name'],
-				'card_exp_month' => $fields['month'],
-				'card_exp_year' => $fields['year'],
-				'card_network' => $type ? $type : $card['type'],
-				'card_first_six' => $first_six,
-				'card_last_four' => $last_four,
-				'info' => json_encode($fields['data']),
-			]);
-
-//			if($enroller_id) {
-//				$this->apply_commissions($purchase);
-//			}
+			$fields['user_id'] = $user->id;
+			$purchase = $this->purchase($user, $billing, $cc, $product, $fields['funnel_id'], $enroller_id, $data);
 		} catch(\Exception $e) {
 			DB::rollback();
 			throw $e;
 		}
 		DB::commit();
-
-		$user->email = 'fa.iverson@gmail.com';
-		$params = [
-			'user' => $user,
-			'purchase' => $purchase,
-			'product' => $product
-		];
-		$beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-		$beautymail->send('emails.purchase', $params, function ($message) use ($user) {
-			$message
-				->from('system@dextrader.com')
-				->to($user->email)
-				->subject('Yey! Your purchase has been approved!');
-		});
 		return response()->added();
 	}
 
@@ -176,55 +141,72 @@ class PurchasesController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function purchase(Request $request)
+    public function purchase(User $user, BillingAddress $billing, CreditCard $cc, Product $product, $funnel_id, $enroller_id = null, $data = array())
     {
-        $rules = [
-			'card_id' => 'required|exists:credit_cards,id',
-			'product_id' => 'required|exists:products,id',
-			'mk_id' => 'required|exists:marketing_links,id'
-		];
-		$fields = $request->all();
-		if(!empty($fields['enroller_id'])) {
-			$rules['enroller_id'] = 'required|exists:users,id';
-		}
-
-        $validator = Validator::make($fields, $rules);
-        if ($validator->fails()) {
-            return response()->error($validator->errors()->all());
-        }
-
-		// lets check if it's the owner
-		$user_id = Token::getId($request);
-		$belong_user = $this->checkCard($fields['card_id'], $user_id);
-		if($belong_user <= 0) {
-			return response()->error('The CC does not belong to the user');
-		}
-
 		$purchase = Purchase::create([
-			'user_id' => $user_id,
-			'enroller_id' => $fields['enroller_id'],
-			'card_id' => $fields['card_id'],
-			'product_id' => $fields['product_id'],
-			'funnel_id' => $fields['mk_id']
+			'user_id' => $user->id,
+			'enroller_id' => $enroller_id,
+			'funnel_id' => $funnel_id,
+			'product_id' => $product->product_id,
+			'product_amount' => $product->amount,
+			// billing address
+			'billing_address' => $billing->address,
+			'billing_address2' => empty($billing->address2) ? '' : $billing->address2,
+			'billing_city' => $billing->city,
+			'billing_state' => $billing->state,
+			'billing_country' => $billing->country,
+			'billing_zip' => $billing->zip,
+			'billing_phone' => empty($billing->phone) ? null : $billing->phone,
+			// CC data
+			'card_name' => $cc->name,
+			'card_exp_month' => $cc->exp_month,
+			'card_exp_year' => $cc->exp_year,
+			'card_network' => $cc->network,
+			'card_first_six' => $cc->first_six,
+			'card_last_four' => $cc->last_four,
+			'info' => $data,
 		]);
 
-		$this->apply_commissions($purchase);
-        return response()->added();
+		if($enroller_id) {
+			$this->applyCommissions($purchase);
+		}
+
+		$this->emailPurchase($purchase, $user, $product);
+        return $purchase;
     }
 
-	public function apply_commissions($purchase)
+	public function emailPurchase(Purchase $purchase, User $user, Product $product)
 	{
-		$product = Product::find($purchase->product_id);
-		if($product) {
-			// the enroller taken by the purchase give us the chance
-			// to set different people if that's the case
-			Commission::create([
+		$user->email = 'fa.iverson@gmail.com';
+		$params = [
+			'user' => $user,
+			'purchase' => $purchase,
+			'product' => $product
+		];
+		$beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+		$beautymail->send('emails.purchase', $params, function ($message) use ($user) {
+			$message
+				->from(Config::get('dextrader.from'))
+				->to($user->email)
+				->subject('Yey! Your purchase has been approved!');
+		});
+	}
+
+	public function applyCommissions(Purchase $purchase)
+	{
+		// the enroller taken by the purchase give us the chance
+		// to set different people if that's the case
+		if($purchase->enroller_id > 0) {
+			$comms = Commission::create([
 				'from_user_id' => $purchase->user_id,
 				'to_user_id' => $purchase->enroller_id,
 				'purchase_id' => $purchase->id,
-				'amount' => $product->amount * Config::get('dextrader.comms'),
+				'amount' => $purchase->product_amount * Config::get('dextrader.comms'),
 			]);
+			return $comms;
 		}
+
+		return false;
 	}
 
     /**
@@ -240,7 +222,6 @@ class PurchasesController extends Controller
 
 	protected function getEnroller($enroller)
 	{
-
 		$enroller = User::where('username', $enroller)->first(array('id'));
 		return $enroller ? $enroller->id : null;
 	}

@@ -27,8 +27,8 @@ class Commissions extends Migration
 			$table->decimal('amount', 10, 2)->signed()->nullable(false);
 			$table->timestamp('payout_dt')->nullable();
 			$table->timestamp('refund_dt')->nullable();
-			$table->bigInteger('refund_by')->unsigned();
-			$table->foreign('refund_by')->references('id')->on('users')->nullable();
+			$table->bigInteger('refund_by')->unsigned()->nullable();
+			$table->foreign('refund_by')->references('id')->on('users');
 
 			$table->text('notes')->nullable();
 			$table->timestamps();

@@ -2,6 +2,7 @@
 
 return [
 
+	'from' => 'system@dextrader.com',
 	//  commissions' porcentage
 	'comms' => .50,
 

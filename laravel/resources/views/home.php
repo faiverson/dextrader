@@ -39,13 +39,15 @@
 <script type="text/javascript" src="/front/js/modules/app.js"></script>
 <script type="text/javascript" src="/front/js/common/directives/shared-directives.js"></script>
 <script type="text/javascript" src="/front/js/common/filters/shared-filters.js"></script>
-<script type="text/javascript" src="/front/js/common/helpers/shared-helpers.js"></script>
 <script type="text/javascript" src="/front/js/common/services/http-services.js"></script>
 <script type="text/javascript" src="/front/js/common/services/site-configs.js"></script>
+<script type="text/javascript" src="/front/js/common/helpers/shared-helpers.js"></script>
 <script type="text/javascript" src="/front/js/modules/affiliates/affiliates.js"></script>
 <script type="text/javascript" src="/front/js/modules/auth/auth.js"></script>
 <script type="text/javascript" src="/front/js/modules/dashboard/dashboard.js"></script>
+<script type="text/javascript" src="/front/js/modules/dex-fx/dex-fx.js"></script>
 <script type="text/javascript" src="/front/js/modules/dex-ib/dex-ib.js"></script>
+<script type="text/javascript" src="/front/js/modules/dex-na/dex-na.js"></script>
 <script type="text/javascript" src="/front/js/modules/disclosure/disclosure.js"></script>
 <script type="text/javascript" src="/front/js/modules/privacy/privacy.js"></script>
 <script type="text/javascript" src="/front/js/modules/terms-and-conditions/terms-and-conditions.js"></script>

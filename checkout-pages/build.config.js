@@ -101,12 +101,17 @@ module.exports = {
     },
     placeholders: [
 		{
+			match: 'SITE_NAME',
+			replacement: 'DX Trader'
+		},
+		{
 			match: 'SITE_URL',
-			replacement: process.env.URL
+			replacement: 'http://localhost:8000', //process.env.URL
 		},
 		{
 			match: 'API_URL',
 			replacement: process.env.URL + '/api/'
 		}
+
 	]
 };

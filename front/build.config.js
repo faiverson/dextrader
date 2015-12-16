@@ -107,6 +107,10 @@ module.exports = {
     },
     placeholders: [
 		{
+			match: 'SITE_NAME',
+			replacement: 'DX Trader'
+		},
+		{
 			match: 'SITE_URL',
 			replacement: process.env.URL
 		},
