@@ -22,7 +22,7 @@ module.exports = {
     port: 8000,
     paths: {
         input: 'src/**/*',
-        output: '../public_html/front/',
+        output: '../public_html/',
         server_path: '../public_html'
     },
     js: {
@@ -58,7 +58,7 @@ module.exports = {
                 '!src/**/*.spec.js',
                 '!src/**/*.scenario.js'
             ],
-            output: '../public_html/front/js/'
+            output: '../public_html/js/'
         }
     },
     less: {
@@ -67,7 +67,7 @@ module.exports = {
             'src/common/**/*.less',
             'src/modules/**/*.less'
         ],
-        output: '../public_html/front/css/'
+        output: '../public_html/css/'
     },
     html: {
         input: 'src/index.html',
@@ -81,15 +81,15 @@ module.exports = {
     assets: {
         fonts: {
             input: ['src/assets/fonts/**/*.{ttf,woff,woff2,eof,eot}'],
-            output: '../public_html/front/assets/fonts/'
+            output: '../public_html/assets/fonts/'
         },
         images: {
             input: ['src/assets/**/*.{png,gif,jpeg,jpg}'],
-            output: '../public_html/front/assets/'
+            output: '../public_html/assets/'
         },
         svg: {
             input: 'src/assets/**/*.svg',
-            output: '../public_html/front/assets/'
+            output: '../public_html/assets/'
         }
     },
     docs: {
