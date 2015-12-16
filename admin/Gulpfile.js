@@ -71,13 +71,7 @@ gulp.task('production', function(callback) {
 gulp.task('default', ['env']);
 
 // run a server and a watcher
-gulp.task('dev', function (callback) {
-	runSequence(
-		'env',
-		'server',
-		'watch',
-		callback);
-});
+gulp.task('dev', ['env', 'server', 'watch']);
 
 // TASKS
 // set the environment
@@ -295,15 +289,15 @@ gulp.task('html', function () {
 	if(condition) {
 		input = [];
 		inputs = [
-			'/admin/js/' + pkg.name + '-v' + pkg.version + '.min.js'
+			'/js/' + pkg.name + '-v' + pkg.version + '.min.js'
 		];
 	}
 	else {
 		input = config.js.files.input;
 		inputs = [
 			'http://localhost:35729/livereload.js',
-			'/admin/js/' + config.js.vendor.output,
-			'/admin/js/templates.js'
+			'/js/' + config.js.vendor.output,
+			'/js/templates.js'
 		];
 	}
 	for(var f in inputs) {
@@ -320,7 +314,7 @@ gulp.task('html', function () {
 			removeTags: true,
 			empty: true,
 			transform: function(filepath, file, index, length, targetFile){
-				return '<script type="text/javascript" src="' + filepath.replace('/src/', '/admin/js/') + '"></script>';
+				return '<script type="text/javascript" src="' + filepath.replace('/src/', '/js/') + '"></script>';
 			}
 		}))
 		.pipe(prettify({
@@ -336,7 +330,7 @@ gulp.task('html', function () {
 			collapseWhitespace: true
 		}))
 		.pipe(rename(config.html.output))
-		.pipe(gulp.dest('../laravel/resources/views/'));
+		.pipe(gulp.dest('../public_html/admin/'));
 });
 
 gulp.task('watch', function () {

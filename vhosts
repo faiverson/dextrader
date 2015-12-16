@@ -1,0 +1,50 @@
+<VirtualHost local.dextrader.com:80>
+        DocumentRoot "{full path}/dextrader/public_html/front"
+        ServerName local.dextrader.com
+        ErrorLog "/private/var/log/apache2/local.dextrader.com.local-error_log"
+        CustomLog "/private/var/log/apache2/local.dextrader.com.local-access_log" common
+
+        <Directory "{full path}/dextrader/public_html">
+            AllowOverride All
+            Require all granted
+        </Directory>
+</VirtualHost>
+
+<VirtualHost local.api.dextrader.com:80>
+        DocumentRoot "{full path}/dextrader/public_html/api"
+        ServerName local.api.dextrader.com
+        ErrorLog "/private/var/log/apache2/local.api.dextrader.com.local-error_log"
+        CustomLog "/private/var/log/apache2/local.api.dextrader.com.local-access_log" common
+
+        <Directory "{full path}/dextrader/public_html">
+            AllowOverride All
+            Require all granted
+        </Directory>
+</VirtualHost>
+
+<VirtualHost local.admin.dextrader.com:80>
+        DocumentRoot "{full path}/dextrader/public_html/admin"
+        ServerName local.admin.dextrader.com
+        ErrorLog "/private/var/log/apache2/local.admin.dextrader.com.local-error_log"
+        CustomLog "/private/var/log/apache2/local.admin.dextrader.com.local-access_log" common
+
+        <Directory "{full path}/dextrader/public_html">
+            AllowOverride All
+            Require all granted
+        </Directory>
+</VirtualHost>
+
+<VirtualHost local.secure.dextrader.com:80>
+        DocumentRoot "{full path}/dextrader/public_html/sales"
+        ServerName local.secure.dextrader.com
+        ErrorLog "/private/var/log/apache2/local.secure.dextrader.com.local-error_log"
+        CustomLog "/private/var/log/apache2/local.secure.dextrader.com.local-access_log" common
+
+        <Directory "{full path}/dextrader/public_html">
+            AllowOverride All
+            Require all granted
+        </Directory>
+</VirtualHost>
+
+
+

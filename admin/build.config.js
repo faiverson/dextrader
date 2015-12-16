@@ -66,7 +66,7 @@ module.exports = {
     },
     html: {
         input: 'src/index.html',
-        output: 'admin/admin.php',
+        output: 'index.html',
         tpl: {
             output: 'templates.js',
             modules: 'src/modules/**/*.tpl.html',
@@ -102,12 +102,16 @@ module.exports = {
     },
     placeholders: [
         {
+            match: 'SITE_NAME',
+            replacement: 'DX Trader'
+        },
+        {
             match: 'SITE_URL',
             replacement: process.env.URL
         },
         {
             match: 'API_URL',
-            replacement: process.env.URL + '/api/'
+            replacement: process.env.API_URL + '/api/'
         }
     ]
 };
