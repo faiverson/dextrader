@@ -106,7 +106,7 @@ module.exports = {
 		},
 		{
 			match: 'SITE_URL',
-			replacement: 'http://localhost:8000', //process.env.URL
+			replacement: process.env.URL
 		},
 		{
 			match: 'API_URL',
