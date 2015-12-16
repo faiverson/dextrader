@@ -6,6 +6,16 @@ Homestead.json
 .editorconfig
 /laravel/.env
 .idea/
-public_html/*
 
-laravel/resources/views/home.php
+
+public_html/admin/js
+public_html/admin/css
+public_html/admin/assets
+
+public_html/front/js
+public_html/front/css
+public_html/front/assets
+
+public_html/sales/js
+public_html/sales/css
+public_html/sales/assets

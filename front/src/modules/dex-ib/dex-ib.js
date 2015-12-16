@@ -10,7 +10,7 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
                 }
             })
             .state('dex_ib.upgrade', {
-                url: '/dexib/upgrade',
+                url: '/upgrade',
                 templateUrl: 'modules/dex-ib/dex-ib.upgrade.tpl.html',
                 controller: 'DexIBUpgradeCtrl',
                 data: {

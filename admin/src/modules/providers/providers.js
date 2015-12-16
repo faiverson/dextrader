@@ -43,7 +43,7 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
 
             var vm = this;
 
-            $scope.image = '/admin/assets/images/image-placeholder.gif';
+            $scope.image = '/assets/images/image-placeholder.gif';
 
             $scope.uploadAndSave = function () {
                 $scope.$broadcast('show-errors-check-validity');
