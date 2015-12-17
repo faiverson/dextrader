@@ -24,7 +24,6 @@ class Files
 
         $headers = array(
             'Content-Type' => $mime,
-            'Access-Control-Allow-Origin' => 'http://localhost:8000',
             'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
         );
 
