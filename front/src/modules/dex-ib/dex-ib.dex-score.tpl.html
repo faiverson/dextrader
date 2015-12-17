@@ -25,7 +25,7 @@
         </thead>
         <tbody>
         <tr data-ng-repeat="provider in providers">
-            <td><img data-ng-src="/assets/images/{{provider.image}}"></td>
+            <td><img data-ng-src="/front/assets/images/{{provider.image}}"></td>
             <td data-ng-bind="provider.min_deposit | currency: '$'"></td>
             <td data-ng-bind="(provider.us_traders && 'Yes' || 'No')"></td>
             <td class="link">

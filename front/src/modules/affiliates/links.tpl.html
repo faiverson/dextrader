@@ -4,41 +4,41 @@
 
     <div class="spacer-big"></div>
     <div class="aff-link-wrapper clearfix" data-ng-repeat="mLink in mLinks">
-        <img class="image" data-ng-src="{{mLink.image}}" width="120" height="120">
-        <div class="row container-title">
-            <div class="col-md-2"></div>
-            <div class="col-md-5 title">
-                <h2 data-ng-bind="::mLink.title"></h2>
-            </div>
-            <div class="col-md-5">
-                <h3>Promote URL</h3>
-            </div>
-        </div>
-        <div class="row container-desc">
-            <div class="col-md-2"></div>
-            <div class="col-md-5">
-                <span data-ng-bind="::mLink.description"></span>
-            </div>
-            <div class="col-md-5">
-                <input type="text" value="{{::mLink.link}}">
-                <a target="_blank" href="{{::mLink.link}}"><img src="/assets/images/arrow-right.png"></a>
-            </div>
-        </div>
-
-
-        <!--<div class="left">-->
-            <!--<img data-ng-src="{{mLink.image}}" width="120" height="120">-->
-
-            <!--<h2 data-ng-bind="::mLink.title"></h2>-->
-            <!--<span data-ng-bind="::mLink.description"></span>-->
-        <!--</div>-->
-        <!--<div class="right">-->
-            <!--<h3>Promote URL</h3>-->
-
-            <!--<div class="aff-link">-->
-                <!--<input type="text" value="{{::mLink.link}}">-->
-                <!--<a target="_blank" href="{{::mLink.link}}"><img src="/assets/images/arrow-right.png"></a>-->
+        <!--<img class="image" data-ng-src="{{mLink.image}}" width="120" height="120">-->
+        <!--<div class="row container-title">-->
+            <!--<div class="col-md-2"></div>-->
+            <!--<div class="col-md-5 title">-->
+                <!--<h2 data-ng-bind="::mLink.title"></h2>-->
+            <!--</div>-->
+            <!--<div class="col-md-5">-->
+                <!--<h3>Promote URL</h3>-->
             <!--</div>-->
         <!--</div>-->
+        <!--<div class="row container-desc">-->
+            <!--<div class="col-md-2"></div>-->
+            <!--<div class="col-md-5">-->
+                <!--<span data-ng-bind="::mLink.description"></span>-->
+            <!--</div>-->
+            <!--<div class="col-md-5">-->
+                <!--<input type="text" value="{{::mLink.link}}">-->
+                <!--<a target="_blank" href="{{::mLink.link}}"><img src="/front/assets/images/arrow-right.png"></a>-->
+            <!--</div>-->
+        <!--</div>-->
+
+
+        <div class="left">
+            <img data-ng-src="{{mLink.image}}" width="120" height="120">
+
+            <h2 data-ng-bind="::mLink.title"></h2>
+            <span data-ng-bind="::mLink.description"></span>
+        </div>
+        <div class="right">
+            <h3>Promote URL</h3>
+
+            <div class="aff-link">
+                <input type="text" value="{{::mLink.link}}">
+                <a target="_blank" href="{{::mLink.link}}"><img src="/front/assets/images/arrow-right.png"></a>
+            </div>
+        </div>
     </div>
 </section>

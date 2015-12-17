@@ -32,11 +32,11 @@ body {
 }
 
 .page-login {
-    background-image: url('/assets/images/bg-login.jpg');
+    background-image: url('/front/assets/images/bg-login.jpg');
 }
 
 .page-dashboard {
-    background-image: url('/assets/images/bg.jpg')
+    background-image: url('/front/assets/images/bg.jpg')
 }
 
 .left {
@@ -272,37 +272,37 @@ h3 {
 }
 
 #nav-dashboard {
-    background-image: url('/assets/images/nav-dash.png')
+    background-image: url('/front/assets/images/nav-dash.png')
 }
 
 #nav-dashboard.active {
-    background-image: url('/assets/images/nav-dash-a.png');
+    background-image: url('/front/assets/images/nav-dash-a.png');
     border-bottom: 1px solid #ff4e00;
 }
 
 #nav-dexib {
-    background-image: url('/assets/images/nav-dexib.png')
+    background-image: url('/front/assets/images/nav-dexib.png')
 }
 
 #nav-dexib.active {
-    background-image: url('/assets/images/nav-dexib-a.png');
+    background-image: url('/front/assets/images/nav-dexib-a.png');
     border-bottom: 1px solid #00b4ff;
 }
 
 #nav-dexna {
-    background-image: url('/assets/images/nav-dexna.png')
+    background-image: url('/front/assets/images/nav-dexna.png')
 }
 
 #nav-dexfx {
-    background-image: url('/assets/images/nav-dexfx.png')
+    background-image: url('/front/assets/images/nav-dexfx.png')
 }
 
 #nav-affiliates {
-    background-image: url('/assets/images/nav-affiliates.png')
+    background-image: url('/front/assets/images/nav-affiliates.png')
 }
 
 #nav-affiliates.active {
-    background-image: url('/assets/images/nav-affiliates-a.png');
+    background-image: url('/front/assets/images/nav-affiliates-a.png');
     border-bottom: 1px solid #ff4e00;
 }
 
@@ -321,7 +321,7 @@ h3 {
 #nav-profile > li {
     display: inline-block;
     position: relative;
-    background: transparent url('/assets/images/ico-2.png') top left no-repeat;
+    background: transparent url('/front/assets/images/ico-2.png') top left no-repeat;
     padding-top: 5px;
     padding-left: 20px;
 }
@@ -330,7 +330,7 @@ h3 {
     color: #98989a;
     padding: 20px 10px;
     padding-right: 20px;
-    background: transparent url('/assets/images/ico-3.png') center right no-repeat;
+    background: transparent url('/front/assets/images/ico-3.png') center right no-repeat;
 }
 
 #nav-profile > li ul {
@@ -427,12 +427,12 @@ input {
 
 #form-login-email,
 .bg-email {
-    background-image: url('/assets/images/form-email.png')
+    background-image: url('/front/assets/images/form-email.png')
 }
 
 #form-login-password,
 .bg-pass {
-    background-image: url('/assets/images/form-password.png')
+    background-image: url('/front/assets/images/form-password.png')
 }
 
 #form-login-links {
@@ -443,7 +443,7 @@ input {
     float: left;
     padding: 15px 0;
     padding-left: 30px;
-    background: transparent url('/assets/images/ico-1.png') center left no-repeat;
+    background: transparent url('/front/assets/images/ico-1.png') center left no-repeat;
 }
 
 #form-login-submit {
@@ -483,19 +483,19 @@ input {
 }
 
 #sn-aff-hiw:before {
-    content: url('/assets/images/sub-aff-1a.png')
+    content: url('/front/assets/images/sub-aff-1a.png')
 }
 
 #sn-aff-hiw.active:before {
-    content: url('/assets/images/sub-aff-1a.png')
+    content: url('/front/assets/images/sub-aff-1a.png')
 }
 
 #sn-aff-lin:before {
-    content: url('/assets/images/sub-aff-2.png')
+    content: url('/front/assets/images/sub-aff-2.png')
 }
 
 #sn-aff-lin.active:before {
-    content: url('/assets/images/sub-aff-2.png')
+    content: url('/front/assets/images/sub-aff-2.png')
 }
 
 #sn-aff-tra:before,
@@ -503,7 +503,7 @@ input {
 #sn-aff-com:before,
 #sn-pro-set:before,
 #sn-aff-pay:before {
-    content: url('/assets/images/sub-aff-3.png')
+    content: url('/front/assets/images/sub-aff-3.png')
 }
 
 #sn-aff-tra.active:before,
@@ -511,7 +511,7 @@ input {
 #sn-aff-com.active:before,
 #sn-pro-set.active:before,
 #sn-aff-pay.active:before {
-    content: url('/assets/images/sub-aff-3.png')
+    content: url('/front/assets/images/sub-aff-3.png')
 }
 
 #video-wrapper > h2 {
@@ -533,14 +533,14 @@ input {
 }
 
 #next-video:before {
-    content: url('/assets/images/ico-play-orange.png');
+    content: url('/front/assets/images/ico-play-orange.png');
     position: absolute;
     left: 15px;
     top: 16px;
 }
 
 #next-video:after {
-    content: url('/assets/images/arr-right.png');
+    content: url('/front/assets/images/arr-right.png');
     position: absolute;
     right: 10px;
     top: 16px;
@@ -588,15 +588,15 @@ input {
 }
 
 #video-sideinfo.playlist .title:before {
-    content: url('/assets/images/ico-video-title.png')
+    content: url('/front/assets/images/ico-video-title.png')
 }
 
 #video-sideinfo.playlist .calendar:before {
-    content: url('/assets/images/ico-16.png')
+    content: url('/front/assets/images/ico-16.png')
 }
 
 #video-sideinfo.playlist #ibpro-training-archives:before {
-    content: url('/assets/images/ico-17.png')
+    content: url('/front/assets/images/ico-17.png')
 }
 
 #video-sideinfo.playlist > a:before {
@@ -611,11 +611,11 @@ input {
 
 #video-sideinfo.playlist .video-stopped:before,
 #video-sideinfo.playlist #ibpro-training-title:before {
-    content: url('/assets/images/ico-video-play.png')
+    content: url('/front/assets/images/ico-video-play.png')
 }
 
 #video-sideinfo.playlist .video-playing:before {
-    content: url('/assets/images/ico-video-pause.png')
+    content: url('/front/assets/images/ico-video-pause.png')
 }
 
 #video-sideinfo.playlist > a.active {
@@ -626,7 +626,7 @@ input {
 #getstarted,
 .submitbutton {
     display: block;
-    background: #303135 url('/assets/images/arrow-right.png') center right no-repeat;
+    background: #303135 url('/front/assets/images/arrow-right.png') center right no-repeat;
     background-position: center right 20px;
     background-position-x: 93%;
     padding: 15px;
@@ -671,36 +671,36 @@ input {
 }
 
 #ql-joingroup {
-    background-image: url('/assets/images/bigico-1.png')
+    background-image: url('/front/assets/images/bigico-1.png')
 }
 
 #ql-joingroup:hover {
-    background-image: url('/assets/images/bigico-1h.png');
+    background-image: url('/front/assets/images/bigico-1h.png');
     background-color: #415e9b;
 }
 
 #ql-earnmoney {
-    background-image: url('/assets/images/bigico-2.png')
+    background-image: url('/front/assets/images/bigico-2.png')
 }
 
 #ql-earnmoney:hover {
-    background-image: url('/assets/images/bigico-2h.png');
+    background-image: url('/front/assets/images/bigico-2h.png');
     background-color: #9c5aa2;
 }
 
 #ql-contact {
-    background-image: url('/assets/images/bigico-3.png')
+    background-image: url('/front/assets/images/bigico-3.png')
 }
 
 #ql-contact:hover {
-    background-image: url('/assets/images/bigico-3h.png');
+    background-image: url('/front/assets/images/bigico-3h.png');
     background-color: #ffa800;
 }
 
 .aff-link-wrapper {
     padding: 20px 0;
     position: relative;
-    background: transparent url('/assets/images/aff-l.png') bottom left repeat-x;
+    background: transparent url('/front/assets/images/aff-l.png') bottom left repeat-x;
     margin-bottom: 20px;
 }
 
@@ -784,17 +784,17 @@ input {
 }
 
 #aff-stats-pen {
-    background-image: url('/assets/images/aff-stats-1.png');
+    background-image: url('/front/assets/images/aff-stats-1.png');
     background-color: #37383f;
 }
 
 #aff-stats-rtp {
-    background-image: url('/assets/images/aff-stats-2.png');
+    background-image: url('/front/assets/images/aff-stats-2.png');
     background-color: #2e2f34;
 }
 
 #aff-stats-tot {
-    background-image: url('/assets/images/aff-stats-3.png');
+    background-image: url('/front/assets/images/aff-stats-3.png');
     background-color: #222328;
 }
 
@@ -924,13 +924,13 @@ input {
 .nav-prev {
     border-right: 1px solid #eaeaea;
     padding-left: 40px;
-    background: transparent url('/assets/images/bigarr-left.png') center left no-repeat;
+    background: transparent url('/front/assets/images/bigarr-left.png') center left no-repeat;
 }
 
 .table-nav-buttons .table-nav-next,
 .nav-next {
     padding-right: 40px;
-    background: transparent url('/assets/images/bigarr-right.png') center right no-repeat;
+    background: transparent url('/front/assets/images/bigarr-right.png') center right no-repeat;
 }
 
 #commission-graphs > div {
@@ -1003,7 +1003,7 @@ select {
     font-family: 'roboto';
     box-sizing: border-box;
     overflow: visible !important;
-    background-image: url('/assets/images/ico-4.png');
+    background-image: url('/front/assets/images/ico-4.png');
     background-position: center right 5%;
     background-position-x: 95%;
     background-position-y: center;
@@ -1033,11 +1033,11 @@ select {
 }
 
 .aff-resource-view-title.opened {
-    background-image: url('/assets/images/ico-up.png')
+    background-image: url('/front/assets/images/ico-up.png')
 }
 
 .aff-resource-view-title.closed {
-    background-image: url('/assets/images/ico-down.png')
+    background-image: url('/front/assets/images/ico-down.png')
 }
 
 .aff-resource-view-title > span {
@@ -1064,7 +1064,7 @@ select {
 
 .aff-resource-view-text > a.copy {
     color: #fff;
-    background: #ff4e00 url('/assets/images/ico-copy.png') center left no-repeat;
+    background: #ff4e00 url('/front/assets/images/ico-copy.png') center left no-repeat;
     background-position: center left 5px;
     background-position-x: 5px;
     padding: 2px 4px;
@@ -1074,7 +1074,7 @@ select {
 .subscription .edit,
 .cc .edit {
     color: #7d7d7d;
-    background: #eae9e9 url('/assets/images/ico-edit.png') center left no-repeat;
+    background: #eae9e9 url('/front/assets/images/ico-edit.png') center left no-repeat;
     background-position: center left 5px;
     background-position-x: 5px;
     padding: 3px 4px;
@@ -1090,27 +1090,27 @@ select {
 }
 
 #aff-res-fbw:before {
-    content: url('/assets/images/ico-5.png')
+    content: url('/front/assets/images/ico-5.png')
 }
 
 #aff-res-fbm:before {
-    content: url('/assets/images/ico-6.png')
+    content: url('/front/assets/images/ico-6.png')
 }
 
 #aff-res-lem:before {
-    content: url('/assets/images/ico-7.png')
+    content: url('/front/assets/images/ico-7.png')
 }
 
 #aff-res-sem:before {
-    content: url('/assets/images/ico-8.png')
+    content: url('/front/assets/images/ico-8.png')
 }
 
 #aff-res-ban:before {
-    content: url('/assets/images/ico-9.png')
+    content: url('/front/assets/images/ico-9.png')
 }
 
 #video-sideinfo.playlist #ibpro-title:before {
-    content: url('/assets/images/ico-10.png')
+    content: url('/front/assets/images/ico-10.png')
 }
 
 #video-sideinfo.playlist .ibpro-item {
@@ -1119,7 +1119,7 @@ select {
 }
 
 #video-sideinfo.playlist .ibpro-item:before {
-    content: url('/assets/images/ico-11.png');
+    content: url('/front/assets/images/ico-11.png');
     opacity: 1;
 }
 
@@ -1128,35 +1128,35 @@ select {
 }
 
 #sn-dib-cer:before {
-    content: url('/assets/images/sub-aff-3.png')
+    content: url('/front/assets/images/sub-aff-3.png')
 }
 
 #sn-dib-cer.active:before {
-    content: url('/assets/images/sub-aff-3.png')
+    content: url('/front/assets/images/sub-aff-3.png')
 }
 
 #sn-dib-liv:before {
-    content: url('/assets/images/sn-4.png')
+    content: url('/front/assets/images/sn-4.png')
 }
 
 #sn-dib-liv.active:before {
-    content: url('/assets/images/sn-4.png')
+    content: url('/front/assets/images/sn-4.png')
 }
 
 #sn-dib-scr:before {
-    content: url('/assets/images/sn-5.png')
+    content: url('/front/assets/images/sn-5.png')
 }
 
 #sn-dib-scr.active:before {
-    content: url('/assets/images/sn-5.png')
+    content: url('/front/assets/images/sn-5.png')
 }
 
 #sn-dib-pro:before {
-    content: url('/assets/images/sn-6.png')
+    content: url('/front/assets/images/sn-6.png')
 }
 
 #sn-dib-pro.active:before {
-    content: url('/assets/images/sn-6.png')
+    content: url('/front/assets/images/sn-6.png')
 }
 
 #sn-dib-pro {
@@ -1193,7 +1193,7 @@ select {
     font-size: 24px;
     width: 295px;
     padding: 20px 0;
-    background: transparent url('/assets/images/bigico-play.png') center left no-repeat;
+    background: transparent url('/front/assets/images/bigico-play.png') center left no-repeat;
 }
 
 #dash-head .right > a > span {
@@ -1204,7 +1204,7 @@ select {
 
 #readmore {
     padding-left: 50px;
-    background: transparent url('/assets/images/bigarr-down.png') center left no-repeat;
+    background: transparent url('/front/assets/images/bigarr-down.png') center left no-repeat;
     color: #999;
     font-family: 'times';
     font-style: italic;
@@ -1297,17 +1297,17 @@ select {
 
 .button-green {
     background-color: #5c9211;
-    background-image: url('/assets/images/ico-plus.png');
+    background-image: url('/front/assets/images/ico-plus.png');
 }
 
 .button-orange {
     background-color: #ff4e00;
-    background-image: url('/assets/images/ico-cancel.png');
+    background-image: url('/front/assets/images/ico-cancel.png');
 }
 
 .button-blue {
     background-color: #00b5ff;
-    background-image: url('/assets/images/ico-refresh.png');
+    background-image: url('/front/assets/images/ico-refresh.png');
 }
 
 table th.sortable {
@@ -1322,7 +1322,7 @@ table th.sortable:after {
 
 
 table th.sortable-asc:after {
-    content: url('/assets/images/ico-sort.png');
+    content: url('/front/assets/images/ico-sort.png');
     margin-left: 5px;
     -webkit-transform: rotate(180deg);
     -moz-transform: rotate(180deg);
@@ -1332,12 +1332,12 @@ table th.sortable-asc:after {
 }
 
 table th.sortable-desc:after {
-    content: url('/assets/images/ico-sort.png');
+    content: url('/front/assets/images/ico-sort.png');
     margin-left: 5px;
 }
 
 table td.link {
-    background: transparent url('/assets/images/arr-right.png') center right no-repeat;
+    background: transparent url('/front/assets/images/arr-right.png') center right no-repeat;
     background-position: center right 10%;
     background-position-x: 90%;
 }
@@ -1388,19 +1388,19 @@ table td.link {
 }
 
 #sn-pro-sup:before {
-    content: url('/assets/images/sn-4.png')
+    content: url('/front/assets/images/sn-4.png')
 }
 
 #sn-pro-sup.active:before {
-    content: url('/assets/images/sn-4a.png')
+    content: url('/front/assets/images/sn-4a.png')
 }
 
 #sn-pro-bil:before {
-    content: url('/assets/images/sn-5.png')
+    content: url('/front/assets/images/sn-5.png')
 }
 
 #sn-pro-bil.active:before {
-    content: url('/assets/images/sn-5a.png')
+    content: url('/front/assets/images/sn-5a.png')
 }
 
 #billing-subscriptions > div,
@@ -1430,7 +1430,7 @@ table td.link {
 
 .subscription:hover > a.edit {
     color: #fff;
-    background: #ff4e00 url('/assets/images/ico-edit-a.png') center left no-repeat;
+    background: #ff4e00 url('/front/assets/images/ico-edit-a.png') center left no-repeat;
     background-position: center left 5px;
     background-position-x: 5px;
 }
@@ -1462,15 +1462,15 @@ table td.link {
 }
 
 .sub-info-nb {
-    background-image: url('/assets/images/ico-12.png')
+    background-image: url('/front/assets/images/ico-12.png')
 }
 
 .sub-info-cc {
-    background-image: url('/assets/images/ico-13.png')
+    background-image: url('/front/assets/images/ico-13.png')
 }
 
 .sub-info-pr {
-    background-image: url('/assets/images/ico-14.png')
+    background-image: url('/front/assets/images/ico-14.png')
 }
 
 #order-history-table td:nth-child(3) {
@@ -1521,19 +1521,19 @@ table td.link {
 }
 
 #tab-livetraining {
-    background-image: url('/assets/images/ico-video-play.png')
+    background-image: url('/front/assets/images/ico-video-play.png')
 }
 
 #tab-livetraining.active {
-    background-image: url('/assets/images/ico-play-orange.png')
+    background-image: url('/front/assets/images/ico-play-orange.png')
 }
 
 #tab-newsletter {
-    background-image: url('/assets/images/ico-15.png')
+    background-image: url('/front/assets/images/ico-15.png')
 }
 
 #tab-newsletter.active {
-    background-image: url('/assets/images/ico-15.png')
+    background-image: url('/front/assets/images/ico-15.png')
 }
 
 .calendar-item {
