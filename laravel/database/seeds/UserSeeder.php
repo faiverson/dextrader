@@ -66,7 +66,7 @@ class UserSeeder extends Seeder
 				'username' => 'dexib',
 				'email' => 'dexib@dexib.com',
 				'password' => bcrypt('password')
-		])->attachRoles([$role, $roleIB]);
+		])->attachRoles([$roleIB]);
 
 		if (App::Environment() === 'local') {
 			$this->fakeUsers();
