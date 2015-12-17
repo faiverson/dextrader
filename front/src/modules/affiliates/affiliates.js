@@ -98,6 +98,10 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
     .controller('HowItWorksCtrl', ['$scope', function ($scope) {
         $scope.youTubeVideoId = "lYKRPzOi1zI";
 
+        $scope.createEWallet = function(){
+
+        };
+
         $scope.playerVars = {
             controls: 0,
             autoplay: 0,
