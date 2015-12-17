@@ -8,6 +8,9 @@ Homestead.json
 .idea/
 
 
+public_html/assets/*
+public_html/index.html
+
 public_html/admin/js
 public_html/admin/css
 public_html/admin/assets
