@@ -19,7 +19,7 @@ angular.module('app', [
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {
 
-        $urlRouterProvider.otherwise('/dashboard');
+        $urlRouterProvider.otherwise('/login');
         showErrorsConfigProvider.showSuccess(true);
         $httpProvider.interceptors.push('httpRequestInterceptor');
         NotificationProvider.setOptions({

@@ -20,7 +20,7 @@ module.exports = {
         ' */\n\n'
     },
     port: 8000,
-    paths: {
+    paths: {  
         input: 'src/**/*',
         output: '../public_html/front/',
         server_path: '../public_html'
@@ -71,7 +71,7 @@ module.exports = {
     },
     html: {
         input: 'src/index.html',
-        output: 'home.php',
+        output: 'index.html',
         tpl: {
 			output: 'templates.js',
 			modules: 'src/modules/**/*.tpl.html',
@@ -116,7 +116,7 @@ module.exports = {
 		},
 		{
 			match: 'API_URL',
-			replacement: process.env.URL + '/api/'
+			replacement: process.env.API_URL + '/api/'
 		}
 	]
 };

@@ -331,7 +331,7 @@ gulp.task('html', function () {
             collapseWhitespace: true
         }))
         .pipe(rename(config.html.output))
-        .pipe(gulp.dest('../laravel/resources/views/'));
+        .pipe(gulp.dest('../public_html/'));
 });
 
 gulp.task('watch', function () {

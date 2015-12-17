@@ -27,14 +27,14 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
             });
     })
 
-    .controller('UsersCtrl', ['$scope', 'UserService', 'DTOptionsBuilder', 'DTColumnBuilder', 'localStorageService', '$compile',
-        function ($scope, UserService, DTOptionsBuilder, DTColumnBuilder, localStorageService, $compile) {
+    .controller('UsersCtrl', ['$scope', 'UserService', 'DTOptionsBuilder', 'DTColumnBuilder', 'localStorageService', '$compile', '$site-configs',
+        function ($scope, UserService, DTOptionsBuilder, DTColumnBuilder, localStorageService, $compile, $config) {
 
             function actionsHtml(data, type, full, meta) {
-                return '<button class="btn btn-warning" ui-sref="users-edit({ id:' + data.id + '})">' +
+                return '<button class="btn btn-warning" ui-sref="users-edit({ id:' + data.user_id + '})">' +
                     '   <i class="fa fa-edit"></i>' +
                     '</button>&nbsp;' +
-                    '<button class="btn btn-danger" ng-click="showCase.delete(showCase.persons[' + data.id + '])" )"="">' +
+                    '<button class="btn btn-danger" ng-click="showCase.delete(showCase.persons[' + data.user_id + '])" )"="">' +
                     '   <i class="fa fa-trash-o"></i>' +
                     '</button>';
             }
@@ -47,7 +47,7 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
             $scope.dtOptions = DTOptionsBuilder.newOptions()
                 .withOption('ajax', {
                     headers: {'Authorization': 'Bearer ' + localStorageService.get('token')},
-                    url: '/api/users',
+                    url: $config.API_BASE_URL + 'users',
                     type: 'GET'
                 })
                 .withDataProp('data')
@@ -58,7 +58,7 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
                 .withOption('createdRow', createdRow);
 
             $scope.dtColumns = [
-                DTColumnBuilder.newColumn('id').withTitle('ID'),
+                DTColumnBuilder.newColumn('user_id').withTitle('ID'),
                 DTColumnBuilder.newColumn('username').withTitle('Username'),
                 DTColumnBuilder.newColumn('full_name').withTitle('Name'),
                 DTColumnBuilder.newColumn('email').withTitle('Email'),
