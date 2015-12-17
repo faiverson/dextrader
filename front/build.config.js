@@ -20,7 +20,7 @@ module.exports = {
         ' */\n\n'
     },
     port: 8000,
-    paths: { 
+    paths: {  
         input: 'src/**/*',
         output: '../public_html/front/',
         server_path: '../public_html'
