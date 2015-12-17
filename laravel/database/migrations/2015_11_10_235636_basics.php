@@ -28,6 +28,10 @@ class Basics extends Migration
 			$table->string('phone', 15);
 			$table->tinyInteger('active')->nullable(false)->default(1);
 			$table->string('password', 200)->nullable(false);
+			$table->string('ip_address', 25)->nullable();
+			$table->bigInteger('enroller_id')->unsigned()->nullable();
+			$table->foreign('enroller_id')
+				->references('id')->on('users');
 			$table->rememberToken();
 			$table->softDeletes();
 			$table->timestamps();

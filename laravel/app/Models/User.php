@@ -38,6 +38,7 @@ class User extends Model implements AuthenticatableContract,
 	];
 
 	protected $setterMutators = [
+		'email' => 'strtolower',
 		'username' => 'strtolower',
 		'first_name' => 'strtolower|ucwords',
 		'last_name' => 'strtolower|ucwords'
@@ -48,7 +49,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-	protected $fillable = ['id', 'first_name', 'last_name', 'username', 'email', 'phone', 'active', 'password'];
+	protected $fillable = ['id', 'first_name', 'last_name', 'username', 'email', 'phone', 'active', 'password', 'ip_address', 'enroller_id'];
 
 	protected $appends = array('full_name', 'user_id');
 

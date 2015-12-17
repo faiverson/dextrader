@@ -12,46 +12,24 @@ class MerchantCharges extends Migration
      */
     public function up()
     {
-		Schema::create('leads', function (Blueprint $table) {
-			$table->bigIncrements('id');
-
-			$table->integer('funnel_id')->unsigned();
-			$table->foreign('funnel_id')->references('id')->on('marketing_links')
-				->onUpdate('cascade')->onDelete('cascade');
-
-			$table->string('first_name', 50)->nullable(false);
-			$table->string('last_name', 50)->nullable(false);
-			$table->string('username', 50)->nullable(false)->unique('username');
-			$table->string('email')->nullable(false)->unique('email');
-			$table->string('phone', 15);
-			$table->text('data'); // like IP, browser, etc
-
-			$table->timestamps();
-		});
-
-		Schema::create('merchant_charges', function (Blueprint $table) {
+		Schema::create('gateway_transactions', function (Blueprint $table) {
 			$table->bigIncrements('id');
 
 			$table->bigInteger('user_id')->unsigned();
-			$table->foreign('user_id')->references('id')->on('users')->nullable();
+			$table->foreign('user_id')->references('id')->on('users');
 
-			$table->bigInteger('lead_id')->unsigned();
-			$table->foreign('lead_id')->references('id')->on('users')->nullable();
-
-			$table->bigInteger('card_id')->unsigned();
-			$table->foreign('card_id')->references('id')->on('credit_cards')
-				->onUpdate('cascade')->onDelete('cascade');
+			$table->bigInteger('purchase_id')->unsigned();
+			$table->foreign('purchase_id')->references('id')->on('purchases');
 
 			$table->string('status', 50)->nullable();
-			$table->string('response', 250)->nullable();
-			$table->string('capture_status', 250)->nullable();
-			$table->integer('auth_number')->nullable();
-			$table->string('amount')->nullable();
-			$table->integer('last_four')->nullable();
+			$table->string('authcode')->nullable();
+			$table->string('transactionid')->nullable();
+			$table->string('orderid')->nullable();
 
-//			$table->dateTime('refunded_at')->nulleable(false)->default(null);
-//			$table->integer('refunded_id')->unsigned();
-//			$table->foreign('refunded_id')->references('id')->on('refunds')->nullable();
+			$table->string('avsresponse', 250)->nullable();
+			$table->string('cvvresponse', 250)->nullable();
+			$table->string('type', 50)->nullable();
+			$table->string('response_code', 50)->nullable();
 			$table->timestamps();
 		});
     }
@@ -64,7 +42,6 @@ class MerchantCharges extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-		Schema::drop('leads');
-		Schema::drop('merchant_charges');
+		Schema::drop('gateway_transactions');
 		DB::statement('SET FOREIGN_KEY_CHECKS = 1');    }
 }

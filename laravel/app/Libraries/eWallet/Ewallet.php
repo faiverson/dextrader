@@ -23,11 +23,11 @@ class eWallet
 
 	public function __construct($user)
 	{
-		$this->merchantName = Config('ewallet.merchant');
-		$this->merchantGUID = Config('ewallet.guid');
-		$this->eWalletURL = Config('ewallet.url');
-		$this->merchantPassword = Config('ewallet.password');
-		$this->merchantLogin = Config('ewallet.login');
+		$this->merchantName = Config::get('ewallet.merchant');
+		$this->merchantGUID = Config::get('ewallet.guid');
+		$this->eWalletURL = Config::get('ewallet.url');
+		$this->merchantPassword = Config::get('ewallet.password');
+		$this->merchantLogin = Config::get('ewallet.login');
 		$this->user = $user;
 		$this->userId = $user->id;
 	}

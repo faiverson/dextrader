@@ -120,27 +120,10 @@ class CardsController extends Controller
 			return response()->error('The credit card does not belong to the user or is not in the system');
 		}
 
-//		$number = $request->input('number');
-		$type = $request->input('type');
-//		$card = Cards::validCreditCard($number, $type);
-		// check if the number is valid
-//		if (!$card['valid']) {
-//			return response()->error('The credit card number is not valid number');
-//		}
-
-		// check if the card is unique
-//		if(CreditCard::where('id', '!=', $card_id)->where('number', Encrypt::encrypt($number))->count() > 0) {
-//			return response()->error('The credit card is in the system');
-//		}
-
 		$cc->name = $request->input('name');
 		$cc->exp_month = $request->input('month');
 		$cc->exp_year = $request->input('year');
-//		$cc->number = Encrypt::encrypt($number);
 		$cc->network = $request->input('network');
-//		$cc->first_six = substr($number, 0, 6);
-//		$cc->last_four = substr($number, -4);
-//		$cc->network = $type ? $type : $card['type'];
 		$cc->save();
         return response()->ok();
     }

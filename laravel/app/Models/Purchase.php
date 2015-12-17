@@ -29,12 +29,19 @@ class Purchase extends Model
      * @var array
      */
 	protected $fillable = [
-		'id',
 		'user_id',
+		'first_name',
+		'last_name',
+		'email',
+		'ip_address',
+
 		'enroller_id',
 		'funnel_id',
 		'product_id',
+		'product_name',
 		'product_amount',
+		'product_discount',
+		'amount',
 		'billing_address',
 		'billing_address2',
 		'billing_city',
@@ -42,13 +49,15 @@ class Purchase extends Model
 		'billing_country',
 		'billing_zip',
 		'billing_phone',
+
+		'card_id',
 		'card_name',
 		'card_exp_month',
 		'card_exp_year',
-		'card_network',
+		'card_network' ,
 		'card_first_six',
 		'card_last_four',
-		'info'
+		'info',
 	];
 
 	protected $appends = array('purchase_id');

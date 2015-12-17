@@ -81,7 +81,7 @@ class UserSeeder extends Seeder
 		foreach(range(1, $total_batch) as $batch) {
 			$this->command->info("Starting batch " . $batch . " of " . $total_batch);
 			$users = [];
-			foreach (range(1, 50) as $index) {
+			foreach (range(1, 30) as $index) {
 				try {
 					$users[] = [
 						'first_name' => $faker->firstName,
