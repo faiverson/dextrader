@@ -25,6 +25,7 @@ class Commissions extends Migration
 			$table->foreign('purchase_id')->references('id')->on('purchases');
 
 			$table->decimal('amount', 10, 2)->signed()->nullable(false);
+			$table->enum('type', ['enroller', 'parent', 'admin', 'refund'])->default('enroller');
 			$table->timestamp('payout_dt')->nullable();
 			$table->timestamp('refund_dt')->nullable();
 			$table->bigInteger('refund_by')->unsigned()->nullable();

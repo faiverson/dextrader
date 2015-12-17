@@ -17,6 +17,8 @@ use Encrypt;
 use DB;
 use GeoIP;
 use Role;
+use Gateway;
+use App\Libraries\nmi\nmi;
 
 class PurchasesController extends Controller
 {
@@ -41,6 +43,7 @@ class PurchasesController extends Controller
 	 */
 	public function checkout(Request $request)
 	{
+
 		$rules = [
 			'first_name' => 'required',
 			'last_name' => 'required',
@@ -51,12 +54,12 @@ class PurchasesController extends Controller
 			'city' => 'required',
 			'state' => 'required',
 			'country' => 'required',
-			'zip' => ['regex:/^[0-9]{4,5}$/'],
+			'zip' => ['required','regex:/^[0-9]{4,5}$/'],
 			'card_name' => 'required',
-			'month' => ['regex:/^(0?[1-9]|1[012])$/'],
-			'year' => ['regex:/^[0-9]{2}$/'],
-			'number' => ['regex:/^[0-9]{14,16}$/'],
-			'cvv' => ['regex:/^[0-9]{3,4}$/']
+			'month' => ['required','regex:/^(0?[1-9]|1[012])$/'],
+			'year' => ['required','regex:/^[0-9]{2}$/'],
+			'number' => ['required','regex:/^[0-9]{14,16}$/'],
+			'cvv' => ['required', 'regex:/^[0-9]{3,4}$/']
 		];
 
 		$fields = $request->all();
@@ -86,12 +89,17 @@ class PurchasesController extends Controller
 			return response()->error('The credit card is in the system! Please contact support immediately!');
 		}
 
-		$fields['enroller'] = !empty($fields['enroller']) ? $fields['enroller'] : '';
+		$fields['enroller'] = !empty($fields['enroller']) ? $fields['enroller'] : null;
 		$enroller_id = $this->getEnroller($fields['enroller']);
-		$product = Product::find($fields['product_id'])->first();
+		$product = Product::find($fields['product_id']);
+
 		$geo = $this->getGeoIP($request);
 		$role = Role::where('name', $product->name)->first(array('id'));
-		$data = !empty($fields['data']) ? $fields['data'] : null;
+		if(empty($fields['data'])) {
+			$data = json_encode($geo);
+		} else {
+			$data = json_encode(array_merge($geo, $fields['data']));
+		}
 
 		DB::beginTransaction();
 		try {
@@ -102,6 +110,8 @@ class PurchasesController extends Controller
 				'username' => $fields['username'],
 				'password' => bcrypt($fields['password']),
 				'phone' => $fields['phone'] ? $fields['phone'] : null,
+				'ip_address' => $request->ip(),
+				'enroller_id' => $enroller_id
 			]);
 			$user->attachRole($role->id);
 
@@ -115,6 +125,7 @@ class PurchasesController extends Controller
 				'zip' => $fields['zip'],
 				'phone' => empty($fields['billing_phone']) ? null : $fields['billing_phone'],
 			]);
+
 			$cc = CreditCard::create([
 				'user_id' => $user->id,
 				'name' => $fields['card_name'],
@@ -125,8 +136,16 @@ class PurchasesController extends Controller
 				'first_six' => $first_six,
 				'last_four' => $last_four
 			]);
-			$fields['user_id'] = $user->id;
+
 			$purchase = $this->purchase($user, $billing, $cc, $product, $fields['funnel_id'], $enroller_id, $data);
+		} catch(\Exception $e) {
+			DB::rollback();
+			throw $e;
+		}
+		DB::commit();
+		DB::beginTransaction();
+		try {
+			$this->gateway($purchase, $fields['number'], $fields['cvv']);
 		} catch(\Exception $e) {
 			DB::rollback();
 			throw $e;
@@ -143,12 +162,24 @@ class PurchasesController extends Controller
      */
     public function purchase(User $user, BillingAddress $billing, CreditCard $cc, Product $product, $funnel_id, $enroller_id = null, $data = array())
     {
+		$price = number_format($product->amount - ($product->amount * $product->discount), 2, '.', '');
 		$purchase = Purchase::create([
+			//user info
 			'user_id' => $user->id,
+			'first_name' => $user->first_name,
+			'last_name' => $user->last_name,
+			'email' => $user->email,
+			'ip_address' => $user->ip_address,
+
 			'enroller_id' => $enroller_id,
 			'funnel_id' => $funnel_id,
+			// product info
 			'product_id' => $product->product_id,
+			'product_name' => $product->name,
 			'product_amount' => $product->amount,
+			'product_discount' => $product->discount,
+			'amount' => $price,
+
 			// billing address
 			'billing_address' => $billing->address,
 			'billing_address2' => empty($billing->address2) ? '' : $billing->address2,
@@ -157,37 +188,34 @@ class PurchasesController extends Controller
 			'billing_country' => $billing->country,
 			'billing_zip' => $billing->zip,
 			'billing_phone' => empty($billing->phone) ? null : $billing->phone,
+
 			// CC data
+			'card_id' => $cc->id,
 			'card_name' => $cc->name,
 			'card_exp_month' => $cc->exp_month,
 			'card_exp_year' => $cc->exp_year,
 			'card_network' => $cc->network,
 			'card_first_six' => $cc->first_six,
 			'card_last_four' => $cc->last_four,
-			'info' => $data,
+			'info' => $data
 		]);
 
 		if($enroller_id) {
 			$this->applyCommissions($purchase);
 		}
 
-		$this->emailPurchase($purchase, $user, $product);
+		$this->emailPurchase($purchase);
         return $purchase;
     }
 
-	public function emailPurchase(Purchase $purchase, User $user, Product $product)
+	public function emailPurchase(Purchase $purchase)
 	{
-		$user->email = 'fa.iverson@gmail.com';
-		$params = [
-			'user' => $user,
-			'purchase' => $purchase,
-			'product' => $product
-		];
+		$purchase->email = 'fa.iverson@gmail.com';
 		$beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-		$beautymail->send('emails.purchase', $params, function ($message) use ($user) {
+		$beautymail->send('emails.purchase', ['purchase' => $purchase], function ($message) use ($purchase) {
 			$message
 				->from(Config::get('dextrader.from'))
-				->to($user->email)
+				->to($purchase->email)
 				->subject('Yey! Your purchase has been approved!');
 		});
 	}
@@ -201,12 +229,45 @@ class PurchasesController extends Controller
 				'from_user_id' => $purchase->user_id,
 				'to_user_id' => $purchase->enroller_id,
 				'purchase_id' => $purchase->id,
-				'amount' => $purchase->product_amount * Config::get('dextrader.comms'),
+				'amount' => $purchase->amount * Config::get('dextrader.comms'),
 			]);
+			$parent = User::find($purchase->enroller_id);
+			if($parent->enroller_id > 0) {
+				Commission::create([
+					'from_user_id' => $purchase->user_id,
+					'to_user_id' => $parent->enroller_id,
+					'purchase_id' => $purchase->id,
+					'type' => 'parent',
+					'amount' => $purchase->amount * Config::get('dextrader.parent_comms'),
+				]);
+			}
 			return $comms;
 		}
 
 		return false;
+	}
+
+	public function gateway(Purchase $purchase, $number, $ccv)
+	{
+		$nmi = new NMI;
+		$response = $nmi->purchase($purchase, $number, $ccv);
+		Gateway::create([
+			'user_id' => $purchase->user_id,
+			'purchase_id' => $purchase->id,
+			'status' => $response['responsetext'],
+			'authcode' => $response['authcode'],
+			'transactionid' => $response['transactionid'],
+			'orderid' => $response['orderid'],
+			'avsresponse' => $response['avsresponse'],
+			'cvvresponse' => $response['cvvresponse'],
+			'type' => $response['type'],
+			'response_code' => $response['response_code']
+		]);
+
+		if($response['response'] === "1") {
+			$purchase->paid = 1;
+			$purchase->save();
+		}
 	}
 
     /**

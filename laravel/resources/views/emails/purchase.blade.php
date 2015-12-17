@@ -6,7 +6,7 @@
         'level' => 'h1',
     ])
 	@include('beautymail::templates.sunny.contentStart', ['color' => '#0000FF'])
-	<h3>Hello {{$user->first_name}} {{$user->last_name}},</h3>
+	<h3>Hello {{$purchase->first_name}} {{$purchase->last_name}},</h3>
 	<p> These is the information regarding to your purchase: <br/>
 		<table>
 			<tr>
@@ -43,11 +43,11 @@
 			</tr>
 			<tr>
 				<td>Product:</td>
-				<td>{{$product->display_name}}</td>
+				<td>{{$purchase->product_name}}</td>
 			</tr>
 			<tr>
 				<td>Amount:</td>
-				<td>{{$purchase->product_amount}}</td>
+				<td>{{$purchase->amount}}</td>
 			</tr>
 		</table>
 	</p>

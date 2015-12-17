@@ -16,8 +16,8 @@ class Products extends Migration
 			$table->smallIncrements('id');
 			$table->string('name');
 			$table->string('display_name');
-			$table->decimal('amount', 10, 2)->nullable(false);
-			$table->decimal('discount', 10, 2)->default(0);
+			$table->decimal('amount', 10, 2)->signed()->nullable(false);
+			$table->decimal('discount', 10, 2)->signed()->default(0);
 			$table->tinyInteger('active')->nullable(false)->default(1);
 			$table->timestamps();
 			$table->softDeletes();
