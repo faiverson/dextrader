@@ -261,7 +261,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             var endpoint = service,
                 deferred = $q.defer();
 
-            if(angular.isUndefined(id)){
+            if (angular.isUndefined(id)) {
                 deferred.reject('Card id is required!');
             }
 
@@ -280,7 +280,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
-        function save(data){
+        function save(data) {
             var endpoint = service,
                 deferred = $q.defer();
 
@@ -293,12 +293,12 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             }
 
 
-            if(angular.isDefined(data.cc_id)){
+            if (angular.isDefined(data.cc_id)) {
                 endpoint += '/' + data.cc_id;
 
                 $http.put(endpoint, data)
                     .then(success, error);
-            }else{
+            } else {
                 $http.post(endpoint, data)
                     .then(success, error);
             }
@@ -339,7 +339,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             var endpoint = service,
                 deferred = $q.defer();
 
-            if(angular.isUndefined(id)){
+            if (angular.isUndefined(id)) {
                 deferred.reject('Address id is required!');
             }
 
@@ -358,7 +358,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
-        function save(data){
+        function save(data) {
             var endpoint = service,
                 deferred = $q.defer();
 
@@ -371,12 +371,12 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             }
 
 
-            if(angular.isDefined(data.address_id)){
+            if (angular.isDefined(data.address_id)) {
                 endpoint += '/' + data.address_id;
 
                 $http.put(endpoint, data)
                     .then(success, error);
-            }else{
+            } else {
                 $http.post(endpoint, data)
                     .then(success, error);
             }
@@ -511,10 +511,39 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
+        function download(id) {
+            var deferred = $q.defer(),
+                endpoint = service + '/certification/download';
+
+
+            if (angular.isUndefined(id)) {
+                deferred.reject();
+            }
+
+            endpoint += '/' + id;
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            $http({
+                method: 'GET',
+                url: endpoint,
+                responseType: 'arraybuffer'
+            }).then(success, error);
+
+            return deferred.promise;
+        }
+
         return {
             queryAffiliates: queryAffiliates,
             queryDexIB: queryDexIB,
-            unlockTraining: unlockTraining
+            unlockTraining: unlockTraining,
+            download: download
         };
     }])
 

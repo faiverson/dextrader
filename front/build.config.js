@@ -20,7 +20,7 @@ module.exports = {
         ' */\n\n'
     },
     port: 8000,
-    paths: {  
+    paths: {
         input: 'src/**/*',
         output: '../public_html/front/',
         server_path: '../public_html'
@@ -48,6 +48,7 @@ module.exports = {
                 'vendor/angular-sanitize/angular-sanitize.js',
                 'vendor/angular-moment/angular-moment.js',
                 'vendor/moment/min/moment.min.js',
+                'vendor/angular-file-saver/dist/angular-file-saver.bundle.js',
                 'vendor/angular-ui-mask/dist/mask.js'
             ],
             output: 'vendor.js'

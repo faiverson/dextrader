@@ -16,7 +16,8 @@
     "ui-select": "angular-ui-select#~0.13.2",
     "angular-moment": "~0.10.3",
     "moment": "~2.10.6",
-    "angular-ui-mask": "~1.6.5"
+    "angular-ui-mask": "~1.6.5",
+    "angular-file-saver": "~1.0.2"
   },
   "devDependencies": {
     "angular-cookies": "~1.4.7",

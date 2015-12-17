@@ -1,4 +1,4 @@
-angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-resources'])
+angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-resources', 'ngFileSaver'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('affiliates', {
@@ -129,7 +129,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
 
     }])
 
-    .controller('TrainingCtrl', ['$scope', 'TrainingService', function ($scope, TrainingService) {
+    .controller('TrainingCtrl', ['$scope', 'TrainingService', 'FileSaver', 'Notification', function ($scope, TrainingService, FileSaver, Notification) {
 
         var vm = this;
 
@@ -155,6 +155,18 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
         };
 
         vm.init();
+
+        $scope.download = function(training){
+            TrainingService.download(training.training_id)
+                .then(function(res){
+                    var blob = new Blob([res], {type: "application/octet-stream"});
+                    FileSaver.saveAs(blob, training.filename);
+
+                },
+                function(err){
+                    Notification.error('File not found!');
+                });
+        };
 
         $scope.setVideo = function (video) {
 

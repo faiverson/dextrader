@@ -131,7 +131,7 @@ class Trainings extends Controller
 //				return view('errors.404', array('error' => 'The user does not unblock the video.'));
 			}
 		}
-		return Files::download('trainings/' . $doc->filename, true);
+		return Files::download('trainings/' . $doc->filename, true, $doc->filename);
 	}
 
 	/**
