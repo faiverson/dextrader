@@ -11,14 +11,14 @@ class MarketingLinksSeeder extends Seeder
      */
     public function run()
     {
-		if (App::Environment() === 'local') {
+		//if (App::Environment() === 'local') {
 			$this->fetching();
-		}
+		//}
 
     }
 
 	public function fetching()
 	{
-		factory(App\Models\MarketingLink::class, 20)->create();
+		factory(App\Models\MarketingLink::class, 2)->create();
 	}
 }
