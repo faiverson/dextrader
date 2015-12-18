@@ -232,6 +232,7 @@ return [
         'Country' => App\Models\Country::class,
         'City' => App\Models\City::class,
 		'Gateway' => App\Models\Gateway::class,
+		'CommingSoon' => App\Models\CommingSoon::class,
     ],
 
 ];

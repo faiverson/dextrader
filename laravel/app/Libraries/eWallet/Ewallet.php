@@ -63,16 +63,17 @@ class eWallet
 
 		$curl = cURL::post($this->eWalletURL, $info);
 		$response = $this->parseResponse($curl->body);
+
 		Log::info('eWallet user: '. $this->userId, $response);
 		if ($response['code'] == 'USERNAME_EXISTS') {
 			// we override the response because we want to autologin the user
-			$response = $this->login();
+			$this->login();
 		}
 
 		return $response;
 	}
 
-	public function login()
+	protected function login()
 	{
 		$user = $this->user->toArray();
 
@@ -84,7 +85,7 @@ class eWallet
 		);
 
 		$curl = cURL::post($this->eWalletURL, $info);
-//		Log::info('eWallet user check: '. $this->userId, $curl->body);
+		//Log::info('eWallet user check: '. $this->userId, $curl->body);
 		$response = $this->parseResponse($curl->body);
 
 		return $response;

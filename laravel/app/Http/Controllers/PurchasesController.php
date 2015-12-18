@@ -43,7 +43,6 @@ class PurchasesController extends Controller
 	 */
 	public function checkout(Request $request)
 	{
-
 		$rules = [
 			'first_name' => 'required',
 			'last_name' => 'required',
@@ -54,7 +53,7 @@ class PurchasesController extends Controller
 			'city' => 'required',
 			'state' => 'required',
 			'country' => 'required',
-			'zip' => ['required','regex:/^[0-9]{4,5}$/'],
+			'zip' => ['required'],
 			'card_name' => 'required',
 			'month' => ['required','regex:/^(0?[1-9]|1[012])$/'],
 			'year' => ['required','regex:/^[0-9]{2}$/'],

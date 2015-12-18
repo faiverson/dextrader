@@ -22,6 +22,9 @@ class LeadsProductsCommingSoon extends Migration
 			$table->smallInteger('product_id')->unsigned();
 			$table->foreign('product_id')->references('id')->on('products')
 				->onUpdate('cascade')->onDelete('cascade');
+
+			$table->string('email')->nullable(false);
+			$table->string('phone')->nullable();
 			$table->timestamps();
 		});
     }

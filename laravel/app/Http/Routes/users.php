@@ -8,6 +8,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 	Route::delete('/users', 'UsersController@destroy');
 
 	Route::post('/users/ewallet', 'UsersController@createEwallet');
+	Route::post('/users/comming-soon', 'CommingSoonController@addUser');
 
 	// check if it's the user
 	Route::group(['middleware' => 'is.user'], function () {
@@ -26,6 +27,5 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 		Route::delete('/users/{id}/billing-address/{address_id}', 'BillingAddressController@destroy')->where('id', '[0-9]+')->where('address_id', '[0-9]+');
 
 		Route::get('/users/{id}/invoices', 'PurchasesController@index')->where('id', '[0-9]+');
-
 	});
 });
