@@ -2689,16 +2689,16 @@
         },
         {
             "name": "yajra/laravel-datatables-oracle",
-            "version": "v5.12.4",
+            "version": "v5.12.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yajra/laravel-datatables.git",
-                "reference": "e1bca1f60d51a468e5bea791b750747647fdc4fe"
+                "reference": "4cc8d86de795af03c5f320711a9645b8a295b95f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yajra/laravel-datatables/zipball/e1bca1f60d51a468e5bea791b750747647fdc4fe",
-                "reference": "e1bca1f60d51a468e5bea791b750747647fdc4fe",
+                "url": "https://api.github.com/repos/yajra/laravel-datatables/zipball/4cc8d86de795af03c5f320711a9645b8a295b95f",
+                "reference": "4cc8d86de795af03c5f320711a9645b8a295b95f",
                 "shasum": ""
             },
             "require": {
@@ -2740,7 +2740,7 @@
                 "laravel4",
                 "laravel5"
             ],
-            "time": "2015-12-02 08:39:12"
+            "time": "2015-12-18 00:56:03"
         },
         {
             "name": "zizaco/entrust",

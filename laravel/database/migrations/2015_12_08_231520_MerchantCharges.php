@@ -21,6 +21,11 @@ class MerchantCharges extends Migration
 			$table->bigInteger('purchase_id')->unsigned();
 			$table->foreign('purchase_id')->references('id')->on('purchases');
 
+			$table->bigInteger('subscription_id')->unsigned();
+			$table->foreign('subscription_id')
+				->references('id')->on('subscriptions')
+				->onUpdate('cascade')->onDelete('cascade');
+
 			$table->string('status', 50)->nullable();
 			$table->string('authcode')->nullable();
 			$table->string('transactionid')->nullable();

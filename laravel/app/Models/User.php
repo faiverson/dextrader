@@ -25,7 +25,7 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $table = 'users';
 
-	protected $dates = ['created_at', 'updated_at'];
+	protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
 	protected $maps = [
 		'user_id' => 'id',
@@ -44,6 +44,11 @@ class User extends Model implements AuthenticatableContract,
 		'last_name' => 'strtolower|ucwords'
 	];
 
+	// http://stackoverflow.com/questions/17232714/add-a-custom-attribute-to-a-laravel-eloquent-model-on-load
+//	protected $attributes = array(
+//		'user_id' => '',
+//	);
+
     /**
      * The attributes that are mass assignable.
      *
@@ -58,7 +63,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $hidden = ['id', 'password', 'remember_token', 'active' , 'deleted_at'];
+    protected $hidden = ['id', 'password', 'remember_token', 'active', 'deleted_at'];
 
 	public function setPhoneAttribute($value)
 	{

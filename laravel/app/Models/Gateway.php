@@ -27,6 +27,7 @@ class Gateway extends Model
 	protected $fillable = [
 		'user_id',
 		'purchase_id',
+		'subscription_id',
 		'status',
 		'authcode',
 		'transactionid',

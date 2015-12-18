@@ -35,6 +35,7 @@ class Purchase extends Model
 		'email',
 		'ip_address',
 
+		'subscription_id',
 		'enroller_id',
 		'funnel_id',
 		'product_id',

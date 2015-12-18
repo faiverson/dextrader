@@ -53,7 +53,7 @@ class BillingAddressController extends Controller
 			'city' => 'required',
 			'state' => 'required',
 			'country' => 'required',
-			'zip' => ['regex:/^[0-9]{4,5}$/']
+			'zip' => 'required'
 		];
 		$fields = $request->all();
 		$fields['user_id'] = $user_id;
