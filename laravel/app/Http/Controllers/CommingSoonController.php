@@ -13,9 +13,9 @@ class CommingSoonController extends Controller
      * Display a listing of roles
      *
      */
-    public function index()
+    public function index(Request $request)
     {
-		$list = CommingSoon::all();
+		$list = CommingSoon::with('users')->where('product_id', $request->product_id)->get();
 		return response()->ok($list);
 	}
 

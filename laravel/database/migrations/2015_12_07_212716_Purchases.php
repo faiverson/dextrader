@@ -40,6 +40,11 @@ class Purchases extends Migration
 				->references('id')->on('marketing_links')
 				->onUpdate('cascade')->onDelete('cascade');
 
+			$table->bigInteger('subscription_id')->unsigned();
+			$table->foreign('subscription_id')
+				->references('id')->on('subscriptions')
+				->onUpdate('cascade')->onDelete('cascade');
+
 			$table->bigInteger('card_id')->unsigned()->nullable(false);
 			$table->string('card_name', 150)->nullable(false);
 			$table->smallInteger('card_exp_month')->nullable(false);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use CreditCard;
+use Faker\Provider\cs_CZ\DateTime;
 use Illuminate\Support\Facades\Config;
 use User;
 use Illuminate\Http\Request;
@@ -18,6 +19,7 @@ use DB;
 use GeoIP;
 use Role;
 use Gateway;
+use Subscription;
 use App\Libraries\nmi\nmi;
 
 class PurchasesController extends Controller
@@ -53,7 +55,7 @@ class PurchasesController extends Controller
 			'city' => 'required',
 			'state' => 'required',
 			'country' => 'required',
-			'zip' => ['required'],
+			'zip' => 'required',
 			'card_name' => 'required',
 			'month' => ['required','regex:/^(0?[1-9]|1[012])$/'],
 			'year' => ['required','regex:/^[0-9]{2}$/'],
@@ -136,7 +138,9 @@ class PurchasesController extends Controller
 				'last_four' => $last_four
 			]);
 
-			$purchase = $this->purchase($user, $billing, $cc, $product, $fields['funnel_id'], $enroller_id, $data);
+			$sub = $this->addSubscription($user, $billing, $cc, $product, $enroller_id);
+
+			$purchase = $this->purchase($user, $billing, $cc, $product, $sub, $fields['funnel_id'], $enroller_id, $data);
 		} catch(\Exception $e) {
 			DB::rollback();
 			throw $e;
@@ -144,7 +148,7 @@ class PurchasesController extends Controller
 		DB::commit();
 		DB::beginTransaction();
 		try {
-			$this->gateway($purchase, $fields['number'], $fields['cvv']);
+			$this->gateway($sub, $purchase, $fields['number'], $fields['cvv']);
 		} catch(\Exception $e) {
 			DB::rollback();
 			throw $e;
@@ -159,9 +163,9 @@ class PurchasesController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function purchase(User $user, BillingAddress $billing, CreditCard $cc, Product $product, $funnel_id, $enroller_id = null, $data = array())
+    public function purchase(User $user, BillingAddress $billing, CreditCard $cc, Product $product, Subscription $sub, $funnel_id, $enroller_id = null, $data = array())
     {
-		$price = number_format($product->amount - ($product->amount * $product->discount), 2, '.', '');
+		$price = $this->getPrice($product);
 		$purchase = Purchase::create([
 			//user info
 			'user_id' => $user->id,
@@ -169,6 +173,7 @@ class PurchasesController extends Controller
 			'last_name' => $user->last_name,
 			'email' => $user->email,
 			'ip_address' => $user->ip_address,
+			'subscription_id' => $sub->id,
 
 			'enroller_id' => $enroller_id,
 			'funnel_id' => $funnel_id,
@@ -209,7 +214,7 @@ class PurchasesController extends Controller
 
 	public function emailPurchase(Purchase $purchase)
 	{
-		$purchase->email = 'fa.iverson@gmail.com';
+		$purchase->email = 'fa.iverson@gmail.com'; // @TODO remove please
 		$beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
 		$beautymail->send('emails.purchase', ['purchase' => $purchase], function ($message) use ($purchase) {
 			$message
@@ -217,6 +222,18 @@ class PurchasesController extends Controller
 				->to($purchase->email)
 				->subject('Yey! Your purchase has been approved!');
 		});
+	}
+
+	public function emailComms(User $user)
+	{
+//		$purchase->email = 'fa.iverson@gmail.com'; // @TODO remove please
+//		$beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+//		$beautymail->send('emails.comms', ['purchase' => $purchase], function ($message) use ($purchase) {
+//			$message
+//				->from(Config::get('dextrader.from'))
+//				->to($purchase->email)
+//				->subject('Yey! Your receive a new commission!');
+//		});
 	}
 
 	public function applyCommissions(Purchase $purchase)
@@ -246,13 +263,29 @@ class PurchasesController extends Controller
 		return false;
 	}
 
-	public function gateway(Purchase $purchase, $number, $ccv)
+	public function addSubscription(User $user, BillingAddress $billing, CreditCard $cc, Product $product, $enroller_id)
+	{
+		$now = DateTime('now');
+		return Subscription::create([
+			'user_id' => $user->id,
+			'enroller_id' => $enroller_id,
+			'card_id' => $cc->id,
+			'billing_address_id' => $billing->id,
+			'product_id' => $billing->id,
+			'amount' => $this->getPrice($product),
+			'last_billing' => $now->format('Y-m-d'),
+			'next_billing' => $now->format('Y-m-d')
+		]);
+	}
+
+	public function gateway(Subscription $sub, Purchase $purchase, $number, $ccv)
 	{
 		$nmi = new NMI;
 		$response = $nmi->purchase($purchase, $number, $ccv);
 		Gateway::create([
 			'user_id' => $purchase->user_id,
 			'purchase_id' => $purchase->id,
+			'subscription_id' => $sub->id,
 			'status' => $response['responsetext'],
 			'authcode' => $response['authcode'],
 			'transactionid' => $response['transactionid'],
@@ -266,7 +299,15 @@ class PurchasesController extends Controller
 		if($response['response'] === "1") {
 			$purchase->paid = 1;
 			$purchase->save();
+			$sub->status = 'active';
+
+			$billing = DateTime($sub->next_billing);
+			$sub->next_billing = $billing->add(new DateInterval('P1M'))->format('Y-m-d');
 		}
+		else {
+			$sub->attempts_billing = $sub->attempts_billing + 1;
+		}
+		$sub->save();
 	}
 
     /**
@@ -289,5 +330,10 @@ class PurchasesController extends Controller
 	protected function getGeoIP(Request $request)
 	{
 		return GeoIP::getLocation($request->ip());
+	}
+
+	protected function getPrice(Product $product)
+	{
+		return number_format($product->amount - ($product->amount * $product->discount), 2, '.', '');
 	}
 }

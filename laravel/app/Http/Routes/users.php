@@ -9,6 +9,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 
 	Route::post('/users/ewallet', 'UsersController@createEwallet');
 	Route::post('/users/comming-soon', 'CommingSoonController@addUser');
+	Route::get('/users/comming-soon/{product_id}', 'CommingSoonController@index')->where('product_id', '[0-9]+');
 
 	// check if it's the user
 	Route::group(['middleware' => 'is.user'], function () {
