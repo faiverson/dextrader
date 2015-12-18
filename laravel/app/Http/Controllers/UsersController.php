@@ -182,6 +182,7 @@ class UsersController extends Controller
 				$settings->save();
 			}
 		}
+
 		return response()->ok($response);
 	}
 }

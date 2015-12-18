@@ -95,16 +95,20 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
 
     }])
 
-    .controller('HowItWorksCtrl', ['$scope', 'EWalletService', function ($scope, EWalletService) {
+    .controller('HowItWorksCtrl', ['$scope', 'EWalletService', 'Notification', '$site-configs', function ($scope, EWalletService, Notification, $configs) {
         $scope.youTubeVideoId = "lYKRPzOi1zI";
 
         $scope.createEWallet = function () {
             EWalletService.createEWallet()
-                .then(function () {
-
+                .then(function (res) {
+                        if(angular.isDefined(res.data.code) && res.data.code === 'USERNAME_EXISTS'){
+                            window.location.href = $configs.EWALLET_LOGIN;
+                        }else{
+                            Notification.success('Account has created successfully!');
+                        }
                     },
-                    function () {
-
+                    function (err) {
+                        Notification.error(err.data);
                     });
         };
 
