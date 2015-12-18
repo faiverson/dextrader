@@ -85,7 +85,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
 
         if (!AuthService.isLoggedIn()) {
             $state.go('affiliates.upgrade');
-        }else{
+        } else {
             $state.go('affiliates.how_it_works');
         }
 
@@ -95,11 +95,17 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
 
     }])
 
-    .controller('HowItWorksCtrl', ['$scope', function ($scope) {
+    .controller('HowItWorksCtrl', ['$scope', 'EWalletService', function ($scope, EWalletService) {
         $scope.youTubeVideoId = "lYKRPzOi1zI";
 
-        $scope.createEWallet = function(){
+        $scope.createEWallet = function () {
+            EWalletService.createEWallet()
+                .then(function () {
 
+                    },
+                    function () {
+
+                    });
         };
 
         $scope.playerVars = {
@@ -160,16 +166,16 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
 
         vm.init();
 
-        $scope.download = function(training){
+        $scope.download = function (training) {
             TrainingService.download(training.training_id)
-                .then(function(res){
-                    var blob = new Blob([res], {type: "application/octet-stream"});
-                    FileSaver.saveAs(blob, training.filename);
+                .then(function (res) {
+                        var blob = new Blob([res], {type: "application/octet-stream"});
+                        FileSaver.saveAs(blob, training.filename);
 
-                },
-                function(err){
-                    Notification.error('File not found!');
-                });
+                    },
+                    function (err) {
+                        Notification.error('File not found!');
+                    });
         };
 
         $scope.setVideo = function (video) {

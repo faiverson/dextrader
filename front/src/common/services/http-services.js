@@ -735,6 +735,23 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
     }])
 
+    .factory('EWalletService', ['$http', '$q', '$site-configs', function ($http, $q, $configs) {
+        var service = 'commissions';
+
+        function createEWallet() {
+            var endpoint = service,
+                deferred = $q.defer();
+
+            
+            return deferred.promise;
+
+        }
+
+        return {
+            createEWallet: createEWallet
+        };
+    }])
+
     .factory('UserRolesService', ['$http', '$q', '$site-configs', function ($http, $q, $configs) {
         //var service = $configs.API_BASE_URL + 'users';
         function getRoles() {
