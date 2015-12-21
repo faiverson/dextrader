@@ -26,7 +26,7 @@ class CommingSoonController extends Controller
 	public function addUser(Request $request)
 	{
 		$rules = [
-			'product_id' => 'required',
+			'product' => 'required',
 			'email' => 'required'
 		];
 		$user = $request->user();
@@ -47,8 +47,9 @@ class CommingSoonController extends Controller
 		if(!in_array(strtoupper($product), ['NA', 'FX'])) {
 			return response()->error('Wrong product');
 		}
+		$product = Product::where('name', $product);
 
-		$is = CommingSoon::where('user_id', $fields['user_id'])->where('product_id', $fields['product_id'])->count();
+		$is = CommingSoon::where('user_id', $fields['user_id'])->where('product_id', $product->id)->count();
 		if($is > 0) {
 			return response()->error('The user is subscribe already!');
 		}
