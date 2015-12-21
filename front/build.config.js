@@ -120,8 +120,8 @@ module.exports = {
 			replacement: process.env.API_URL + '/api/'
 		},
         {
-            match: 'EWALLET_URL',
-            replacement: process.env.EWALLET_URL
+            match: 'EWALLET_LOGIN',
+            replacement: process.env.EWALLET_LOGIN
         }
 	]
 };

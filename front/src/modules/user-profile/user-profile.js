@@ -237,7 +237,9 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
             };
 
             $scope.selectCCType = function (network) {
-                $scope.card.network = network;
+                if(!angular.isDefined(cc_id)){
+                    $scope.card.network = network;
+                }
             };
 
             $scope.close = function () {

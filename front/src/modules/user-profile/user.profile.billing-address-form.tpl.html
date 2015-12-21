@@ -79,20 +79,22 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group has-feedback" data-show-errors>
-                    <input type="number"
+                    <input type="text"
                            name="zip"
                            class="form-control"
                            id="zip"
                            required
+                           data-ng-maxlength="10"
+                           data-ng-minlength="4"
                            data-ng-model="address.zip"
                            placeholder="Zip">
                     <span class="glyphicon glyphicon-pencil form-control-feedback" aria-hidden="true"></span>
-                    <span class="help-block">Min length: 4, Max length: 5</span>
+                    <span class="help-block">Min length: 4, Max length: 10</span>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group has-feedback" data-show-errors>
-                    <input type="number"
+                    <input type="text"
                            data-ng-minlength="10"
                            data-ng-maxlength="12"
                            name="phone"
