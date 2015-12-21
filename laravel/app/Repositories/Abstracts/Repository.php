@@ -1,8 +1,7 @@
-<?php namespace Repositories\Abstracts;
+<?php namespace App\Repositories\Abstracts;
 
-use Repositories\Contracts\RepositoryInterface;
-use Repositories\Exceptions\RepositoryException;
-
+use App\Models\User;
+use App\Repositories\Contracts\RepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Container\Container as App;
 
@@ -24,11 +23,10 @@ abstract class Repository implements RepositoryInterface {
 
 	/**
 	 * @param App $app
-	 * @throws \Bosnadev\Repositories\Exceptions\RepositoryException
 	 */
 	public function __construct(App $app) {
 		$this->app = $app;
-		$this->makeModel();
+		return $this->model = $app->make($this->model());
 	}
 
 	/**
@@ -42,17 +40,22 @@ abstract class Repository implements RepositoryInterface {
 	 * @param array $columns
 	 * @return mixed
 	 */
-	public function all($columns = array('*')) {
-		return $this->model->get($columns);
-	}
+	public function all($columns = array('*'), $limit = null, $offset = null, $order_by = null) {
+		if($limit != null) {
+			$this->model = $this->model->take($limit);
+		}
 
-	/**
-	 * @param int $perPage
-	 * @param array $columns
-	 * @return mixed
-	 */
-	public function paginate($perPage = 15, $columns = array('*')) {
-		return $this->model->paginate($perPage, $columns);
+		if($offset != null) {
+			$this->model = $this->model->skip($offset);
+		}
+
+		if($order_by != null) {
+			foreach($order_by as $column => $dir) {
+				$this->model = $this->model->orderBy($column, $dir);
+			}
+		}
+
+		return $this->model->get($columns);
 	}
 
 	/**
@@ -77,7 +80,7 @@ abstract class Repository implements RepositoryInterface {
 	 * @param $id
 	 * @return mixed
 	 */
-	public function delete($id) {
+	public function destroy($id) {
 		return $this->model->destroy($id);
 	}
 
@@ -86,7 +89,7 @@ abstract class Repository implements RepositoryInterface {
 	 * @param array $columns
 	 * @return mixed
 	 */
-	public function find($id, $columns = array('*')) {
+	public function find($id, $columns = array('*'), $limit = null, $offset = null) {
 		return $this->model->find($id, $columns);
 	}
 
@@ -96,20 +99,7 @@ abstract class Repository implements RepositoryInterface {
 	 * @param array $columns
 	 * @return mixed
 	 */
-	public function findBy($attribute, $value, $columns = array('*')) {
-		return $this->model->where($attribute, '=', $value)->first($columns);
-	}
-
-	/**
-	 * @return \Illuminate\Database\Eloquent\Builder
-	 * @throws RepositoryException
-	 */
-	public function makeModel() {
-		$model = $this->app->make($this->model());
-
-		if (!$model instanceof Model)
-			throw new RepositoryException("Class {$this->model()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
-
-		return $this->model = $model->newQuery();
+	public function findBy($attribute, $value, $columns = array('*'), $limit = null, $offset = null) {
+		return $this->model->where($attribute, '=', $value)->get($columns);
 	}
 }

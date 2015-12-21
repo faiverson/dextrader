@@ -1,4 +1,4 @@
-<?php namespace App\Repositories;
+<?php namespace App\Repositories\Contracts;
 
 /**
  * RepositoryInterface provides the standard functions to be expected of ANY
@@ -14,7 +14,7 @@ interface RepositoryInterface {
 
 	public function create(array $attributes);
 
-	public function update(array $attributes);
+	public function update(array $attributes, $id, $attribute = "id");
 
 	public function destroy($ids);
 

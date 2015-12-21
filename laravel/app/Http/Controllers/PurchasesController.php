@@ -92,7 +92,7 @@ class PurchasesController extends Controller
 
 		$fields['enroller'] = !empty($fields['enroller']) ? $fields['enroller'] : null;
 		$enroller_id = $this->getEnroller($fields['enroller']);
-		$product = Product::find($fields['product_id']);
+		$product = Product::where('name', $fields['product'])->first();
 
 		$geo = $this->getGeoIP($request);
 		$role = Role::where('name', $product->name)->first(array('id'));

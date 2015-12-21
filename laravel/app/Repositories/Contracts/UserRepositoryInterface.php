@@ -1,6 +1,6 @@
-<?php namespace App\Repositories;
+<?php namespace App\Repositories\Contracts;
 
-use App\Libraries\dtrader\RepositoryInterface;
+use App\Repositories\Contracts\RepositoryInterface;
 /**
  * The UserRepositoryInterface contains ONLY method signatures for methods
  * related to the User object.
@@ -9,6 +9,5 @@ use App\Libraries\dtrader\RepositoryInterface;
  * this interface must also provide all the standard eloquent methods (find, all, etc.)
  */
 interface UserRepositoryInterface extends RepositoryInterface {
-
-	public function findUserByUsername($username);
+	public function actives($columns = array('*'), $limit = null, $offset = null, $order_by = null);
 }
