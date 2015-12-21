@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use CommingSoon;
 use App\Http\Requests;
 use Validator;
+use Product;
 
 class CommingSoonController extends Controller
 {
@@ -47,12 +48,13 @@ class CommingSoonController extends Controller
 		if(!in_array(strtoupper($product), ['NA', 'FX'])) {
 			return response()->error('Wrong product');
 		}
-		$product = Product::where('name', $product);
+		$product = Product::where('name', $product)->first();
 
 		$is = CommingSoon::where('user_id', $fields['user_id'])->where('product_id', $product->id)->count();
 		if($is > 0) {
 			return response()->error('The user is subscribe already!');
 		}
+		$fields['product_id'] = $product->id;
 		$cs = CommingSoon::create($fields);
 		return response()->added();
 	}
