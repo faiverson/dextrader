@@ -6,7 +6,7 @@ use App\Services\HitUpdateValidator;
 use App\Services\HitCreateValidator;
 use App\Repositories\HitRepository;
 use App\Repositories\UserRepository;
-use Tag;
+use App\Repositories\TagRepository;
 
 class HitGateway extends AbstractGateway {
 
@@ -18,21 +18,19 @@ class HitGateway extends AbstractGateway {
 
 	protected $errors;
 
-	public function __construct(HitRepository $repository, UserRepository $user, HitCreateValidator $createValidator, HitUpdateValidator $updateValidator)
+	public function __construct(HitRepository $repository, UserRepository $user, TagRepository $tag, HitCreateValidator $createValidator, HitUpdateValidator $updateValidator)
 	{
 		$this->repository = $repository;
 		$this->createValidator = $createValidator;
 		$this->updateValidator = $updateValidator;
 		$this->user = $user;
+		$this->tag = $tag;
 	}
 
 	public function create(array $data)
 	{
 		if(array_key_exists('tag', $data)) {
-			$tag = Tag::where('title', $data['tag'])->first(['id']);
-			if($tag != null) {
-				$data['tag_id'] = $tag->id;
-			}
+			$data['tag_id'] = $this->tag->getIdByTag($data['tag']);
 		}
 
 		if(array_key_exists('enroller', $data)) {
