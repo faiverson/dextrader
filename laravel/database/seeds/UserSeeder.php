@@ -78,10 +78,13 @@ class UserSeeder extends Seeder
 		$faker = Faker::create();
 		// common users
 		$total_batch = 2;
+		$by_bath = 30;
 		foreach(range(1, $total_batch) as $batch) {
 			$this->command->info("Starting batch " . $batch . " of " . $total_batch);
 			$users = [];
-			foreach (range(1, 30) as $index) {
+
+			foreach (range(1, $by_bath) as $index) {
+				$total = $index * $batch - 1;
 				try {
 					$users[] = [
 						'first_name' => $faker->firstName,
@@ -89,6 +92,9 @@ class UserSeeder extends Seeder
 						'username' => str_replace('.', '_', $faker->unique()->userName),
 						'email' => $faker->unique()->email,
 						'password' => bcrypt('password'),
+						'phone' => rand(0,2) == 0 ? $faker->phoneNumber : null,
+						'enroller_id' => rand(0,2) == 1 ? rand(1, $total) : null,
+						'ip_address' => $faker->ipv4,
 						'created_at' => $faker->dateTimeThisYear('now'),
 						'updated_at' => $faker->dateTimeThisYear('now')
 					];

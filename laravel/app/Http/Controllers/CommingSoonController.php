@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use CommingSoon;
 use App\Http\Requests;
 use Validator;
+use Product;
 
 class CommingSoonController extends Controller
 {
@@ -26,7 +27,7 @@ class CommingSoonController extends Controller
 	public function addUser(Request $request)
 	{
 		$rules = [
-			'product_id' => 'required',
+			'product' => 'required',
 			'email' => 'required'
 		];
 		$user = $request->user();
@@ -42,16 +43,18 @@ class CommingSoonController extends Controller
 			return response()->error($validator->errors()->all());
 		}
 
-		$product_id = $fields['product_id'];
+		$product = $fields['product'];
 		// let's make sure the products are NA or FX
-		if($product_id != 3 && $product_id != 4) {
-			return response()->error('Wrong product ID');
+		if(!in_array(strtoupper($product), ['NA', 'FX'])) {
+			return response()->error('Wrong product');
 		}
+		$product = Product::where('name', $product)->first();
 
-		$is = CommingSoon::where('user_id', $fields['user_id'])->where('product_id', $fields['product_id'])->count();
+		$is = CommingSoon::where('user_id', $fields['user_id'])->where('product_id', $product->id)->count();
 		if($is > 0) {
 			return response()->error('The user is subscribe already!');
 		}
+		$fields['product_id'] = $product->id;
 		$cs = CommingSoon::create($fields);
 		return response()->added();
 	}

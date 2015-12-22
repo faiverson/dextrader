@@ -11,12 +11,13 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 use Sofa\Eloquence\Eloquence; // base trait
 use Sofa\Eloquence\Mappable;
+use Sofa\Eloquence\Mutable;
 
 class User extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
                                     CanResetPasswordContract
 {
-    use Eloquence, Mappable, Authenticatable, CanResetPassword, EntrustUserTrait;
+    use Eloquence, Mutable, Mappable, Authenticatable, CanResetPassword, EntrustUserTrait;
 
     /**
      * The database table used by the model.
@@ -34,7 +35,9 @@ class User extends Model implements AuthenticatableContract,
 	protected $getterMutators = [
 		'first_name' => 'strtolower|ucwords',
 		'last_name' => 'strtolower|ucwords',
-		'fullname' => 'strtolower|ucwords'
+		'username' => 'strtolower|ucwords',
+		'fullname' => 'strtolower|ucwords',
+		'email' => 'strtolower'
 	];
 
 	protected $setterMutators = [
@@ -63,7 +66,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $hidden = ['id', 'password', 'remember_token', 'active', 'deleted_at'];
+    protected $hidden = ['id', 'password', 'remember_token', 'active', 'created_at', 'updated_at', 'deleted_at'];
 
 	public function setPhoneAttribute($value)
 	{

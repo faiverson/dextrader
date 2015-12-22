@@ -149,6 +149,8 @@ return [
 		App\Providers\ResponseServiceProvider::class,
         App\Providers\WorldCountriesCitiesServiceProvider::class,
 
+		App\Providers\RepositoryServiceProvider::class,
+
 		yajra\Datatables\DatatablesServiceProvider::class,
 		Snowfire\Beautymail\BeautymailServiceProvider::class,
 		Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
