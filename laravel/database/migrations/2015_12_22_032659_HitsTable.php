@@ -29,6 +29,11 @@ class HitsTable extends Migration
 				->references('id')->on('campaign_tags')
 				->onUpdate('cascade')->onDelete('cascade');
 
+			$table->smallInteger('product_id')->unsigned()->nullable()->default(null);
+			$table->foreign('product_id')
+				->references('id')->on('products')
+				->onUpdate('cascade')->onDelete('cascade');
+
 			$table->text('info')->nullable();
 			$table->timestamps();
 		});

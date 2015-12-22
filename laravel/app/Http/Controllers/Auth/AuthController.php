@@ -115,7 +115,7 @@ class AuthController extends Controller
 					return response()->error('Wrong Password', 401);
 				}
 
-				$token = Token::page($page->id, '+20 years', 'page_dextrader');
+				$token = Token::page($page->id, '+20 years');
 				if($token) {
 					return response()->ok(compact('token'));
 				}

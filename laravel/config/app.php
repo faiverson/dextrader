@@ -236,6 +236,7 @@ return [
 		'Gateway' => App\Models\Gateway::class,
 		'Subscription' => App\Models\Subscription::class,
 		'CommingSoon' => App\Models\CommingSoon::class,
+		'Hit' => App\Models\Hit::class,
     ],
 
 ];

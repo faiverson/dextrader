@@ -74,7 +74,6 @@ class MerchantCharges extends Migration
 			$table->string('type', 50)->nullable();
 			$table->string('response_code', 50)->nullable();
 			$table->timestamps();
-			$table->index(['refunded_at', 'cancelled_at']);
 		});
     }
 

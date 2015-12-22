@@ -53,7 +53,7 @@ class UsersController extends Controller
     {
 		$fields = $request->all();
 		$fields['ip_address'] = $request->ip();
-		$user = $this->gateway->create($request->all());
+		$user = $this->gateway->create($fields);
 		if(!$user) {
 			return response()->error($this->gateway->errors()->all());
 		}
@@ -69,8 +69,9 @@ class UsersController extends Controller
     public function update(Request $request)
     {
 		$id = $request->user()->id;
+		$fields = $request->all();
 		$fields['ip_address'] = $request->ip();
-		$user = $this->gateway->update($request->all(), $id);
+		$user = $this->gateway->update($fields, $id);
 		if(!$user) {
 			return response()->error($this->gateway->errors()->all());
 		}

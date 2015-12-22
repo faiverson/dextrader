@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use Role;
+use Token;
 /**
  * Class Roles
  *
@@ -38,6 +39,10 @@ class Permissions
 	{
 		if (!$request->user()->can(explode('|', $perms))) {
 			return response()->error('The account being accessed does not have sufficient permissions to execute this operation', 403);
+		}
+		$payload = Token::getPayload($request);
+		if($payload['iss'] != 'user' && $payload['iss'] != 'admin') {
+			return response()->error('Your account being accessed does not have sufficient permissions to execute this operation', 403);
 		}
 
 		return $next($request);

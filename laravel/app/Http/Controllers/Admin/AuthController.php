@@ -13,6 +13,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Http\Request;
 use DB;
 use Hash;
+use Token;
 
 class AuthController extends Controller
 {
@@ -92,15 +93,10 @@ class AuthController extends Controller
 					return response()->error('Not Allowed', 401);
 				}
 
-				$customClaims = $user->toArray();
-				$customClaims['iss'] = 'admin/login';
-				$customClaims['exp'] = strtotime('+7 days', time());
-				unset($customClaims['id']);
-				$token = JWTAuth::fromUser($user, $customClaims);
+				$token = Token::add($u->id, '+1 day', 'admin');
 				if($token) {
 					return response()->ok(compact('token'));
 				}
-
 			}
 			catch (JWTException $e) {
 				return response()->error('Could not create a token', $e->getStatusCode());

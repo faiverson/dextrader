@@ -18,6 +18,7 @@ class RepositoryServiceProvider extends ServiceProvider {
 		// here we can change the UserRepository to use another class with redis ot whatever
 		$this->app->bind('App\Repositories\Contracts\UserRepositoryInterface', 'App\Repositories\UserRepository');
 		$this->app->bind('App\Repositories\Contracts\CardRepositoryInterface', 'App\Repositories\CardRepository');
+		$this->app->bind('App\Repositories\Contracts\HitRepositoryInterface', 'App\Repositories\HitRepository');
 //		$this->app->bind('App\Repositories\Contracts\UserGateway',
 //			function($app) {
 //				return new UserGateway(

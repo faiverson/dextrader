@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
             'last_name' => 'whiting',
             'username' => 'admin',
             'email' => 'fa.iverson@gmail.com',
-            'password' => bcrypt('admin')
+            'password' => 'admin'
         ])->attachRole($role->id);
 
 		$roleAdmin = Role::where('name', 'admin')->first();
@@ -31,7 +31,7 @@ class UserSeeder extends Seeder
 			'last_name' => 'torres',
 			'username' => 'fabian',
 			'email' => 'fabian@gmail.com',
-			'password' => bcrypt('admin')
+			'password' => 'admin'
 		])->attachRole($roleAdmin);
 
 		$role = Role::where('name', 'editor')->first();
@@ -40,7 +40,7 @@ class UserSeeder extends Seeder
 			'last_name' => 'sixfingers',
 			'username' => 'luciano',
 			'email' => 'luciano.sixfingers@gmail.com',
-			'password' => bcrypt('editor')
+			'password' => 'editor'
 		])->attachRole($role);
 
 		User::create([
@@ -48,7 +48,7 @@ class UserSeeder extends Seeder
 			'last_name' => 'borda',
 			'username' => 'juan',
 			'email' => 'juan@borda.com',
-			'password' => bcrypt('editor')
+			'password' => 'editor'
 		])->attachRoles([$role, $roleAdmin]);
 
 		User::create([
@@ -56,7 +56,7 @@ class UserSeeder extends Seeder
 			'last_name' => 'cullins',
 			'username' => 'jcullins',
 			'email' => 'jason.cullins@innovationstechgroup.com',
-			'password' => bcrypt('jcullins')
+			'password' => 'jcullins'
 		])->attachRoles([$roleAdmin]);
 
 		$roleIB = Role::where('name', 'IB')->first();
@@ -65,7 +65,7 @@ class UserSeeder extends Seeder
 				'last_name' => 'IB',
 				'username' => 'dexib',
 				'email' => 'dexib@dexib.com',
-				'password' => bcrypt('password')
+				'password' => 'password'
 		])->attachRoles([$roleIB]);
 
 		if (App::Environment() === 'local') {
@@ -91,7 +91,7 @@ class UserSeeder extends Seeder
 						'last_name' => $faker->lastName,
 						'username' => str_replace('.', '_', $faker->unique()->userName),
 						'email' => $faker->unique()->email,
-						'password' => bcrypt('password'),
+						'password' => 'password',
 						'phone' => rand(0,2) == 0 ? $faker->phoneNumber : null,
 						'enroller_id' => rand(0,2) == 1 ? rand(1, $total) : null,
 						'ip_address' => $faker->ipv4,

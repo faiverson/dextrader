@@ -47,10 +47,6 @@ abstract class AbstractGateway {
 	 */
 	public function update(array $data, $id)
 	{
-		if($data['username']) {
-			unset($data['username']);
-		}
-
 		if( ! $this->updateValidator->with($data)->passes() )
 		{
 			$this->errors = $this->updateValidator->errors();

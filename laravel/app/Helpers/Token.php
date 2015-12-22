@@ -22,7 +22,7 @@ class Token {
 		return $payload->toArray();
 	}
 
-	public static function add($user_id, $expiration = '+7 days', $iss = 'login')
+	public static function add($user_id, $expiration = '+7 days', $iss = 'user')
 	{
 		$user = User::with('roles.permissions')->find($user_id);
 		$customClaims = $user->toArray();
