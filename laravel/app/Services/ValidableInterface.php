@@ -25,5 +25,4 @@ interface ValidableInterface {
 	 * @return array
 	 */
 	public function errors();
-
 }

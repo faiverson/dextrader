@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -17,7 +18,7 @@ class User extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
                                     CanResetPasswordContract
 {
-    use Eloquence, Mutable, Mappable, Authenticatable, CanResetPassword, EntrustUserTrait;
+    use Eloquence, Mutable, Mappable, Authenticatable, CanResetPassword, EntrustUserTrait, SoftDeletes;
 
     /**
      * The database table used by the model.
@@ -38,13 +39,6 @@ class User extends Model implements AuthenticatableContract,
 		'username' => 'strtolower|ucwords',
 		'fullname' => 'strtolower|ucwords',
 		'email' => 'strtolower'
-	];
-
-	protected $setterMutators = [
-		'email' => 'strtolower',
-		'username' => 'strtolower',
-		'first_name' => 'strtolower|ucwords',
-		'last_name' => 'strtolower|ucwords'
 	];
 
 	// http://stackoverflow.com/questions/17232714/add-a-custom-attribute-to-a-laravel-eloquent-model-on-load
@@ -86,6 +80,30 @@ class User extends Model implements AuthenticatableContract,
 	public function getPhoneAttribute()
 	{
 		return preg_replace("/(\d{3})(\d{3})(\d{4})/", "$1/$2/$3", $this->attributes['phone']);
+	}
+
+	public function setPasswordAttribute($value)
+	{
+		$this->attributes['password'] = bcrypt($value);
+	}
+
+	public function setFirstNameAttribute($value)
+	{
+		$this->attributes['first_name'] = ucwords(strtolower($value));
+	}
+
+	public function setLastNameAttribute($value)
+	{
+		$this->attributes['last_name'] = ucwords(strtolower($value));
+	}
+
+	public function setUsernameAttribute($value)
+	{
+		$this->attributes['username'] = strtolower($value);
+	}
+	public function setEmailAttribute($value)
+	{
+		$this->attributes['email'] = strtolower($value);
 	}
 
 //	public function settings()

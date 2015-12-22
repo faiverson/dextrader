@@ -26,6 +26,13 @@ abstract class AbstractValidator implements ValidableInterface {
 	protected $rules = array();
 
 	/**
+	 * Messages
+	 *
+	 * @var array
+	 */
+	protected $messages = array();
+
+	/**
 	 * Validation errors
 	 *
 	 * @var array
@@ -67,7 +74,7 @@ abstract class AbstractValidator implements ValidableInterface {
 	 */
 	public function passes()
 	{
-		$validator = $this->validator->make($this->data, $this->rules);
+		$validator = $this->validator->make($this->data, $this->rules, $this->messages);
 
 		if( $validator->fails() )
 		{
@@ -77,4 +84,6 @@ abstract class AbstractValidator implements ValidableInterface {
 
 		return true;
 	}
+
+	public function custom() {}
 }

@@ -53,7 +53,7 @@ class BillingAddressController extends Controller
 			'city' => 'required',
 			'state' => 'required',
 			'country' => 'required',
-			'zip' => 'required'
+			'zip' => 'alpha_dash'
 		];
 		$fields = $request->all();
 		$fields['user_id'] = $user_id;
