@@ -5,9 +5,9 @@
     </div>
 
     <div id="profile-edit-wrapper">
-        <form name="userForm" novalidate="novalidate">
+        <form name="soonForm" novalidate="novalidate">
             <div class="form-group has-feedback" data-show-errors>
-                <input type="text"
+                <input type="email"
                        name="email"
                        class="form-control"
                        id="email"
@@ -22,12 +22,16 @@
                        name="phone"
                        class="form-control"
                        id="phone"
-                       data-ng-minlength="4"
+                       data-ng-minlength="10"
+                       data-ng-minlength="15"
                        data-ng-model="user.phone"
                        placeholder="Phone">
                 <span class="glyphicon glyphicon-phone form-control-feedback" aria-hidden="true"></span>
             </div>
+            <button class="btn btn-warning submitbutton btn-block bg-orange"
+                    type="submit"
+                    data-ng-disabled="soonForm.$invalid"
+                    data-ng-click="send()">Join The List</button>
         </form>
-        <a class="submitbutton bg-orange" href="#" data-ng-click="save()">Join The List</a>
     </div>
 </section>

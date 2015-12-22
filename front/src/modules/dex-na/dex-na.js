@@ -18,6 +18,36 @@ angular.module('app.dex-na', ['ui.router'])
             });
     })
 
-    .controller('ComingSoonCtrl', ['$scope', function ($scope) {
+    .controller('ComingSoonCtrl', ['$scope', 'UserService', 'Notification', '$state', 'AuthService',
+        function ($scope, UserService, Notification, $state, AuthService) {
+            var vm = this;
 
-    }]);
+            $scope.user = {
+                product: 'NA',
+                email: AuthService.getLoggedInUser().email,
+                phone: AuthService.getLoggedInUser.phone
+            };
+
+            vm.success = function (res) {
+                Notification.success('Congratulations! Successfully subscribed.');
+
+                $state.go('dashboard');
+            };
+
+            vm.error = function (err) {
+                if (angular.isArray(err.data.error)) {
+                    angular.forEach(err.data.error, function (e) {
+                        Notification.error(e);
+                    });
+                } else {
+                    Notification.error(err.data.error);
+                }
+            };
+
+            $scope.send = function () {
+                if ($scope.soonForm.$valid) {
+                    UserService.soon($scope.user)
+                        .then(vm.success, vm.error);
+                }
+            };
+        }]);

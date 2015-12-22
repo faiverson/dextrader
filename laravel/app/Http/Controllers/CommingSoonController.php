@@ -52,7 +52,7 @@ class CommingSoonController extends Controller
 
 		$is = CommingSoon::where('user_id', $fields['user_id'])->where('product_id', $product->id)->count();
 		if($is > 0) {
-			return response()->error('The user is subscribe already!');
+			return response()->error('User already subscribed!');
 		}
 		$fields['product_id'] = $product->id;
 		$cs = CommingSoon::create($fields);

@@ -14,9 +14,7 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
                 templateUrl: 'modules/user-profile/user.profile.settings.tpl.html',
                 controller: 'UserProfileSettingsCtrl',
                 data: {
-                    pageTitle: 'User Settings',
-                    permission: 'user.profile',
-                    redirectTo: 'dashboard'
+                    pageTitle: 'User Settings'
                 }
             })
             .state('user.support', {

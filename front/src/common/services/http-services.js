@@ -228,10 +228,28 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
+        function soon(data) {
+            var deferred = $q.defer(),
+                endpoint = service + '/coming-soon';
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            $http.post(endpoint, data).then(success, error);
+
+            return deferred.promise;
+        }
+
         return {
             getUsers: getUsers,
             saveUser: save,
-            getUser: getUser
+            getUser: getUser,
+            soon: soon
         };
     }])
 
