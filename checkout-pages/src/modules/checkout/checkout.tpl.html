@@ -1,6 +1,6 @@
 <header>
     <div id="header-content">
-        <div id="logo"><a href="#"><img src="/assets/images/logo-ib.png" alt="DEX Trader"></a></div>
+        <div id="logo"><a ui-sref="home"><img src="/assets/images/logo-ib.png" alt="DEX Trader"></a></div>
         <div id="secure-ib">
             <img src="/assets/images/secure-ib.png">
         </div>
@@ -70,7 +70,7 @@
                     </div>
                     <div class="form-group has-feedback" data-show-errors>
                         <label for="phone">Mobile Phone</label>
-                        <input type="number"
+                        <input type="text"
                                name="phone"
                                data-ng-minlength="10"
                                data-ng-maxlength="12"
@@ -85,7 +85,7 @@
 
                 <div class="form-wrapper">
                     <div class="form-group has-feedback" data-show-errors>
-                        <label for="phone">Address</label>
+                        <label for="address">Address</label>
                         <input type="text"
                                name="address"
                                class="form-control"
@@ -121,7 +121,8 @@
                                 <span ng-bind-html="match.model.name | uibTypeaheadHighlight:query"></span>
                             </a>
                         </script>
-                        <input type="text" name="dex_city" id="dex_city" data-ng-disabled="formCheckout.country.$invalid"
+                        <input type="text" name="dex_city" id="dex_city"
+                               data-ng-disabled="formCheckout.dex_country.$invalid"
                                ng-model="selectedCity"
                                typeahead-on-select="selectCity($item, $model, $label)"
                                typeahead-min-length="3"
@@ -146,14 +147,14 @@
                     </div>
                     <div class="form-group has-feedback" data-show-errors>
                         <label for="zip">Zip/Postal Code</label>
-                        <input type="number"
+                        <input type="text"
                                name="zip"
                                class="form-control"
                                id="zip"
                                required
                                maxlength="6"
                                data-ng-minlength="4"
-                               data-ng-maxlength="6"
+                               data-ng-maxlength="10"
                                data-ng-model="formData.zip">
                     </div>
                 </div>
@@ -162,10 +163,11 @@
                 <div class="clearfix">
                     <h3 id="co-f3" class="left">Payment Information</h3>
 
-                    <div class="right">
-                        <img src="/assets/images/ico-cc-1.png">
-                        <img src="/assets/images/ico-cc-2.png">
-                        <img src="/assets/images/ico-cc-3.png">
+                    <div class="right credit-cards">
+                        <img src="/assets/images/creditcards/amex.png">
+                        <img src="/assets/images/creditcards/visa.png">
+                        <img src="/assets/images/creditcards/mastercard.png">
+                        <img src="/assets/images/creditcards/discover.png">
                     </div>
                 </div>
                 <div class="form-wrapper">
@@ -228,7 +230,7 @@
                     </div>
                     <div class="form-group has-feedback" data-show-errors>
                         <label for="billing_phone">Billing Phone</label>
-                        <input type="number"
+                        <input type="text"
                                name="phone"
                                data-ng-minlength="10"
                                data-ng-maxlength="12"

@@ -2,7 +2,7 @@
 namespace App\Repositories;
 
 use App\Repositories\Contracts\UserRepositoryInterface;
-use App\Repositories\Abstracts\Repository as AbstractRepository;;
+use App\Repositories\Abstracts\Repository as AbstractRepository;
 use User;
 
 class UserRepository extends AbstractRepository implements UserRepositoryInterface

@@ -7,7 +7,8 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
                 controller: 'AuthController',
                 data: {
                     pageTitle: 'Login Page',
-                    bodyClass: 'page-login'
+                    bodyClass: 'page-login',
+                    isPublic: true
                 }
             })
             .state('logout', {
@@ -25,7 +26,8 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
                 controller: 'ResetPasswordCtrl',
                 data: {
                     pageTitle: 'Reset Password',
-                    bodyClass: 'page-login'
+                    bodyClass: 'page-login',
+                    isPublic: true
                 }
             });
     })

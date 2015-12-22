@@ -21,7 +21,8 @@ angular.module('app', [
         'app.disclosure',
         'app.term-and-conditions',
         'app.dex-na',
-        'app.dex-fx'
+        'app.dex-fx',
+        'app.whitelist'
     ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {
@@ -52,9 +53,10 @@ angular.module('app', [
         $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             var perm = toState.data.permission;
             var redirectTo = toState.data.redirectTo;
+            var isPublic = toState.data.isPublic;
 
 
-            if (!AuthService.isLoggedIn() && toState.name !== 'login' && angular.isDefined(perm)) {
+            if (!AuthService.isLoggedIn() && toState.name !== 'login' && angular.isUndefined(isPublic)) {
                 event.preventDefault();
                 $state.go('login');
             }
