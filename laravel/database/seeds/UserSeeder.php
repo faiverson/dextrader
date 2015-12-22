@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $this->command->info("Starting to seed Users");//
+        $this->command->info("Starting to seed Users");
         // creates the admin user
 		$role = Role::where('name', 'owner')->first();
 		User::create([

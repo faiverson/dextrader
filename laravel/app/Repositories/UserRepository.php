@@ -39,4 +39,16 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 		return $this->model->select($columns)->first();
 	}
 
+	public function findByUsername($username, $columns = array('*')) {
+		$this->model = $this->model->with('roles')->where('active', 1)->where('username', $username);
+
+		return $this->model->select($columns)->first();
+	}
+
+	public function getIdByUsername($username) {
+		$this->model = $this->model->with('roles')->where('active', 1)->where('username', $username);
+		$user = $this->model->select(['id'])->first();
+		return $user != null ? $user->id : null;
+	}
+
 }

@@ -237,6 +237,7 @@ return [
 		'Subscription' => App\Models\Subscription::class,
 		'CommingSoon' => App\Models\CommingSoon::class,
 		'Hit' => App\Models\Hit::class,
+		'Tag' => App\Models\Tag::class,
     ],
 
 ];

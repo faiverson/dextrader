@@ -75,4 +75,9 @@ class Purchase extends Model
 		return $this->attributes['id'];
 	}
 
+	public function setInfoAttribute($value)
+	{
+		$this->attributes['info'] = json_encode($value);
+	}
+
 }

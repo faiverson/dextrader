@@ -101,6 +101,7 @@ class User extends Model implements AuthenticatableContract,
 	{
 		$this->attributes['username'] = strtolower($value);
 	}
+
 	public function setEmailAttribute($value)
 	{
 		$this->attributes['email'] = strtolower($value);

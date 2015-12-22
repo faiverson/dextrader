@@ -23,7 +23,7 @@ class Basics extends Migration
 			$table->bigIncrements('id');
 			$table->string('first_name', 50)->nullable(false);
 			$table->string('last_name', 50)->nullable(false);
-			$table->string('username', 50)->nullable(false)->unique('username');
+			$table->string('username', 50)->nullable(false)->unique('username')->index();
 			$table->string('email')->nullable(false)->unique('email');
 			$table->string('phone', 15);
 			$table->tinyInteger('active')->nullable(false)->default(1);
