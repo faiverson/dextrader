@@ -12,18 +12,39 @@ class PagesSeeder extends Seeder
      */
     public function run()
     {
+		if (App::Environment() === 'local') {
+			$this->fetching();
+		}
+
 		Page::create([
-			'site' => 'dextrader.com',
+			'site' => 'secure.dextrader.com',
 			'domain' => 'sales',
-			'password' => bcrypt('sAles_dexTr4d3r'),
+			'password' => 'sAles_dexTr4d3r',
 			'access' => 'checkout'
 		]);
 
 		Page::create([
-			'site' => 'signals.com',
+			'site' => 'dextrader.com',
 			'domain' => 'signals',
-			'password' => bcrypt('siGN4l_dexTr4d3r'),
+			'password' => 'siGN4l_dexTr4d3r',
 			'access' => 'signal'
 		]);
     }
+
+	public function fetching()
+	{
+		Page::create([
+			'site' => 'secure.dx.com',
+			'domain' => 'sales',
+			'password' => 'sAles_dexTr4d3r',
+			'access' => 'checkout'
+		]);
+
+		Page::create([
+			'site' => 'local.dx.com',
+			'domain' => 'signals',
+			'password' => 'siGN4l_dexTr4d3r',
+			'access' => 'signal'
+		]);
+	}
 }

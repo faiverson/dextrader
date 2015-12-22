@@ -15,7 +15,7 @@ class Gateway extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'gateway_transactions';
+	protected $table = 'transactions';
 
 	protected $dates = ['created_at', 'updated_at'];
 
@@ -26,8 +26,37 @@ class Gateway extends Model
 	 */
 	protected $fillable = [
 		'user_id',
-		'purchase_id',
-		'subscription_id',
+		'first_name',
+		'last_name',
+		'email',
+		'enroller_id',
+		'funnel_id',
+		'tag_id',
+
+		'product_id',
+		'product_name',
+		'product_amount',
+		'product_discount',
+		'amount',
+
+		'billing_address',
+		'billing_address2',
+		'billing_city',
+		'billing_state',
+		'billing_country',
+		'billing_zip',
+		'billing_phone',
+
+		'card_id',
+		'card_name',
+		'card_exp_month',
+		'card_exp_year',
+		'card_network' ,
+		'card_first_six',
+		'card_last_four',
+		'info',
+		'ip_address',
+
 		'status',
 		'authcode',
 		'transactionid',

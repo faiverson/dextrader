@@ -11,9 +11,9 @@ class MarketingLinksSeeder extends Seeder
      */
     public function run()
     {
-		//if (App::Environment() === 'local') {
+		if (App::Environment() === 'local') {
 			$this->fetching();
-		//}
+		}
 
     }
 

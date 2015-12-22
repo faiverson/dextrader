@@ -47,6 +47,9 @@ class Token {
 	public static function getPage($request)
 	{
 		$token = JWTAuth::setRequest($request)->getToken();
+		if(empty($token)) {
+			return false;
+		}
 		$payload = JWTAuth::getPayload($token);
 		return $payload['sub'];
 	}

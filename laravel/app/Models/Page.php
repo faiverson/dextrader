@@ -9,11 +9,12 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 use Sofa\Eloquence\Eloquence; // base trait
 use Sofa\Eloquence\Mappable;
+use Sofa\Eloquence\Mutable;
 
 class Page extends Model implements AuthenticatableContract,
                                     AuthorizableContract
 {
-    use Eloquence, Mappable, Authenticatable, EntrustUserTrait;
+    use Eloquence, Mappable, Mutable, Authenticatable, EntrustUserTrait;
 
     /**
      * The database table used by the model.
@@ -26,10 +27,6 @@ class Page extends Model implements AuthenticatableContract,
 
 	protected $maps = [
 		'page_id' => 'id',
-	];
-
-	protected $setterMutators = [
-		'domain' => 'strtolower'
 	];
 
     /**
@@ -51,6 +48,16 @@ class Page extends Model implements AuthenticatableContract,
 	public function getPageIdAttribute()
 	{
 		return $this->attributes['id'];
+	}
+
+	public function setPasswordAttribute($value)
+	{
+		$this->attributes['password'] = bcrypt($value);
+	}
+
+	public function setDomainAttribute($value)
+	{
+		$this->attributes['domain'] = strtolower($value);
 	}
 
 }

@@ -30,9 +30,12 @@ class UserUpdateValidator extends AbstractValidator {
 	public function __construct(Factory $validator, Request $request)
 	{
 		parent::__construct($validator);
-		$this->id = $request->user()->id;
-		$this->email = $request->user()->email;
-		$this->custom();
+		$user = $request->user();
+		if($user) {
+			$this->id = $user->id;
+			$this->email = $request->user()->email;
+			$this->custom();
+		}
 	}
 
 	public function custom()
