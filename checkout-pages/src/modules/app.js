@@ -14,7 +14,11 @@ angular.module('app', [
         'app.checkout',
         'app.upsell',
         'app.downsell',
-        'app.thankyou'
+        'app.thankyou',
+        'app.privacy',
+        'app.disclosure',
+        'app.term-and-conditions',
+        'app.whitelist'
     ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {
