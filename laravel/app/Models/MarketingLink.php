@@ -10,15 +10,15 @@ class MarketingLink extends Model
 {
 	use Eloquence, Mappable;
 
-	protected $table = 'marketing_links';
+	protected $table = 'funnels';
 
 	protected $hidden = ['id', 'updated_at', 'created_at'];
 
 	protected $maps = [
-		'marketing_link_id' => 'id',
+		'funnel_id' => 'id',
 	];
 
-	protected $appends = array('marketing_link_id');
+	protected $appends = array('funnel_id');
 
 	public function getMarketingLinkIdAttribute()
 	{

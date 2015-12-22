@@ -25,12 +25,17 @@ class RSA
 	public function handle($request, \Closure $next, $perm)
 	{
 		$pageId = Token::getPage($request);
+		if(empty($pageId)) {
+			return response()->error('Unauthorized', 401);
+		}
+
 		$page = Page::find($pageId);
 		if(empty($page)) {
 			return response()->error('Unauthorized', 401);
 		}
 
 		$access = explode(',', $page->access);
+
 		if(!in_array($perm, $access)) {
 			return response()->error('Unauthorized. Permission denied', 401);
 		}

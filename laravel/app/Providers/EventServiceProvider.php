@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
 		'App\Events\NotificationEvent' => [
 			'App\Listeners\NotificationListener',
 		],
+		'App\Events\CheckoutEvent' => [
+			'App\Listeners\PurchaseListener',
+		],
     ];
 
     /**

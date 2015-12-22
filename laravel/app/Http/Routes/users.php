@@ -1,9 +1,11 @@
 <?php
 Route::post('/users/signup', 'UsersController@store');
+Route::post('/users', ['middleware' => 'page:adduser',
+						'uses' => 'UsersController@store']);
 
 Route::group(['middleware' => 'jwt.auth'], function () {
 	Route::get('/users', 'UsersController@index');
-	Route::post('/users', 'UsersController@store');
+//	Route::post('/users', 'UsersController@store');
 	Route::put('/users', 'UsersController@update');
 	Route::delete('/users', 'UsersController@destroy');
 

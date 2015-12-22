@@ -11,7 +11,7 @@ use App\Libraries\eWallet\eWallet;
 
 class UsersController extends Controller
 {
-	private $user;
+	private $gateway;
 
 	public function __construct(UserGateway $gateway)
 	{
@@ -51,6 +51,8 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
+		$fields = $request->all();
+		$fields['ip_address'] = $request->ip();
 		$user = $this->gateway->create($request->all());
 		if(!$user) {
 			return response()->error($this->gateway->errors()->all());
@@ -67,6 +69,7 @@ class UsersController extends Controller
     public function update(Request $request)
     {
 		$id = $request->user()->id;
+		$fields['ip_address'] = $request->ip();
 		$user = $this->gateway->update($request->all(), $id);
 		if(!$user) {
 			return response()->error($this->gateway->errors()->all());

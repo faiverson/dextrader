@@ -31,7 +31,7 @@ class SubscriptionTable extends Migration
 			$table->bigInteger('billing_address_id')->unsigned();
 			$table->foreign('billing_address_id')->references('id')->on('billing_address');
 
-			$table->enum('status', ['new', 'active', 'cancel', 'auto_cancel', 'admin_cancel'])->default('new');
+			$table->enum('status', ['active', 'cancel', 'auto_cancel', 'admin_cancel'])->default('active');
 			$table->tinyInteger('attempts_billing')->default(0);
 			$table->date('last_billing')->nullable(false);
 			$table->date('next_billing')->nullable(false);
