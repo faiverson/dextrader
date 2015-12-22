@@ -5,7 +5,8 @@ angular.module('app.privacy', [])
                 url: '/privacy-policy',
                 templateUrl: 'modules/privacy/privacy.tpl.html',
                 data: {
-                    pageTitle: 'Privacy Policy'
+                    pageTitle: 'Privacy Policy',
+                    isPublic: true
                 }
             });
     });

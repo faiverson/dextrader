@@ -11,7 +11,10 @@ angular.module('app', [
         'LocalStorageModule',
         'ngAnimate',
         'app.home',
-        'app.checkout'
+        'app.checkout',
+        'app.upsell',
+        'app.downsell',
+        'app.thankyou'
     ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {

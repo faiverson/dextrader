@@ -22,9 +22,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 templateUrl: 'modules/affiliates/how-it-works.tpl.html',
                 controller: 'HowItWorksCtrl',
                 data: {
-                    pageTitle: 'Affiliates - How it works',
-                    permission: 'user.view',
-                    redirectTo: 'affiliates.upgrade'
+                    pageTitle: 'Affiliates - How it works'
                 }
             })
             .state('affiliates.links', {
@@ -32,9 +30,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 templateUrl: 'modules/affiliates/links.tpl.html',
                 controller: 'MarketingLinksCtrl',
                 data: {
-                    pageTitle: 'Affiliates - Links',
-                    permission: 'user.view',
-                    redirectTo: 'affiliates.upgrade'
+                    pageTitle: 'Affiliates - Links'
                 }
             })
             .state('affiliates.training', {
@@ -42,9 +38,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 templateUrl: 'modules/affiliates/training.tpl.html',
                 controller: 'TrainingCtrl',
                 data: {
-                    pageTitle: 'Affiliates - Training',
-                    permission: 'user.view',
-                    redirectTo: 'affiliates.upgrade'
+                    pageTitle: 'Affiliates - Training'
                 }
             })
             .state('affiliates.resources', {
@@ -52,9 +46,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 templateUrl: 'modules/affiliates/resources.tpl.html',
                 controller: 'ResourcesCtrl',
                 data: {
-                    pageTitle: 'Affiliates - Resources',
-                    permission: 'user.view',
-                    redirectTo: 'affiliates.upgrade'
+                    pageTitle: 'Affiliates - Resources'
                 }
             })
             .state('affiliates.commissions', {
@@ -62,9 +54,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 templateUrl: 'modules/affiliates/commissions.tpl.html',
                 controller: 'CommissionsCtrl',
                 data: {
-                    pageTitle: 'Affiliates - Commissions',
-                    permission: 'user.view',
-                    redirectTo: 'affiliates.upgrade'
+                    pageTitle: 'Affiliates - Commissions'
                 }
             })
             .state('affiliates.payments', {
@@ -72,9 +62,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 templateUrl: 'modules/affiliates/payments.tpl.html',
                 controller: 'PaymentsCtrl',
                 data: {
-                    pageTitle: 'Affiliates - Payments',
-                    permission: 'user.view',
-                    redirectTo: 'affiliates.upgrade'
+                    pageTitle: 'Affiliates - Payments'
                 }
             });
     })

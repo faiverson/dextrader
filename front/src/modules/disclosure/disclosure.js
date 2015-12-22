@@ -5,7 +5,8 @@ angular.module('app.disclosure', [])
                 url: '/disclosure',
                 templateUrl: 'modules/disclosure/disclosure.tpl.html',
                 data: {
-                    pageTitle: 'Disclosure'
+                    pageTitle: 'Disclosure',
+                    isPublic: true
                 }
             });
     });

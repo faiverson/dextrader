@@ -5,7 +5,8 @@ angular.module('app.term-and-conditions', [])
                 url: '/terms-and-conditions',
                 templateUrl: 'modules/terms-and-conditions/terms-and-conditions.tpl.html',
                 data: {
-                    pageTitle: 'Term And Conditions'
+                    pageTitle: 'Term And Conditions',
+                    isPublic: true
                 }
             });
     });
