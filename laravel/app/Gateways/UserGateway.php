@@ -37,4 +37,8 @@ class UserGateway extends AbstractGateway {
 
 		return $this->repository->update($data, $id);
 	}
+
+	public function getIdByUsername($username) {
+		return $this->repository->getIdByUsername($username);
+	}
 }

@@ -3,7 +3,7 @@ namespace App\Repositories;
 
 use App\Repositories\Contracts\TagRepositoryInterface;
 use App\Repositories\Abstracts\Repository as AbstractRepository;
-use Tag;
+use App\Models\Tag;
 
 class TagRepository extends AbstractRepository implements TagRepositoryInterface
 {
@@ -14,7 +14,7 @@ class TagRepository extends AbstractRepository implements TagRepositoryInterface
 	}
 
 	public function getIdByTag($tag) {
-		$this->model = $this->model->where('title', $tag);
+		$this->model = $this->model->where('tag', $tag);
 		$t = $this->model->select(['id'])->first();
 		return $t != null ? $t->id : null;
 	}

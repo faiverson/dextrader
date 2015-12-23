@@ -16,8 +16,6 @@ class ProductsSeeder extends Seeder
     {
 		$this->command->info("Creating Products");
 
-		$this->command->info("Starting to create products");
-
 		Product::unguard();
 		Product::create([
 			'name' => 'IB',

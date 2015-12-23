@@ -24,34 +24,35 @@ class NMI {
 		$this->password = Config::get('nmi.password');
 	}
 
-	public function purchase(Purchase $purchase, $number, $ccv, $type = 'sale')
+	public function purchase(array $data, $type = 'sale')
 	{
 		$order = [
 			'username' => $this->username,
 			'password' => $this->password,
 
-			'ccnumber' => $number,
-			'ccexp' => $purchase->card_exp_month . $purchase->card_exp_year,
-			'amount' => number_format($purchase->product_amount, 2, ".", ""),
-			'cvv' => $ccv,
+			'ccnumber' => $data['number'],
+			'ccexp' => $data['card_exp_month'] . $data['card_exp_year'],
+			'amount' => number_format($data['amount'], 2, ".", ""),
+			'cvv' => $data['cvv'],
 
-			'ipaddress' => $purchase->ip_address,
-			'orderid' => $purchase->id,
-			'orderdescription' => $purchase->product_name,
+			'ipaddress' => $data['ip_address'],
+			'orderid' => $data['orderid'],
+			'orderdescription' => $data['product_name'],
 			'tax' => 0,
 			'shipping' => 0,
 			'ponumber' => '',
 
-			'firstname' => $purchase->first_name,
-			'lastname' => $purchase->last_name,
-			'email' => $purchase->email,
-			'address1' => $purchase->billing_address,
-			'address2' => $purchase->billing_address2,
-			'country' => $purchase->billing_country,
-			'state' => $purchase->billing_state,
-			'city' => $purchase->billing_city,
-			'zip' => $purchase->billing_zip,
-			'phone' => $purchase->billing_phone,
+			'firstname' => $data['first_name'],
+			'lastname' => $data['last_name'],
+			'email' => $data['email'],
+
+			'address1' => $data['billing_address'],
+			'address2' => $data['billing_address2'],
+			'country' => $data['billing_country'],
+			'state' => $data['billing_state'],
+			'city' => $data['billing_city'],
+			'zip' => $data['billing_zip'],
+			'phone' => $data['billing_phone'],
 			'type' => $type
 		];
 		$values = array_map("urlencode", array_values($order));

@@ -20,11 +20,5 @@ class Tag extends Model
      *
      * @var array
      */
-	protected $fillable = ['title'];
-
-	public function setInfoAttribute($value)
-	{
-		$this->attributes['info'] = json_encode($value);
-	}
-
+	protected $fillable = ['tag'];
 }

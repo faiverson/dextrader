@@ -45,7 +45,7 @@ class MerchantCharges extends Migration
 				->references('id')->on('campaign_tags')
 				->onUpdate('cascade')->onDelete('cascade');
 
-			$table->bigInteger('card_id')->unsigned()->nullable(false);
+			$table->bigInteger('card_id')->unsigned()->nullable();
 			$table->string('card_name', 150)->nullable(false);
 			$table->smallInteger('card_exp_month')->nullable(false);
 			$table->smallInteger('card_exp_year')->nullable(false);
@@ -53,6 +53,7 @@ class MerchantCharges extends Migration
 			$table->integer('card_last_four')->nullable(false);
 			$table->string('card_network', 15)->nullable(false);
 
+			$table->bigInteger('billing_address_id')->unsigned()->nullable();
 			$table->string('billing_address', 200)->nullable(false);
 			$table->string('billing_address2', 200)->nullable();
 			$table->string('billing_city', 100)->nullable(false);
@@ -64,7 +65,8 @@ class MerchantCharges extends Migration
 			$table->text('info')->nullable();
 			$table->string('ip_address', 25)->nullable();
 
-			$table->string('status', 50)->nullable();
+			$table->string('response', 5)->nullable();
+			$table->string('responsetext', 150)->nullable();
 			$table->string('authcode')->nullable();
 			$table->string('transactionid')->nullable();
 			$table->string('orderid')->nullable();

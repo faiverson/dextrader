@@ -14,7 +14,7 @@ class CampaignTagsTable extends Migration
     {
 		Schema::create('campaign_tags', function (Blueprint $table) {
 			$table->increments('id');
-			$table->string('title')->nullable(false)->index();
+			$table->string('tag')->nullable(false)->index();
 		});
     }
 

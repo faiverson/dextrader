@@ -29,5 +29,8 @@ class Hit extends Model
      */
     protected $hidden = ['id', 'created_at', 'updated_at'];
 
-
+	public function setInfoAttribute($value)
+	{
+		$this->attributes['info'] = json_encode($value);
+	}
 }

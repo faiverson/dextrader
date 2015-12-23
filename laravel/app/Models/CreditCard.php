@@ -3,14 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Zizaco\Entrust\Traits\EntrustUserTrait;
 use Sofa\Eloquence\Eloquence; // base trait
 use Sofa\Eloquence\Mappable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Encrypt;
 
 class CreditCard extends Model
 {
-	use SoftDeletes, Eloquence, Mappable;
+	use Eloquence, Mappable, SoftDeletes;
 
     /**
      * The database table used by the model.
@@ -54,6 +54,11 @@ class CreditCard extends Model
 	public function getExpYearAttribute()
 	{
 		return $this->attributes['exp_year'] < 10 ? '0' . $this->attributes['exp_year'] : (string) $this->attributes['exp_year'];
+	}
+
+	public function setNumberAttribute($value)
+	{
+		$this->attributes['number'] = Encrypt::encrypt($value);
 	}
 
 }

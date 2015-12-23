@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Sofa\Eloquence\Eloquence; // base trait
-use Sofa\Eloquence\Mappable;
+use Sofa\Eloquence\Mutable;
 
-class Gateway extends Model
+
+class Transaction extends Model
 {
-	use Eloquence, Mappable;
+	use Eloquence, Mutable;
 
 	/**
 	 * The database table used by the model.
@@ -29,6 +30,7 @@ class Gateway extends Model
 		'first_name',
 		'last_name',
 		'email',
+
 		'enroller_id',
 		'funnel_id',
 		'tag_id',
@@ -39,6 +41,7 @@ class Gateway extends Model
 		'product_discount',
 		'amount',
 
+		'billing_address_id',
 		'billing_address',
 		'billing_address2',
 		'billing_city',
@@ -57,7 +60,8 @@ class Gateway extends Model
 		'info',
 		'ip_address',
 
-		'status',
+		'response',
+		'responsetext',
 		'authcode',
 		'transactionid',
 		'orderid',
@@ -65,12 +69,26 @@ class Gateway extends Model
 		'cvvresponse',
 		'type',
 		'response_code'
+
 	];
 
-	/**
-	 * The attributes excluded from the model's JSON form.
-	 *
-	 * @var array
-	 */
-	protected $hidden = ['id'];
+	public function getProductAmountAttribute()
+	{
+		return number_format($this->attributes['product_amount'], 2, '.', ',');
+	}
+
+	public function setProductAmountAttribute($value)
+	{
+		$this->attributes['product_amount'] = number_format($value, 2, '.', '');
+	}
+
+	public function getAmountAttribute()
+	{
+		return number_format($this->attributes['amount'], 2, '.', ',');
+	}
+
+	public function setAmountAttribute($value)
+	{
+		$this->attributes['amount'] = number_format($value, 2, '.', '');
+	}
 }

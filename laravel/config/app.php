@@ -233,7 +233,7 @@ return [
 		'Page'  => App\Models\Page::class,
         'Country' => App\Models\Country::class,
         'City' => App\Models\City::class,
-		'Gateway' => App\Models\Gateway::class,
+		'Transaction' => App\Models\Transaction::class,
 		'Subscription' => App\Models\Subscription::class,
 		'CommingSoon' => App\Models\CommingSoon::class,
 		'Hit' => App\Models\Hit::class,

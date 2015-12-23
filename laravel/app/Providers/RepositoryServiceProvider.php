@@ -19,14 +19,13 @@ class RepositoryServiceProvider extends ServiceProvider {
 		$this->app->bind('App\Repositories\Contracts\UserRepositoryInterface', 'App\Repositories\UserRepository');
 		$this->app->bind('App\Repositories\Contracts\CardRepositoryInterface', 'App\Repositories\CardRepository');
 		$this->app->bind('App\Repositories\Contracts\HitRepositoryInterface', 'App\Repositories\HitRepository');
-//		$this->app->bind('App\Repositories\Contracts\UserGateway',
-//			function($app) {
-//				return new UserGateway(
-//					$app->make('App\Repositories\UserRepository'),
-//					new UserCreateValidator( $app['validator'], $app['request'] ),
-//					new UserUpdateValidator( $app['validator'], $app['request'] )
-//				);
-//			});
-
+		$this->app->bind('App\Repositories\Contracts\TagRepositoryInterface', 'App\Repositories\TagRepository');
+		$this->app->bind('App\Repositories\Contracts\BillingAddressRepositoryInterface', 'App\Repositories\BillingAddressRepository');
+		$this->app->bind('App\Repositories\Contracts\TransactionRepositoryInterface', 'App\Repositories\TransactionRepository');
+		$this->app->bind('App\Repositories\Contracts\ProductRepositoryInterface', 'App\Repositories\ProductRepository');
+		$this->app->bind('App\Repositories\Contracts\PurchaseRepositoryInterface', 'App\Repositories\PurchaseRepository');
+		$this->app->bind('App\Repositories\Contracts\SubscriptionRepositoryInterface', 'App\Repositories\SubscriptionRepository');
+		$this->app->bind('App\Repositories\Contracts\InvoiceRepositoryInterface', 'App\Repositories\InvoiceRepository');
+		$this->app->bind('App\Repositories\Contracts\CommissionRepositoryInterface', 'App\Repositories\CommissionRepository');
 	}
 }

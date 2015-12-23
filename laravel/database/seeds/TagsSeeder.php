@@ -14,13 +14,13 @@ class TagsSeeder extends Seeder
     {
 		Tag::unguard();
         Tag::create([
-			'title' => 'facebook'
+			'tag' => 'facebook'
 		]);
 		Tag::create([
-			'title' => 'twitter'
+			'tag' => 'twitter'
 		]);
 		Tag::create([
-			'title' => 'checkout page'
+			'tag' => 'checkout page'
 		]);
 		Tag::reguard();
     }
