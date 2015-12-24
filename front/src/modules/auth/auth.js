@@ -11,6 +11,16 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
                     isPublic: true
                 }
             })
+            .state('doLogin', {
+                url: '/doLogin?token',
+                templateUrl: 'modules/auth/auth.form.tpl.html',
+                controller: 'DoLoginController',
+                data: {
+                    pageTitle: 'Login Page',
+                    bodyClass: 'page-login',
+                    isPublic: true
+                }
+            })
             .state('logout', {
                 url: '/logout',
                 //templateUrl: 'modules/users/users.form.tpl.html',
@@ -74,6 +84,31 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
                     //$log.info('Modal dismissed at: ' + new Date());
                 });
             };
+
+        }])
+
+    .controller('DoLoginController', ['$scope', '$state', 'AuthService', 'Notification',
+        function ($scope, $state, AuthService, Notification) {
+
+            var vm = this;
+
+            vm.init = function () {
+                if (angular.isDefined($state.params.token)) {
+                    AuthService.logout().then(function () {
+                        AuthService.setUserToken($state.params.token);
+
+                        var user = AuthService.getLoggedInUser();
+
+                        Notification.success("Welcome " + user.full_name);
+
+                        $state.go('dashboard');
+                    });
+                } else {
+                    $state.go('dashboard');
+                }
+            };
+
+            vm.init();
 
         }])
 

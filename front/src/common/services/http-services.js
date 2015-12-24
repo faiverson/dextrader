@@ -140,6 +140,12 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
+        function setUserToken(token) {
+            // Set the token into local storage
+            localStorageService.set('token', token);
+            $rootScope.$broadcast("user-has-change");
+        }
+
         return {
             login: login,
             getLoggedInUser: getLoggedInUser,
@@ -147,7 +153,8 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             logout: logout,
             userHasPermission: userHasPermission,
             forgotPassword: forgotPassword,
-            resetPassword: resetPassword
+            resetPassword: resetPassword,
+            setUserToken: setUserToken
         };
     }])
 

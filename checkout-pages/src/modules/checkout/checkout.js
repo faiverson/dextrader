@@ -2,7 +2,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('checkout', {
-                url: '/checkout/:enroller',
+                url: '/checkout/:enroller?/:tag?',
                 templateUrl: 'modules/checkout/checkout.tpl.html',
                 controller: 'CheckoutCtrl',
                 data: {
@@ -19,8 +19,8 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             });
     })
 
-    .controller('CheckoutCtrl', ['$scope', 'SalesService', 'CountriesService', '$q', 'os-info', '$stateParams', 'PageService', 'Notification',
-        function ($scope, SalesService, CountriesService, $q, osInfo, $stateParams, PageService, Notification) {
+    .controller('CheckoutCtrl', ['$scope', 'SalesService', 'CountriesService', '$q', 'os-info', '$stateParams', 'PageService', 'Notification', 'HitsService',
+        function ($scope, SalesService, CountriesService, $q, osInfo, $stateParams, PageService, Notification, HitsService) {
             var vm = this;
             $scope.formData = {};
 
@@ -47,7 +47,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 $scope.showAgreementWarning = angular.isUndefined($scope.formData.terms);
 
                 if ($scope.formCheckout.$valid) {
-                    vm.getUserBrowserData();
+                    $scope.formData.data = vm.getUserBrowserData();
 
                     $scope.formData.enroller = $stateParams.enroller;
 
@@ -112,11 +112,30 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 $scope.formData.state = $item.district;
             };
 
-            $scope.getToken = function () {
-                PageService.getToken()
-                    .then(function (res) {
-                        $scope.token = res.data.token;
-                    });
+            vm.sendHit = function () {
+                var data = {
+                    funnel_id: 2,
+                    info: vm.getUserBrowserData(),
+                    product_id: 1
+                };
+
+                if (angular.isDefined($stateParams.enroller) && $stateParams.enroller.length > 0) {
+                    data.enroller_id = $stateParams.enroller;
+                }
+
+                if (angular.isDefined($stateParams.tag)) {
+                    data.tag_id = $stateParams.tag;
+                }
+
+                HitsService.send(data, $scope.token);
+            };
+
+            vm.getToken = function () {
+                var promise = PageService.getToken();
+                promise.then(function (res) {
+                    $scope.token = res.data.token;
+                });
+                return promise;
             };
 
             vm.success = function (res) {
@@ -141,14 +160,17 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             };
 
             vm.getUserBrowserData = function () {
-                $scope.formData.data = osInfo.getOS();
+                return osInfo.getOS();
             };
 
             vm.init = function () {
                 vm.feelExpMonth();
                 vm.feelExpYear();
 
-                $scope.getToken();
+                vm.getToken()
+                    .then(function () {
+                        vm.sendHit();
+                    });
             };
 
             vm.init();

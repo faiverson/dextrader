@@ -19,7 +19,7 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
             })
             .state('user.support', {
                 url: '/settings',
-                templateUrl: 'modules/user-profile/user.profile.form.tpl.html',
+                templateUrl: 'modules/user-profile/user.profile.settings.tpl.html',
                 controller: 'UserProfileSettingsCtrl',
                 data: {
                     pageTitle: 'User Settings'
