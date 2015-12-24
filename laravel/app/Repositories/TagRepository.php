@@ -14,9 +14,8 @@ class TagRepository extends AbstractRepository implements TagRepositoryInterface
 	}
 
 	public function getIdByTag($tag) {
-		$this->model = $this->model->where('tag', $tag);
-		$t = $this->model->select(['id'])->first();
-		return $t != null ? $t->id : null;
+		$tag = $this->model->where('tag', $tag)->select(['id'])->first();
+		return $tag != null ? $tag->id : null;
 	}
 
 }

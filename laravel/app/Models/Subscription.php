@@ -3,12 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Sofa\Eloquence\Eloquence; // base trait
-use Sofa\Eloquence\Mappable;
+use Sofa\Eloquence\Eloquence;
 
 class Subscription extends Model
 {
-    use Eloquence, Mappable;
+    use Eloquence;
 
     protected $table = 'subscriptions';
 

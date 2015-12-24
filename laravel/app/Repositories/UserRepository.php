@@ -14,41 +14,44 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 	}
 
 	public function actives($columns = array('*'), $limit = null, $offset = null, $order_by = null) {
-		$this->model = $this->model->with('roles')->where('active', 1);
+		$user = $this->model->with('roles')->where('active', 1);
 
 		if($limit != null) {
-			$this->model = $this->model->take($limit);
+			$user = $user->take($limit);
 		}
 
 		if($offset != null) {
-			$this->model = $this->model->skip($offset);
+			$user = $user->skip($offset);
 		}
 
 		if($order_by != null) {
 			foreach($order_by as $column => $dir) {
-				$this->model = $this->model->orderBy($column, $dir);
+				$user = $user->orderBy($column, $dir);
 			}
 		}
 
-		return $this->model->get($columns);
+		return $user->get($columns);
 	}
 
 	public function findById($id, $column = 'id', $columns = array('*')) {
-		$this->model = $this->model->with('roles')->where('active', 1)->where($column, $id);
-
-		return $this->model->select($columns)->first();
+		$user = $this->model->with('roles')->where('active', 1)->where($column, $id);
+		return $user->select($columns)->first();
 	}
 
 	public function findByUsername($username, $columns = array('*')) {
-		$this->model = $this->model->with('roles')->where('active', 1)->where('username', $username);
-
-		return $this->model->select($columns)->first();
+		$user = $this->model->with('roles')->where('active', 1)->where('username', $username);
+		return $user->select($columns)->first();
 	}
 
 	public function getIdByUsername($username) {
-		$this->model = $this->model->with('roles')->where('active', 1)->where('username', $username);
-		$user = $this->model->select(['id'])->first();
+		$user = $this->model->with('roles')->where('active', 1)->where('username', $username);
+		$user = $user->select(['id'])->first();
 		return $user != null ? $user->id : null;
+	}
+
+	public function addRole($user_id, $role_id)
+	{
+		return $this->model->find($user_id)->attachRole($role_id);
 	}
 
 }

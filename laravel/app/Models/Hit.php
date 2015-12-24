@@ -33,4 +33,9 @@ class Hit extends Model
 	{
 		$this->attributes['info'] = json_encode($value);
 	}
+
+	public function getInfoAttribute()
+	{
+		return json_decode($this->attributes['info']);
+	}
 }

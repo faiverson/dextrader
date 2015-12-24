@@ -10,4 +10,8 @@ use App\Repositories\Contracts\RepositoryInterface;
  */
 interface UserRepositoryInterface extends RepositoryInterface {
 	public function actives($columns = array('*'), $limit = null, $offset = null, $order_by = null);
+	public function findById($id, $column = 'id', $columns = array('*'));
+	public function findByUsername($username, $columns = array('*'));
+	public function getIdByUsername($username);
+	public function addRole($user_id, $role_id);
 }

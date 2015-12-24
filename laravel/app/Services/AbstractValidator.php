@@ -5,11 +5,18 @@ use App\Services\ValidableInterface;
 
 abstract class AbstractValidator implements ValidableInterface {
 	/**
-	 * Validator
+	 * Validator factory
 	 *
 	 * @var object
 	 */
 	protected $validator;
+
+	/**
+	 * Validator object
+	 *
+	 * @var object
+	 */
+	protected $factory;
 
 	/**
 	 * Data to be validated
@@ -41,7 +48,7 @@ abstract class AbstractValidator implements ValidableInterface {
 
 	public function __construct(Factory $validator)
 	{
-		$this->validator = $validator;
+		$this->factory = $validator;
 	}
 
 	/**
@@ -74,11 +81,14 @@ abstract class AbstractValidator implements ValidableInterface {
 	 */
 	public function passes()
 	{
-		$validator = $this->validator->make($this->data, $this->rules, $this->messages);
+		$this->validator = $this->factory->make($this->data, $this->rules, $this->messages);
+		$this->validator->after(function($validator) {
+			$this->after($validator);
+		});
 
-		if( $validator->fails() )
+		if( $this->validator->fails() )
 		{
-			$this->errors = $validator->messages();
+			$this->errors = $this->validator->messages();
 			return false;
 		}
 
@@ -86,4 +96,5 @@ abstract class AbstractValidator implements ValidableInterface {
 	}
 
 	public function custom() {}
+	public function after($validator) {}
 }

@@ -36,7 +36,6 @@ class TransactionUpdateValidator extends AbstractValidator {
 
 		'billing_address_id' => 'sometimes|numeric',
 		'billing_address' => 'sometimes|required',
-		'billing_address2' => 'sometimes|required',
 		'billing_city' => 'sometimes|required',
 		'billing_state' => 'sometimes|required',
 		'billing_country' => 'sometimes|required',

@@ -14,6 +14,9 @@ final class Role extends EntrustRole
 
 	protected $appends = array('role_id');
 
+	protected $fillable = ['name', 'display_name', 'description'];
+
+
 	public function permissions()
 	{
 		return $this->belongsToMany(Permission::class, 'permission_role', 'role_id', 'permission_id');

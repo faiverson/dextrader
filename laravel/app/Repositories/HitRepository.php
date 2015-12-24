@@ -2,8 +2,8 @@
 namespace App\Repositories;
 
 use App\Repositories\Contracts\HitRepositoryInterface;
-use App\Repositories\Abstracts\Repository as AbstractRepository;;
-use Hit;
+use App\Repositories\Abstracts\Repository as AbstractRepository;
+use App\Models\Hit;
 
 class HitRepository extends AbstractRepository implements HitRepositoryInterface
 {

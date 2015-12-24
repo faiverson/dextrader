@@ -50,6 +50,11 @@ class InvoicesTable extends Migration
 				->references('id')->on('subscriptions')
 				->onUpdate('cascade')->onDelete('cascade');
 
+			$table->bigInteger('transaction_id')->unsigned();
+			$table->foreign('transaction_id')
+				->references('id')->on('transactions')
+				->onUpdate('cascade')->onDelete('cascade');
+
 			$table->bigInteger('card_id')->unsigned()->nullable(false);
 			$table->string('card_name', 150)->nullable(false);
 			$table->smallInteger('card_exp_month')->nullable(false);
@@ -58,6 +63,10 @@ class InvoicesTable extends Migration
 			$table->integer('card_last_four')->nullable(false);
 			$table->string('card_network', 15)->nullable(false);
 
+			$table->bigInteger('billing_address_id')->unsigned();
+			$table->foreign('billing_address_id')
+				->references('id')->on('billing_address')
+				->onUpdate('cascade')->onDelete('cascade');
 			$table->string('billing_address', 200)->nullable(false);
 			$table->string('billing_address2', 200)->nullable();
 			$table->string('billing_city', 100)->nullable(false);

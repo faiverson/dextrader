@@ -7,7 +7,7 @@ use Sofa\Eloquence\Eloquence; // base trait
 use Sofa\Eloquence\Mutable;
 
 
-class Transaction extends Model
+class Invoice extends Model
 {
 	use Eloquence, Mutable;
 
@@ -16,7 +16,7 @@ class Transaction extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'transactions';
+	protected $table = 'invoices';
 
 	protected $dates = ['created_at', 'updated_at'];
 
@@ -32,14 +32,17 @@ class Transaction extends Model
 		'email',
 
 		'enroller_id',
-		'funnel_id',
-		'tag_id',
+		'amount',
 
 		'product_id',
 		'product_name',
 		'product_amount',
 		'product_discount',
-		'amount',
+
+		'funnel_id',
+		'tag_id',
+		'subscription_id',
+		'transaction_id',
 
 		'billing_address_id',
 		'billing_address',
@@ -58,17 +61,7 @@ class Transaction extends Model
 		'card_first_six',
 		'card_last_four',
 		'info',
-		'ip_address',
-
-		'response',
-		'responsetext',
-		'authcode',
-		'transactionid',
-		'orderid',
-		'avsresponse',
-		'cvvresponse',
-		'type',
-		'response_code'
+		'ip_address'
 
 	];
 
