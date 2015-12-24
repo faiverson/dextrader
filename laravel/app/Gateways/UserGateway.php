@@ -41,4 +41,9 @@ class UserGateway extends AbstractGateway {
 	public function getIdByUsername($username) {
 		return $this->repository->getIdByUsername($username);
 	}
+
+	public function attachRole($user_id, $role_id)
+	{
+		return $this->repository->addRole($user_id, $role_id);
+	}
 }

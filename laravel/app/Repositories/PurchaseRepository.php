@@ -2,8 +2,8 @@
 namespace App\Repositories;
 
 use App\Repositories\Contracts\PurchaseRepositoryInterface;
-use App\Repositories\Abstracts\Repository as AbstractRepository;;
-use Purchase;
+use App\Repositories\Abstracts\Repository as AbstractRepository;
+use App\Models\Purchase;
 
 class PurchaseRepository extends AbstractRepository implements PurchaseRepositoryInterface
 {

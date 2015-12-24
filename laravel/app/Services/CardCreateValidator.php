@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Services;
+<?php namespace App\Services;
 
 use Illuminate\Validation\Factory;
 use Illuminate\Http\Request;
@@ -27,14 +25,5 @@ class CardCreateValidator extends AbstractValidator {
 	public function __construct(Factory $validator, Request $request)
 	{
 		parent::__construct($validator);
-//		$this->custom();
 	}
-
-//	public function custom()
-//	{
-//		$this->validator->extendImplicit('validNumber', function($attribute, $value, $parameters, $validator) {
-//			$type = !empty($parameters['type']) ? $parameters['type'] : null;
-//			$card = Cards::validCreditCard($value, $type);
-//		});
-//	}
 }

@@ -1,7 +1,7 @@
-<?php
+<?php namespace App\Services;
 
-namespace App\Services;
-
+use Illuminate\Validation\Factory;
+use Transaction;
 class TransactionCreateValidator extends AbstractValidator {
 
 	protected $messages = array(
@@ -20,6 +20,7 @@ class TransactionCreateValidator extends AbstractValidator {
 		'last_name' => 'required',
 		'email' => 'required|email|max:150',
 
+		'user_id' => 'required|exists:users,id',
 		'enroller_id' => 'sometimes|required|exists:users,id',
 		'funnel_id'=> 'required|exists:funnels,id',
 		'tag_id' => 'sometimes|required|exists:campaign_tags,id',
@@ -33,7 +34,6 @@ class TransactionCreateValidator extends AbstractValidator {
 
 		'billing_address_id' => 'numeric',
 		'billing_address' => 'required',
-		'billing_address2' => 'required',
 		'billing_city' => 'required',
 		'billing_state' => 'required',
 		'billing_country' => 'required',
@@ -50,4 +50,19 @@ class TransactionCreateValidator extends AbstractValidator {
 		'card_last_four'=> ['required', 'regex:/^[0-9]{4}$/'],
 		'cvv' => ['sometimes', 'required', 'regex:/^[0-9]{3,4}$/']
 	);
+
+	public function __construct(Factory $validator)
+	{
+		parent::__construct($validator);
+	}
+
+	public function after($validator)
+	{
+		$data = $validator->getData();
+		if(Transaction::where('user_id', $data['user_id'])->where('product_id', $data['product_id'])->count() > 0) {
+			$validator->errors()->add('user_id', 'You have bought this product already!');
+		}
+	}
+
+
 }

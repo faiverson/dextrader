@@ -1,6 +1,5 @@
 <?php namespace App\Repositories\Abstracts;
 
-use App\Models\User;
 use App\Repositories\Contracts\RepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Container\Container as App;
