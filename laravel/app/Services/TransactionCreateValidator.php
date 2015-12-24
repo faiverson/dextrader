@@ -1,7 +1,8 @@
 <?php namespace App\Services;
 
+use App\Models\Subscription;
 use Illuminate\Validation\Factory;
-use Transaction;
+
 class TransactionCreateValidator extends AbstractValidator {
 
 	protected $messages = array(
@@ -59,7 +60,11 @@ class TransactionCreateValidator extends AbstractValidator {
 	public function after($validator)
 	{
 		$data = $validator->getData();
-		if(Transaction::where('user_id', $data['user_id'])->where('product_id', $data['product_id'])->count() > 0) {
+		$many = Subscription::where('user_id', $data['user_id'])
+							->where('product_id', $data['product_id'])
+							->where('status', 'active')
+							->count();
+		if($many > 0) {
 			$validator->errors()->add('user_id', 'You have bought this product already!');
 		}
 	}

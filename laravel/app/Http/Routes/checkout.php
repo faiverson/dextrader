@@ -1,4 +1,4 @@
 <?php
 Route::post('/checkout', ['middleware' => 'page:checkout',
-						  'uses' => 'PurchasesController@checkout']);
+						  'uses' => 'TransactionController@checkout']);
 

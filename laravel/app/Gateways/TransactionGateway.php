@@ -251,7 +251,8 @@ class TransactionGateway extends AbstractGateway {
 			'status' => 'active',
 			'subscription_id' => $subscription->id,
 			'transaction_id' => $data['orderid'],
-			'invoice_id' => $invoice->id
+			'invoice_id' => $invoice->id,
+			'purchase_id' => $purchase->id
 		]);
 	}
 

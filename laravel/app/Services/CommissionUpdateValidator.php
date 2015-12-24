@@ -14,6 +14,11 @@ class CommissionUpdateValidator extends AbstractValidator {
 	 * @var array
 	 */
 	protected $rules = array(
+		'from_user_id' => 'required|exists:users,id',
+		'to_user_id' => 'required|exists:users,id',
+		'invoices_id' => 'required|exists:invoices,id',
+		'amount' => 'required',
+		'type' => 'sometimes|required'
 	);
 
 
