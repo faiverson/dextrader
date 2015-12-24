@@ -22,4 +22,9 @@ class PurchaseGateway extends AbstractGateway {
 		$this->createValidator = $createValidator;
 		$this->updateValidator = $updateValidator;
 	}
+
+//	public function findByUser()
+//	{
+//
+//	}
 }

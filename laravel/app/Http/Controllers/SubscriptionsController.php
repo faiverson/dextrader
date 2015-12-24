@@ -21,10 +21,10 @@ class SubscriptionsController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$id = $request->id;
+		$user_id = $request->id;
 		$limit = $request->input('limit') ? $request->input('limit') : $this->limit;
 		$offset = $request->input('offset') ? $request->input('offset') : 0;
-		$response = $this->gateway->findBy('user_id', $id, null, $limit, $offset);
+		$response = $this->gateway->findByUser($user_id, null, $limit, $offset);
 		return response()->ok($response);
 	}
 

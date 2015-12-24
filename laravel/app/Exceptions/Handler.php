@@ -54,9 +54,9 @@ class Handler extends ExceptionHandler
 		else if ($e instanceof ModelNotFoundException) {
 			$e = new NotFoundHttpException($e->getMessage(), $e);
 		}
-		else if ($e instanceof QueryException) {
-			return response()->error('Ups! There was a problem saving in database. Please contact support immediately!');
-		}
+//		else if ($e instanceof QueryException) {
+//			return response()->error('Ups! There was a problem in database. Please contact support immediately!');
+//		}
 		else if ($e instanceof NotFoundHttpException) {
 			return response()->error('Ups! The URL provided was not found!', $e->getStatusCode());
 		}

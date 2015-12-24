@@ -45,7 +45,7 @@ class Purchase extends Model
      *
      * @var array
      */
-    protected $hidden = ['id'];
+    protected $hidden = ['id', 'product_id', 'card_id', 'billing_address_id'];
 
 	public function getPurchaseIdAttribute()
 	{
@@ -55,6 +55,21 @@ class Purchase extends Model
 	public function setInfoAttribute($value)
 	{
 		$this->attributes['info'] = json_encode($value);
+	}
+
+	public function card()
+	{
+		return $this->hasOne(CreditCard::class, 'id', 'card_id');
+	}
+
+	public function product()
+	{
+		return $this->hasOne(Product::class, 'id', 'product_id');
+	}
+
+	public function address()
+	{
+		return $this->hasOne(BillingAddress::class, 'id', 'billing_address_id');
 	}
 
 }
