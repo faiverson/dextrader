@@ -34,7 +34,6 @@ class UserUpdateValidator extends AbstractValidator {
 		if($user) {
 			$this->id = $user->id;
 			$this->email = $request->user()->email;
-			$this->custom();
 		}
 	}
 

@@ -34,6 +34,7 @@ class Transaction extends Model
 		'enroller_id',
 		'funnel_id',
 		'tag_id',
+		'tag',
 
 		'product_id',
 		'product_name',

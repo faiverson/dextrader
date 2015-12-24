@@ -86,7 +86,7 @@ class UserSeeder extends Seeder
 			foreach (range(1, $by_bath) as $index) {
 				$total = $index * $batch - 1;
 				try {
-					$users[] = [
+					User::create([
 						'first_name' => $faker->firstName,
 						'last_name' => $faker->lastName,
 						'username' => str_replace('.', '_', $faker->unique()->userName),
@@ -97,12 +97,12 @@ class UserSeeder extends Seeder
 						'ip_address' => $faker->ipv4,
 						'created_at' => $faker->dateTimeThisYear('now'),
 						'updated_at' => $faker->dateTimeThisYear('now')
-					];
+					]);
 				} catch (Exception $e) {
 					var_dump($e);
 				}
 			}
-			DB::table('users')->insert($users);
+
 		}
 	}
 }

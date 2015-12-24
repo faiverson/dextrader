@@ -18,7 +18,7 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
         'username' => str_replace('.', '_', $faker->unique()->userName),
         'email' => $faker->unique()->email,
         'phone' => rand(1, 1000) . '-' . rand(1, 1000) . ' ' . rand(1, 10000),
-        'password' => bcrypt(str_random(10)),
+        'password' => str_random(10),
 		'phone' => rand(0,2) == 0 ? $faker->phoneNumber : null,
 //		'enroller_id' => rand(0,2) == 1 ? rand(1, $total) : null,
 		'ip_address' => $faker->ipv4,

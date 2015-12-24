@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Gateways\TransactionGateway;
+use App\Gateways\PurchaseGateway;
 use Illuminate\Http\Request;
+use Config;
 
 class PurchasesController extends Controller
 {
 	public function __construct(TransactionGateway $gateway)
 	{
 		$this->transaction = $gateway;
+		$this->limit = Config::get('dextrader.limit');
 	}
 	/**
 	 * Show array of user cards
@@ -17,11 +20,13 @@ class PurchasesController extends Controller
 	 * @param  \Illuminate\Http\Request $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index(Request $request)
+	public function index(Request $request, PurchaseGateway $purchase)
 	{
 		$id = $request->id;
-		$cards = Purchase::where('user_id', $id)->get();
-		return response()->ok($cards);
+		$limit = $request->input('limit') ? $request->input('limit') : $this->limit;
+		$offset = $request->input('offset') ? $request->input('offset') : 0;
+		$response = $purchase->findBy('user_id', $id, null, $limit, $offset);
+		return response()->ok($response);
 	}
 
 	/**

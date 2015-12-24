@@ -17,7 +17,7 @@ class ProductsSeeder extends Seeder
 		$this->command->info("Creating Products");
 
 		Product::unguard();
-		Product::create([
+		$ib = Product::create([
 			'name' => 'IB',
 			'display_name' => 'IB',
 			'amount' => 97,
@@ -29,6 +29,7 @@ class ProductsSeeder extends Seeder
 			'display_name' => 'IB PRO',
 			'amount' => 100,
 			'discount' => 0,
+			'parents' => $ib->id,
 		]);
 
 		Product::create([

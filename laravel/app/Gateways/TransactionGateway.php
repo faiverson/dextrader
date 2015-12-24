@@ -218,6 +218,18 @@ class TransactionGateway extends AbstractGateway {
 				return false;
 			}
 
+			$purchase = $this->purchase->create(array_merge($data, [
+				'invoice_id' => $invoice->id,
+				'card_id' => $card->id,
+				'billing_address_id' => $billing->id,
+				'subscription_id' => $subscription->id,
+				'transaction_id' => $data['orderid']
+			]));
+			if(!$purchase) {
+				$this->errors = $this->purchase->errors();
+				return false;
+			}
+
 			$role_id = $this->role->getRoleIdByName($data['product_name']);
 			$this->user->attachRole($data['user_id'], $role_id);
 		} catch(\Exception $e) {
