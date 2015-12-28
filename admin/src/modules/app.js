@@ -12,6 +12,8 @@ angular.module('app', [
         'app.shared-directives',
         'ui.bootstrap.tpls',
         'ui.bootstrap',
+        'ngAnimate',
+        'angular-loading-bar',
         'app.http-services',
         'LocalStorageModule',
         'app.user-profile',

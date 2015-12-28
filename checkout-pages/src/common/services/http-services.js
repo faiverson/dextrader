@@ -147,8 +147,8 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             };
         }])
 
-    .factory('SalesService', ['$q', '$site-configs', '$http', function ($q, $config, $http) {
-        var service = $config.API_BASE_URL + 'sales';
+    .factory('CheckoutService', ['$q', '$site-configs', '$http', function ($q, $config, $http) {
+        var service = $config.API_BASE_URL + 'checkout';
 
         function send(data, token) {
             var endpoint = service,
@@ -167,6 +167,37 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 url: endpoint,
                 data: data,
                 headers: {'Authorization': 'Bearer ' + token}
+            }).then(success, error);
+
+            return deferred.promise;
+
+        }
+
+        return {
+            send: send
+        };
+
+    }])
+
+    .factory('UserService', ['$q', '$site-configs', '$http', function ($q, $config, $http) {
+        var service = $config.API_BASE_URL + 'users';
+
+        function send(data) {
+            var endpoint = service + '/signup',
+                deferred = $q.defer();
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http({
+                method: "POST",
+                url: endpoint,
+                data: data
             }).then(success, error);
 
             return deferred.promise;

@@ -2,7 +2,15 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('checkout', {
-                url: '/checkout/:enroller?/:tag?',
+                url: '/checkout/:enroller',
+                templateUrl: 'modules/checkout/checkout.tpl.html',
+                controller: 'CheckoutCtrl',
+                data: {
+                    pageTitle: 'Checkout Page'
+                }
+            })
+            .state('checkout2', {
+                url: '/checkout/:enroller/:tag',
                 templateUrl: 'modules/checkout/checkout.tpl.html',
                 controller: 'CheckoutCtrl',
                 data: {
@@ -19,17 +27,26 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             });
     })
 
-    .controller('CheckoutCtrl', ['$scope', 'SalesService', 'CountriesService', '$q', 'os-info', '$stateParams', 'PageService', 'Notification', 'HitsService', 'TestimonialsService',
-        function ($scope, SalesService, CountriesService, $q, osInfo, $stateParams, PageService, Notification, HitsService, TestimonialsService) {
+    .controller('CheckoutCtrl', ['$scope', 'CheckoutService', 'UserService', 'CountriesService', '$q', 'os-info', '$stateParams', 'PageService', 'Notification', 'HitsService', 'TestimonialsService', '$state',
+        function ($scope, CheckoutService, UserService, CountriesService, $q, osInfo, $stateParams, PageService, Notification, HitsService, TestimonialsService, $state) {
             var vm = this;
-            $scope.formData = {};
+            $scope.formData = {
+                billing_address2: "",
+                product_id: 1,
+                funnel_id: 1
+            };
+
+            $scope.userData = {};
 
             vm.feelExpMonth = function () {
                 $scope.months = [];
+                var text = '';
 
                 for (var i = 1; i <= 12; i++) {
 
-                    $scope.months.push(i);
+                    text = i < 10 ? '0' + i : i;
+
+                    $scope.months.push(text);
                 }
             };
 
@@ -43,20 +60,35 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             };
 
             $scope.send = function () {
-
+                var proms = [];
                 $scope.showAgreementWarning = angular.isUndefined($scope.formData.terms);
 
                 if ($scope.formCheckout.$valid) {
                     $scope.formData.data = vm.getUserBrowserData();
 
-                    $scope.formData.enroller = $stateParams.enroller;
-
-                    if (angular.isUndefined($scope.formData.username)) {
-                        $scope.formData.username = $scope.formData.email;
+                    if (angular.isDefined($stateParams.enroller) && $stateParams.enroller.length > 0) {
+                        $scope.formData.enroller = $stateParams.enroller;
                     }
 
-                    SalesService.send($scope.formData, $scope.token)
-                        .then(vm.success, vm.error);
+                    if (angular.isDefined($stateParams.tag)) {
+                        $scope.formData.tag = $stateParams.tag;
+                    }
+
+                    if (angular.isUndefined($scope.userData.username)) {
+                        $scope.userData.username = $scope.formData.email;
+                    }
+
+                    if (angular.isDefined($scope.formData.user_id)) {
+                        CheckoutService.send($scope.formData, $scope.token)
+                            .then(vm.success, vm.error);
+                    } else {
+                        UserService.send($scope.userData).then(function (res) {
+                            $scope.formData.user_id = res.data.user_id;
+                            CheckoutService.send($scope.formData, $scope.token)
+                                .then(vm.success, vm.error);
+
+                        }, vm.error);
+                    }
 
                 } else {
                     $scope.$broadcast('show-errors-check-validity');
@@ -79,7 +111,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             };
 
             $scope.selectCountry = function ($item, $model, $label) {
-                $scope.formData.country = $item.name;
+                $scope.formData.billing_country = $item.name;
                 $scope.selectedCountry = $item;
             };
 
@@ -99,17 +131,17 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             };
 
             $scope.autoCompleteBillingName = function () {
-                $scope.formData.card_name = $scope.formData.first_name + ' ' + $scope.formData.last_name;
+                $scope.formData.card_name = $scope.userData.first_name + ' ' + $scope.userData.last_name;
             };
 
             $scope.autoCompleteBillingPhone = function () {
-                $scope.formData.billing_phone = $scope.formData.phone;
+                $scope.formData.billing_phone = $scope.userData.phone;
             };
 
             $scope.selectCity = function ($item, $model, $label) {
-                $scope.formData.city = $item.name;
+                $scope.formData.billing_city = $item.name;
                 $scope.selectedCity = $item;
-                $scope.formData.state = $item.district;
+                $scope.formData.billing_state = $item.district;
             };
 
             $scope.nextTestimonial = function () {
@@ -117,7 +149,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
 
                 if (currentIndex < $scope.testimonials.length - 1) {
                     $scope.selectedTestimonial = $scope.testimonials[currentIndex + 1];
-                }else{
+                } else {
                     $scope.selectedTestimonial = $scope.testimonials[0];
                 }
             };
@@ -127,8 +159,8 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
 
                 if (currentIndex > 1) {
                     $scope.selectedTestimonial = $scope.testimonials[currentIndex - 1];
-                }else{
-                    $scope.selectedTestimonial = $scope.testimonials[$scope.testimonials.length -1];
+                } else {
+                    $scope.selectedTestimonial = $scope.testimonials[$scope.testimonials.length - 1];
                 }
             };
 
@@ -151,17 +183,17 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
 
             vm.sendHit = function () {
                 var data = {
-                    funnel_id: 2,
+                    funnel_id: 1,
                     info: vm.getUserBrowserData(),
                     product_id: 1
                 };
 
                 if (angular.isDefined($stateParams.enroller) && $stateParams.enroller.length > 0) {
-                    data.enroller_id = $stateParams.enroller;
+                    data.enroller = $stateParams.enroller;
                 }
 
                 if (angular.isDefined($stateParams.tag)) {
-                    data.tag_id = $stateParams.tag;
+                    data.tag = $stateParams.tag;
                 }
 
                 HitsService.send(data, $scope.token);
@@ -176,7 +208,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             };
 
             vm.success = function (res) {
-                //TODO see where we should redirect the user
+                $state.go('upsell');
                 Notification.success('Congratulations!!! Account has been created!');
             };
 

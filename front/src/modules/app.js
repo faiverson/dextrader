@@ -17,6 +17,7 @@ angular.module('app', [
         'app.shared-filters',
         'LocalStorageModule',
         'ngAnimate',
+        'angular-loading-bar',
         'app.privacy',
         'app.disclosure',
         'app.term-and-conditions',

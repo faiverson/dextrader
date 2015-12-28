@@ -107,4 +107,18 @@ angular.module('app.shared-directives', [])
                 }
             }
         };
+    }])
+    .directive('ngCsrc', ['$site-configs', function($configs) {
+        return {
+            priority: 99,
+            link: function(scope, element, attr) {
+                attr.$observe('ngCsrc', function(value) {
+                    if (!value){
+                        return;
+                    }
+
+                    attr.$set('src', $configs.DASHBOARD_URL + value);
+                });
+            }
+        };
     }]);

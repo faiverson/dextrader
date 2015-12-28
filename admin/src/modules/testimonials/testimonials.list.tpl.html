@@ -23,7 +23,7 @@
         </thead>
         <tbody>
         <tr data-ng-repeat="testimonial in testimonials">
-            <td><img data-ng-src="http://local.dextrader.com/assets/images/{{testimonial.image}}" class="img-responsive" width="20"></td>
+            <td><img data-ng-csrc="/assets/images/{{testimonial.image}}" class="img-responsive" width="20"></td>
             <td data-ng-bind="testimonial.author"></td>
             <td class="link">
                 <a href="#" data-ng-click="open(testimonial)">
@@ -39,7 +39,7 @@
                         Actions <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a ui-sref="testimonials.edit({id:testimonial.id})">Edit</a></li>
+                        <li><a ui-sref="testimonia.edit({id:testimonial.id})">Edit</a></li>
                         <li><a href="#">Remove</a></li>
                     </ul>
                 </div>

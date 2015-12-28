@@ -29,7 +29,7 @@
                                class="form-control"
                                id="email"
                                required
-                               data-ng-model="formData.email">
+                               data-ng-model="userData.email">
                     </div>
                     <div class="form-group has-feedback" data-show-errors>
                         <label for="email">Username</label>
@@ -37,7 +37,7 @@
                                name="username"
                                class="form-control"
                                id="username"
-                               data-ng-model="formData.username">
+                               data-ng-model="userData.username">
                     </div>
                     <div class="form-group has-feedback" data-show-errors>
                         <label for="first_name">Password</label>
@@ -46,7 +46,7 @@
                                class="form-control"
                                id="password"
                                required
-                               data-ng-model="formData.password">
+                               data-ng-model="userData.password">
                     </div>
                     <div class="form-group has-feedback" data-show-errors>
                         <label for="first_name">First Name</label>
@@ -56,7 +56,7 @@
                                class="form-control"
                                id="first_name"
                                required
-                               data-ng-model="formData.first_name">
+                               data-ng-model="userData.first_name">
                     </div>
                     <div class="form-group has-feedback" data-show-errors>
                         <label for="last_name">Last Name</label>
@@ -66,7 +66,7 @@
                                class="form-control"
                                id="last_name"
                                required
-                               data-ng-model="formData.last_name">
+                               data-ng-model="userData.last_name">
                     </div>
                     <div class="form-group has-feedback" data-show-errors>
                         <label for="phone">Mobile Phone</label>
@@ -76,7 +76,7 @@
                                data-ng-maxlength="12"
                                class="form-control"
                                id="phone"
-                               data-ng-model="formData.phone">
+                               data-ng-model="userData.phone">
                     </div>
                 </div>
             </div>
@@ -91,8 +91,17 @@
                                class="form-control"
                                required
                                id="address"
-                               data-ng-model="formData.address">
+                               data-ng-model="formData.billing_address">
                     </div>
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="billing_address2">Address 2</label>
+                        <input type="text"
+                               name="billing_address2"
+                               class="form-control"
+                               id="billing_address2"
+                               data-ng-model="formData.billing_address2">
+                    </div>
+
                     <div class="form-group has-feedback" data-show-errors>
                         <label for="dex_country">Country</label>
                         <script type="text/ng-template" id="countryTemplate.html">
@@ -143,7 +152,7 @@
                                data-ng-disabled="formCheckout.city.$invalid"
                                class="form-control"
                                required
-                               data-ng-model="formData.state" />
+                               data-ng-model="formData.billing_state" />
                     </div>
                     <div class="form-group has-feedback" data-show-errors>
                         <label for="zip">Zip/Postal Code</label>
@@ -155,7 +164,7 @@
                                maxlength="6"
                                data-ng-minlength="4"
                                data-ng-maxlength="10"
-                               data-ng-model="formData.zip">
+                               data-ng-model="formData.billing_zip">
                     </div>
                 </div>
             </div>
@@ -201,7 +210,7 @@
                                 <select id="cc-exp"
                                         class="form-control halfsize"
                                         name="cc-exp"
-                                        data-ng-model="formData.month"
+                                        data-ng-model="formData.card_exp_month"
                                         ng-options="month for month in months"
                                         required>
                                     <option value="">-- Exp Month --</option>
@@ -209,7 +218,7 @@
                                 <select name="cc-exp2"
                                         class="form-control halfsize"
                                         ng-options="year for year in years"
-                                        data-ng-model="formData.year"
+                                        data-ng-model="formData.card_exp_year"
                                         required>
                                     <option value="">-- Exp Year --</option>
                                 </select>
@@ -315,7 +324,7 @@
             {{selectedTestimonial.text}}
         </div>
         <div class="quote-author">
-            <img src="http://local.dextrader.com/assets/images/{{selectedTestimonial.image}}">
+            <img data-ng-csrc="/assets/images/{{selectedTestimonial.image}}">
             {{selectedTestimonial.author}}
         </div>
         <div class="quote-nav clearfix">

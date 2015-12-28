@@ -92,7 +92,7 @@ angular.module('app.testimonials', ['ui.router', 'ngFileUpload'])
                 TestimonialsService.getOne(id)
                     .then(function (res) {
                         $scope.testimonial = res.data;
-                        $scope.image = 'http://local.dextrader.com/assets/images/' + $scope.testimonial.image;
+                        $scope.image = $configs.DASHBOARD_URL + '/assets/images/' + $scope.testimonial.image;
                     });
             };
 

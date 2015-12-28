@@ -43,7 +43,8 @@ module.exports = {
                 'vendor/angular-jwt/dist/angular-jwt.js',
                 'vendor/angular-ui-notification/dist/angular-ui-notification.js',
                 'vendor/ng-file-upload-shim/ng-file-upload-shim.js', //no html5 browser support
-                'vendor/ng-file-upload-shim/ng-file-upload.js'
+                'vendor/ng-file-upload-shim/ng-file-upload.js',
+                'vendor/angular-loading-bar/build/loading-bar.js'
             ],
             output: 'vendor.js'
         },
@@ -112,6 +113,10 @@ module.exports = {
         {
             match: 'API_URL',
             replacement: process.env.API_URL + '/api/'
+        },
+        {
+            match: 'DASHBOARD_URL',
+            replacement: process.env.DASHBOARD_URL + '/'
         }
     ]
 };
