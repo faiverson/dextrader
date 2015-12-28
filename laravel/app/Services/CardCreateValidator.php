@@ -15,7 +15,7 @@ class CardCreateValidator extends AbstractValidator {
 	protected $rules = array(
 		'user_id' => 'required|exists:users,id',
 		'name' => 'required',
-		'exp_month' => ['regex:/^(0?[1-9]|1[012])$/'],
+		'exp_month' => ['regex:/^(0[1-9]|1[012])$/'],
 		'exp_year' => ['regex:/^[0-9]{2}$/'],
 		'number' => ['regex:/^[0-9]{14,16}$/'],
 		'last_four' => ['regex:/^[0-9]{4}$/'],
