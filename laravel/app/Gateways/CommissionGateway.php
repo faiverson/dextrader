@@ -29,13 +29,7 @@ class CommissionGateway extends AbstractGateway {
 
 	public function add(array $data)
 	{
-		var_dump([
-			'from_user_id' => $data['user_id'],
-			'to_user_id' => $data['enroller_id'],
-			'invoice_id' => $data['invoice_id'],
-			'amount' => $data['amount'] * Config::get('dextrader.comms')
-		]);
-		if($data['enroller_id']) {
+		if(array_key_exists('enroller_id', $data)) {
 			$this->repository->create([
 				'from_user_id' => $data['user_id'],
 				'to_user_id' => $data['enroller_id'],

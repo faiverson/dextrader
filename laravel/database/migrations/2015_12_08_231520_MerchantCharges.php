@@ -25,6 +25,7 @@ class MerchantCharges extends Migration
 
 			$table->bigInteger('enroller_id')->unsigned()->nullable()->default(null);
 			$table->foreign('enroller_id')->references('id')->on('users');
+			$table->string('enroller', 80)->nullable();
 			$table->decimal('amount', 10, 2)->signed()->nullable(false);
 
 			$table->smallInteger('product_id')->unsigned();

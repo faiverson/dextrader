@@ -28,4 +28,25 @@ class SubscriptionsController extends Controller
 		return response()->ok($response);
 	}
 
+	public function update(Request $request)
+	{
+		$user_id = $request->id;
+		$subscription_id = $request->subscription_id;
+		$isOwner = $this->gateway->isOwner($user_id, $subscription_id);
+		if($isOwner > 0) {
+			// we want only update these fields
+			$response = $this->gateway->update([
+				'card_id' => $request->input('card_id'),
+				'billing_address_id' => $request->input('billing_address_id')
+			], $subscription_id);
+			if(!$response) {
+				return response()->error($this->gateway->errors());
+			}
+		} else {
+			return response()->error('You do not have permissions to set this subscription!');
+		}
+
+		return response()->ok();
+	}
+
 }
