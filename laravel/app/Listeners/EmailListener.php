@@ -2,11 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Events\SomeEvent;
+use App\Events\CheckoutEvent;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class EventListener
+class EmailListener
 {
     /**
      * Create the event listener.
@@ -21,10 +21,10 @@ class EventListener
     /**
      * Handle the event.
      *
-     * @param  SomeEvent  $event
+     * @param  CheckoutEvent  $event
      * @return void
      */
-    public function handle(SomeEvent $event)
+    public function handle(CheckoutEvent $event)
     {
         //
     }

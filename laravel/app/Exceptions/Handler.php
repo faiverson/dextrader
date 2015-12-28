@@ -46,16 +46,19 @@ class Handler extends ExceptionHandler
     {
 		Log::info('Exception ');
 		if ($e instanceof Tymon\JWTAuth\Exceptions\TokenExpiredException) {
-			return response()->error('Token Expired' , $e->getStatusCode());
+			return response()->error('The token has expired.' , $e->getStatusCode());
 		}
 		else if ($e instanceof Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-			return response()->error('Invalid Token', $e->getStatusCode());
+			return response()->error('The token is invalid.', $e->getStatusCode());
 		}
 		else if ($e instanceof ModelNotFoundException) {
 			$e = new NotFoundHttpException($e->getMessage(), $e);
 		}
-		else if ($e instanceof QueryException) {
-			//return response()->error('There was a problem saving in database. Please contact support immediately!');
+//		else if ($e instanceof QueryException) {
+//			return response()->error('Ups! There was a problem in database. Please contact support immediately!');
+//		}
+		else if ($e instanceof NotFoundHttpException) {
+			return response()->error('Ups! The URL provided was not found!', $e->getStatusCode());
 		}
 //		else if ($this->isHttpException($e))
 //		{

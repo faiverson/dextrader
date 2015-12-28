@@ -6,7 +6,8 @@ use App\Services\SubscriptionCreateValidator;
 use App\Services\SubscriptionUpdateValidator;
 use App\Repositories\SubscriptionRepository;
 
-class SubscriptionGateway extends AbstractGateway {
+class SubscriptionGateway extends AbstractGateway
+{
 
 	protected $repository;
 
@@ -21,5 +22,10 @@ class SubscriptionGateway extends AbstractGateway {
 		$this->repository = $repository;
 		$this->createValidator = $createValidator;
 		$this->updateValidator = $updateValidator;
+	}
+
+	public function findByUser($user_id, $columns = array('*'), $limit = null, $offset = null)
+	{
+		return $this->repository->findByUser($user_id, $columns, $limit, $offset);
 	}
 }

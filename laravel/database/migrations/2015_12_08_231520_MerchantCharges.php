@@ -45,6 +45,9 @@ class MerchantCharges extends Migration
 				->references('id')->on('campaign_tags')
 				->onUpdate('cascade')->onDelete('cascade');
 
+			// in case the user has a tag is not in the system, we want to know using this
+			$table->string('tag', 80)->nullable();
+
 			$table->bigInteger('card_id')->unsigned()->nullable();
 			$table->string('card_name', 150)->nullable(false);
 			$table->smallInteger('card_exp_month')->nullable(false);

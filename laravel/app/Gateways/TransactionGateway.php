@@ -89,6 +89,12 @@ class TransactionGateway extends AbstractGateway {
 		// get info about user, product and tags
 		$user = $this->user->find($data['user_id']);
 		$product = $this->product->find($data['product_id']);
+		$subs = $this->subscription->findBy('user_id', $data['user_id'], ['product_id']);
+		$canBuy = $this->product->userCanBuy($subs, $product);
+		if(!$canBuy) {
+			$this->errors = $this->product->errors();
+			return false;
+		}
 
 		if(array_key_exists('tag', $data)) {
 			$tag_id = $this->tag->getIdByTag($data['tag']);
@@ -218,6 +224,18 @@ class TransactionGateway extends AbstractGateway {
 				return false;
 			}
 
+			$purchase = $this->purchase->create(array_merge($data, [
+				'invoice_id' => $invoice->id,
+				'card_id' => $card->id,
+				'billing_address_id' => $billing->id,
+				'subscription_id' => $subscription->id,
+				'transaction_id' => $data['orderid']
+			]));
+			if(!$purchase) {
+				$this->errors = $this->purchase->errors();
+				return false;
+			}
+
 			$role_id = $this->role->getRoleIdByName($data['product_name']);
 			$this->user->attachRole($data['user_id'], $role_id);
 		} catch(\Exception $e) {
@@ -233,7 +251,8 @@ class TransactionGateway extends AbstractGateway {
 			'status' => 'active',
 			'subscription_id' => $subscription->id,
 			'transaction_id' => $data['orderid'],
-			'invoice_id' => $invoice->id
+			'invoice_id' => $invoice->id,
+			'purchase_id' => $purchase->id
 		]);
 	}
 

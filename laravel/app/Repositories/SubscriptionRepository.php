@@ -11,4 +11,8 @@ class SubscriptionRepository extends AbstractRepository implements SubscriptionR
 	{
 		return Subscription::class;
 	}
+
+	public function findByUser($user_id, $columns = array('*'), $limit = null, $offset = null) {
+		return $this->model->with('card')->with('product')->with('address')->where('user_id', '=', $user_id)->get($columns);
+	}
 }

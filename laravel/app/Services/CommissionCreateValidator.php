@@ -10,7 +10,10 @@ class CommissionCreateValidator extends AbstractValidator {
 	 * @var array
 	 */
 	protected $rules = array(
-		'tag' => 'required|unique:campaign_tags',
+		'from_user_id' => 'required|exist:users,id',
+		'to_user_id' => 'required|exist:users,id',
+		'invoices_id' => 'required|exist:invoices,id',
+		'amount' => 'required'
 	);
 
 }

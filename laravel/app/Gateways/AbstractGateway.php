@@ -23,6 +23,16 @@ abstract class AbstractGateway {
 	}
 
 	/**
+	 * @param $attribute
+	 * @param $value
+	 * @param array $columns
+	 * @return mixed
+	 */
+	public function findBy($attribute, $value, $columns = array('*'), $limit = null, $offset = null) {
+		return $this->repository->findBy($attribute, $value, $columns, $limit, $offset);
+	}
+
+	/**
 	 * Create
 	 *
 	 * @param array $data

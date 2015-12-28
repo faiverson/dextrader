@@ -38,7 +38,7 @@ class BillingAddress extends Model
      *
      * @var array
      */
-    protected $hidden = ['id', 'number', 'deleted_at', 'updated_at'];
+    protected $hidden = ['id', 'number', 'deleted_at', 'updated_at', 'created_at'];
 
 	public function getAddressIdAttribute()
 	{
