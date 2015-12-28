@@ -43,7 +43,7 @@ class TransactionCreateValidator extends AbstractValidator {
 
 		'card_id' => 'sometimes|numeric',
 		'card_name' => 'required',
-		'card_exp_month' => ['required','regex:/^(0?[1-9]|1[012])$/'],
+		'card_exp_month' => ['required','regex:/^(0[1-9]|1[012])$/'],
 		'card_exp_year' => ['required','regex:/^[0-9]{2}$/'],
 		'number' => ['required','regex:/^[0-9]{14,16}$/'],
 		'card_network' => 'required',

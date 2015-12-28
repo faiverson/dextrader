@@ -15,7 +15,7 @@ class CardUpdateValidator extends AbstractValidator {
 	 */
 	protected $rules = array(
 		'name' => 'required',
-		'month' => ['regex:/^(0?[1-9]|1[012])$/'],
+		'month' => ['regex:/^(0[1-9]|1[012])$/'],
 		'year' => ['regex:/^[0-9]{2}$/'],
 	);
 
