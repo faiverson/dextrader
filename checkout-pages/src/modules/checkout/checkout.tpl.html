@@ -312,16 +312,15 @@
     <div class="content-right">
         <div class="arrow_box quote">
             <img class="quote-img" src="/assets/images/ico-quote.png">
-            These guys know their stuff and provide very good, reliable trading signals. They also taught me how to
-            manage my money and not over trade.
+            {{selectedTestimonial.text}}
         </div>
         <div class="quote-author">
-            <img src="/assets/images/test-4.png">
-            Akpo Khan
+            <img src="http://local.dextrader.com/assets/images/{{selectedTestimonial.image}}">
+            {{selectedTestimonial.author}}
         </div>
         <div class="quote-nav clearfix">
-            <a href="#" class="nav-prev left">&nbsp;</a>
-            <a href="#" class="nav-next right">&nbsp;</a>
+            <a href="#" class="nav-prev left" data-ng-click="prevTestimonial()">&nbsp;</a>
+            <a href="#" class="nav-next right" data-ng-click="nextTestimonial()">&nbsp;</a>
         </div>
     </div>
     <div class="clear"></div>

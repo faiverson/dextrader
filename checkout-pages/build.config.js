@@ -42,7 +42,8 @@ module.exports = {
                 'vendor/angular-animate/angular-animate.js',
                 'vendor/angular-moment/angular-moment.js',
                 'vendor/moment/min/moment.min.js',
-                'vendor/angular-ui-mask/dist/mask.js'
+                'vendor/angular-ui-mask/dist/mask.js',
+                'vendor/angular-loading-bar/build/loading-bar.js'
             ],
             output: 'vendor.js'
         },
@@ -111,6 +112,10 @@ module.exports = {
         {
             match: 'API_URL',
             replacement: process.env.API_URL + '/api/'
+        },
+        {
+            match: 'DASHBOARD_URL',
+            replacement: process.env.DASHBOARD_URL
         }
     ]
 };

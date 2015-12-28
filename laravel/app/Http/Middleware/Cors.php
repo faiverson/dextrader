@@ -20,7 +20,7 @@ class Cors
         $response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
         $response->headers->set('Access-Control-Max-Age', '1000');
         $response->headers->set('Access-Control-Allow-Credentials', 'true');
-        $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization, X-Requested-With, Application');
+        $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Accept, Authentication, Authorization, X-Requested-With, Application');
 
         return $response;
     }

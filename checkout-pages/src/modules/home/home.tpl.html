@@ -263,38 +263,22 @@
         <h2 class="align-center">What Other People<br>Are Saying</h2>
         <div id="testimonials" class="clearfix">
             <div class="left">
-                <div class="test-wrapper">
+                <div class="test-wrapper" data-ng-repeat="testimonial in testimonialsLeft">
                     <div class="test dark">
-                        Signals365.com is my favourite signals provider. They offer more profitable signals than any other competitors and the support is great and transparent about their services. Also you can see all past results verified on their website once you login.
+                        {{testimonial.text}}
                     </div>
                     <div class="test-author align-right">
-                        Alan Simons <img src="/assets/images/test-1.png">
-                    </div>
-                </div>
-                <div class="test-wrapper">
-                    <div class="test">
-                        Managed to triple my broker account with this service and their trading team provided a lot of helpful advice when I asked about their strategies.
-                    </div>
-                    <div class="test-author align-right">
-                        Ted Gorodetzky <img src="/assets/images/test-3.png">
+                        {{testimonial.author}} <img ng-src="http://local.dextrader.com/assets/images/{{testimonial.image}}">
                     </div>
                 </div>
             </div>
             <div class="right">
-                <div class="test-wrapper">
-                    <div class="test">
-                        I've tried using binary options robots but lost most of my money. These guys are for real and provide quite good results.
-                    </div>
-                    <div class="test-author align-left">
-                        <img src="/assets/images/test-2.png"> David Goldstein
-                    </div>
-                </div>
-                <div class="test-wrapper">
+                <div class="test-wrapper" data-ng-repeat="testimonial in testimonialsRight">
                     <div class="test dark">
-                        These guys know their stuff and provide very good, reliable trading signals. They also taught me how to manage my money and not over trade.
+                        {{testimonial.text}}
                     </div>
-                    <div class="test-author align-left">
-                        <img src="/assets/images/test-4.png"> Akpo Khan
+                    <div class="test-author align-right">
+                        {{testimonial.author}} <img ng-src="http://local.dextrader.com/assets/images/{{testimonial.image}}">
                     </div>
                 </div>
             </div>

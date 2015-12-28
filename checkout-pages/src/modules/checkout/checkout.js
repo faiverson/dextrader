@@ -19,8 +19,8 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             });
     })
 
-    .controller('CheckoutCtrl', ['$scope', 'SalesService', 'CountriesService', '$q', 'os-info', '$stateParams', 'PageService', 'Notification', 'HitsService',
-        function ($scope, SalesService, CountriesService, $q, osInfo, $stateParams, PageService, Notification, HitsService) {
+    .controller('CheckoutCtrl', ['$scope', 'SalesService', 'CountriesService', '$q', 'os-info', '$stateParams', 'PageService', 'Notification', 'HitsService', 'TestimonialsService',
+        function ($scope, SalesService, CountriesService, $q, osInfo, $stateParams, PageService, Notification, HitsService, TestimonialsService) {
             var vm = this;
             $scope.formData = {};
 
@@ -112,6 +112,43 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 $scope.formData.state = $item.district;
             };
 
+            $scope.nextTestimonial = function () {
+                var currentIndex = $scope.testimonials.indexOf($scope.selectedTestimonial);
+
+                if (currentIndex < $scope.testimonials.length - 1) {
+                    $scope.selectedTestimonial = $scope.testimonials[currentIndex + 1];
+                }else{
+                    $scope.selectedTestimonial = $scope.testimonials[0];
+                }
+            };
+
+            $scope.prevTestimonial = function () {
+                var currentIndex = $scope.testimonials.indexOf($scope.selectedTestimonial);
+
+                if (currentIndex > 1) {
+                    $scope.selectedTestimonial = $scope.testimonials[currentIndex - 1];
+                }else{
+                    $scope.selectedTestimonial = $scope.testimonials[$scope.testimonials.length -1];
+                }
+            };
+
+            vm.getTestimonials = function () {
+
+                function success(res) {
+                    $scope.testimonials = res.data;
+                    if (res.data.length > 0) {
+                        $scope.selectedTestimonial = res.data[0];
+                    }
+                }
+
+                function error(err) {
+                    console.log(err);
+                }
+
+                TestimonialsService.query()
+                    .then(success, error);
+            };
+
             vm.sendHit = function () {
                 var data = {
                     funnel_id: 2,
@@ -166,6 +203,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             vm.init = function () {
                 vm.feelExpMonth();
                 vm.feelExpYear();
+                vm.getTestimonials();
 
                 vm.getToken()
                     .then(function () {

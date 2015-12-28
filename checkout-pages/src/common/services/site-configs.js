@@ -4,7 +4,8 @@ angular.module('app.site-configs', [])
 	var globals = {
 		API_BASE_URL: '@@API_URL',
 		SITE_URL: '@@SITE_URL',
-		SITE_NAME: '@@SITE_NAME'
+		SITE_NAME: '@@SITE_NAME',
+		DASHBOARD_URL: '@@DASHBOARD_URL'
 	};
 
 	return {

@@ -11,7 +11,7 @@ angular.module('app.thankyou', ['ui.router'])
             });
     })
 
-    .controller('ThankyouCtrl', ['$scope', 'AuthService', 'Notification', function ($scope, AuthService, Notification) {
+    .controller('ThankyouCtrl', ['$scope', 'AuthService', 'Notification', '$site-configs', function ($scope, AuthService, Notification, $configs) {
         var vm = this;
 
         $scope.login = function () {
@@ -26,7 +26,7 @@ angular.module('app.thankyou', ['ui.router'])
         };
 
         vm.successLogin = function (res) {
-            window.location.href = "http://local.dextrader.com/doLogin?token=" + res.data.token;
+            window.location.href = $configs.DASHBOARD_URL + "/doLogin?token=" + res.data.token;
         };
 
         vm.errorLogin = function (err) {

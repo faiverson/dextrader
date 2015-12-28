@@ -1,46 +1,45 @@
-angular.module('app.providers', ['ui.router', 'ngFileUpload'])
+angular.module('app.testimonials', ['ui.router', 'ngFileUpload'])
     .config(function config($stateProvider) {
         $stateProvider
-            .state('providers', {
-                url: '/providers',
-                templateUrl: 'modules/providers/providers.tpl.html',
-                controller: 'ProvidersCtrl',
+            .state('testimonials', {
+                url: '/testimonials',
+                templateUrl: 'modules/testimonials/testimonials.tpl.html',
+                controller: 'TestimonialsCtrl',
                 data: {
-                    pageTitle: 'Providers'
+                    pageTitle: 'Testimonials'
                 }
             })
-            .state('providers.list', {
+            .state('testimonials.list', {
                 url: '/list',
-                templateUrl: 'modules/providers/providers.list.tpl.html',
-                controller: 'ProvidersListCtrl',
+                templateUrl: 'modules/testimonials/testimonials.list.tpl.html',
+                controller: 'TestimonialsListCtrl',
                 data: {
-                    pageTitle: 'Providers - List'
+                    pageTitle: 'Testimonials - List'
                 }
             })
-            .state('providers.new', {
+            .state('testimonials.new', {
                 url: '/new',
-                templateUrl: 'modules/providers/providers.form.tpl.html',
-                controller: 'ProvidersFormCtrl',
+                templateUrl: 'modules/testimonials/testimonials.form.tpl.html',
+                controller: 'TestimonialsFormCtrl',
                 data: {
-                    pageTitle: 'Providers - New'
+                    pageTitle: 'Testimonials - New'
                 }
             })
-            .state('providers.edit', {
+            .state('testimonials.edit', {
                 url: '/edit/:id',
-                templateUrl: 'modules/providers/providers.form.tpl.html',
-                controller: 'ProvidersFormCtrl',
+                templateUrl: 'modules/testimonials/testimonials.form.tpl.html',
+                controller: 'TestimonialsFormCtrl',
                 data: {
-                    pageTitle: 'Providers - Edit'
+                    pageTitle: 'Testimonials - Edit'
                 }
             });
     })
 
-    .controller('ProvidersCtrl', ['$scope', function ($scope) {
+    .controller('TestimonialsCtrl', ['$scope', function ($scope) {
 
     }])
-    .controller('ProvidersFormCtrl', ['$scope', '$state', '$stateParams', 'ProvidersService', 'Notification', 'Upload', '$site-configs', 'AuthService',
-        function ($scope, $state, $stateParams, ProvidersService, Notification, Upload, $configs, AuthService) {
-
+    .controller('TestimonialsFormCtrl', ['$scope', '$state', '$stateParams', 'TestimonialsService', 'Notification', 'Upload', '$site-configs', 'AuthService',
+        function ($scope, $state, $stateParams, TestimonialsService, Notification, Upload, $configs, AuthService) {
             var vm = this;
 
             $scope.image = '/assets/images/image-placeholder.gif';
@@ -48,14 +47,14 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
             $scope.uploadAndSave = function () {
                 $scope.$broadcast('show-errors-check-validity');
 
-                if ($scope.providerForm.$valid) {
+                if ($scope.testimonialForm.$valid) {
 
-                    if ($scope.providerForm.file.$valid && $scope.file) {
+                    if ($scope.testimonialForm.file.$valid && $scope.file) {
                         Notification.info('Processing image!');
 
                         $scope.upload($scope.file)
                             .then(function (resp) {
-                                $scope.provider.image =  resp.data.data.filename;
+                                $scope.testimonial.image =  resp.data.data.filename;
                                 $scope.save();
                             }, function (resp) {
                                 Notification.error('Ups! something went wrong trying to save the image!');
@@ -70,14 +69,14 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
 
                 function success(res) {
                     Notification.success('Provider created successfully!');
-                    $state.go('providers.list');
+                    $state.go('testimonials.list');
                 }
 
                 function error(err) {
                     Notification.error("Ups! there was an error trying to save the provider!");
                 }
 
-                ProvidersService.save($scope.provider)
+                TestimonialsService.save($scope.testimonial)
                     .then(success, error);
             };
 
@@ -89,24 +88,24 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
                 });
             };
 
-            vm.getProviderForEdit = function (id) {
-                ProvidersService.getOne(id)
+            vm.getTestimonialForEdit = function (id) {
+                TestimonialsService.getOne(id)
                     .then(function (res) {
-                        $scope.provider = res.data;
-                        $scope.image = '/assets/images/' + $scope.provider.image;
+                        $scope.testimonial = res.data;
+                        $scope.image = 'http://local.dextrader.com/assets/images/' + $scope.testimonial.image;
                     });
             };
 
             vm.init = function () {
                 if(angular.isDefined($stateParams.id)){
-                    vm.getProviderForEdit($stateParams.id);
+                    vm.getTestimonialForEdit($stateParams.id);
                 }
             };
 
             vm.init();
         }])
 
-    .controller('ProvidersListCtrl', ['$scope', 'ProvidersService', 'Notification', function ($scope, ProvidersService, Notification) {
+    .controller('TestimonialsListCtrl', ['$scope', 'TestimonialsService', 'Notification', '$uibModal', function ($scope, TestimonialsService, Notification, $uibModal) {
         var vm = this;
 
         $scope.pagination = {
@@ -114,7 +113,7 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
             currentPage: 1,
             itemsPerPage: 10,
             pageChange: function () {
-                vm.getProvider();
+                vm.getTestimonials();
             }
         };
 
@@ -129,11 +128,31 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
                     this.dir = 'asc';
                 }
 
-                vm.getProvider();
+                vm.getTestimonials();
             }
         };
 
-        vm.getProvider = function () {
+        $scope.open = function (testimonial) {
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'TestimonialView.html',
+                controller: ['$scope', 'testimonial', '$uibModalInstance', function($scope, testimonial, $uibModalInstance){
+                    $scope.testimonial = testimonial;
+
+                    $scope.close = function () {
+                        $uibModalInstance.close();
+                    };
+                }],
+                resolve: {
+                    testimonial: function () {
+                        return testimonial;
+                    }
+                }
+            });
+        };
+
+        vm.getTestimonials = function () {
 
             var params = {
                 start: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
@@ -144,19 +163,19 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
 
             function success(res) {
                 $scope.pagination.totalItems = res.data.totalItems;
-                $scope.providers = res.data.items;
+                $scope.testimonials = res.data;
             }
 
             function error(err) {
                 Notification.error('Ups! there was an error trying to load providers!');
             }
 
-            ProvidersService.query(params)
+            TestimonialsService.query(params)
                 .then(success, error);
         };
 
         vm.init = function () {
-            vm.getProvider();
+            vm.getTestimonials();
         };
 
         vm.init();

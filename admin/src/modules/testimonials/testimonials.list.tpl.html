@@ -1,0 +1,80 @@
+<div class="provider-list">
+
+    <h1>Testimonials
+        <button class="btn btn-sm btn-primary pull-right" ui-sref="testimonials.new">NEW TESTIMONIAL</button>
+    </h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th sortable="1"
+                current-sort="sortBy.column"
+                current-dir="sortBy.dir"
+                data-ng-click="sortBy.sort(1)">Image
+            </th>
+            <th sortable="2"
+                current-sort="sortBy.column"
+                current-dir="sortBy.dir"
+                data-ng-click="sortBy.sort(2)">Author
+            </th>
+            <th>Text</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="testimonial in testimonials">
+            <td><img data-ng-src="http://local.dextrader.com/assets/images/{{testimonial.image}}" class="img-responsive" width="20"></td>
+            <td data-ng-bind="testimonial.author"></td>
+            <td class="link">
+                <a href="#" data-ng-click="open(testimonial)">
+                    Read Text
+                </a>
+            </td>
+            <td>
+                <div class="btn-group">
+                    <button type="button"
+                            class="btn btn-default dropdown-toggle"
+                            data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        Actions <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a ui-sref="testimonials.edit({id:testimonial.id})">Edit</a></li>
+                        <li><a href="#">Remove</a></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+    <div class="table-nav row">
+        <div class="col-md-8">
+            <uib-pagination direction-links="false"
+                            total-items="pagination.totalItems"
+                            ng-model="pagination.currentPage"
+                            items-per-page="pagination.itemsPerPage"
+                            ng-change="pagination.pageChange()"
+                            num-pages="smallnumPages"></uib-pagination>
+        </div>
+
+        <div class="col-md-4">
+            <uib-pager total-items="pagination.totalItems"
+                       items-per-page="pagination.itemsPerPage"
+                       ng-model="pagination.currentPage"
+                       ng-change="pagination.pageChange()">
+            </uib-pager>
+        </div>
+    </div>
+</div>
+<script type="text/ng-template" id="TestimonialView.html">
+    <div class="modal-header">
+        <h3 class="modal-title">{{testimonial.author}}</h3>
+    </div>
+    <div class="modal-body">
+        {{testimonial.text}}
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="close()">Close</button>
+    </div>
+</script>

@@ -14,7 +14,8 @@ angular.module('app', [
         'ui.bootstrap',
         'app.http-services',
         'LocalStorageModule',
-        'app.user-profile'
+        'app.user-profile',
+        'app.testimonials'
     ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {

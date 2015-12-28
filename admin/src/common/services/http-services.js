@@ -314,6 +314,80 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
     }])
 
+    .factory('TestimonialsService', ['$q', '$site-configs', '$http', function ($q, $config, $http) {
+        var service = $config.API_BASE_URL + 'testimonials';
+
+        function query(params) {
+            var endpoint = service,
+                deferred = $q.defer();
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+
+        }
+
+        function save(data){
+            var endpoint = service,
+                deferred = $q.defer();
+
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            if(angular.isDefined(data.id)){
+                $http.put(endpoint, data).then(success, error);
+            }else{
+                $http.post(endpoint, data).then(success, error);
+            }
+
+            return deferred.promise;
+        }
+
+        function getOne(id) {
+            var deferred = $q.defer(),
+                endpoint = service;
+
+            if(angular.isUndefined(id)){
+                deferred.reject('ID field is required!');
+            }
+
+            endpoint += '/' + id;
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
+        return {
+            query: query,
+            save: save,
+            getOne: getOne
+        };
+
+    }])
+
     .factory('UserRolesService', ['$http', '$q', '$site-configs', function ($http, $q, $configs) {
         var service = $configs.API_BASE_URL + 'roles';
 

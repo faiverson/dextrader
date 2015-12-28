@@ -10,6 +10,7 @@ angular.module('app', [
         'app.shared-directives',
         'LocalStorageModule',
         'ngAnimate',
+        'angular-loading-bar',
         'app.home',
         'app.checkout',
         'app.upsell',
@@ -25,7 +26,6 @@ angular.module('app', [
 
         $urlRouterProvider.otherwise('home');
         showErrorsConfigProvider.showSuccess(true);
-        //$httpProvider.interceptors.push('httpRequestInterceptor');
         NotificationProvider.setOptions({
             delay: 10000,
             startTop: 20,
