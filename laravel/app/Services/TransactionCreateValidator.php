@@ -22,9 +22,9 @@ class TransactionCreateValidator extends AbstractValidator {
 		'email' => 'required|email|max:150',
 
 		'user_id' => 'required|exists:users,id',
-		'enroller_id' => 'sometimes|required|exists:users,id',
+		'enroller_id' => 'sometimes|exists:users,id',
 		'funnel_id'=> 'required|exists:funnels,id',
-		'tag_id' => 'sometimes|required|exists:campaign_tags,id',
+		'tag_id' => 'sometimes|exists:campaign_tags,id',
 		'ip_address' => 'sometimes|ip',
 
 		'product_id' => 'sometimes|required:exists:products,id',
