@@ -5,9 +5,6 @@ Route::post('/users', ['middleware' => 'page:adduser',
 
 Route::group(['middleware' => 'jwt.auth'], function () {
 	Route::get('/users', 'UsersController@index');
-//	Route::post('/users', 'UsersController@store');
-	Route::put('/users', 'UsersController@update');
-	Route::delete('/users', 'UsersController@destroy');
 
 	Route::post('/users/ewallet', 'UsersController@createEwallet');
 	Route::post('/users/coming-soon', 'CommingSoonController@addUser');
@@ -16,6 +13,9 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 	// check if it's the user
 	Route::group(['middleware' => 'is.user'], function () {
 		Route::get('/users/{id}', 'UsersController@show')->where('id', '[0-9]+');
+		Route::put('/users/{id}', 'UsersController@update')->where('id', '[0-9]+');
+		Route::delete('/users/{id}', 'UsersController@destroy')->where('id', '[0-9]+');
+
 		Route::get('/users/{id}/cards', 'CardsController@index')->where('id', '[0-9]+');
 		Route::get('/users/{id}/cards/{card_id}', 'CardsController@show')->where('id', '[0-9]+')->where('card_id', '[0-9]+');
 		Route::post('/users/{id}/cards', 'CardsController@store')->where('id', '[0-9]+');

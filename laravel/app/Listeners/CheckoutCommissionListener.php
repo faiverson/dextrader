@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\CheckoutEvent;
+use App\Gateways\CommissionGateway;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 

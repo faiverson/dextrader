@@ -57,6 +57,7 @@ abstract class AbstractGateway {
 	 */
 	public function update(array $data, $id)
 	{
+		$data['id'] = $id;
 		if( ! $this->updateValidator->with($data)->passes() )
 		{
 			$this->errors = $this->updateValidator->errors();

@@ -68,10 +68,10 @@ class UsersController extends Controller
      */
     public function update(Request $request)
     {
-		$id = $request->user()->id;
+		$id = $request->id;
 		$fields = $request->all();
 		$fields['ip_address'] = $request->ip();
-		$user = $this->gateway->update($fields, $id);
+		$user = $this->gateway->edit($fields, $id);
 		if(!$user) {
 			return response()->error($this->gateway->errors()->all());
 		}

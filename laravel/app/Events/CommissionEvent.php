@@ -3,7 +3,7 @@
 namespace App\Events;
 
 use App\Events\Event;
-use App\Gateways\CommissionGateway;
+use App\Models\Commission;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
@@ -16,9 +16,9 @@ class CommissionEvent extends Event
      *
      * @return void
      */
-    public function __construct(array $cg)
+    public function __construct(Commission $commission)
     {
-        $this->data = $cg;
+        $this->commission = $commission;
     }
 
     /**
