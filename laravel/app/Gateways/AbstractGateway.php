@@ -7,9 +7,9 @@ abstract class AbstractGateway {
 	 *
 	 * @return Illuminate\Database\Eloquent\Collection
 	 */
-	public function all()
+	public function all($columns = array('*'), $limit = null, $offset = null, $order_by = null)
 	{
-		return $this->repository->all();
+		return $this->repository->all($columns, $limit, $offset, $order_by);
 	}
 
 	/**

@@ -40,21 +40,22 @@ abstract class Repository implements RepositoryInterface {
 	 * @return mixed
 	 */
 	public function all($columns = array('*'), $limit = null, $offset = null, $order_by = null) {
+		$query = $this->model;
 		if($limit != null) {
-			$this->model = $this->model->take($limit);
+			$query = $this->model->take($limit);
 		}
 
 		if($offset != null) {
-			$this->model = $this->model->skip($offset);
+			$query = $query->skip($offset);
 		}
 
 		if($order_by != null) {
 			foreach($order_by as $column => $dir) {
-				$this->model = $this->model->orderBy($column, $dir);
+				$query = $query->orderBy($column, $dir);
 			}
 		}
 
-		return $this->model->get($columns);
+		return $query->get($columns);
 	}
 
 	/**
@@ -88,7 +89,7 @@ abstract class Repository implements RepositoryInterface {
 	 * @param array $columns
 	 * @return mixed
 	 */
-	public function find($id, $columns = array('*'), $limit = null, $offset = null) {
+	public function find($id, $columns = array('*')) {
 		return $this->model->find($id, $columns);
 	}
 
@@ -98,7 +99,21 @@ abstract class Repository implements RepositoryInterface {
 	 * @param array $columns
 	 * @return mixed
 	 */
-	public function findBy($attribute, $value, $columns = array('*'), $limit = null, $offset = null) {
-		return $this->model->where($attribute, '=', $value)->get($columns);
+	public function findBy($attribute, $value, $columns = array('*'), $limit = null, $offset = null, $order_by = null) {
+		$query = $this->model;
+		if($limit != null) {
+			$query = $this->model->take($limit);
+		}
+
+		if($offset != null) {
+			$query = $query->skip($offset);
+		}
+
+		if($order_by != null) {
+			foreach($order_by as $column => $dir) {
+				$query = $query->orderBy($column, $dir);
+			}
+		}
+		return $query->where($attribute, '=', $value)->get($columns);
 	}
 }

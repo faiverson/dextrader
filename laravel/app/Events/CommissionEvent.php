@@ -3,10 +3,11 @@
 namespace App\Events;
 
 use App\Events\Event;
+use App\Gateways\CommissionGateway;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class CheckoutEvent extends Event
+class CommissionEvent extends Event
 {
     use SerializesModels;
 
@@ -15,9 +16,9 @@ class CheckoutEvent extends Event
      *
      * @return void
      */
-    public function __construct(array $data)
+    public function __construct(array $cg)
     {
-        $this->data = $data;
+        $this->data = $cg;
     }
 
     /**

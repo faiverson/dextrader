@@ -6,7 +6,7 @@ use App\Events\Event;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class CheckoutEvent extends Event
+class LiveSignalEvent extends Event
 {
     use SerializesModels;
 
@@ -15,9 +15,9 @@ class CheckoutEvent extends Event
      *
      * @return void
      */
-    public function __construct(array $data)
+    public function __construct()
     {
-        $this->data = $data;
+        //
     }
 
     /**
