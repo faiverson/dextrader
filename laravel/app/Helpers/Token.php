@@ -25,6 +25,9 @@ class Token {
 	public static function add($user_id, $expiration = '+7 days', $iss = 'user')
 	{
 		$user = User::with('roles.permissions')->find($user_id);
+		if($user == null) {
+			return false;
+		}
 		$customClaims = $user->toArray();
 		$customClaims['iss'] = $iss;
 		$customClaims['exp'] = strtotime($expiration, time());
@@ -35,6 +38,9 @@ class Token {
 	public static function page($page_id, $expiration = '+7 days', $iss = 'page')
 	{
 		$page = Page::find($page_id);
+		if($page == null) {
+			return false;
+		}
 		$customClaims = $page->toArray();
 		$customClaims['sub'] = $customClaims['page_id'];
 		$customClaims['iss'] = $iss;
