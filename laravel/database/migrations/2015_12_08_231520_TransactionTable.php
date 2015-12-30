@@ -28,7 +28,7 @@ class TransactionTable extends Migration
 			$table->string('enroller', 80)->nullable();
 			$table->decimal('amount', 10, 2)->signed()->nullable(false);
 
-			$table->integer('funnel_id')->unsigned();
+			$table->integer('funnel_id')->unsigned()->nullable()->default(null);
 			$table->foreign('funnel_id')
 				->references('id')->on('funnels')
 				->onUpdate('cascade')->onDelete('cascade');
