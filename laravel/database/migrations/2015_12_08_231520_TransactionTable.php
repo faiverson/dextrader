@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class MerchantCharges extends Migration
+class TransactionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -25,15 +25,8 @@ class MerchantCharges extends Migration
 
 			$table->bigInteger('enroller_id')->unsigned()->nullable()->default(null);
 			$table->foreign('enroller_id')->references('id')->on('users');
+			$table->string('enroller', 80)->nullable();
 			$table->decimal('amount', 10, 2)->signed()->nullable(false);
-
-			$table->smallInteger('product_id')->unsigned();
-			$table->foreign('product_id')
-				->references('id')->on('products')
-				->onUpdate('cascade')->onDelete('cascade');
-			$table->decimal('product_amount', 10, 2)->signed()->nullable(false);
-			$table->decimal('product_discount', 10, 2)->signed()->nullable(false);
-			$table->string('product_name', 100)->nullable(false);
 
 			$table->integer('funnel_id')->unsigned();
 			$table->foreign('funnel_id')

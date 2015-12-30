@@ -13,6 +13,7 @@ class InvoicesController extends Controller
 		$this->gateway = $gateway;
 		$this->limit = Config::get('dextrader.limit');
 	}
+
 	/**
 	 * Show array of user cards
 	 *

@@ -11,4 +11,5 @@ use App\Models\Product;
  */
 interface ProductRepositoryInterface extends RepositoryInterface {
 	public function getPrice(Product $product);
+	public function findIn(array $products);
 }

@@ -11,7 +11,7 @@ class SubscriptionCreateValidator extends AbstractValidator {
 	 */
 	protected $rules = array(
 		'user_id' => 'required|exists:users,id',
-		'enroller_id' => 'sometimes|required|exists:users,id',
+		'enroller_id' => 'sometimes|exists:users,id',
 		'product_id' => 'required|exists:products,id',
 		'card_id' => 'required|exists:credit_cards,id',
 		'billing_address_id' => 'required|exists:billing_address,id',

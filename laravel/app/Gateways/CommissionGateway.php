@@ -1,12 +1,14 @@
 <?php
 namespace App\Gateways;
 
+use App\Events\CommissionEvent;
 use App\Gateways\AbstractGateway;
 use App\Repositories\UserRepository;
 use App\Services\CommissionCreateValidator;
 use App\Services\CommissionUpdateValidator;
 use App\Repositories\CommissionRepository;
 use Config;
+use Event;
 
 class CommissionGateway extends AbstractGateway {
 
@@ -29,14 +31,15 @@ class CommissionGateway extends AbstractGateway {
 
 	public function add(array $data)
 	{
-		if($data['enroller_id']) {
-			$this->repository->create([
+		if(array_key_exists('enroller_id', $data)) {
+			$comm = $this->repository->create([
 				'from_user_id' => $data['user_id'],
 				'to_user_id' => $data['enroller_id'],
 				'invoice_id' => $data['invoice_id'],
 				'amount' => $data['amount'] * Config::get('dextrader.comms')
 			]);
 			$this->parent($data);
+			Event::fire(new CommissionEvent($comm));
 		}
 	}
 
@@ -52,13 +55,14 @@ class CommissionGateway extends AbstractGateway {
 	{
 		$parent = $this->user->find($data['enroller_id']);
 		if($parent->enroller_id > 0) {
-			Commission::create([
+			$comm = $this->repository->create([
 				'from_user_id' => $data['user_id'],
 				'to_user_id' => $data['enroller_id'],
 				'invoice_id' => $data['invoice_id'],
 				'type' => 'parent',
 				'amount' => $data['amount'] * Config::get('dextrader.parent_comms'),
 			]);
+			Event::fire(new CommissionEvent($comm));
 		}
 	}
 }

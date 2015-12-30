@@ -42,7 +42,23 @@
 				<td>XXXX-XXXX-XXXX-{{$purchase->card_last_four}}</td>
 			</tr>
 			<tr>
-				<td>Product:</td>
+				@if (count($purchase->detail) === 1)
+					<td>Product:</td>
+					<td>{{$purchase->detail[0]['product_display_name']}}</td>
+				@else
+					<td>Products:</td>
+					<td>
+						<table>
+							@foreach ($purchase->detail as $detail)
+								<tr>
+									<td>Product:</td>
+									<td>{{$detail['product_display_name']}}</td>
+								</tr>
+							@endforeach
+						</table>
+					</td>
+				@endif
+
 				<td>{{$purchase->product_name}}</td>
 			</tr>
 			<tr>

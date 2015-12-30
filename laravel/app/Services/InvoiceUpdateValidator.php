@@ -15,17 +15,11 @@ class InvoiceUpdateValidator extends AbstractValidator {
 		'last_name' => 'required',
 		'email' => 'required|email|max:150',
 
-		'enroller_id' => 'sometimes|required|exists:users,id',
+		'enroller_id' => 'sometimes|exists:users,id',
 		'amount' => ['required', 'regex:/[0-9]+[.,]?[0-9]*/'],
 
-		'product_id' => 'sometimes|required:exists:products,id',
-		'product_name' => 'required|alpha',
-		'product_amount' => ['required', 'regex:/[0-9]+[.,]?[0-9]*/'],
-		'product_discount' => ['required', 'regex:/[0-9]+[.,]?[0-9]*/'],
-
 		'funnel_id'=> 'required|exists:funnels,id',
-		'tag_id' => 'sometimes|required|exists:campaign_tags,id',
-		'subscription_id' => 'sometimes|required|exists:subscriptions,id',
+		'tag_id' => 'sometimes|exists:campaign_tags,id',
 
 		'billing_address_id' => 'numeric',
 		'billing_address' => 'required',

@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Events\Event;
+use App\Models\Transaction;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
@@ -17,7 +18,9 @@ class CheckoutEvent extends Event
      */
     public function __construct(array $data)
     {
-        $this-> data = $data;
+		$this->purchase = $data['transaction'];
+		unset($data['transaction']);
+		$this->data = $data;
     }
 
     /**
@@ -27,6 +30,6 @@ class CheckoutEvent extends Event
      */
     public function broadcastOn()
     {
-        return [];
+        return ['purchase.new'];
     }
 }

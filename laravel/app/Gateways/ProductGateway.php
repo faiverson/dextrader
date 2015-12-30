@@ -25,26 +25,43 @@ class ProductGateway extends AbstractGateway {
 		$this->updateValidator = $updateValidator;
 	}
 
-	public function price(Product $product)
+	public function total(Collection $products)
+	{
+		$total = 0;
+		foreach($products as $product) {
+			$total += $this->repository->getPrice($product);
+		}
+		return $total;
+	}
+	public function getPrice(Product $product)
 	{
 		return $this->repository->getPrice($product);
 	}
 
-	public function UserCanBuy(Collection $sub, Product $product)
+
+	public function UserCanBuy(Collection $sub, Collection $products)
 	{
-		if($product->parents == 0) {
-			return true;
-		} else {
-			$parents = explode(',', $product->parents);
-			$subs = array_column($sub->toArray(), 'product_id');
-			$result = array_diff($parents, $subs);
-			if(count($result) > 0) {
-				$this->errors = ['You need to buy other packages first to unlock this product'];
-				return false;
+		$ids = array_column($products->toArray(), 'product_id');
+		$subs = array_column($sub->toArray(), 'product_id');
+		foreach($products as $product) {
+			if($product->parents == 0) {
+				continue;
+			} else {
+				$parents = explode(',', $product->parents);
+				$result = array_diff($parents, array_merge($subs, $ids));
+				if(count($result) > 0) {
+					$this->errors = ['You need to buy other packages first to unlock this product'];
+					return false;
+				}
 			}
 		}
 
 		return true;
+	}
+
+	public function findIn(array $products)
+	{
+		return $this->repository->findIn($products)->where('active', 1);
 	}
 
 }

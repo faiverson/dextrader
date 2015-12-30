@@ -20,7 +20,9 @@ class Products extends Migration
 			$table->decimal('discount', 10, 2)->signed()->default(0);
 			$table->tinyInteger('active')->nullable(false)->default(1);
 			$table->string('parents', 20)->nullable(false)->default(0);
-			$table->string('period', 20)->nullable(false)->default('+1 month');
+			$table->string('bundle', 20)->nullable(false)->default(0);
+			$table->string('roles', 100)->nullable(false);
+			$table->string('billing_period', 20)->nullable(false)->default('+1 month');
 			$table->timestamps();
 			$table->softDeletes();
 		});

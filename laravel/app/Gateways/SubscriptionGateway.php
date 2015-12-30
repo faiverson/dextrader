@@ -28,4 +28,11 @@ class SubscriptionGateway extends AbstractGateway
 	{
 		return $this->repository->findByUser($user_id, $columns, $limit, $offset);
 	}
+
+	public function isOwner($user_id, $subscription_id)
+	{
+		return $this->repository->isOwner($user_id, $subscription_id);
+	}
+
+
 }

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Sofa\Eloquence\Eloquence; // base trait
 use Sofa\Eloquence\Mutable;
-
+use App\Models\TransactionDetail;
 
 class Transaction extends Model
 {
@@ -102,4 +102,10 @@ class Transaction extends Model
 	{
 		return json_decode($this->attributes['info']);
 	}
+
+	public function detail()
+	{
+		return $this->hasMany(TransactionDetail::class, 'transaction_id', 'id');
+	}
+
 }

@@ -8,6 +8,9 @@ return [
 	// global email for sender
 	'from' => 'system@dextrader.com',
 
+	// admin email
+	'admin' => 'fa.iverson@gmail.com',
+
 	//  commissions' porcentage
 	'comms' => .50,
 

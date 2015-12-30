@@ -23,19 +23,13 @@ class UserGateway extends AbstractGateway {
 		$this->updateValidator = $updateValidator;
 	}
 
-	public function update(array $data, $id)
+	public function edit(array $data, $id)
 	{
-		if($data['username']) {
+		if(array_key_exists('username', $data)) {
 			unset($data['username']);
 		}
 
-		if( ! $this->updateValidator->with($data)->passes() )
-		{
-			$this->errors = $this->updateValidator->errors();
-			return false;
-		}
-
-		return $this->repository->update($data, $id);
+		return $this->update($data, $id);
 	}
 
 	public function getIdByUsername($username) {

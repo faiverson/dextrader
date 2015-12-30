@@ -3,20 +3,21 @@
 namespace App\Listeners;
 
 use App\Events\CheckoutEvent;
+use App\Gateways\CommissionGateway;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class EmailListener
+class CheckoutCommissionListener
 {
     /**
      * Create the event listener.
      *
      * @return void
      */
-    public function __construct()
-    {
-        //
-    }
+	public function __construct(CommissionGateway $gateway)
+	{
+		$this->gateway = $gateway;
+	}
 
     /**
      * Handle the event.
@@ -24,8 +25,8 @@ class EmailListener
      * @param  CheckoutEvent  $event
      * @return void
      */
-    public function handle(CheckoutEvent $event)
-    {
-        //
-    }
+	public function handle(CheckoutEvent $event)
+	{
+		$this->gateway->add($event->data);
+	}
 }

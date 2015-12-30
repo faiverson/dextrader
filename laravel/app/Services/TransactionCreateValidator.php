@@ -22,15 +22,10 @@ class TransactionCreateValidator extends AbstractValidator {
 		'email' => 'required|email|max:150',
 
 		'user_id' => 'required|exists:users,id',
-		'enroller_id' => 'sometimes|exists:users,id',
+		'enroller_id' => 'sometimes|required|exists:users,id',
 		'funnel_id'=> 'required|exists:funnels,id',
-		'tag_id' => 'sometimes|exists:campaign_tags,id',
+		'tag_id' => 'sometimes|required|exists:campaign_tags,id',
 		'ip_address' => 'sometimes|ip',
-
-		'product_id' => 'sometimes|required:exists:products,id',
-		'product_name' => 'required|alpha',
-		'product_amount' => ['required', 'regex:/[0-9]+[.,]?[0-9]*/'],
-		'product_discount' => ['required', 'regex:/[0-9]+[.,]?[0-9]*/'],
 		'amount' => ['required', 'regex:/[0-9]+[.,]?[0-9]*/'],
 
 		'billing_address_id' => 'numeric',
@@ -60,12 +55,14 @@ class TransactionCreateValidator extends AbstractValidator {
 	public function after($validator)
 	{
 		$data = $validator->getData();
-		$many = Subscription::where('user_id', $data['user_id'])
-							->where('product_id', $data['product_id'])
-							->where('status', 'active')
-							->count();
-		if($many > 0) {
-			$validator->errors()->add('user_id', 'You have bought this product already!');
+		if(array_key_exists('user_id', $data) && array_key_exists('product_id', $data)) {
+			$many = Subscription::where('user_id', $data['user_id'])
+				->where('product_id', $data['product_id'])
+				->where('status', 'active')
+				->count();
+			if ($many > 0) {
+				$validator->errors()->add('user_id', 'You have bought this product already!');
+			}
 		}
 	}
 

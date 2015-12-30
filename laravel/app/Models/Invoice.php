@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Sofa\Eloquence\Eloquence; // base trait
 use Sofa\Eloquence\Mutable;
-
+use App\Models\InvoiceDetail;
 
 class Invoice extends Model
 {
@@ -34,14 +34,8 @@ class Invoice extends Model
 		'enroller_id',
 		'amount',
 
-		'product_id',
-		'product_name',
-		'product_amount',
-		'product_discount',
-
 		'funnel_id',
 		'tag_id',
-		'subscription_id',
 		'transaction_id',
 
 		'billing_address_id',
@@ -62,18 +56,7 @@ class Invoice extends Model
 		'card_last_four',
 		'info',
 		'ip_address'
-
 	];
-
-	public function getProductAmountAttribute()
-	{
-		return number_format($this->attributes['product_amount'], 2, '.', ',');
-	}
-
-	public function setProductAmountAttribute($value)
-	{
-		$this->attributes['product_amount'] = number_format($value, 2, '.', '');
-	}
 
 	public function getAmountAttribute()
 	{
@@ -93,5 +76,10 @@ class Invoice extends Model
 	public function getInfoAttribute()
 	{
 		return json_decode($this->attributes['info']);
+	}
+
+	public function detail()
+	{
+		return $this->hasMany(InvoiceDetail::class, 'invoice_id', 'id');
 	}
 }

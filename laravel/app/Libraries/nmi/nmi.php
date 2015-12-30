@@ -37,7 +37,7 @@ class NMI {
 
 			'ipaddress' => $data['ip_address'],
 			'orderid' => $data['orderid'],
-			'orderdescription' => $data['product_name'],
+			'orderdescription' => $data['description'],
 			'tax' => 0,
 			'shipping' => 0,
 			'ponumber' => '',

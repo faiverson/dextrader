@@ -1,10 +1,12 @@
 <?php
 namespace App\Gateways;
 
+use App\Models\Transaction;
 use App\Repositories\TransactionRepository;
 use App\Services\TransactionCreateValidator;
 use App\Services\TransactionUpdateValidator;
 use App\Gateways\AbstractGateway;
+use App\Gateways\TransactionDetailGateway;
 use App\Gateways\PurchaseGateway;
 use App\Gateways\SubscriptionGateway;
 use App\Gateways\InvoiceGateway;
@@ -17,6 +19,7 @@ use App\Libraries\nmi\nmi;
 use GeoIP;
 use DB;
 use DateTime;
+use Illuminate\Database\Eloquent\Collection;
 
 class TransactionGateway extends AbstractGateway {
 
@@ -25,6 +28,8 @@ class TransactionGateway extends AbstractGateway {
 	protected $createValidator;
 
 	protected $updateValidator;
+
+	protected $detail;
 
 	protected $purchase;
 
@@ -43,6 +48,7 @@ class TransactionGateway extends AbstractGateway {
 	public function __construct(TransactionRepository $repository,
 								TransactionCreateValidator $transactionCreateValidator,
 								TransactionUpdateValidator $transactionUpdateValidator,
+								TransactionDetailGateway $detail,
 								PurchaseGateway $purchase,
 								SubscriptionGateway $subscription,
 								InvoiceGateway $invoice,
@@ -54,6 +60,7 @@ class TransactionGateway extends AbstractGateway {
 								TagGateway $tag)
 	{
 		$this->repository = $repository;
+		$this->detail = $detail;
 		$this->createValidator = $transactionCreateValidator;
 		$this->updateValidator = $transactionUpdateValidator;
 		$this->purchase = $purchase;
@@ -68,6 +75,15 @@ class TransactionGateway extends AbstractGateway {
 
 	}
 
+	public function findBy($attribute, $value, $columns = array('*'), $limit = null, $offset = null, $order_by = null) {
+		return $this->repository->findBy($attribute, $value, $columns, $limit, $offset, $order_by);
+	}
+
+	/**
+	 * @param array $data
+	 * @return object Transaction
+	 *
+	 */
 	public function add(array $data)
 	{
 		// we check if the card data is valid
@@ -88,9 +104,9 @@ class TransactionGateway extends AbstractGateway {
 
 		// get info about user, product and tags
 		$user = $this->user->find($data['user_id']);
-		$product = $this->product->find($data['product_id']);
+		$products = $this->product->findIn($data['products']);
 		$subs = $this->subscription->findBy('user_id', $data['user_id'], ['product_id']);
-		$canBuy = $this->product->userCanBuy($subs, $product);
+		$canBuy = $this->product->userCanBuy($subs, $products);
 		if(!$canBuy) {
 			$this->errors = $this->product->errors();
 			return false;
@@ -114,41 +130,88 @@ class TransactionGateway extends AbstractGateway {
 		$data['info'] = $this->setInfo($data);
 
 		// prepare the information
-		$data = array_merge([
+		$amount = $this->product->total($products);
+		$data = array_merge($data, [
 			'first_name' => $user->first_name,
 			'last_name' => $user->last_name,
 			'email' => $user->email,
 			'card_network' => $card['type'],
-			'product_name' => $product->name,
-			'product_amount' => $product->amount,
-			'product_discount' => $product->discount,
+			'description' => implode(array_column($products->toArray(), 'name'), ' - '),
+			'products' => $this->setDetail($products),
 			'card_last_four' => $this->card->getLast($data['number']),
 			'card_first_six' => $this->card->getFirst($data['number']),
-			'amount' => $this->product->price($product)
-		], $data);
+			'amount' => $amount
+		]);
 
-		$transaction = $this->create($data);
-		if(!$transaction) {
-			$this->errors = $this->errors();
+		DB::beginTransaction();
+		try {
+			$transaction = $this->create($data);
+			if(!$transaction) {
+				$this->errors = $this->errors();
+				return false;
+			}
+		} catch(\Exception $e) {
+			DB::rollback();
+			$this->errors = [$e->getMessage()];
 			return false;
 		}
+		DB::commit();
 
 		// connect to the gateway merchant
 		$data['orderid'] = $transaction['id'];
-		$data['period'] = $product->period;
+		$transaction->responsetext = 'success'; // emulate success gateway
 
-//		$gateway = ['responsetext' => 'success']; // emulate success gateway
-		$gateway = $this->gateway($data);
+//		$gateway = $this->gateway($data);
 
 		// save the response in the transaction
-		$response = $this->set($gateway, $transaction['id']);
-		if(!$response) {
-			$this->errors = $this->errors();
+//		$response = $this->set($gateway, $transaction->id);
+//		if(!$response) {
+//			$this->errors = $this->errors();
+//			return false;
+//		}
+
+		// we return the object transaction for events
+		// and the data for the purchase
+		return array_merge($data, ['transaction' => $transaction]);
+	}
+
+	public function setDetail(Collection $products)
+	{
+		$p = [];
+		foreach($products as $product) {
+			array_push($p, [
+				'product_id' => $product->id,
+				'product_name' => $product->name,
+				'product_display_name' => $product->display_name,
+				'product_amount' => $product->amount,
+				'product_discount' => $product->discount,
+				'billing_period' => $product->billing_period,
+				'roles' => $product->roles,
+			]);
+		}
+		return $p;
+	}
+
+	public function create(array $data)
+	{
+		if( ! $this->createValidator->with($data)->passes() )
+		{
+			$this->errors = $this->createValidator->errors();
 			return false;
 		}
 
-		// return all the info
-		return array_merge($data, $gateway);
+		$transaction = $this->repository->create($data);
+		if($transaction) {
+			foreach($data['products'] as $product) {
+				$product['transaction_id'] = $transaction->id;
+				$detail = $this->detail->create($product);
+				if(!$detail) {
+					$this->errors = $this->detail->errors();
+					return false;
+				}
+			}
+		}
+		return $transaction;
 	}
 
 	public function gateway(array $data)
@@ -191,24 +254,8 @@ class TransactionGateway extends AbstractGateway {
 				'zip' => $data['billing_zip'],
 				'phone' => $data['billing_phone'],
 			]);
-
 			if(!$billing) {
 				$this->errors = $this->address->errors();
-				return false;
-			}
-
-			$now = new DateTime('now');
-			$next = new DateTime('now');
-			$next->modify($data['period']);
-			$subscription = $this->subscription->create(array_merge($data, [
-				'card_id' => $card->id,
-				'billing_address_id' => $billing->id,
-				'status' => 'active',
-				'last_billing' => $now->format('Y-m-d'),
-				'next_billing' => $next->format('Y-m-d')
-			]));
-			if(!$subscription) {
-				$this->errors = $this->subscription->errors();
 				return false;
 			}
 
@@ -216,7 +263,6 @@ class TransactionGateway extends AbstractGateway {
 				'card_id' => $card->id,
 				'billing_address_id' => $billing->id,
 				'status' => 'active',
-				'subscription_id' => $subscription->id,
 				'transaction_id' => $data['orderid']
 			]));
 			if(!$invoice) {
@@ -224,20 +270,47 @@ class TransactionGateway extends AbstractGateway {
 				return false;
 			}
 
-			$purchase = $this->purchase->create(array_merge($data, [
-				'invoice_id' => $invoice->id,
-				'card_id' => $card->id,
-				'billing_address_id' => $billing->id,
-				'subscription_id' => $subscription->id,
-				'transaction_id' => $data['orderid']
-			]));
-			if(!$purchase) {
-				$this->errors = $this->purchase->errors();
-				return false;
-			}
+			$now = new DateTime('now');
+			foreach($data['products'] as $product) {
+				$next = new DateTime('now');
+				$next->modify($product['billing_period']);
+				$subscription = $this->subscription->create(array_merge($data, [
+					'card_id' => $card->id,
+					'billing_address_id' => $billing->id,
+					'status' => 'active',
+					'product_id' => $product['product_id'],
+					'last_billing' => $now->format('Y-m-d'),
+					'next_billing' => $next->format('Y-m-d')
+				]));
+				if (!$subscription) {
+					$this->errors = $this->subscription->errors();
+					return false;
+				}
 
-			$role_id = $this->role->getRoleIdByName($data['product_name']);
-			$this->user->attachRole($data['user_id'], $role_id);
+				$invoice_detail = $this->invoice->addDetail(array_merge($product, [
+					'subscription_id' => $subscription->id,
+					'invoice_id' => $invoice->id
+				]));
+				if (!$invoice_detail) {
+					$this->errors = $this->invoice->errors();
+					return false;
+				}
+
+				$purchase = $this->purchase->create(array_merge($data, [
+					'invoice_id' => $invoice->id,
+					'card_id' => $card->id,
+					'billing_address_id' => $billing->id,
+					'subscription_id' => $subscription->id,
+					'transaction_id' => $data['orderid']
+				]));
+				if(!$purchase) {
+					$this->errors = $this->purchase->errors();
+					return false;
+				}
+
+				$role_id = $this->role->getRoleIdByName($product['roles']);
+				$this->user->attachRole($data['user_id'], $role_id);
+			}
 		} catch(\Exception $e) {
 			DB::rollback();
 			$this->errors = [$e->getMessage()];
@@ -248,11 +321,8 @@ class TransactionGateway extends AbstractGateway {
 		return array_merge($data, [
 			'card_id' => $card->id,
 			'billing_address_id' => $billing->id,
-			'status' => 'active',
-			'subscription_id' => $subscription->id,
 			'transaction_id' => $data['orderid'],
 			'invoice_id' => $invoice->id,
-			'purchase_id' => $purchase->id
 		]);
 	}
 

@@ -14,11 +14,15 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
 		'App\Events\CheckoutEvent' => [
-			'App\Listeners\CommissionListener',
-//			'App\Listeners\NotificationListener',
-			'App\Listeners\EmailListener',
+			'App\Listeners\CheckoutCommissionListener'
+		],
+		'App\Events\CommissionEvent' => [
 		],
     ];
+
+	protected $subscribe = [
+		'App\Listeners\EmailEventListener',
+	];
 
     /**
      * Register any other events for your application.
