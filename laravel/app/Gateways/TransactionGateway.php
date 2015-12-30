@@ -157,7 +157,7 @@ class TransactionGateway extends AbstractGateway {
 		return $nmi->purchase($data);
 	}
 
-	public function set(array $data, $id)
+	public function  set(array $data, $id)
 	{
 		return $this->repository->update($data, $id);
 	}

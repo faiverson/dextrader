@@ -26,6 +26,7 @@
                         <label for="email">Email</label>
                         <input type="email"
                                name="email"
+                               autocomplete="address-level4"
                                class="form-control"
                                id="email"
                                required
@@ -111,11 +112,11 @@
                             </a>
                         </script>
                         <input type="text" name="dex_country" id="dex_country"
-                               ng-model="country"
+                               ng-model="formData.billing_country"
                                typeahead-on-select="selectCountry($item, $model, $label)"
                                typeahead-min-length="3"
                                typeahead-wait-ms="500"
-                               autocomplete="false"
+                               autocomplete="off"
                                required
                                typeahead-template-url="countryTemplate.html"
                                placeholder="Start typing your country"
@@ -132,11 +133,11 @@
                         </script>
                         <input type="text" name="dex_city" id="dex_city"
                                data-ng-disabled="formCheckout.dex_country.$invalid"
-                               ng-model="selectedCity"
+                               ng-model="formData.billing_city"
                                typeahead-on-select="selectCity($item, $model, $label)"
                                typeahead-min-length="3"
                                typeahead-wait-ms="500"
-                               autocomplete="false"
+                               autocomplete="off"
                                required
                                typeahead-template-url="cityTemplate.html"
                                placeholder="Start typing your city"

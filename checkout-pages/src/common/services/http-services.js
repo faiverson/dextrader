@@ -147,6 +147,22 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             };
         }])
 
+    .factory('InvoicesService', ['$http', '$q', '$site-configs', 'localStorageService', function ($http, $q, $configs, localStorageService) {
+
+        function getInvoice(id) {
+            return localStorageService.get(id);
+        }
+
+        function setInvoice(id, data) {
+            return localStorageService.set(id, data);
+        }
+
+        return {
+            getInvoice: getInvoice,
+            setInvoice: setInvoice
+        };
+    }])
+
     .factory('CheckoutService', ['$q', '$site-configs', '$http', function ($q, $config, $http) {
         var service = $config.API_BASE_URL + 'checkout';
 
@@ -297,6 +313,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
 
     }])
+
     .factory('CountriesService', ['$q', '$site-configs', '$http', function ($q, $config, $http) {
         var service = $config.API_BASE_URL + 'countries';
 

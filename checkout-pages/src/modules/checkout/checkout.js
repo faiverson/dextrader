@@ -27,8 +27,8 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             });
     })
 
-    .controller('CheckoutCtrl', ['$scope', 'CheckoutService', 'UserService', 'CountriesService', '$q', 'os-info', '$stateParams', 'PageService', 'Notification', 'HitsService', 'TestimonialsService', '$state',
-        function ($scope, CheckoutService, UserService, CountriesService, $q, osInfo, $stateParams, PageService, Notification, HitsService, TestimonialsService, $state) {
+    .controller('CheckoutCtrl', ['$scope', 'CheckoutService', 'UserService', 'CountriesService', '$q', 'os-info', '$stateParams', 'PageService', 'Notification', 'HitsService', 'TestimonialsService', '$state', 'InvoicesService',
+        function ($scope, CheckoutService, UserService, CountriesService, $q, osInfo, $stateParams, PageService, Notification, HitsService, TestimonialsService, $state, InvoicesService) {
             var vm = this;
             $scope.formData = {
                 billing_address2: "",
@@ -208,7 +208,11 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             };
 
             vm.success = function (res) {
-                $state.go('upsell');
+                var internalId = moment().unix();
+
+                InvoicesService.setInvoice(internalId, res.data);
+
+                $state.go('upsell', { p: internalId });
                 Notification.success('Congratulations!!! Account has been created!');
             };
 

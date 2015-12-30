@@ -416,6 +416,162 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
     }])
 
+    .factory('SubscriptionService', ['$http', '$q', '$site-configs', 'AuthService', function ($http, $q, $configs, AuthService) {
+
+        var service = $configs.API_BASE_URL + 'subscriptions/' + AuthService.getLoggedInUser().user_id;
+
+        function query() {
+            var endpoint = service,
+                deferred = $q.defer();
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+
+        }
+
+        function getOne(id) {
+            var endpoint = service,
+                deferred = $q.defer();
+
+            if (angular.isUndefined(id)) {
+                deferred.reject('Subsctiption id is required!');
+            }
+
+            endpoint += '/' + id;
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
+        function save(data) {
+            var endpoint = service,
+                deferred = $q.defer();
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+
+            if (angular.isDefined(data.address_id)) {
+                endpoint += '/' + data.address_id;
+
+                $http.put(endpoint, data)
+                    .then(success, error);
+            } else {
+                $http.post(endpoint, data)
+                    .then(success, error);
+            }
+
+            return deferred.promise;
+        }
+
+        return {
+            query: query,
+            getOne: getOne,
+            save: save
+        };
+    }])
+
+    .factory('InvoiceService', ['$http', '$q', '$site-configs', 'AuthService', function ($http, $q, $configs, AuthService) {
+
+        var service = $configs.API_BASE_URL + 'invoices/' + AuthService.getLoggedInUser().user_id;
+
+        function query() {
+            var endpoint = service,
+                deferred = $q.defer();
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+
+        }
+
+        function getOne(id) {
+            var endpoint = service,
+                deferred = $q.defer();
+
+            if (angular.isUndefined(id)) {
+                deferred.reject('Subsctiption id is required!');
+            }
+
+            endpoint += '/' + id;
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
+        function save(data) {
+            var endpoint = service,
+                deferred = $q.defer();
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+
+            if (angular.isDefined(data.address_id)) {
+                endpoint += '/' + data.address_id;
+
+                $http.put(endpoint, data)
+                    .then(success, error);
+            } else {
+                $http.post(endpoint, data)
+                    .then(success, error);
+            }
+
+            return deferred.promise;
+        }
+
+        return {
+            query: query,
+            getOne: getOne,
+            save: save
+        };
+    }])
+
     .factory('MarketingLinksService', ['$http', '$q', '$site-configs', function ($http, $q, $configs) {
         var service = $configs.API_BASE_URL + 'marketing-links';
 

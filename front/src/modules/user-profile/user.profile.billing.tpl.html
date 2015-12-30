@@ -3,89 +3,34 @@
     <div id="billing-subscriptions" class="content-left">
         <div>
             <h3>Subscriptions</h3>
-            <div class="subscription">
+            <div class="subscription" data-ng-repeat="subscription in subscriptions">
                 <a class="edit" href="#">EDIT</a>
-                <h3>Dex IB</h3>
+                <h3>Dex {{subscription.product.display_name}}</h3>
                 <div class="sub-info centeredboxes">
                     <div class="sub-info-nb">
-                        <span>Next Billing: </span>August 1st, 2015
+                        <span>Next Billing: </span>{{subscription.next_billing | date: 'MMMM dd, yyyy'}}
                     </div>
                     <div class="sub-info-cc">
-                        <span>Credit Card: </span>2570
+                        <span>Credit Card: </span>{{subscription.card.last_four}}
                     </div>
                     <div class="sub-info-pr">
-                        <span>Product Price: </span>$552
-                    </div>
-                </div>
-            </div>
-            <div class="subscription">
-                <a class="edit" href="#">EDIT</a>
-                <h3>Dex IB</h3>
-                <div class="sub-info centeredboxes">
-                    <div class="sub-info-nb">
-                        <span>Next Billing: </span>August 1st, 2015
-                    </div>
-                    <div class="sub-info-cc">
-                        <span>Credit Card: </span>2570
-                    </div>
-                    <div class="sub-info-pr">
-                        <span>Product Price: </span>$552
-                    </div>
-                </div>
-            </div>
-            <div class="subscription">
-                <a class="edit" href="#">EDIT</a>
-                <h3>Dex IB</h3>
-                <div class="sub-info centeredboxes">
-                    <div class="sub-info-nb">
-                        <span>Next Billing: </span>August 1st, 2015
-                    </div>
-                    <div class="sub-info-cc">
-                        <span>Credit Card: </span>2570
-                    </div>
-                    <div class="sub-info-pr">
-                        <span>Product Price: </span>$552
-                    </div>
-                </div>
-            </div>
-            <div class="subscription">
-                <a class="edit" href="#">EDIT</a>
-                <h3>Dex IB</h3>
-                <div class="sub-info centeredboxes">
-                    <div class="sub-info-nb">
-                        <span>Next Billing: </span>August 1st, 2015
-                    </div>
-                    <div class="sub-info-cc">
-                        <span>Credit Card: </span>2570
-                    </div>
-                    <div class="sub-info-pr">
-                        <span>Product Price: </span>$552
+                        <span>Product Price: </span>{{subscription.amount | currency: '$'}}
                     </div>
                 </div>
             </div>
         </div>
         <div id="order-history">
-            <table id="order-history-table" class="minitable">
+            <table id="order-history-table" class="table minitable">
                 <thead>
                 <tr><th>Date</th>
                     <th>Product</th>
                     <th>Receipt</th>
                 </tr></thead>
                 <tbody>
-                <tr>
-                    <td>19 Oct 2015</td>
-                    <td>Dex IB</td>
-                    <td><a href="#">View</a></td>
-                </tr>
-                <tr>
-                    <td>19 Oct 2015</td>
-                    <td>Dex NA</td>
-                    <td><a href="#">View</a></td>
-                </tr>
-                <tr>
-                    <td>19 Oct 2015</td>
-                    <td>Dex FX</td>
-                    <td><a href="#">View</a></td>
+                <tr data-ng-repeat="invoice in invoices">
+                    <td>{{invoice.created_at | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY'}}</td>
+                    <td>Dex {{invoice.product_name}}</td>
+                    <td><a href="#" data-ng-click="getPdf(invoice)">View</a></td>
                 </tr>
                 </tbody>
             </table>
@@ -115,7 +60,6 @@
                     <span class="small" ng-if="address.address2">{{address.address2}}</span>
                     <span class="small">{{address.city}} - {{address.state}} - {{address.country}}</span>
                     <div class="cc-info">
-                        <div><span>Name: </span>{{address.name}}</div>
                         <div><span>ZIP: </span>{{address.zip}}</div>
                         <div><span>Phone: </span>{{address.phone}}</div>
                     </div>

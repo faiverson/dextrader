@@ -1,4 +1,4 @@
-angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.mask'])
+angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.mask', 'angularMoment'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('user', {
@@ -87,11 +87,13 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
         vm.init();
     }])
 
-    .controller('BillingCtrl', ['$scope', 'CreditCardService', 'BillingAddressService', 'Notification', '$uibModal',
-        function ($scope, CreditCardService, BillingAddressService, Notification, $uibModal) {
+    .controller('BillingCtrl', ['$scope', 'CreditCardService', 'BillingAddressService', 'Notification', '$uibModal', 'SubscriptionService', 'InvoiceService',
+        function ($scope, CreditCardService, BillingAddressService, Notification, $uibModal, SubscriptionService, InvoiceService) {
             var vm = this;
             $scope.creditCards = [];
             $scope.addresses = [];
+            $scope.invoices = [];
+            $scope.subscriptions = [];
 
             $scope.openFormCreditCard = function (cc_id) {
 
@@ -131,6 +133,32 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
                 });
             };
 
+            vm.getSubscriptions = function () {
+                SubscriptionService.query()
+                    .then(vm.getSubscriptionsSuccess, vm.getSubscriptionsError);
+            };
+
+            vm.getSubscriptionsSuccess = function (res) {
+                $scope.subscriptions = res.data;
+            };
+
+            vm.getSubscriptionsError = function (err) {
+
+            };
+
+            vm.getInvoices = function () {
+                InvoiceService.query()
+                    .then(vm.getInvoicesSuccess, vm.getInvoicesError);
+            };
+
+            vm.getInvoicesSuccess = function (res) {
+                $scope.invoices = res.data;
+            };
+
+            vm.getInvoicesError = function (err) {
+
+            };
+
             vm.getUserCreditCards = function () {
 
                 function success(res) {
@@ -162,6 +190,8 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
             vm.init = function () {
                 vm.getUserCreditCards();
                 vm.getUserBillingAddress();
+                vm.getSubscriptions();
+                vm.getInvoices();
             };
 
             vm.init();
