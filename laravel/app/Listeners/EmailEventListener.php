@@ -20,7 +20,7 @@ class EmailEventListener //implements ShouldQueue
 
     public function onCheckout($event)
     {
-		$event->purchase->email = 'fa.iverson@gmail.com';
+		//$event->purchase->email = 'fa.iverson@gmail.com';
 		$this->mailer->send('emails.purchase', ['purchase' => $event->purchase->with('detail')->first()], function ($message) use ($event) {
 			$message
 				->from($this->from)

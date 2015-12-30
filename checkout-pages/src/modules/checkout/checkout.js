@@ -32,7 +32,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             var vm = this;
             $scope.formData = {
                 billing_address2: "",
-                product_id: 1,
+                products: [1],
                 funnel_id: 1
             };
 
@@ -212,7 +212,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
 
                 InvoicesService.setInvoice(internalId, res.data);
 
-                $state.go('upsell', { p: internalId });
+                $state.go('upsell', { invoice: internalId });
                 Notification.success('Congratulations!!! Account has been created!');
             };
 
