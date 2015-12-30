@@ -159,16 +159,15 @@ class TransactionGateway extends AbstractGateway {
 
 		// connect to the gateway merchant
 		$data['orderid'] = $transaction['id'];
-		$transaction->responsetext = 'success'; // emulate success gateway
-
-//		$gateway = $this->gateway($data);
+//		$transaction->responsetext = 'success'; // emulate success gateway
+		$gateway = $this->gateway($data);
 
 		// save the response in the transaction
-//		$response = $this->set($gateway, $transaction->id);
-//		if(!$response) {
-//			$this->errors = $this->errors();
-//			return false;
-//		}
+		$response = $this->set($gateway, $transaction->id);
+		if(!$response) {
+			$this->errors = $this->errors();
+			return false;
+		}
 
 		// we return the object transaction for events
 		// and the data for the purchase

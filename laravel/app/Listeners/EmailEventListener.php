@@ -34,7 +34,7 @@ class EmailEventListener //implements ShouldQueue
 		$from = $this->userGateway->find($event->commission->from_user_id);
 		$to = $this->userGateway->find($event->commission->to_user_id);
 		$params = ['from' => $from, 'to' => $to];
-		$to->email = 'fa.iverson@gmail.com';
+//		$to->email = 'fa.iverson@gmail.com';
 		$this->mailer->send('emails.commission', $params, function ($message) use ($to) {
 			$message
 				->from($this->from)
