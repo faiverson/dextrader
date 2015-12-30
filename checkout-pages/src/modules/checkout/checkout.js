@@ -217,7 +217,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             };
 
             vm.error = function (err) {
-                if (angular.isDefined(err.data.error)) {
+                if (err.data && angular.isDefined(err.data.error)) {
                     if (angular.isArray(err.data.error)) {
                         angular.forEach(err.data.error, function (e) {
                             Notification.error(e);
