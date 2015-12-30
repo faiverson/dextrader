@@ -73,6 +73,12 @@ class RoleSeeder extends Seeder
 				'description' => 'Allow to view FX section',
 		]);
 
+		$signal = Permission::create([
+			'name' => 'signal',
+			'display_name' => 'Signal',
+			'description' => 'Allow to CRUD live signals',
+		]);
+
 
 		Permission::reguard();
 		$this->command->info("Starting to seed roles");
@@ -82,19 +88,19 @@ class RoleSeeder extends Seeder
             'name' => 'owner',
 			'display_name' => 'Application God',
 			'description' => 'This role can do everything',
-        ])->attachPermissions(array($uAdd, $uUpdate, $uDelete, $uView, $uLogin, $uProfile, $ib, $training, $pro, $na, $fx));
+        ])->attachPermissions(array($uAdd, $uUpdate, $uDelete, $uView, $uLogin, $uProfile, $ib, $training, $pro, $na, $fx, $signal));
 
         Role::create([
 			'name' => 'admin',
 			'display_name' => 'Aministrator',
 			'description' => 'This role is an admin'
-        ])->attachPermissions(array($uAdd, $uUpdate, $uDelete, $uView, $uLogin, $uProfile, $ib, $training, $pro, $na, $fx));
+        ])->attachPermissions(array($uAdd, $uUpdate, $uDelete, $uView, $uLogin, $uProfile, $ib, $training, $pro, $na, $fx, $signal));
 
 		Role::create([
 			'name' => 'editor',
 			'display_name' => 'Editor',
 			'description' => 'This role is an editor'
-		])->attachPermissions(array($uView, $uProfile, $ib, $training, $pro, $na, $fx));
+		])->attachPermissions(array($uView, $uProfile, $ib, $training, $pro, $na, $fx, $signal));
 
         Role::create([
 			'name' => 'user',
