@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Config;
 use Event;
 use App\Events\CheckoutEvent;
+use Log;
 
 class TransactionController extends Controller
 {
@@ -41,16 +42,17 @@ class TransactionController extends Controller
 	{
 		$fields = $fields =$request->all();
 		$fields['ip_address'] = $request->ip();
+
 		// to simplify UI
 		$fields['products'] = is_string($fields['products']) ? explode(',', $fields['products']) : $fields['products'];
 
 		$response = $this->transaction->add($fields);
-		if(!$response['transaction']) {
+		if(!$response) {
 			return response()->error($this->transaction->errors());
 		}
 
 		// if everything is ok, we set the user and create the invoice
-		if(strtolower($response['transaction']->responsetext) == 'success') {
+		if(array_key_exists('responsetext', $response) && strtolower($response['responsetext']) == 'success') {
 			$purchase = $this->transaction->purchase($response);
 			if(!$purchase) {
 				return response()->error($this->transaction->errors());
@@ -58,10 +60,15 @@ class TransactionController extends Controller
 			$response = array_merge($response, $purchase);
 			Event::fire(new CheckoutEvent($response));
 		} else {
-			return response()->error('There is a problem with the Merchant. Please contact support to solve the problem!');
+			Log::info('Merchant', $response);
+			if(!array_key_exists('responsetext', $response)) {
+				$response['responsetext'] = 'There is a problem with the Merchant. Please contact support to solve the problem!';
+			}
+			return response()->error($response['responsetext']);
+
 		}
 
-		return response()->ok($response['transaction']);
+		return response()->ok($response);
 	}
 
 }

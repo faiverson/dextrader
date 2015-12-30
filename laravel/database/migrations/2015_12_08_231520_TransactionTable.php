@@ -45,8 +45,8 @@ class TransactionTable extends Migration
 			$table->string('card_name', 150)->nullable(false);
 			$table->smallInteger('card_exp_month')->nullable(false);
 			$table->smallInteger('card_exp_year')->nullable(false);
-			$table->integer('card_first_six')->nullable(false);
-			$table->integer('card_last_four')->nullable(false);
+			$table->string('card_first_six', 6)->nullable(false);
+			$table->string('card_last_four', 4)->nullable(false);
 			$table->string('card_network', 15)->nullable(false);
 
 			$table->bigInteger('billing_address_id')->unsigned()->nullable();
