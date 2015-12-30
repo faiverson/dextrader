@@ -23,8 +23,8 @@ class CreditCards extends Migration
 			$table->smallInteger('exp_month')->nullable(false);
 			$table->smallInteger('exp_year')->nullable(false);
 			$table->string('number')->nullable(false)->unique('number');
-			$table->integer('first_six')->nullable(false);
-			$table->integer('last_four')->nullable(false);
+			$table->string('first_six', 6)->nullable(false);
+			$table->string('last_four', 4)->nullable(false);
 			$table->string('network', 15)->nullable(false);
 			$table->boolean('default_card')->nullable(false)->default(true);
 			$table->softDeletes();

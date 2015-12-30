@@ -79,6 +79,10 @@ class TransactionGateway extends AbstractGateway {
 		return $this->repository->findBy($attribute, $value, $columns, $limit, $offset, $order_by);
 	}
 
+	public function findWith($id) {
+		return $this->repository->findWith($id);
+	}
+
 	/**
 	 * @param array $data
 	 * @return object Transaction
@@ -158,8 +162,7 @@ class TransactionGateway extends AbstractGateway {
 		DB::commit();
 
 		// connect to the gateway merchant
-		$data['orderid'] = $transaction['id'];
-//		$transaction->responsetext = 'success'; // emulate success gateway
+		$data['orderid'] = $transaction->id;
 		$gateway = $this->gateway($data);
 
 		// save the response in the transaction
@@ -167,11 +170,11 @@ class TransactionGateway extends AbstractGateway {
 		if(!$response) {
 			$this->errors = $this->errors();
 			return false;
+		} else {
+			$data = array_merge($gateway, $data);
 		}
 
-		// we return the object transaction for events
-		// and the data for the purchase
-		return array_merge($data, ['transaction' => $transaction]);
+		return $data;
 	}
 
 	public function setDetail(Collection $products)
@@ -219,9 +222,9 @@ class TransactionGateway extends AbstractGateway {
 		return $nmi->purchase($data);
 	}
 
-	public function  set(array $data, $id)
+	public function set(array $data, $id)
 	{
-		return $this->repository->update($data, $id);
+		return $this->update($data, $id);
 	}
 
 	public function purchase(array $data)
@@ -310,7 +313,8 @@ class TransactionGateway extends AbstractGateway {
 				$role_id = $this->role->getRoleIdByName($product['roles']);
 				$this->user->attachRole($data['user_id'], $role_id);
 			}
-		} catch(\Exception $e) {
+		}
+		catch(\Exception $e) {
 			DB::rollback();
 			$this->errors = [$e->getMessage()];
 			return false;

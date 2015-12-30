@@ -35,4 +35,9 @@ class TransactionRepository extends AbstractRepository implements TransactionRep
 		}
 		return $query->with('detail')->where($attribute, '=', $value)->get($columns);
 	}
+
+	public function findWith($id) {
+		$query = $this->model;
+		return $query->with('detail')->find($id);
+	}
 }

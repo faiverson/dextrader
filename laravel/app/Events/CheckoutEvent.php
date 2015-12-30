@@ -18,8 +18,6 @@ class CheckoutEvent extends Event
      */
     public function __construct(array $data)
     {
-		$this->purchase = $data['transaction'];
-		unset($data['transaction']);
 		$this->data = $data;
     }
 

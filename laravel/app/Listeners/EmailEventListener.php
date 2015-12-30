@@ -2,16 +2,20 @@
 
 namespace App\Listeners;
 
+use Illuminate\Container\Container as App;
 use App\Gateways\UserGateway;
+use App\Models\Transaction;
 use Snowfire\Beautymail\Beautymail;
 use Config;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Repositories\TransactionRepository;
 
 class EmailEventListener //implements ShouldQueue
 {
-	public function __construct(Beautymail $bm, UserGateway $userGateway)
+	public function __construct(App $app, Beautymail $bm, UserGateway $userGateway)
 	{
+		$this->app = $app;
 		$this->mailer = $bm;
 		$this->from = Config::get('dextrader.from');
 		$this->admin = Config::get('dextrader.admin');
@@ -20,11 +24,14 @@ class EmailEventListener //implements ShouldQueue
 
     public function onCheckout($event)
     {
-		//$event->purchase->email = 'fa.iverson@gmail.com';
-		$this->mailer->send('emails.purchase', ['purchase' => $event->purchase->with('detail')->first()], function ($message) use ($event) {
+		$tr = new TransactionRepository($this->app);
+		$transaction_id = $event->data['orderid'];
+		$transaction = $tr->findWith($transaction_id);
+//		$transaction->email = 'fa.iverson@gmail.com';
+		$this->mailer->send('emails.purchase', ['purchase' => $transaction], function ($message) use ($transaction) {
 			$message
 				->from($this->from)
-				->to($event->purchase->email)
+				->to($transaction->email)
 				->subject('Yey! Your purchase has been approved!');
 		});
     }
