@@ -28,14 +28,6 @@ class TransactionTable extends Migration
 			$table->string('enroller', 80)->nullable();
 			$table->decimal('amount', 10, 2)->signed()->nullable(false);
 
-			$table->smallInteger('product_id')->unsigned();
-			$table->foreign('product_id')
-				->references('id')->on('products')
-				->onUpdate('cascade')->onDelete('cascade');
-			$table->decimal('product_amount', 10, 2)->signed()->nullable(false);
-			$table->decimal('product_discount', 10, 2)->signed()->nullable(false);
-			$table->string('product_name', 100)->nullable(false);
-
 			$table->integer('funnel_id')->unsigned();
 			$table->foreign('funnel_id')
 				->references('id')->on('funnels')

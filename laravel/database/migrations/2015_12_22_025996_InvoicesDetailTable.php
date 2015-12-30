@@ -14,16 +14,23 @@ class InvoicesDetailTable extends Migration
 	{
 		Schema::create('invoices_detail', function (Blueprint $table) {
 			$table->bigIncrements('id');
-			$table->bigInteger('invoices_id')->unsigned();
-			$table->foreign('invoices_id')->references('id')->on('invoices')
+			$table->bigInteger('invoice_id')->unsigned();
+			$table->foreign('invoice_id')->references('id')->on('invoices')
 				  ->onUpdate('cascade')->onDelete('cascade');
+
+			$table->bigInteger('subscription_id')->unsigned();
+			$table->foreign('subscription_id')
+				->references('id')->on('subscriptions')
+				->onUpdate('cascade')->onDelete('cascade');
 
 			$table->smallInteger('product_id')->unsigned();
 			$table->foreign('product_id')->references('id')->on('products')
 				->onUpdate('cascade')->onDelete('cascade');
+			$table->string('product_name', 100)->nullable(false);
+			$table->string('product_display_name', 100)->nullable(false);
 			$table->decimal('product_amount', 10, 2)->signed()->nullable(false);
 			$table->decimal('product_discount', 10, 2)->signed()->nullable(false);
-			$table->string('product_name', 100)->nullable(false);
+
 		});
 	}
 

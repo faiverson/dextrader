@@ -19,4 +19,9 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryI
 	{
 		return number_format($product->amount - ($product->amount * $product->discount), 2, '.', ',');
 	}
+
+	public function findIn(array $products)
+	{
+		return $this->model->whereIn('id', $products)->get();
+	}
 }

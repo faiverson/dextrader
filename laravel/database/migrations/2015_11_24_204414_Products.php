@@ -22,7 +22,7 @@ class Products extends Migration
 			$table->string('parents', 20)->nullable(false)->default(0);
 			$table->string('bundle', 20)->nullable(false)->default(0);
 			$table->string('roles', 100)->nullable(false);
-			$table->string('period', 20)->nullable(false)->default('+1 month');
+			$table->string('billing_period', 20)->nullable(false)->default('+1 month');
 			$table->timestamps();
 			$table->softDeletes();
 		});

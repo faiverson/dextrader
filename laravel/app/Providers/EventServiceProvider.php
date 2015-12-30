@@ -18,8 +18,6 @@ class EventServiceProvider extends ServiceProvider
 		],
 		'App\Events\CommissionEvent' => [
 		],
-		'App\Events\LiveSignalEvent' => [
-		],
     ];
 
 	protected $subscribe = [

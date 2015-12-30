@@ -21,9 +21,10 @@ class TransactionDetailTable extends Migration
 			$table->smallInteger('product_id')->unsigned();
 			$table->foreign('product_id')->references('id')->on('products')
 					->onUpdate('cascade')->onDelete('cascade');
+			$table->string('product_name', 100)->nullable(false);
+			$table->string('product_display_name', 100)->nullable(false);
 			$table->decimal('product_amount', 10, 2)->signed()->nullable(false);
 			$table->decimal('product_discount', 10, 2)->signed()->nullable(false);
-			$table->string('product_name', 100)->nullable(false);
 		});
 	}
 

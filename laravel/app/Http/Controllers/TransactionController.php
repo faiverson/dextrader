@@ -17,6 +17,21 @@ class TransactionController extends Controller
 	}
 
 	/**
+	 * Show array of user cards
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function index(Request $request)
+	{
+		$id = $request->id;
+		$limit = $request->input('limit') ? $request->input('limit') : $this->limit;
+		$offset = $request->input('offset') ? $request->input('offset') : 0;
+		$response = $this->transaction->findBy('user_id', $id, null, $limit, $offset);
+		return response()->ok($response);
+	}
+
+	/**
 	 * Store a newly created resource in storage.
 	 *
 	 * @param  \Illuminate\Http\Request $request
@@ -26,22 +41,27 @@ class TransactionController extends Controller
 	{
 		$fields = $fields =$request->all();
 		$fields['ip_address'] = $request->ip();
-		$transaction = $this->transaction->add($fields);
-		if(!$transaction) {
+		// to simplify UI
+		$fields['products'] = is_string($fields['products']) ? explode(',', $fields['products']) : $fields['products'];
+
+		$response = $this->transaction->add($fields);
+		if(!$response['transaction']) {
 			return response()->error($this->transaction->errors());
 		}
 
 		// if everything is ok, we set the user and create the invoice
-		if(strtolower($transaction['responsetext']) == 'success') {
-			$transaction = $this->transaction->purchase($transaction);
-			if(!$transaction) {
+		if(strtolower($response['transaction']->responsetext) == 'success') {
+			$purchase = $this->transaction->purchase($response);
+			if(!$purchase) {
 				return response()->error($this->transaction->errors());
 			}
-			Event::fire(new CheckoutEvent($transaction));
+			$response = array_merge($response, $purchase);
+			Event::fire(new CheckoutEvent($response));
+		} else {
+			return response()->error('There is a problem with the Merchant. Please contact support to solve the problem!');
 		}
 
-		return response()->ok($transaction);
+		return response()->ok($response['transaction']);
 	}
-
 
 }

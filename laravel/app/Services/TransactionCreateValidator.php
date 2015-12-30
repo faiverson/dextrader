@@ -26,11 +26,6 @@ class TransactionCreateValidator extends AbstractValidator {
 		'funnel_id'=> 'required|exists:funnels,id',
 		'tag_id' => 'sometimes|required|exists:campaign_tags,id',
 		'ip_address' => 'sometimes|ip',
-
-		'product_id' => 'sometimes|required:exists:products,id',
-		'product_name' => 'required|alpha',
-		'product_amount' => ['required', 'regex:/[0-9]+[.,]?[0-9]*/'],
-		'product_discount' => ['required', 'regex:/[0-9]+[.,]?[0-9]*/'],
 		'amount' => ['required', 'regex:/[0-9]+[.,]?[0-9]*/'],
 
 		'billing_address_id' => 'numeric',

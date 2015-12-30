@@ -1,13 +1,21 @@
 @extends('beautymail::templates.sunny')
-
 @section('content')
 	@include ('beautymail::templates.sunny.heading' , [
         'heading' => 'Dex Trader',
         'level' => 'h1',
     ])
 	@include('beautymail::templates.sunny.contentStart', ['color' => '#0000FF'])
-	<p> Hey {{$user->first_name}} {{$user->last_name}}<br/>
-	You have a new commission! Login <a href="{{ url('/commissions') }}">here</a> to take a look!</p>
-	<p> There is a new signal in the system<br/></p>
+	<p> Congrats {{ $to->fullname }}!<br/>
+
+		{{ $from->fullname }} just gave you a commission...<br>
+		Seriously, you just earned a commission from <br>
+		{{ $from->first_name }} ...without doing anything at all! <br><br>
+		Here's their info if you want to welcome them. <br><br>
+		Email: {{ $from->email }} <br>
+		@if ($from->phone != '')
+			Phone: {{ $from->phone }} <br><br>
+		@endif
+		Have a great day! <br>
+	</p>
 	@include('beautymail::templates.sunny.contentEnd')
 @stop

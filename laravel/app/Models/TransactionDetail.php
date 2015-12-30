@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Sofa\Eloquence\Eloquence; // base trait
 use Sofa\Eloquence\Mutable;
-use App\Models\TransactionDetail;
 
-class Transaction extends Model
+
+class TransactionDetail extends Model
 {
 	use Eloquence, Mutable;
 
@@ -16,9 +16,9 @@ class Transaction extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'transactions';
+	protected $table = 'transactions_detail';
 
-	protected $dates = ['created_at', 'updated_at'];
+	public $timestamps = false;
 
 	/**
 	 * The attributes that are mass assignable.
@@ -26,51 +26,12 @@ class Transaction extends Model
 	 * @var array
 	 */
 	protected $fillable = [
-		'user_id',
-		'first_name',
-		'last_name',
-		'email',
-
-		'enroller_id',
-		'funnel_id',
-		'tag_id',
-		'tag',
-
+		'transaction_id',
 		'product_id',
 		'product_name',
+		'product_display_name',
 		'product_amount',
-		'product_discount',
-		'amount',
-
-		'billing_address_id',
-		'billing_address',
-		'billing_address2',
-		'billing_city',
-		'billing_state',
-		'billing_country',
-		'billing_zip',
-		'billing_phone',
-
-		'card_id',
-		'card_name',
-		'card_exp_month',
-		'card_exp_year',
-		'card_network' ,
-		'card_first_six',
-		'card_last_four',
-		'info',
-		'ip_address',
-
-		'response',
-		'responsetext',
-		'authcode',
-		'transactionid',
-		'orderid',
-		'avsresponse',
-		'cvvresponse',
-		'type',
-		'response_code'
-
+		'product_discount'
 	];
 
 	public function getProductAmountAttribute()
@@ -102,10 +63,4 @@ class Transaction extends Model
 	{
 		return json_decode($this->attributes['info']);
 	}
-
-	public function detail()
-	{
-		return $this->hasMany(TransactionDetail::class, 'transaction_id', 'id');
-	}
-
 }

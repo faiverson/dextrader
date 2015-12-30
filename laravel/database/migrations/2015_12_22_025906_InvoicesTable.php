@@ -27,14 +27,6 @@ class InvoicesTable extends Migration
 			$table->foreign('enroller_id')->references('id')->on('users');
 			$table->decimal('amount', 10, 2)->signed()->nullable(false);
 
-			$table->smallInteger('product_id')->unsigned();
-			$table->foreign('product_id')
-				->references('id')->on('products')
-				->onUpdate('cascade')->onDelete('cascade');
-			$table->decimal('product_amount', 10, 2)->signed()->nullable(false);
-			$table->decimal('product_discount', 10, 2)->signed()->nullable(false);
-			$table->string('product_name', 100)->nullable(false);
-
 			$table->integer('funnel_id')->unsigned();
 			$table->foreign('funnel_id')
 				->references('id')->on('funnels')
@@ -43,11 +35,6 @@ class InvoicesTable extends Migration
 			$table->integer('tag_id')->unsigned()->nullable()->default(null);
 			$table->foreign('tag_id')
 				->references('id')->on('campaign_tags')
-				->onUpdate('cascade')->onDelete('cascade');
-
-			$table->bigInteger('subscription_id')->unsigned();
-			$table->foreign('subscription_id')
-				->references('id')->on('subscriptions')
 				->onUpdate('cascade')->onDelete('cascade');
 
 			$table->bigInteger('transaction_id')->unsigned();

@@ -27,11 +27,6 @@ class TransactionUpdateValidator extends AbstractValidator {
 		'funnel_id'=> 'sometimes|exists:funnels,id',
 		'tag_id' => 'sometimes|exists:campaign_tags,id',
 		'ip_address' => 'sometimes|ip',
-
-		'product_id' => 'sometimes|exists:products,id',
-		'product_name' => 'sometimes|required|unique:products|alpha',
-		'product_amount' => ['sometimes', 'required', 'regex:/[0-9]+[.,]?[0-9]*/'],
-		'product_discount' => ['sometimes', 'required', 'regex:/[0-9]+[.,]?[0-9]*/'],
 		'amount' => ['sometimes', 'required', 'regex:/[0-9]+[.,]?[0-9]*/'],
 
 		'billing_address_id' => 'sometimes|numeric',

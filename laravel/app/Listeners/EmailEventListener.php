@@ -8,7 +8,7 @@ use Config;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class EmailEventListener implements ShouldQueue
+class EmailEventListener //implements ShouldQueue
 {
 	public function __construct(Beautymail $bm, UserGateway $userGateway)
 	{
@@ -20,35 +20,26 @@ class EmailEventListener implements ShouldQueue
 
     public function onCheckout($event)
     {
-		dd($event->data);
-		$event->data['email'] = 'fa.iverson@gmail.com';
-		$this->mailer->send('emails.purchase', ['purchase' => $event->data], function ($message) use ($event) {
+		$event->purchase->email = 'fa.iverson@gmail.com';
+		$this->mailer->send('emails.purchase', ['purchase' => $event->purchase->with('detail')->first()], function ($message) use ($event) {
 			$message
 				->from($this->from)
-				->to($event->data['email'])
+				->to($event->purchase->email)
 				->subject('Yey! Your purchase has been approved!');
 		});
     }
 
 	public function onCommissions($event)
 	{
-		$user = $this->userGateway->find($event->commission->to_user_id);
-		$user->email = 'fa.iverson@gmail.com';
-		$this->mailer->send('emails.commission', ['user' => $user->toArray()], function ($message) use ($user) {
+		$from = $this->userGateway->find($event->commission->from_user_id);
+		$to = $this->userGateway->find($event->commission->to_user_id);
+		$params = ['from' => $from, 'to' => $to];
+		$to->email = 'fa.iverson@gmail.com';
+		$this->mailer->send('emails.commission', $params, function ($message) use ($to) {
 			$message
 				->from($this->from)
-				->to($user->email)
+				->to($to->email)
 				->subject('Yey! You have a new commission!');
-		});
-	}
-
-	public function onLiveSignal($event)
-	{
-		$this->mailer->send('emails.live-signal', $event->data, function ($message) use ($event) {
-			$message
-				->from($this->from)
-				->to($this->admin)
-				->subject('Live Signal on DexTrader!');
 		});
 	}
 
@@ -60,19 +51,7 @@ class EmailEventListener implements ShouldQueue
      */
 	public function subscribe($events)
 	{
-		$events->listen(
-			'App\Events\CheckoutEvent',
-			'App\Listeners\EmailEventListener@onCheckout'
-		);
-
-		$events->listen(
-			'App\Events\CommissionEvent',
-			'App\Listeners\EmailEventListener@onCommissions'
-		);
-
-		$events->listen(
-			'App\Events\LiveSignalEvent',
-			'App\Listeners\EmailEventListener@onLiveSignal'
-		);
+		$events->listen('App\Events\CheckoutEvent', 'App\Listeners\EmailEventListener@onCheckout');
+		$events->listen('App\Events\CommissionEvent', 'App\Listeners\EmailEventListener@onCommissions');
 	}
 }

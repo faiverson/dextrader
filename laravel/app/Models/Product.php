@@ -13,9 +13,9 @@ class Product extends Model
 
 	protected $table = 'products';
 
-	protected $hidden = ['id', 'name', 'updated_at', 'created_at', 'deleted_at'];
+	protected $hidden = ['id', 'updated_at', 'created_at', 'deleted_at'];
 
-	protected $fillable = ['name', 'display_name', 'amount', 'discount', 'active', 'parents', 'period'];
+	protected $fillable = ['name', 'name', 'display_name', 'amount', 'discount', 'active', 'parents', 'period', 'billing_period', 'bundle', 'roles'];
 
 	protected $maps = [
 		'product_id' => 'id',

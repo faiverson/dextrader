@@ -28,6 +28,6 @@ class CommissionEvent extends Event
      */
     public function broadcastOn()
     {
-        return [];
+        return ['commission.new'];
     }
 }
