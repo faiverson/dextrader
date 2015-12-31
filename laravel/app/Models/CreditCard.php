@@ -61,4 +61,9 @@ class CreditCard extends Model
 		$this->attributes['number'] = Encrypt::encrypt($value);
 	}
 
+	public function getNumberAttribute()
+	{
+		return Encrypt::decrypt($this->attributes['number']);
+	}
+
 }
