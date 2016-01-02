@@ -30,6 +30,13 @@ class LiveSignalsController extends Controller
 		return response()->ok($response);
 	}
 
+	public function show(Request $request)
+	{
+		$id = $request->signal_id;
+		$response = $this->live_gateway->find($id);
+		return response()->ok($response);
+	}
+
 	public function store_by_page(Request $request)
 	{
 		$type = $request->input('type');

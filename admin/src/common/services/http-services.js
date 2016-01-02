@@ -138,7 +138,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
-        function getUserToken(){
+        function getUserToken() {
             return 'Bearer ' + localStorageService.get('token');
         }
 
@@ -175,7 +175,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             var deferred = $q.defer(),
                 endpoint = service;
 
-            if(angular.isDefined(params)){
+            if (angular.isDefined(params)) {
                 endpoint += '?' + $objects.toUrlString(params);
             }
 
@@ -192,7 +192,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
-        function save(data){
+        function save(data) {
             var endpoint = service,
                 deferred = $q.defer();
 
@@ -205,9 +205,9 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 deferred.reject(res);
             }
 
-            if(angular.isDefined(data.id)){
+            if (angular.isDefined(data.id)) {
                 $http.put(endpoint, data).then(success, error);
-            }else{
+            } else {
                 $http.post(endpoint, data).then(success, error);
             }
 
@@ -218,7 +218,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             var deferred = $q.defer(),
                 endpoint = service;
 
-            if(angular.isUndefined(id)){
+            if (angular.isUndefined(id)) {
                 deferred.reject('ID field is required!');
             }
 
@@ -241,6 +241,107 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             query: query,
             save: save,
             getOne: getOne
+        };
+    }])
+
+    .factory('LiveSignalsService', ['$http', '$q', '$site-configs', '$objects', function ($http, $q, $configs, $objects) {
+        var service = $configs.API_BASE_URL + 'signals/live';
+
+        function query(params) {
+            var deferred = $q.defer(),
+                endpoint = service;
+
+            if (angular.isDefined(params)) {
+                endpoint += '?' + $objects.toUrlString(params);
+            }
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
+        function save(data) {
+            var endpoint = service,
+                deferred = $q.defer();
+
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            if (angular.isDefined(data.id)) {
+                endpoint += '/' + data.id;
+                $http.put(endpoint, data).then(success, error);
+            } else {
+                $http.post(endpoint, data).then(success, error);
+            }
+
+            return deferred.promise;
+        }
+
+        function getOne(id) {
+            var deferred = $q.defer(),
+                endpoint = service;
+
+            if (angular.isUndefined(id)) {
+                deferred.reject('ID field is required!');
+            }
+
+            endpoint += '/' + id;
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
+        function destroy(id) {
+            var deferred = $q.defer(),
+                endpoint = service;
+
+            if (angular.isUndefined(id)) {
+                deferred.reject('ID field is required!');
+            }
+
+            endpoint += '/' + id;
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            $http.delete(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
+        return {
+            query: query,
+            save: save,
+            getOne: getOne,
+            destroy: destroy
         };
     }])
 
@@ -335,7 +436,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
 
         }
 
-        function save(data){
+        function save(data) {
             var endpoint = service,
                 deferred = $q.defer();
 
@@ -348,9 +449,9 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 deferred.reject(res);
             }
 
-            if(angular.isDefined(data.id)){
+            if (angular.isDefined(data.id)) {
                 $http.put(endpoint, data).then(success, error);
-            }else{
+            } else {
                 $http.post(endpoint, data).then(success, error);
             }
 
@@ -361,7 +462,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             var deferred = $q.defer(),
                 endpoint = service;
 
-            if(angular.isUndefined(id)){
+            if (angular.isUndefined(id)) {
                 deferred.reject('ID field is required!');
             }
 

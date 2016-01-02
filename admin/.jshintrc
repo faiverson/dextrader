@@ -23,6 +23,7 @@
 		"require": true,
 		"console": true,
 		"angular": true,
-		"process": true
+		"process": true,
+		"moment": true
 	}
 }

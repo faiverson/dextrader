@@ -44,7 +44,11 @@ module.exports = {
                 'vendor/angular-ui-notification/dist/angular-ui-notification.js',
                 'vendor/ng-file-upload-shim/ng-file-upload-shim.js', //no html5 browser support
                 'vendor/ng-file-upload-shim/ng-file-upload.js',
-                'vendor/angular-loading-bar/build/loading-bar.js'
+                'vendor/angular-loading-bar/build/loading-bar.js',
+                'vendor/angular-moment/angular-moment.js',
+                'vendor/moment/min/moment.min.js',
+                'vendor/angular-animate/angular-animate.js',
+                'vendor/angular-ui-mask/dist/mask.js'
             ],
             output: 'vendor.js'
         },

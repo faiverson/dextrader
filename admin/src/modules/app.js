@@ -13,11 +13,14 @@ angular.module('app', [
         'ui.bootstrap.tpls',
         'ui.bootstrap',
         'ngAnimate',
+        'app.ui-services',
+        'app.shared-filters',
         'angular-loading-bar',
         'app.http-services',
         'LocalStorageModule',
         'app.user-profile',
-        'app.testimonials'
+        'app.testimonials',
+        'app.live-signals'
     ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {

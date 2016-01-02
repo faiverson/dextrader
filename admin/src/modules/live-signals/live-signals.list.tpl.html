@@ -1,0 +1,94 @@
+<div class="provider-list">
+
+    <h1>Live Signals
+        <button class="btn btn-sm btn-primary pull-right" ui-sref="live_signals.new">NEW SIGNAL</button>
+    </h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th sortable="1"
+                current-sort="sortBy.column"
+                current-dir="sortBy.dir"
+                data-ng-click="sortBy.sort(1)">Date
+            </th>
+            <th sortable="2"
+                current-sort="sortBy.column"
+                current-dir="sortBy.dir"
+                data-ng-click="sortBy.sort(2)">Signal Time
+            </th>
+            <th sortable="3"
+                current-sort="sortBy.column"
+                current-dir="sortBy.dir"
+                data-ng-click="sortBy.sort(3)">Expiry Time
+            </th>
+            <th>Review</th>
+            <th sortable="4"
+                current-sort="sortBy.column"
+                current-dir="sortBy.dir"
+                data-ng-click="sortBy.sort(4)">Asset
+            </th>
+            <th sortable="5"
+                current-sort="sortBy.column"
+                current-dir="sortBy.dir"
+                data-ng-click="sortBy.sort(5)">Asset Rate
+            </th>
+            <th sortable="6"
+                current-sort="sortBy.column"
+                current-dir="sortBy.dir"
+                data-ng-click="sortBy.sort(6)">End Price
+            </th>
+            <th sortable="7"
+                current-sort="sortBy.column"
+                current-dir="sortBy.dir"
+                data-ng-click="sortBy.sort(7)">Target Price
+            </th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="signal in signals">
+            <td data-ng-bind="::signal.signal_date | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY'"></td>
+            <td data-ng-bind="::signal.signal_time"></td>
+            <td data-ng-bind="::signal.expiry_time"></td>
+            <td data-ng-bind="::signal.asset"></td>
+            <td data-ng-bind="::signal.asset_rate"></td>
+            <td data-ng-bind="::signal.target_price"></td>
+            <td data-ng-bind="::signal.end_price"></td>
+            <td>
+                <div class="btn-group">
+                    <button type="button"
+                            class="btn btn-default dropdown-toggle"
+                            data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        Actions <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a ui-sref="live_signals.edit({id:signal.id})">Edit</a></li>
+                        <li><a href="#" data-ng-click="openDeleteConfirm(signal.id)">Remove</a></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+    <div class="table-nav row">
+        <div class="col-md-8">
+            <uib-pagination direction-links="false"
+                            total-items="pagination.totalItems"
+                            ng-model="pagination.currentPage"
+                            items-per-page="pagination.itemsPerPage"
+                            ng-change="pagination.pageChange()"
+                            num-pages="smallnumPages"></uib-pagination>
+        </div>
+
+        <div class="col-md-4">
+            <uib-pager total-items="pagination.totalItems"
+                       items-per-page="pagination.itemsPerPage"
+                       ng-model="pagination.currentPage"
+                       ng-change="pagination.pageChange()">
+            </uib-pager>
+        </div>
+    </div>
+</div>
