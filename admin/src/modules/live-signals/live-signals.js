@@ -6,7 +6,9 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
                 templateUrl: 'modules/live-signals/live-signals.tpl.html',
                 controller: 'LiveSignalsCtrl',
                 data: {
-                    pageTitle: 'Live Signals'
+                    pageTitle: 'Live Signals',
+                    permission: 'signal',
+                    redirectTo: 'dashboard'
                 }
             })
             .state('live_signals.list', {

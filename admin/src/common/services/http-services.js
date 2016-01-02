@@ -1,6 +1,6 @@
 angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.shared-helpers'])
 
-    .factory('AuthService', ['$http', '$q', '$site-configs', 'localStorageService', 'jwtHelper', '$objects', '$filter', function ($http, $q, $configs, localStorageService, jwtHelper, $objects, $filter) {
+    .factory('AuthService', ['$http', '$q', '$site-configs', 'localStorageService', 'jwtHelper', '$objects', '$filter', '$rootScope', function ($http, $q, $configs, localStorageService, jwtHelper, $objects, $filter, $rootScope) {
 
         function login(username, password) {
             var endpoint = $configs.API_BASE_URL + 'login';
@@ -11,6 +11,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
 
                     // Set the token into local storage
                     localStorageService.set('token', res.data.data.token);
+                    $rootScope.$broadcast("user-has-change");
 
                     deferred.resolve();
                 } else {
@@ -117,6 +118,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
 
                     // Set the token into local storage
                     localStorageService.set('token', res.data.data.token);
+                    $rootScope.$broadcast("user-has-change");
 
                     deferred.resolve();
                 } else {
@@ -138,6 +140,12 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
+        function setUserToken(token) {
+            // Set the token into local storage
+            localStorageService.set('token', token);
+            $rootScope.$broadcast("user-has-change");
+        }
+
         function getUserToken() {
             return 'Bearer ' + localStorageService.get('token');
         }
@@ -150,6 +158,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             userHasPermission: userHasPermission,
             forgotPassword: forgotPassword,
             resetPassword: resetPassword,
+            setUserToken: setUserToken,
             getUserToken: getUserToken
         };
     }])
