@@ -6,38 +6,45 @@ use App\Services\UserCreateValidator;
 use App\Services\UserUpdateValidator;
 use App\Repositories\UserRepository;
 
-class UserGateway extends AbstractGateway {
+class UserGateway extends AbstractGateway
+{
 
-	protected $repository;
+    protected $repository;
 
-	protected $createValidator;
+    protected $createValidator;
 
-	protected $updateValidator;
+    protected $updateValidator;
 
-	protected $errors;
+    protected $errors;
 
-	public function __construct(UserRepository $repository, UserCreateValidator $createValidator, UserUpdateValidator $updateValidator)
-	{
-		$this->repository = $repository;
-		$this->createValidator = $createValidator;
-		$this->updateValidator = $updateValidator;
-	}
+    public function __construct(UserRepository $repository, UserCreateValidator $createValidator, UserUpdateValidator $updateValidator)
+    {
+        $this->repository = $repository;
+        $this->createValidator = $createValidator;
+        $this->updateValidator = $updateValidator;
+    }
 
-	public function edit(array $data, $id)
-	{
-		if(array_key_exists('username', $data)) {
-			unset($data['username']);
-		}
+    public function edit(array $data, $id)
+    {
+        if (array_key_exists('username', $data)) {
+            unset($data['username']);
+        }
 
-		return $this->update($data, $id);
-	}
+        return $this->update($data, $id);
+    }
 
-	public function getIdByUsername($username) {
-		return $this->repository->getIdByUsername($username);
-	}
+    public function getIdByUsername($username)
+    {
+        return $this->repository->getIdByUsername($username);
+    }
 
-	public function attachRole($user_id, $role_id)
-	{
-		return $this->repository->addRole($user_id, $role_id);
-	}
+    public function attachRole($user_id, $role_id)
+    {
+        return $this->repository->addRole($user_id, $role_id);
+    }
+
+    public function actives($columns = array('*'), $limit = null, $offset = null, $order_by = null)
+    {
+        return $this->repository->actives($columns, $limit, $offset, $order_by);
+    }
 }

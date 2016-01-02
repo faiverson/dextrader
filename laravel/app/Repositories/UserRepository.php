@@ -15,6 +15,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 
 	public function actives($columns = array('*'), $limit = null, $offset = null, $order_by = null) {
 		$user = $this->model->with('roles')->where('active', 1);
+		$sortColumns = ['id', 'username', 'last_name', 'email'];
 
 		if($limit != null) {
 			$user = $user->take($limit);
@@ -26,7 +27,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 
 		if($order_by != null) {
 			foreach($order_by as $column => $dir) {
-				$user = $user->orderBy($column, $dir);
+				$user = $user->orderBy($sortColumns[$column], $column['dir']);
 			}
 		}
 

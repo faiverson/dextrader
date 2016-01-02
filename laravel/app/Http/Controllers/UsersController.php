@@ -38,8 +38,9 @@ class UsersController extends Controller
 		$start = $request->input('start') ? $request->input('start') : 0;
 		$length = $request->input('length') ? $request->input('length') : 10;
 		$order = $request->input('order');
+
 //		$list = $this->user->all(null, 30, 0, ['first_name' => 'asc', 'last_name' => 'desc']);
-		$query = $this->user->actives(null, $length, $start, $order);
+		$query = $this->gateway->actives(null, $length, $start, $order);
 		return Datatables::of($query)->make(true);
 	}
 
