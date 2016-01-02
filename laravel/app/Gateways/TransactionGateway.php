@@ -1,6 +1,7 @@
 <?php
 namespace App\Gateways;
 
+use App\Models\Subscription;
 use App\Models\Transaction;
 use App\Repositories\TransactionRepository;
 use App\Services\TransactionCreateValidator;
@@ -33,13 +34,19 @@ class TransactionGateway extends AbstractGateway {
 
 	protected $purchase;
 
+	protected $subscription;
+
+	protected $invoice;
+
 	protected $user;
+
+	protected $role;
+
+	protected $product;
 
 	protected $card;
 
 	protected $address;
-
-	protected $cvv;
 
 	protected $tag;
 
@@ -147,19 +154,13 @@ class TransactionGateway extends AbstractGateway {
 			'amount' => $amount
 		]);
 
-		DB::beginTransaction();
-		try {
-			$transaction = $this->create($data);
-			if(!$transaction) {
-				$this->errors = $this->errors();
-				return false;
-			}
-		} catch(\Exception $e) {
-			DB::rollback();
-			$this->errors = [$e->getMessage()];
+
+		$transaction = $this->create($data);
+		if(!$transaction) {
+			$this->errors = $this->errors();
 			return false;
 		}
-		DB::commit();
+
 
 		// connect to the gateway merchant
 		$data['orderid'] = $transaction->id;
@@ -196,23 +197,31 @@ class TransactionGateway extends AbstractGateway {
 
 	public function create(array $data)
 	{
-		if( ! $this->createValidator->with($data)->passes() )
-		{
-			$this->errors = $this->createValidator->errors();
-			return false;
-		}
+		DB::beginTransaction();
+		try {
+			if( ! $this->createValidator->with($data)->passes() )
+			{
+				$this->errors = $this->createValidator->errors();
+				return false;
+			}
 
-		$transaction = $this->repository->create($data);
-		if($transaction) {
-			foreach($data['products'] as $product) {
-				$product['transaction_id'] = $transaction->id;
-				$detail = $this->detail->create($product);
-				if(!$detail) {
-					$this->errors = $this->detail->errors();
-					return false;
+			$transaction = $this->repository->create($data);
+			if($transaction) {
+				foreach($data['products'] as $product) {
+					$product['transaction_id'] = $transaction->id;
+					$detail = $this->detail->create($product);
+					if(!$detail) {
+						$this->errors = $this->detail->errors();
+						return false;
+					}
 				}
 			}
+		} catch(\Exception $e) {
+			DB::rollback();
+			$this->errors = [$e->getMessage()];
+			return false;
 		}
+		DB::commit();
 		return $transaction;
 	}
 
@@ -337,4 +346,6 @@ class TransactionGateway extends AbstractGateway {
 		}
 		return $geo;
 	}
+
+
 }

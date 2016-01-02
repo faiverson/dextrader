@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
 use App\Models\CreditCard;
+use App\Models\BillingAddress;
 use App\Models\Product;
+use App\Models\User;
 
 class Subscription extends Model
 {
@@ -22,7 +24,9 @@ class Subscription extends Model
 
 	protected $appends = array('subscription_id');
 
-	protected $hidden = ['id', 'product_id', 'card_id', 'billing_address_id'];
+	protected $visible = array('card.number');
+
+	protected $hidden = ['id', 'user_id', 'product_id', 'card_id', 'billing_address_id', 'created_at', 'updated_at'];
 
 	public function getSubscriptionIdAttribute()
 	{
@@ -32,6 +36,11 @@ class Subscription extends Model
 	public function card()
 	{
 		return $this->hasOne(CreditCard::class, 'id', 'card_id');
+	}
+
+	public function user()
+	{
+		return $this->hasOne(User::class, 'id', 'user_id');
 	}
 
 	public function product()

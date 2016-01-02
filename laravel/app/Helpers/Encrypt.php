@@ -16,7 +16,7 @@ final class Encrypt
 		return base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $secure_key, $text, MCRYPT_MODE_ECB));
 	}
 
-	public static function decrypt_text($text)
+	public static function decrypt($text)
 	{
 		$secure_key = hash('sha256', self::SALT(), true);
 

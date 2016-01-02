@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \App\Console\Commands\Inspire::class,
+//        \App\Console\Commands\Inspire::class,
+		\App\Console\Commands\MonthlyPayments::class
     ];
 
 	protected $bootstrappers = [
@@ -36,7 +37,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('inspire')
-                 ->hourly();
+		$path = storage_path('logs/payments-monthly' . date('Y-m-d') . '.log');
+		$schedule->command('payments:monthly --force')->everyMinute()->sendOutputTo($path);;
     }
 }

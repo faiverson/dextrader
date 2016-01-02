@@ -33,9 +33,9 @@ class NMI {
 			'ccnumber' => $data['number'],
 			'ccexp' => $data['card_exp_month'] . $data['card_exp_year'],
 			'amount' => number_format($data['amount'], 2, ".", ""),
-			'cvv' => $data['cvv'],
+			'cvv' => array_key_exists('cvv', $data) ? $data['cvv'] : '',
 
-			'ipaddress' => $data['ip_address'],
+			'ipaddress' => array_key_exists('ip_address', $data) ? $data['ip_address'] : '',
 			'orderid' => $data['orderid'],
 			'orderdescription' => $data['description'],
 			'tax' => 0,
