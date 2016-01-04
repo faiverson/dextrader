@@ -203,7 +203,8 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 deferred.reject(res);
             }
 
-            if (angular.isDefined(data.id)) {
+            if (angular.isDefined(data.user_id)) {
+                endpoint += '/' + data.user_id;
                 $http.put(endpoint, data).then(success, error);
             } else {
                 $http.post(endpoint, data).then(success, error);
@@ -516,7 +517,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
 
         }
 
-        function getOne(id) {
+        function download(id) {
             var endpoint = service,
                 deferred = $q.defer();
 
@@ -524,7 +525,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 deferred.reject('Subsctiption id is required!');
             }
 
-            endpoint += '/' + id;
+            endpoint += '/download/' + id;
 
             function success(res) {
                 deferred.resolve(res.data);
@@ -534,7 +535,11 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 deferred.reject(err);
             }
 
-            $http.get(endpoint).then(success, error);
+            $http({
+                method: 'GET',
+                url: endpoint,
+                responseType: 'arraybuffer'
+            }).then(success, error);
 
             return deferred.promise;
         }
@@ -567,7 +572,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
 
         return {
             query: query,
-            getOne: getOne,
+            download: download,
             save: save
         };
     }])

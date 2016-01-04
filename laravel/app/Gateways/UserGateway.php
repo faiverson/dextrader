@@ -47,4 +47,9 @@ class UserGateway extends AbstractGateway
     {
         return $this->repository->actives($columns, $limit, $offset, $order_by);
     }
+
+    public function findById($id, $column = 'id', $columns = array('*'))
+    {
+        return $this->repository->findById($id, $column = 'id', $columns = array('*'));
+    }
 }

@@ -1,4 +1,4 @@
-angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.mask', 'angularMoment'])
+angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.mask', 'angularMoment', 'ngFileSaver'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('user', {
@@ -87,8 +87,8 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
         vm.init();
     }])
 
-    .controller('BillingCtrl', ['$scope', 'CreditCardService', 'BillingAddressService', 'Notification', '$uibModal', 'SubscriptionService', 'InvoiceService',
-        function ($scope, CreditCardService, BillingAddressService, Notification, $uibModal, SubscriptionService, InvoiceService) {
+    .controller('BillingCtrl', ['$scope', 'CreditCardService', 'BillingAddressService', 'Notification', '$uibModal', 'SubscriptionService', 'InvoiceService', 'FileSaver',
+        function ($scope, CreditCardService, BillingAddressService, Notification, $uibModal, SubscriptionService, InvoiceService, FileSaver) {
             var vm = this;
             $scope.creditCards = [];
             $scope.addresses = [];
@@ -131,6 +131,27 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
                 }, function () {
                     //$log.info('Modal dismissed at: ' + new Date());
                 });
+            };
+
+            $scope.getPdf = function (invoice) {
+                InvoiceService.download(invoice.id)
+                    .then(function (res) {
+                        var urlCreator = window.URL || window.webkitURL || window.mozURL || window.msURL;
+                        var link = document.createElement("a");
+                        var blob = new Blob([res], {type: "application/pdf"});
+                        var url = urlCreator.createObjectURL(blob);
+
+                        link.setAttribute("href", url);
+                        link.setAttribute("download", 'test.pdf');
+
+                        // Simulate clicking the download link
+                        var event = document.createEvent('MouseEvents');
+                        event.initMouseEvent('click', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
+                        link.dispatchEvent(event);
+                        //FileSaver.saveAs(blob, 'test.pdf');
+                    }, function (err) {
+
+                    });
             };
 
             vm.getSubscriptions = function () {
@@ -265,7 +286,7 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
             };
 
             $scope.selectCCType = function (network) {
-                if(!angular.isDefined(cc_id)){
+                if (!angular.isDefined(cc_id)) {
                     $scope.card.network = network;
                 }
             };

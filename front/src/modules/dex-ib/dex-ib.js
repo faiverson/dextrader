@@ -56,6 +56,16 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
                     permission: 'product.ib.dex_score',
                     redirectTo: 'dex_ib.dex_score'
                 }
+            })
+            .state('dex_ib.dex_ib_pro_upgrade', {
+                url: '/dexib-pro-upgrade',
+                templateUrl: 'modules/dex-ib/dex-ib.dex-ib-pro.upgrade.tpl.html',
+                controller: 'DexIBProUpgradeCtrl',
+                data: {
+                    pageTitle: 'Dex IB - Pro - Upgrade',
+                    permission: 'product.ib',
+                    redirectTo: 'dashboard'
+                }
             });
     })
 
@@ -256,4 +266,7 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
 
     .controller('DexIBProCtrl', ['$scope', function ($scope) {
 
+    }])
+    .controller('DexIBProUpgradeCtrl', ['$scope', function ($scope) {
+        $scope.videoId = 'lYKRPzOi1zI';
     }]);
