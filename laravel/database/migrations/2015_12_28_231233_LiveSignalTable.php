@@ -20,8 +20,8 @@ class LiveSignalTable extends Migration
 			$table->string('expiry_time', 6)->nullable();
 			$table->string('asset', 10)->nullable()->index();
 			$table->string('asset_rate', 10)->nullable();
-			$table->decimal('target_price', 19, 5)->signed()->nullable(false);
-			$table->decimal('end_price', 19, 5)->signed()->nullable();
+			$table->decimal('target_price', 11, 5)->signed()->nullable(false);
+			$table->decimal('end_price', 11, 5)->signed()->nullable();
 
 			$table->softDeletes();
 			$table->timestamps();

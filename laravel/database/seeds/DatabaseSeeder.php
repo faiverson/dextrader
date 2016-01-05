@@ -13,7 +13,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-
 		$this->call('CitiesSeeder');
 		$this->call('CountriesSeeder');
 		$this->call('RoleSeeder');

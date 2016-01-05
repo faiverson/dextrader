@@ -21,7 +21,6 @@ class InvoiceCreateValidator extends AbstractValidator {
 		'funnel_id'=> 'required|exists:funnels,id',
 		'tag_id' => 'sometimes|exists:campaign_tags,id',
 
-
 		'billing_address_id' => 'numeric',
 		'billing_address' => 'required',
 		'billing_city' => 'required',

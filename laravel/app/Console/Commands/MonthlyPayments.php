@@ -59,9 +59,6 @@ class MonthlyPayments extends Command
 				}
 				$data['orderid'] = $transaction->id;
 				$gateway = $this->transaction->gateway($data);
-//				if(array_key_exists('responsetext', $gateway) && strtolower($gateway['responsetext']) == 'success') {
-//					$this->transaction->failed($gateway, $transaction->id);
-//				}
 				$response = $this->transaction->set($gateway, $transaction->id);
 				if(!$response) {
 					$this->warn('Error in transaction set');
@@ -70,7 +67,43 @@ class MonthlyPayments extends Command
 				} else {
 					$data = array_merge($gateway, $data);
 				}
-				$this->info('Processed ' . $data['orderid']);
+
+				if(array_key_exists('responsetext', $gateway) && strtolower($gateway['responsetext']) == 'success') {
+					$response = $this->subscription->renewed($subscription);
+					if(!$response) {
+						$this->warn('Error in subscription renewed');
+						Log::info('Error in subscription renewed', (array) $this->subscription->errors());
+						return false;
+					}
+
+					$response = $this->transaction->generateInvoice(array_merge($data, [
+						'subscription_id' => $subscription->id,
+						'card_id' => $subscription->card_id,
+						'billing_address_id' => $subscription->billing_address_id,
+						'status' => 'active',
+						'transaction_id' => $data['orderid']
+					]));
+					if(!$response) {
+						$this->warn('Error in create invoice');
+						Log::info('Error in create invoice', (array) $this->transaction->errors());
+						return false;
+					}
+				}
+				else {
+					$response = $this->subscription->failed($subscription);
+					if(!$response) {
+						$this->warn('Error in subscription failed');
+						Log::info('Error in subscription failed', (array) $this->subscription->errors());
+						return false;
+					}
+					else {
+						Log::info('Subscription failed', $this->subscription->toArray());
+						$this->warn('Subscription failed');
+					}
+				}
+
+				Log::info('Processed order ID: ' . $data['orderid']);
+				$this->info('Processed order ID: ' . $data['orderid']);
 			}
 		}
 		$this->info('Finished billing proccess');

@@ -32,11 +32,12 @@ class CommissionGateway extends AbstractGateway {
 	public function add(array $data)
 	{
 		if(array_key_exists('enroller_id', $data)) {
+			$enroller = $this->user->find($data['enroller_id']);
 			$comm = $this->repository->create([
 				'from_user_id' => $data['user_id'],
 				'to_user_id' => $data['enroller_id'],
 				'invoice_id' => $data['invoice_id'],
-				'amount' => $data['amount'] * Config::get('dextrader.comms')
+				'amount' => $data['amount'] * $enroller->commissions
 			]);
 			$this->parent($data);
 			Event::fire(new CommissionEvent($comm));
@@ -60,7 +61,7 @@ class CommissionGateway extends AbstractGateway {
 				'to_user_id' => $data['enroller_id'],
 				'invoice_id' => $data['invoice_id'],
 				'type' => 'parent',
-				'amount' => $data['amount'] * Config::get('dextrader.parent_comms'),
+				'amount' => $data['amount'] * $parent->parent_commissions,
 			]);
 			Event::fire(new CommissionEvent($comm));
 		}
