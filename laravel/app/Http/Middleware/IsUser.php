@@ -27,7 +27,7 @@ class IsUser
 		$userId = Token::getId($request);
 		if($userId != $request->id ) {
 			$user = User::find($userId);
-			if(!$user->hasRole('admin')) {
+			if(!$user->hasRole('admin') && !$user->hasRole('owner')) {
 				return response()->error('Unauthorized', 401);
 			}
 		}

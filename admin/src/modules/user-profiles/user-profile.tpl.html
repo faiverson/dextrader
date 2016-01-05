@@ -1,6 +1,8 @@
 <div class="user-profile">
     <div class="container">
-        <h1>User Profile</h1>
+        <h1>User Profile
+            <button class="btn btn-sm btn-primary pull-right" ui-sref="users">BACK TO USERS</button>&nbsp;
+            <button class="btn btn-sm btn-warning pull-right" ui-sref="users-edit({ id: user.user_id})">Edit <i class="fa fa-edit"></i></button></h1>
         <div class="row">
             <div class="col-md-4 user-data">
                 <h3>{{user.full_name}}</h3>
@@ -39,6 +41,9 @@
                                 <td>{{ba.phone}}</td>
                                 <td>{{ba.default_address == 1 && 'Yes' || 'No'}}</td>
                             </tr>
+                            <tr>
+                                <td colspan="8" data-ng-if="billing_addresses.length == 0" class="text-center">-- No Billing Address Were Found --</td>
+                            </tr>
                             </tbody>
                         </table>
                     </uib-tab>
@@ -63,10 +68,47 @@
                                 <td>{{cc.exp_month}}/{{cc.exp_year}}</td>
                                 <td>{{cc.default_card == 1 && 'Yes' || 'No'}}</td>
                             </tr>
+                            <tr>
+                                <td colspan="8" data-ng-if="credit_cards.length == 0" class="text-center">-- No Credit Cards Were Found --</td>
+                            </tr>
                             </tbody>
                         </table>
                     </uib-tab>
-                    <uib-tab heading="Commissions">Commissions</uib-tab>
+                    <uib-tab heading="Invoices" select="loadUserInvoices(user.user_id)">
+                        <table class="table table-invoices">
+                            <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Detail</th>
+                                <th>Billed to</th>
+                                <th>Credit Card</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="invoice in invoices">
+                                <td>{{invoice.created_at | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY HH:mm'}}</td>
+                                <td>
+                                    <p data-ng-repeat="prod in invoice.detail">{{prod.product_display_name}} - {{prod.product_amount | currency: '$'}}</p>
+                                </td>
+                                <td class="small">
+                                    <p>{{invoice.billing_address}} - {{invoice.billing_zip}}</p>
+                                    <p>{{invoice.billing_city}} - {{invoice.billing_state}} - {{invoice.billing_country}}</p>
+                                </td>
+                                <td class="small">
+                                    <p>{{invoice.card_name}}</p>
+                                    <p>{{invoice.card_first_six}}*******{{invoice.card_last_four}}</p>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary">More Info</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="8" data-ng-if="billing_addresses.length == 0" class="text-center">-- No Billing Address Were Found --</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </uib-tab>
                     <uib-tab heading="Subscriptions">Subscriptions</uib-tab>
                     <uib-tab heading="Other Content">Other Content</uib-tab>
                 </uib-tabset>
