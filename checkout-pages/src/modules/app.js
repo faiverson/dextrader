@@ -11,7 +11,6 @@ angular.module('app', [
         'LocalStorageModule',
         'ngAnimate',
         'angular-loading-bar',
-        'app.home',
         'app.checkout',
         'app.upsell',
         'app.downsell',
@@ -24,7 +23,7 @@ angular.module('app', [
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {
 
-        $urlRouterProvider.otherwise('home');
+        $urlRouterProvider.otherwise('ib');
         showErrorsConfigProvider.showSuccess(true);
         NotificationProvider.setOptions({
             delay: 10000,
@@ -45,11 +44,22 @@ angular.module('app', [
     .run(function () {
     })
 
-    .controller('AppCtrl', ['$scope', '$state', function AppCtrl($scope, $state) {
+
+    .controller('AppCtrl', ['$scope', '$state', '$location', '$window', '$site-configs', function AppCtrl($scope, $state, $location, $window, $configs) {
+
+        $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+            forceSSL();
+        });
 
         $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
             if (angular.isDefined(toState.data.pageTitle)) {
                 $scope.pageTitle = toState.data.pageTitle;
             }
         });
+
+        var forceSSL = function () {
+            if ($location.protocol() !== $configs.HTTP_PROTOCOL) {
+                $window.location.href = $location.absUrl().replace('http', $configs.HTTP_PROTOCOL);
+            }
+        };
     }]);

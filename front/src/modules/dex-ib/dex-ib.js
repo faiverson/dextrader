@@ -56,7 +56,51 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
                     permission: 'product.ib.dex_score',
                     redirectTo: 'dex_ib.dex_score'
                 }
+            })
+            .state('dex_ib.dex_ib_pro_upgrade', {
+                url: '/dexib-pro-upgrade',
+                templateUrl: 'modules/dex-ib/dex-ib.dex-ib-pro.upgrade.tpl.html',
+                controller: 'DexIBProUpgradeCtrl',
+                data: {
+                    pageTitle: 'Dex IB - Pro - Upgrade',
+                    permission: 'product.ib',
+                    redirectTo: 'dashboard'
+                }
+            })
+
+            .state('dex_ib_sales', {
+                url: '/ib',
+                templateUrl: 'modules/dex-ib/dex-ib.sales.tpl.html',
+                controller: 'DexIBSalesCtrl',
+                data: {
+                    pageTitle: 'Dex IB',
+                    bodyClass: 'dex-in-sales',
+                    isPublic: true
+                }
+            })
+
+            .state('dex_ib_sales1', {
+                url: '/ib/:sponsor',
+                templateUrl: 'modules/dex-ib/dex-ib.sales.tpl.html',
+                controller: 'DexIBSalesCtrl',
+                data: {
+                    pageTitle: 'Dex IB',
+                    bodyClass: 'dex-in-sales',
+                    isPublic: true
+                }
+            })
+
+            .state('dex_ib_sales2', {
+                url: '/ib/:sponsor/:tag',
+                templateUrl: 'modules/dex-ib/dex-ib.sales.tpl.html',
+                controller: 'DexIBSalesCtrl',
+                data: {
+                    pageTitle: 'Dex IB',
+                    bodyClass: 'dex-in-sales',
+                    isPublic: true
+                }
             });
+
     })
 
     .controller('DexIBCtrl', ['$scope', '$state', 'AuthService', function ($scope, $state, AuthService) {
@@ -198,14 +242,14 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
 
     }])
 
-    .controller('DexScoreCtrl', ['$scope', 'ProvidersService', 'Notification', function ($scope, ProvidersService, Notification){
+    .controller('DexScoreCtrl', ['$scope', 'ProvidersService', 'Notification', function ($scope, ProvidersService, Notification) {
         var vm = this;
 
         $scope.pagination = {
             totalItems: 20,
             currentPage: 1,
             itemsPerPage: 10,
-            pageChange: function(){
+            pageChange: function () {
                 vm.getProvider();
             }
         };
@@ -213,10 +257,10 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
         $scope.sortBy = {
             column: 1,
             dir: 'asc',
-            sort: function(col){
-                if(col === this.column){
+            sort: function (col) {
+                if (col === this.column) {
                     this.dir = this.dir === 'asc' ? 'desc' : 'asc';
-                }else{
+                } else {
                     this.column = col;
                     this.dir = 'asc';
                 }
@@ -228,7 +272,7 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
         vm.getProvider = function () {
 
             var params = {
-                start: ($scope.pagination.currentPage -1) * $scope.pagination.itemsPerPage,
+                start: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
                 length: $scope.pagination.itemsPerPage,
                 sortBy: $scope.sortBy.column,
                 sortDir: $scope.sortBy.dir
@@ -239,7 +283,7 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
                 $scope.providers = res.data.items;
             }
 
-            function error(err){
+            function error(err) {
                 Notification.error('Ups! there was an error trying to load providers!');
             }
 
@@ -256,4 +300,52 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
 
     .controller('DexIBProCtrl', ['$scope', function ($scope) {
 
+    }])
+    .controller('DexIBProUpgradeCtrl', ['$scope', function ($scope) {
+        $scope.videoId = 'lYKRPzOi1zI';
+    }])
+
+    .controller('DexIBSalesCtrl', ['$scope', 'TestimonialsService', '$stateParams', function ($scope, TestimonialsService, $stateParams) {
+        var vm = this;
+
+        $scope.orderNowLink = '/ib';
+
+        vm.getTestimonials = function () {
+
+            function success(res) {
+
+                if (res.data.length > 1) {
+                    var half_length = Math.ceil(res.data.length / 2);
+                    var leftSide = res.data.splice(0, half_length);
+                    var rightSide = res.data;
+
+                    $scope.testimonialsLeft = leftSide;
+                    $scope.testimonialsRight = rightSide;
+                } else {
+                    $scope.testimonialsLeft = res.data;
+                }
+
+            }
+
+            function error(err) {
+                console.log(err);
+            }
+
+            TestimonialsService.query()
+                .then(success, error);
+        };
+
+        vm.init = function () {
+            vm.getTestimonials();
+
+            if (angular.isDefined($stateParams.sponsor)) {
+                $scope.orderNowLink += '/' + $stateParams.sponsor;
+            }
+
+            if (angular.isDefined($stateParams.tag)) {
+                $scope.orderNowLink += '/' + $stateParams.tag;
+            }
+        };
+
+        vm.init();
     }]);

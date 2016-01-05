@@ -123,4 +123,19 @@ angular.module('app.shared-directives', [])
                 });
             }
         };
+    }])
+
+    .directive('ngChref', ['$site-configs', function($configs) {
+        return {
+            priority: 99,
+            link: function(scope, element, attr) {
+                attr.$observe('ngChref', function(value) {
+                    if (!value){
+                        return;
+                    }
+
+                    attr.$set('href', $configs.SECURE_URL + value);
+                });
+            }
+        };
     }]);

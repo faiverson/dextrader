@@ -51,6 +51,7 @@ class UserGateway extends AbstractGateway
         return $this->repository->actives($columns, $limit, $offset, $order_by);
     }
 
+
 	public function revoke($user_id, $role_id)
 	{
 		return $this->repository->detachRole($user_id, $role_id);
@@ -60,4 +61,10 @@ class UserGateway extends AbstractGateway
 	{
 		return $this->role->getRoleIdByName($name);
 	}
+
+    public function findById($id, $column = 'id', $columns = array('*'))
+    {
+        return $this->repository->findById($id, $column = 'id', $columns = array('*'));
+    }
+    
 }

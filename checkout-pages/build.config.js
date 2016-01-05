@@ -19,7 +19,7 @@ module.exports = {
         ' *\n' +
         ' */\n\n'
     },
-    port: 8000,
+    port: 10000,
     paths: {
         input: 'src/**/*',
         output: '../public_html/sales/',
@@ -116,6 +116,10 @@ module.exports = {
         {
             match: 'DASHBOARD_URL',
             replacement: process.env.DASHBOARD_URL
+        },
+        {
+            match: 'CHECKOUT_SITE_PROTOCOL',
+            replacement: process.env.CHECKOUT_SITE_PROTOCOL
         }
     ]
 };

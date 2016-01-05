@@ -26,7 +26,7 @@ class UsersController extends Controller
 			if($user->id != $id && !$user->can(['user.profile'])) {
 				return response()->error('User does not have permission user.profile');
 			}
-			return response()->ok($this->user->findById($id));
+			return response()->ok($this->gateway->findById($id));
         } else {
 			return response()->error('User not found');
 		}

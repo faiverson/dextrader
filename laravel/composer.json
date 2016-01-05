@@ -14,7 +14,9 @@
 		"sofa/eloquence": "~5.1@dev",
 		"nicolaslopezj/searchable": "1.*",
         "anlutro/curl": "^1.4",
-		"torann/geoip": "0.2.*@dev"
+		"torann/geoip": "0.2.*@dev",
+        "barryvdh/laravel-dompdf": "0.6.*",
+        "laravelcollective/html": "5.1.*"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",
