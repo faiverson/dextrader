@@ -21,6 +21,8 @@ use GeoIP;
 use DB;
 use DateTime;
 use Illuminate\Database\Eloquent\Collection;
+use Event;
+use App\Events\SubscriptionRenewedEvent;
 
 class TransactionGateway extends AbstractGateway {
 
@@ -40,8 +42,6 @@ class TransactionGateway extends AbstractGateway {
 
 	protected $user;
 
-	protected $role;
-
 	protected $product;
 
 	protected $card;
@@ -60,7 +60,6 @@ class TransactionGateway extends AbstractGateway {
 								SubscriptionGateway $subscription,
 								InvoiceGateway $invoice,
 								UserGateway $user,
-								RoleGateway $role,
 								ProductGateway $product,
 								CardGateway $card,
 								BillingAddressGateway $address,
@@ -74,7 +73,6 @@ class TransactionGateway extends AbstractGateway {
 		$this->subscription = $subscription;
 		$this->invoice = $invoice;
 		$this->user = $user;
-		$this->role = $role;
 		$this->product = $product;
 		$this->card = $card;
 		$this->address = $address;
@@ -291,7 +289,11 @@ class TransactionGateway extends AbstractGateway {
 					'status' => 'active',
 					'product_id' => $product['product_id'],
 					'last_billing' => $now->format('Y-m-d'),
-					'next_billing' => $next->format('Y-m-d')
+					'next_billing' => $next->format('Y-m-d'),
+					// if there multiple products, we don't want the total
+					// we want to get the product's price since the sub is related to
+					// one product only
+					'amount' => number_format($data['product_amount'] - ($data['product_amount'] * $data['product_discount']), 2, '.', ',')
 				]));
 				if (!$subscription) {
 					$this->errors = $this->subscription->errors();
@@ -319,7 +321,7 @@ class TransactionGateway extends AbstractGateway {
 					return false;
 				}
 
-				$role_id = $this->role->getRoleIdByName($product['roles']);
+				$role_id = $this->user->getRoleByName($product['roles']);
 				$this->user->attachRole($data['user_id'], $role_id);
 			}
 		}
@@ -336,6 +338,50 @@ class TransactionGateway extends AbstractGateway {
 			'transaction_id' => $data['orderid'],
 			'invoice_id' => $invoice->id,
 		]);
+	}
+
+	/**
+	 * Generate invoice when we have a new transaction to renew a subscription
+	 *
+	 * @param $data
+	 * @return bool
+	 */
+	public function generateInvoice($data)
+	{
+		DB::beginTransaction();
+		try {
+			$invoice = $this->invoice->create($data);
+			if(!$invoice) {
+				$this->errors = $this->invoice->errors();
+				return false;
+			}
+
+			foreach($data['products'] as $product) {
+				$invoice_detail = $this->invoice->addDetail(array_merge($product, [
+					'invoice_id' => $invoice->id,
+					'subscription_id' => $data['subscription_id'],
+				]));
+				if (!$invoice_detail) {
+					$this->errors = $this->invoice->errors();
+					return false;
+				}
+				Event::fire(new SubscriptionRenewedEvent([
+					'subscription_id' => $data['subscription_id'],
+					'user_id' => $data['user_id'],
+					'enroller_id' => $data['enroller_id'],
+					'invoice_id' => $invoice->id,
+					'amount' => $data['amount']
+				]));
+			}
+		}
+		catch(\Exception $e) {
+			DB::rollback();
+			$this->errors = [$e->getMessage()];
+			return false;
+		}
+		DB::commit();
+
+		return $invoice;
 	}
 
 	protected function setInfo(array $info)

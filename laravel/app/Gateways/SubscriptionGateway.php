@@ -8,6 +8,9 @@ use App\Services\SubscriptionUpdateValidator;
 use App\Repositories\SubscriptionRepository;
 use DateTime;
 use DB;
+use Event;
+use App\Events\SubscriptionFailEvent;
+use App\Events\SubscriptionCancelEvent;
 
 class SubscriptionGateway extends AbstractGateway
 {
@@ -18,13 +21,16 @@ class SubscriptionGateway extends AbstractGateway
 
 	protected $updateValidator;
 
+	protected $userGateway;
+
 	protected $errors;
 
-	public function __construct(SubscriptionRepository $repository, SubscriptionCreateValidator $createValidator, SubscriptionUpdateValidator $updateValidator)
+	public function __construct(SubscriptionRepository $repository, SubscriptionCreateValidator $createValidator, SubscriptionUpdateValidator $updateValidator, UserGateway $userGateway)
 	{
 		$this->repository = $repository;
 		$this->createValidator = $createValidator;
 		$this->updateValidator = $updateValidator;
+		$this->userGateway = $userGateway;
 	}
 
 	public function findByUser($user_id, $columns = array('*'), $limit = null, $offset = null)
@@ -83,5 +89,50 @@ class SubscriptionGateway extends AbstractGateway
 		];
 	}
 
+	/**
+	 * @param Subscription $subscription with products, etc
+	 * it should have JOIN like the function getSubForBilling
+	 * in the sub's repo
+	 */
+	public function renewed(Subscription $subscription)
+	{
+		$now = new DateTime('now');
 
+		$next = new DateTime('now');
+		$next->modify($subscription->product->billing_period);
+		$data = [
+			'attempts_billing' => 0,
+			'last_billing' => $now->format('Y-m-d'),
+			'next_billing' => $next->format('Y-m-d'),
+			'status' => 'active'
+		];
+
+		$response = $this->repository->update($data, $subscription->id);
+		return $response;
+	}
+
+	public function failed(Subscription $subscription)
+	{
+		$data = [
+			'attempts_billing' => ($subscription->attempts_billing + 1)
+		];
+
+		if($data['attempts_billing'] >= 3) {
+			$data['status'] = 'auto_cancel';
+			// we get the role ID we want to deatch from the user
+			$role_id = $this->userGateway->getRoleByName($subscription->product->roles);
+			// removing the role we delete the permissions for that product
+			$this->userGateway->revoke($subscription->user->id, $role_id);
+		}
+
+		$response = $this->repository->update($data, $subscription->id);
+		if($response) {
+			if($data['attempts_billing'] < 3) {
+				Event::fire(new SubscriptionFailEvent($subscription));
+			} else {
+				Event::fire(new SubscriptionCancelEvent($subscription));
+			}
+		}
+		return $response;
+	}
 }

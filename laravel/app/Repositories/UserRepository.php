@@ -55,4 +55,8 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 		return $this->model->find($user_id)->attachRole($role_id);
 	}
 
+	public function detachRole($user_id, $role_id)
+	{
+		return $this->model->find($user_id)->detachRole($role_id);
+	}
 }

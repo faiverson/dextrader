@@ -32,6 +32,8 @@ class Basics extends Migration
 			$table->bigInteger('enroller_id')->unsigned()->nullable();
 			$table->foreign('enroller_id')
 				->references('id')->on('users');
+			$table->string('commissions', 4)->nullable(false)->default(40);
+			$table->string('parent_commissions', 4)->nullable(false)->default(10);
 			$table->rememberToken();
 			$table->softDeletes();
 			$table->timestamps();

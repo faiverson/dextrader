@@ -12,7 +12,7 @@ return [
 	'admin' => 'fa.iverson@gmail.com',
 
 	//  commissions' porcentage
-	'comms' => .50,
+	'comms' => .40,
 
 	//  commissions' parent porcentage
 	'parent_comms' => .10,

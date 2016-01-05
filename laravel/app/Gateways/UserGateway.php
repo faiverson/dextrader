@@ -15,13 +15,16 @@ class UserGateway extends AbstractGateway
 
     protected $updateValidator;
 
+    protected $role;
+
     protected $errors;
 
-    public function __construct(UserRepository $repository, UserCreateValidator $createValidator, UserUpdateValidator $updateValidator)
+    public function __construct(UserRepository $repository, UserCreateValidator $createValidator, UserUpdateValidator $updateValidator, RoleGateway $role)
     {
         $this->repository = $repository;
         $this->createValidator = $createValidator;
         $this->updateValidator = $updateValidator;
+        $this->role = $role;
     }
 
     public function edit(array $data, $id)
@@ -47,4 +50,14 @@ class UserGateway extends AbstractGateway
     {
         return $this->repository->actives($columns, $limit, $offset, $order_by);
     }
+
+	public function revoke($user_id, $role_id)
+	{
+		return $this->repository->detachRole($user_id, $role_id);
+	}
+
+	public function getRoleByName($name)
+	{
+		return $this->role->getRoleIdByName($name);
+	}
 }

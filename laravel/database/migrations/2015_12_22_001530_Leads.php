@@ -21,7 +21,6 @@ class Leads extends Migration
 
 			$table->bigInteger('enroller_id')->unsigned()->nullable()->default(null);
 			$table->foreign('enroller_id')->references('id')->on('users');
-			$table->decimal('amount', 10, 2)->signed()->nullable(false);
 
 			$table->integer('tag_id')->unsigned()->nullable();
 			$table->foreign('tag_id')

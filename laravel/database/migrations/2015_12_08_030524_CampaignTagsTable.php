@@ -15,6 +15,10 @@ class CampaignTagsTable extends Migration
 		Schema::create('campaign_tags', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('tag')->nullable(false)->index();
+			$table->bigInteger('user_id')->unsigned();
+			$table->foreign('user_id')
+				->references('id')->on('users')
+				->onUpdate('cascade')->onDelete('cascade');
 		});
     }
 

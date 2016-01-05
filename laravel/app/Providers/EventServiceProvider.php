@@ -18,6 +18,14 @@ class EventServiceProvider extends ServiceProvider
 		],
 		'App\Events\CommissionEvent' => [
 		],
+		'App\Events\SubscriptionCancelEvent' => [
+		],
+		'App\Events\SubscriptionFailEvent' => [
+		],
+		'App\Events\SubscriptionRenewedEvent' => [
+			'App\Listeners\SubscriptionCommissionListener'
+		],
+
     ];
 
 	protected $subscribe = [
