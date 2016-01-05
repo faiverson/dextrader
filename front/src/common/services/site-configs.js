@@ -5,7 +5,8 @@ angular.module('app.site-configs', [])
 		API_BASE_URL: '@@API_URL',
 		SITE_URL: '@@SITE_URL',
 		SITE_NAME: '@@SITE_NAME',
-		EWALLET_LOGIN: '@@EWALLET_LOGIN'
+		EWALLET_LOGIN: '@@EWALLET_LOGIN',
+		SECURE_URL: '@@SECURE_URL'
 	};
 
 	return {

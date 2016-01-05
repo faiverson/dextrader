@@ -2,7 +2,7 @@
     <div class="sp-content">
         <header class="no-bg">
             <div id="header-content">
-                <div id="logo"><a ui-sref="home"><img src="/assets/images/logo.png" alt="DEX Trader"></a></div>
+                <div id="logo"><a ui-sref="dashboard"><img src="/front/assets/images/logo.png" alt="DEX Trader"></a></div>
                 <ul id="header-nav">
                     <li><a href="#sp-home">Home</a></li>
                     <li><a href="#sp-feature-01">Features</a></li>
@@ -10,21 +10,26 @@
                     <li><a href="#sp-testim">Stories</a></li>
                     <li><a href="#sp-faq">FAQ</a></li>
                 </ul>
-                <ul id="nav-profile">
+                <ul id="nav-profile" data-ng-controller="HeaderCtrl">
                     <li>
-                        <a href="login.html">Login</a>
+                        <a ui-sref="user.profile">Profile</a>
+                        <ul>
+                            <li><a ui-sref="login" data-ng-if="!isLoggedIn()">Login</a></li>
+                            <li><a ui-sref="user.profile" data-ng-if="isLoggedIn()">Edit Profile</a></li>
+                            <li><a href="#" data-ng-click="logout()" data-ng-if="isLoggedIn()">Logout</a></li>
+                        </ul>
                     </li>
                 </ul>
                 <ul class="mob-nav">
                     <li>
-                        <a href="#"><img src="/assets/images/ico-mob.png"></a>
+                        <a href="#"><img src="/front/assets/images/ico-mob.png"></a>
                         <ul>
                             <li><a href="#sp-home">Home</a></li>
                             <li><a href="#sp-feature-01">Features</a></li>
                             <li><a href="#sp-dp">Results</a></li>
                             <li><a href="#sp-testim">Stories</a></li>
                             <li><a href="#sp-faq">FAQ</a></li>
-                            <li><a href="login.html">Login</a></li>
+                            <li><a ui-sref="login">Login</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -39,34 +44,34 @@
             <div id="sp-home-video">
                 <iframe id="video-player" type="text/html" src="https://www.youtube.com/embed/lYKRPzOi1zI?autoplay=0&amp;controls=0&amp;showinfo=0" frameborder="0"></iframe>
             </div>
-            <a ui-sref="checkout" class="button bg-orange submitbutton">Order Now</a>
+            <a ng-chref="{{orderNowLink}}" class="button bg-orange submitbutton">Order Now</a>
         </div>
     </div>
 </section>
 <section id="sp-small-features" class="sp-section">
     <div class="sp-content">
         <div>
-            <img src="/assets/images/sp-f-1.png">
+            <img src="/front/assets/images/sp-f-1.png">
             <span>Proven 80%+ Daily Win Rate</span>
         </div>
         <div>
-            <img src="/assets/images/sp-f-2.png">
+            <img src="/front/assets/images/sp-f-2.png">
             <span>Over 100 New Signals Per Day</span>
         </div>
         <div>
-            <img src="/assets/images/sp-f-3.png">
+            <img src="/front/assets/images/sp-f-3.png">
             <span>Short and Long Term Signals</span>
         </div>
         <div>
-            <img src="/assets/images/sp-f-4.png">
+            <img src="/front/assets/images/sp-f-4.png">
             <span>Zero Experience Required</span>
         </div>
         <div>
-            <img src="/assets/images/sp-f-5.png">
+            <img src="/front/assets/images/sp-f-5.png">
             <span>Real Time Signal Alerts</span>
         </div>
         <div>
-            <img src="/assets/images/sp-f-6.png">
+            <img src="/front/assets/images/sp-f-6.png">
             <span>Money Back Guarantee</span>
         </div>
     </div>
@@ -142,7 +147,7 @@
                 </div>
             </div>
         </div>
-        <a ui-sref="checkout" class="button bg-orange submitbutton">Order Now</a>
+        <a ng-chref="{{orderNowLink}}" class="button bg-orange submitbutton">Order Now</a>
     </div>
 </section>
 <section id="sp-dp" class="sp-section">
@@ -191,7 +196,7 @@
                     <td>19 Oct 2015</td>
                     <td class="green">20:02</td>
                     <td class="red">20:12</td>
-                    <td><img src="/assets/images/ico-greenup.png"></td>
+                    <td><img src="/front/assets/images/ico-greenup.png"></td>
                     <td>AUD/NZD</td>
                     <td>65%</td>
                     <td class="green">1.06638</td>
@@ -202,7 +207,7 @@
                     <td>19 Oct 2015</td>
                     <td class="green">18:27</td>
                     <td class="red">18:37</td>
-                    <td><img src="/assets/images/ico-greenup.png"></td>
+                    <td><img src="/front/assets/images/ico-greenup.png"></td>
                     <td>NZD/USD</td>
                     <td>75%</td>
                     <td class="green">1.06638</td>
@@ -213,7 +218,7 @@
                     <td>19 Oct 2015</td>
                     <td class="green">18:02</td>
                     <td class="red">18:22</td>
-                    <td><img src="/assets/images/ico-reddown.png"></td>
+                    <td><img src="/front/assets/images/ico-reddown.png"></td>
                     <td>EUR/GBP</td>
                     <td>62%</td>
                     <td class="green">1.06638</td>
@@ -224,7 +229,7 @@
                     <td>19 Oct 2015</td>
                     <td class="green">17:14</td>
                     <td class="red">17:24</td>
-                    <td><img src="/assets/images/ico-greenup.png"></td>
+                    <td><img src="/front/assets/images/ico-greenup.png"></td>
                     <td>EUR/GBP</td>
                     <td>58%</td>
                     <td class="green">1.06638</td>
@@ -235,7 +240,7 @@
                     <td>19 Oct 2015</td>
                     <td class="green">15:10</td>
                     <td class="red">15:20</td>
-                    <td><img src="/assets/images/ico-greenup.png"></td>
+                    <td><img src="/front/assets/images/ico-greenup.png"></td>
                     <td>CAD/CHF</td>
                     <td>70%</td>
                     <td class="green">1.06638</td>
@@ -246,7 +251,7 @@
                     <td>19 Oct 2015</td>
                     <td class="green">12:38</td>
                     <td class="red">12:48</td>
-                    <td><img src="/assets/images/ico-reddown.png"></td>
+                    <td><img src="/front/assets/images/ico-reddown.png"></td>
                     <td>EUR/USD</td>
                     <td>70%</td>
                     <td class="green">1.06638</td>
@@ -268,7 +273,7 @@
                         {{testimonial.text}}
                     </div>
                     <div class="test-author align-right">
-                        {{testimonial.author}} <img ng-csrc="/assets/images/{{testimonial.image}}">
+                        {{testimonial.author}} <img ng-src="/assets/images/{{testimonial.image}}">
                     </div>
                 </div>
             </div>
@@ -278,7 +283,7 @@
                         {{testimonial.text}}
                     </div>
                     <div class="test-author align-right">
-                        {{testimonial.author}} <img ng-csrc="/assets/images/{{testimonial.image}}">
+                        {{testimonial.author}} <img ng-src="/assets/images/{{testimonial.image}}">
                     </div>
                 </div>
             </div>
@@ -287,7 +292,7 @@
             <a href="#" class="nav-prev left">Previous</a>
             <a href="#" class="nav-next right">Next</a>
         </div>
-        <a ui-sref="checkout" class="button bg-orange submitbutton">Order Now</a>
+        <a ng-chref="{{orderNowLink}}" class="button bg-orange submitbutton">Order Now</a>
     </div>
 </section>
 <section id="sp-faq" class="sp-section">

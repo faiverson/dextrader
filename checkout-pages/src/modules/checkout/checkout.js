@@ -2,7 +2,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('checkout', {
-                url: '/checkout/:enroller',
+                url: '/ib/:enroller',
                 templateUrl: 'modules/checkout/checkout.tpl.html',
                 controller: 'CheckoutCtrl',
                 data: {
@@ -10,7 +10,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 }
             })
             .state('checkout2', {
-                url: '/checkout/:enroller/:tag',
+                url: '/ib/:enroller/:tag',
                 templateUrl: 'modules/checkout/checkout.tpl.html',
                 controller: 'CheckoutCtrl',
                 data: {
@@ -18,7 +18,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 }
             })
             .state('checkout_root', {
-                url: '/checkout',
+                url: '/ib',
                 templateUrl: 'modules/checkout/checkout.tpl.html',
                 controller: 'CheckoutCtrl',
                 data: {

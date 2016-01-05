@@ -123,6 +123,10 @@ module.exports = {
         {
             match: 'EWALLET_LOGIN',
             replacement: process.env.EWALLET_LOGIN
+        },
+        {
+            match: 'SECURE_URL',
+            replacement: process.env.SECURE_URL
         }
 	]
 };
