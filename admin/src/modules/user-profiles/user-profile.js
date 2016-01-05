@@ -10,8 +10,8 @@ angular.module('app.user-profile', [])
                 }
             });
     })
-    .controller('UserProfileController', ['$scope', '$state', '$stateParams', 'UserService',
-        function ($scope, $state, $stateParams, UserService) {
+    .controller('UserProfileController', ['$scope', '$state', '$stateParams', 'UserService', 'BillingAddressService', 'CreditCardService',
+        function ($scope, $state, $stateParams, UserService, BillingAddressService, CreditCardService) {
             var vm = this;
 
             vm.loadUser = function (id) {
@@ -19,6 +19,41 @@ angular.module('app.user-profile', [])
 
                 function success(res) {
                     $scope.user = res.data;
+                    console.log(res.data);
+                }
+
+                function error(err) {
+
+                }
+
+                prom.then(success, error);
+
+                return prom;
+            };
+
+            vm.loadUserBillingAddresses = function (user_id) {
+                var prom = BillingAddressService.query(user_id);
+
+                function success(res) {
+                    $scope.billing_addresses = res.data;
+                    console.log(res.data);
+                }
+
+                function error(err) {
+
+                }
+
+                prom.then(success, error);
+
+                return prom;
+            };
+
+            $scope.loadUserCreditCards = function (user_id) {
+                var prom = CreditCardService.query(user_id);
+
+                function success(res) {
+                    $scope.credit_cards = res.data;
+                    console.log(res.data);
                 }
 
                 function error(err) {
@@ -35,6 +70,7 @@ angular.module('app.user-profile', [])
 
                 if (angular.isDefined($stateParams.id)) {
                     vm.loadUser($stateParams.id);
+                    vm.loadUserBillingAddresses($stateParams.id);
                 } else {
                     $state.go('users');
                 }
