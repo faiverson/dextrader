@@ -10,8 +10,8 @@ angular.module('app.user-profile', [])
                 }
             });
     })
-    .controller('UserProfileController', ['$scope', '$state', '$stateParams', 'UserService', 'BillingAddressService', 'CreditCardService', 'Notification', 'InvoiceService',
-        function ($scope, $state, $stateParams, UserService, BillingAddressService, CreditCardService, Notification, InvoiceService) {
+    .controller('UserProfileController', ['$scope', '$state', '$stateParams', 'UserService', 'BillingAddressService', 'CreditCardService', 'Notification', 'InvoiceService', 'SubscriptionService',
+        function ($scope, $state, $stateParams, UserService, BillingAddressService, CreditCardService, Notification, InvoiceService, SubscriptionService) {
             var vm = this;
 
             vm.loadUser = function (id) {
@@ -71,6 +71,23 @@ angular.module('app.user-profile', [])
 
                 function success(res) {
                     $scope.invoices = res.data;
+                    console.log(res.data);
+                }
+
+                function error(err) {
+                    Notification.error(err.data.error);
+                }
+
+                prom.then(success, error);
+
+                return prom;
+            };
+
+            $scope.loadUserSubscriptions = function (user_id) {
+                var prom = SubscriptionService.query(user_id);
+
+                function success(res) {
+                    $scope.subscriptions = res.data;
                     console.log(res.data);
                 }
 

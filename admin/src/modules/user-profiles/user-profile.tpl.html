@@ -104,12 +104,46 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="8" data-ng-if="billing_addresses.length == 0" class="text-center">-- No Billing Address Were Found --</td>
+                                <td colspan="5" data-ng-if="invoices.length == 0" class="text-center">-- No Invoices Were Found --</td>
                             </tr>
                             </tbody>
                         </table>
                     </uib-tab>
-                    <uib-tab heading="Subscriptions">Subscriptions</uib-tab>
+                    <uib-tab heading="Subscriptions" select="loadUserSubscriptions(user.user_id)">
+                        <table class="table table-invoices">
+                            <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Detail</th>
+                                <th>Billed to</th>
+                                <th>Credit Card</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="subscription in subscriptions">
+                                <td>{{invoice.created_at | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY HH:mm'}}</td>
+                                <td>
+                                    <p data-ng-repeat="prod in invoice.detail">{{prod.product_display_name}} - {{prod.product_amount | currency: '$'}}</p>
+                                </td>
+                                <td class="small">
+                                    <p>{{invoice.billing_address}} - {{invoice.billing_zip}}</p>
+                                    <p>{{invoice.billing_city}} - {{invoice.billing_state}} - {{invoice.billing_country}}</p>
+                                </td>
+                                <td class="small">
+                                    <p>{{invoice.card_name}}</p>
+                                    <p>{{invoice.card_first_six}}*******{{invoice.card_last_four}}</p>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary">More Info</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" data-ng-if="subscriptions.length == 0" class="text-center">-- No Subscriptions Were Found --</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </uib-tab>
                     <uib-tab heading="Other Content">Other Content</uib-tab>
                 </uib-tabset>
             </div>
