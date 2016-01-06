@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\MarketingLink;
+use App\Models\FunnelCampaign;
 
 class MarketingLinksSeeder extends Seeder
 {
@@ -11,11 +13,31 @@ class MarketingLinksSeeder extends Seeder
      */
     public function run()
     {
+		$fc = FunnelCampaign::create([
+			'title' => 'IB'
+		]);
+
+		MarketingLink::create([
+			'title' => 'IB sales',
+			'campaign_id' => $fc->id,
+			'description' => 'IB sale page',
+			'image' => 'http://dextrader.com/ib',
+			'link' => 'http://dextrader.com/ib',
+		]);
+
+		MarketingLink::create([
+			'title' => 'IB checkout',
+			'campaign_id' => $fc->id,
+			'description' => 'IB checkout page',
+			'image' => 'http://dextrader.com/ib',
+			'link' => 'https://secure.dextrader.com/ib',
+		]);
+
 		if (App::Environment() === 'local') {
 			$this->fetching();
 		}
 
-    }
+	}
 
 	public function fetching()
 	{

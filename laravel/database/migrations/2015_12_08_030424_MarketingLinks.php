@@ -16,7 +16,7 @@ class MarketingLinks extends Migration
 		Schema::create('funnels', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('title')->nullable(false);
-			$table->string('image')->nullable(false);
+			$table->string('image')->nullable();
 			$table->string('link')->nullable(false);
 			$table->text('description')->nullable();
 

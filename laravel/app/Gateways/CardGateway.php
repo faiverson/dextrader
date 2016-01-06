@@ -60,6 +60,17 @@ class CardGateway extends AbstractGateway {
 		return $card;
 	}
 
+	public function findUserCard($user_id, $card_id)
+	{
+		$response = $this->repository->findUserCard($user_id, $card_id);
+		if(!$response) {
+			$this->errors = ['The credit card does not belong to the user'];
+			return false;
+		}
+
+		return $response;
+	}
+
 	public function getLast($number)
 	{
 		return substr($number, -4);

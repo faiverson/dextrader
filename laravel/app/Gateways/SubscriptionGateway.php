@@ -56,7 +56,6 @@ class SubscriptionGateway extends AbstractGateway
 			'info' => ['type' => 'billing'],
 			'enroller_id' => $subscription->enroller_id,
 			'amount' => $subscription->amount,
-			'funnel_id' => 1,
 			'first_name' => $subscription->user->first_name,
 			'last_name' => $subscription->user->last_name,
 			'email' => $subscription->user->email,

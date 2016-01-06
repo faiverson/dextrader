@@ -11,4 +11,9 @@ class BillingAddressRepository extends AbstractRepository implements BillingAddr
 	{
 		return BillingAddress::class;
 	}
+
+	public function findUserAddress($user_id, $billing_address_id)
+	{
+		return $this->model->where('id', $billing_address_id)->where('user_id', $user_id)->first();
+	}
 }

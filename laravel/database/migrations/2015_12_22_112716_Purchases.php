@@ -27,7 +27,7 @@ class Purchases extends Migration
 				->references('id')->on('transactions')
 				->onUpdate('cascade')->onDelete('cascade');
 
-			$table->integer('funnel_id')->unsigned();
+			$table->integer('funnel_id')->unsigned()->nullable()->default(null);
 			$table->foreign('funnel_id')
 				->references('id')->on('funnels')
 				->onUpdate('cascade')->onDelete('cascade');

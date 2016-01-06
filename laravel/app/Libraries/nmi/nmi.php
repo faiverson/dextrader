@@ -47,12 +47,12 @@ class NMI {
 			'email' => $data['email'],
 
 			'address1' => $data['billing_address'],
-			'address2' => $data['billing_address2'],
+			'address2' => array_key_exists('billing_address2', $data) ? $data['billing_address2'] : '',
 			'country' => $data['billing_country'],
 			'state' => $data['billing_state'],
 			'city' => $data['billing_city'],
 			'zip' => $data['billing_zip'],
-			'phone' => $data['billing_phone'],
+			'phone' => array_key_exists('billing_phone', $data) ? $data['billing_phone'] : '',
 			'type' => $type
 		];
 		$values = array_map("urlencode", array_values($order));
