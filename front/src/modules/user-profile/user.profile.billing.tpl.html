@@ -4,7 +4,7 @@
         <div>
             <h3>Subscriptions</h3>
             <div class="subscription" data-ng-repeat="subscription in subscriptions">
-                <a class="edit" href="#">EDIT</a>
+                <a class="edit" href="#" data-ng-click="openSubscriptionForm(subscription)">EDIT</a>
                 <h3>Dex {{subscription.product.display_name}}</h3>
                 <div class="sub-info centeredboxes">
                     <div class="sub-info-nb">

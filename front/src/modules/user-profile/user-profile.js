@@ -133,6 +133,25 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
                 });
             };
 
+            $scope.openSubscriptionForm = function (subscription) {
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'modules/user-profile/user.profile.subscription-form.tpl.html',
+                    controller: 'SubscriptionFormCtrl',
+                    resolve: {
+                        subscription: function () {
+                            return subscription;
+                        }
+                    }
+                });
+
+                modalInstance.result
+                    .then(function (email) {
+                        vm.getSubscriptions();
+                    }, function () {
+                        //$log.info('Modal dismissed at: ' + new Date());
+                    });
+            };
+
             $scope.getPdf = function (invoice) {
                 InvoiceService.download(invoice.id)
                     .then(function (res) {
@@ -351,6 +370,83 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
                 if ($scope.addressForm.$valid) {
 
                     BillingAddressService.save($scope.address)
+                        .then(vm.saveSuccess, vm.saveError);
+                }
+            };
+
+            vm.init();
+        }])
+
+    .controller('SubscriptionFormCtrl', ['$scope', '$uibModalInstance', 'Notification', 'subscription', 'BillingAddressService', '$filter', 'CreditCardService', 'SubscriptionService',
+        function ($scope, $uibModalInstance, Notification, subscription, BillingAddressService, $filter, CreditCardService, SubscriptionService) {
+            var vm = this;
+            $scope.subscription = subscription;
+
+            vm.init = function () {
+                BillingAddressService.query()
+                    .then(vm.getAddressSuccess, vm.getAddressError);
+
+                CreditCardService.query()
+                    .then(vm.getCardsSuccess, vm.getCardsError);
+            };
+
+            vm.getAddressSuccess = function (res) {
+
+                angular.forEach(res.data, function (address) {
+                    if(address.address_id === subscription.address.address_id){
+                        $scope.address = address;
+                    }
+                });
+
+                $scope.addresses = res.data;
+
+            };
+
+            vm.getAddressError = function (err) {
+                Notification.error('Ups! there was an error trying to load the billing addresses!');
+            };
+
+            vm.getCardsSuccess = function (res) {
+
+                angular.forEach(res.data, function (card) {
+                    card.last_four = '**** **** **** ' + card.last_four;
+                    if(card.cc_id === subscription.card.cc_id){
+                        $scope.card = card;
+                    }
+                });
+
+                $scope.cards = res.data;
+            };
+
+            vm.getCardsError = function (err) {
+                Notification.error('Ups! there was an error trying to load the credit cards!');
+            };
+
+            vm.saveSuccess = function (res) {
+                Notification.success('Address saved successfully!');
+                $uibModalInstance.close(res.data);
+            };
+
+            vm.saveError = function (err) {
+                Notification.error(err.data.error);
+            };
+
+            $scope.close = function () {
+                $uibModalInstance.dismiss('close');
+            };
+
+            $scope.save = function () {
+                $scope.$broadcast('show-errors-check-validity');
+
+                if ($scope.subscriptionForm.$valid) {
+
+                    var data = {
+                        subscription_id: $scope.subscription.subscription_id,
+                        card_id: $scope.card.cc_id,
+                        billing_address_id: $scope.address.address_id
+                    };
+
+                    SubscriptionService.save(data)
                         .then(vm.saveSuccess, vm.saveError);
                 }
             };

@@ -296,7 +296,7 @@ gulp.task('html', function () {
     else {
         input = config.js.files.input;
         inputs = [
-            'http://localhost:35729/livereload.js',
+            'http://localhost:4002/livereload.js',
             '/front/js/' + config.js.vendor.output,
             '/front/js/templates.js'
         ];
@@ -335,7 +335,7 @@ gulp.task('html', function () {
 });
 
 gulp.task('watch', function () {
-    livereload.listen();
+    livereload.listen(4002);
 
     watch('./Gulpfile.js')
         .on('change', function (file) {

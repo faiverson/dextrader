@@ -419,10 +419,10 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
 
     .factory('SubscriptionService', ['$http', '$q', '$site-configs', 'AuthService', function ($http, $q, $configs, AuthService) {
 
-        var service = $configs.API_BASE_URL + 'subscriptions/' + AuthService.getLoggedInUser().user_id;
+        var service = $configs.API_BASE_URL + 'subscriptions/';
 
         function query() {
-            var endpoint = service,
+            var endpoint = service + AuthService.getLoggedInUser().user_id,
                 deferred = $q.defer();
 
             function success(res) {
@@ -475,13 +475,10 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             }
 
 
-            if (angular.isDefined(data.address_id)) {
-                endpoint += '/' + data.address_id;
+            if (angular.isDefined(data.subscription_id)) {
+                endpoint += data.subscription_id + '/users/' + AuthService.getLoggedInUser().user_id;
 
                 $http.put(endpoint, data)
-                    .then(success, error);
-            } else {
-                $http.post(endpoint, data)
                     .then(success, error);
             }
 

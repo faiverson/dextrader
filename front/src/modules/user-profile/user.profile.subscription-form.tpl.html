@@ -1,0 +1,42 @@
+<div class="modal-header">
+    <button type="button" class="close" data-ng-click="close()" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <h3 class="modal-title">Subscription to {{subscription.product.display_name}}</h3>
+</div>
+<div class="modal-body">
+    <form id="subscriptionForm" name="subscriptionForm" class="subscription-form" novalidate="novalidate">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group has-feedback" data-show-errors>
+                    <select class="form-control"
+                            name="card"
+                            ng-model="card"
+                            required
+                            ng-options="card.last_four for card in cards">
+                    </select>
+                    <span class="glyphicon glyphicon-credit-card form-control-feedback" aria-hidden="true"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group has-feedback" data-show-errors>
+                    <select class="form-control"
+                            ng-model="address"
+                            name="address"
+                            required
+                            ng-options="address.address for address in addresses">
+                    </select>
+                    <span class="glyphicon glyphicon-credit-card form-control-feedback" aria-hidden="true"></span>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="submit" data-ng-disabled="ccForm.$invalid" class="btn btn-warning"
+            data-ng-click="save()">Save
+    </button>
+    <button type="button" class="btn btn-default"
+            data-ng-click="close()">Cancel
+    </button>
+</div>
