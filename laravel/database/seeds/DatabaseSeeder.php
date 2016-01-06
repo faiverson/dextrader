@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
 		$this->call('ProvidersSeeder');
 		$this->call('TrainingsSeeder');
 		$this->call('PagesSeeder');
-		$this->call('TagsSeeder');
 		$this->call('TestimonialsSeeder');
 		Model::reguard();
     }

@@ -23,7 +23,7 @@ class TagGateway extends AbstractGateway {
 		$this->updateValidator = $updateValidator;
 	}
 
-	public function getIdByTag($tag) {
-		return $this->repository->getIdByTag($tag);
+	public function getIdByTag($user_id, $tag) {
+		return $this->repository->getIdByTag($user_id, $tag);
 	}
 }
