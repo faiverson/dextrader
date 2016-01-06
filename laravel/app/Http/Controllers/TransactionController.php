@@ -81,10 +81,10 @@ class TransactionController extends Controller
 	{
 		$fields = $fields =$request->all();
 		$fields['ip_address'] = $request->ip();
+		$fields['user_id'] = $request->id;
 
 		// to simplify UI
 		$fields['products'] = is_string($fields['products']) ? explode(',', $fields['products']) : $fields['products'];
-
 		$response = $this->transaction->upgrade($fields);
 		if(!$response) {
 			return response()->error($this->transaction->errors());

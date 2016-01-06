@@ -22,4 +22,15 @@ class BillingAddressGateway extends AbstractGateway {
 		$this->createValidator = $createValidator;
 		$this->updateValidator = $updateValidator;
 	}
+
+	public function findUserAddress($user_id, $billing_address_id)
+	{
+		$response = $this->repository->findUserAddress($user_id, $billing_address_id);
+		if(!$response) {
+			$this->errors = ['The billing address does not belong to the user'];
+			return false;
+		}
+
+		return $response;
+	}
 }

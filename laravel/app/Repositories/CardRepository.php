@@ -17,4 +17,9 @@ class CardRepository extends AbstractRepository implements CardRepositoryInterfa
 	{
 		return CreditCard::where('number', Encrypt::encrypt($number))->count();
 	}
+
+	public function findUserCard($user_id, $card_id)
+	{
+		return $this->model->where('id', $card_id)->where('user_id', $user_id)->first();
+	}
 }

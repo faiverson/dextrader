@@ -37,7 +37,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-		$path = storage_path('logs/payments-monthly' . date('Y-m-d') . '.log');
-		$schedule->command('payments:monthly --force')->everyMinute()->sendOutputTo($path);;
+		$path = storage_path('logs/payments-monthly-' . date('Y-m-d') . '.log');
+		// run the cronjob every 2 hours
+		$schedule->command('payments:monthly')->cron('0 */2 * * * *')->sendOutputTo($path);;
     }
 }

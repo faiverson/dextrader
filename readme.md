@@ -33,3 +33,21 @@ Documentation for the framework can be found on the [Laravel website](http://lar
 
 ### License
 The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+
+### Add a cron job
+
+117
+down vote
+accepted
+Just follow these steps:
+
+In Terminal: crontab -e.
+Press i to go into vim's insert mode.
+Type your cron job, for example:
+
+* * * * * php /Users/faiverson/Sites/dextrader/laravel/artisan/ schedule:run >> /dev/null 2>&1
+
+Press Esc to exit vim's insert mode.
+
+Type ZZ (must be capital letters).
+Verify by using crontab -l

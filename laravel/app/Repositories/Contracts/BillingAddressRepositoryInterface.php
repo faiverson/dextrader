@@ -9,4 +9,5 @@ use App\Repositories\Contracts\RepositoryInterface;
  * this interface must also provide all the standard eloquent methods (find, all, etc.)
  */
 interface BillingAddressRepositoryInterface extends RepositoryInterface {
+	public function findUserAddress($user_id, $billing_address_id);
 }

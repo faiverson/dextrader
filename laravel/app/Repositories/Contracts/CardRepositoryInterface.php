@@ -10,4 +10,5 @@ use App\Repositories\Contracts\RepositoryInterface;
  */
 interface CardRepositoryInterface extends RepositoryInterface {
 	public function isCard($number);
+	public function findUserCard($user_id, $card_id);
 }

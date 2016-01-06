@@ -24,7 +24,7 @@ class Subscription extends Model
 
 	protected $appends = array('subscription_id');
 
-	protected $hidden = ['id', 'user_id', 'product_id', 'card_id', 'billing_address_id', 'created_at', 'updated_at'];
+	protected $hidden = ['id', 'user_id', 'card_id', 'billing_address_id', 'created_at', 'updated_at'];
 
 	public function getSubscriptionIdAttribute()
 	{

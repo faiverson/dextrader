@@ -236,31 +236,42 @@ class TransactionGateway extends AbstractGateway {
 	{
 		DB::beginTransaction();
 		try {
-			$card = $this->card->create([
-				'user_id' => $data['user_id'],
-				'number' => $data['number'],
-				'network' => $data['card_network'],
-				'name' => $data['card_name'],
-				'exp_month' => $data['card_exp_month'],
-				'exp_year' => $data['card_exp_year'],
-				'last_four' => $data['card_last_four'],
-				'first_six' => $data['card_first_six'],
-			]);
+			if(array_key_exists('card_id', $data)) {
+				$card = $this->card->find($data['card_id']);
+			}
+			else {
+				$card = $this->card->create([
+					'user_id' => $data['user_id'],
+					'number' => $data['number'],
+					'network' => $data['card_network'],
+					'name' => $data['card_name'],
+					'exp_month' => $data['card_exp_month'],
+					'exp_year' => $data['card_exp_year'],
+					'last_four' => $data['card_last_four'],
+					'first_six' => $data['card_first_six'],
+				]);
+			}
+
 			if(!$card) {
 				$this->errors = $this->card->errors();
 				return false;
 			}
 
-			$billing = $this->address->create([
-				'user_id' => $data['user_id'],
-				'address' => $data['billing_address'],
-				'address2' => array_key_exists('billing_address2', $data) ? $data['billing_address2'] : '',
-				'country' => $data['billing_country'],
-				'state' => $data['billing_state'],
-				'city' => $data['billing_city'],
-				'zip' => $data['billing_zip'],
-				'phone' => array_key_exists('billing_phone', $data) ? $data['billing_phone'] : '',
-			]);
+			if(array_key_exists('billing_address_id', $data)) {
+				$billing = $this->address->find($data['billing_address_id']);
+			}
+			else {
+				$billing = $this->address->create([
+					'user_id' => $data['user_id'],
+					'address' => $data['billing_address'],
+					'address2' => array_key_exists('billing_address2', $data) ? $data['billing_address2'] : '',
+					'country' => $data['billing_country'],
+					'state' => $data['billing_state'],
+					'city' => $data['billing_city'],
+					'zip' => $data['billing_zip'],
+					'phone' => array_key_exists('billing_phone', $data) ? $data['billing_phone'] : '',
+				]);
+			}
 			if(!$billing) {
 				$this->errors = $this->address->errors();
 				return false;
@@ -400,20 +411,33 @@ class TransactionGateway extends AbstractGateway {
 	{
 		// we check if the card data is valid
 		$card = $this->card->findUserCard($data['user_id'], $data['card_id']);
-		$billing_address = $this->address->findByUser($data['user_id'], $data['billing_address_id']);
+		if(!$card) {
+			$this->errors = $this->card->errors();
+			return false;
+		}
 
-		// get info about user, product and tags
+		$billing_address = $this->address->findUserAddress($data['user_id'], $data['billing_address_id']);
+		if(!$billing_address) {
+			$this->errors = $this->address->errors();
+			return false;
+		}
+
+		// get info about user, product and current subscriptions
 		$user = $this->user->find($data['user_id']);
 		$products = $this->product->findIn($data['products']);
-		$subs = $this->subscription->findBy('user_id', $data['user_id'], ['product_id']);
+		$subs = $this->subscription->findBy('user_id', $data['user_id'], ['product_id', 'id']);
 		$canBuy = $this->product->userCanBuy($subs, $products);
 		if(!$canBuy) {
 			$this->errors = $this->product->errors();
 			return false;
 		}
 
+		if($user->enroller_id) {
+			$data['enroller_id'] = $user->enroller_id;
+		}
+
 		// add geo location
-		$data['info'] = $this->setInfo($data);
+		$data['info'] = array_merge($this->setInfo($data), ['type' => 'upgrade']);
 
 		// prepare the information
 		$amount = $this->product->total($products);
@@ -421,11 +445,24 @@ class TransactionGateway extends AbstractGateway {
 			'first_name' => $user->first_name,
 			'last_name' => $user->last_name,
 			'email' => $user->email,
-			'card_network' => $card['type'],
 			'description' => implode(array_column($products->toArray(), 'name'), ' - '),
 			'products' => $this->setDetail($products),
-			'card_last_four' => $this->card->getLast($data['number']),
-			'card_first_six' => $this->card->getFirst($data['number']),
+			'number' => $card->number,
+			'card_id' => $card->id,
+			'card_name' => $card->name,
+			'card_network' => $card->network,
+			'card_last_four' => $card->last_four,
+			'card_first_six' => $card->first_six,
+			'card_exp_month' => $card->exp_month,
+			'card_exp_year' => $card->exp_year,
+			'billing_address_id' => $billing_address->id,
+			'billing_address' => $billing_address->address,
+			'billing_address2' => $billing_address->address2,
+			'billing_state' => $billing_address->state,
+			'billing_city' => $billing_address->city,
+			'billing_country' => $billing_address->country,
+			'billing_zip' => $billing_address->zip,
+			'billing_phone' => $billing_address->phone,
 			'amount' => $amount
 		]);
 
@@ -450,6 +487,5 @@ class TransactionGateway extends AbstractGateway {
 
 		return $data;
 	}
-
 
 }

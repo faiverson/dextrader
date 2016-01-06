@@ -64,7 +64,7 @@ class CardGateway extends AbstractGateway {
 	{
 		$response = $this->repository->findUserCard($user_id, $card_id);
 		if(!$response) {
-			$this->errors = ['The card was not found'];
+			$this->errors = ['The credit card does not belong to the user'];
 			return false;
 		}
 

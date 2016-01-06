@@ -18,7 +18,7 @@ class InvoiceCreateValidator extends AbstractValidator {
 		'enroller_id' => 'sometimes|exists:users,id',
 		'amount' => ['required', 'regex:/[0-9]+[.,]?[0-9]*/'],
 
-		'funnel_id'=> 'required|exists:funnels,id',
+		'funnel_id'=> 'sometimes|exists:funnels,id',
 		'tag_id' => 'sometimes|exists:campaign_tags,id',
 
 		'billing_address_id' => 'numeric',
