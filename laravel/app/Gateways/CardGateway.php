@@ -62,14 +62,13 @@ class CardGateway extends AbstractGateway {
 
 	public function findUserCard($user_id, $card_id)
 	{
-		$response =  $this->repository->findUserCard($user_id, $card_id);
-		if(!Cards::validDate('20' . $data['exp_year'], $data['exp_month'])) {
-			$this->errors = ['The expiration date is invalid'];
+		$response = $this->repository->findUserCard($user_id, $card_id);
+		if(!$response) {
+			$this->errors = ['The card was not found'];
 			return false;
 		}
 
-
-		return $card;
+		return $response;
 	}
 
 	public function getLast($number)
