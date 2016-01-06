@@ -73,7 +73,7 @@ abstract class Repository implements RepositoryInterface {
 	 * @return mixed
 	 */
 	public function update(array $data, $id) {
-		return $this->model->where('id', $id)->update($data);
+		return $this->model->find($id)->update($data);
 	}
 
 	/**

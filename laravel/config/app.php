@@ -216,6 +216,7 @@ return [
         'Token' => App\Helpers\Token::class,
         'Files' => App\Helpers\Files::class,
         'Cards' => App\Helpers\Cards::class,
+		'SMS'  => App\Helpers\SMS::class,
         'cURL' => anlutro\cURL\Laravel\cURL::class,
         'Encrypt' => App\Helpers\Encrypt::class,
         'GeoIP' => Torann\GeoIP\GeoIPFacade::class,

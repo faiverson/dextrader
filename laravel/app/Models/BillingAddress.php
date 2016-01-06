@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
-use Sofa\Eloquence\Eloquence; // base trait
+use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
+use Sofa\Eloquence\Mutable;
 
 class BillingAddress extends Model
 {
-	use Eloquence, Mappable;
+	use Eloquence, Mutable, Mappable;
 
     /**
      * The database table used by the model.

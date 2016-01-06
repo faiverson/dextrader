@@ -33,6 +33,10 @@ class UserGateway extends AbstractGateway
             unset($data['username']);
         }
 
+		if (array_key_exists('full_name', $data)) {
+			unset($data['full_name']);
+		}
+
         return $this->update($data, $id);
     }
 
@@ -66,5 +70,5 @@ class UserGateway extends AbstractGateway
     {
         return $this->repository->findById($id, $column = 'id', $columns = array('*'));
     }
-    
+
 }
