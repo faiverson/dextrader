@@ -31,11 +31,14 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
         function ($scope, UserService, DTOptionsBuilder, DTColumnBuilder, localStorageService, $compile, $config) {
 
             function actionsHtml(data, type, full, meta) {
-                return '<button class="btn btn-warning" ui-sref="users-edit({ id:' + data.user_id + '})">' +
-                    '   <i class="fa fa-edit"></i>' +
+                return '<button class="btn btn-primary" ui-sref="user_profile({ id:' + data.user_id + '})">' +
+                    'View <i class="fa fa-edit"></i>' +
+                    '</button>&nbsp;' +
+                    '<button class="btn btn-warning" ui-sref="users-edit({ id:' + data.user_id + '})">' +
+                    'Edit <i class="fa fa-edit"></i>' +
                     '</button>&nbsp;' +
                     '<button class="btn btn-danger" ng-click="showCase.delete(showCase.persons[' + data.user_id + '])" )"="">' +
-                    '   <i class="fa fa-trash-o"></i>' +
+                    'Delete <i class="fa fa-trash-o"></i>' +
                     '</button>';
             }
 
