@@ -1,9 +1,11 @@
 <header>
     <div id="header-content">
         <div id="logo"><a href="http://dextrader.com"><img src="/assets/images/logo-ib.png" alt="DEX Trader"></a></div>
-        <div id="secure-ib">
-            <img src="/assets/images/secure-ib.png">
+        <div class="logo-text">
+            <p>Secure Payment Website For</p>
+            <span>www.dextrader.com/ib</span>
         </div>
+        <div id="secure-ib"></div>
 
         <div class="clear"></div>
     </div>
@@ -153,7 +155,7 @@
                                data-ng-disabled="formCheckout.city.$invalid"
                                class="form-control"
                                required
-                               data-ng-model="formData.billing_state" />
+                               data-ng-model="formData.billing_state"/>
                     </div>
                     <div class="form-group has-feedback" data-show-errors>
                         <label for="zip">Zip/Postal Code</label>
@@ -256,12 +258,14 @@
                        id="terms"
                        data-ng-model="formData.terms"
                        required>
-                <label for="terms" uib-tooltip="Check terms!" tooltip-is-open="showAgreementWarning" tooltip-class="warning">
+                <label for="terms" uib-tooltip="Check terms!" tooltip-is-open="showAgreementWarning"
+                       tooltip-class="warning">
                     I agree to the payment terms as stated above
                 </label>
             </div>
             <button class="btn btn-warning btn-block"
-                    data-ng-click="send()">Create Account</button>
+                    data-ng-click="send()">Create Account
+            </button>
             <!--<a href="#" class="submitbutton bg-orange align-center">Create Account</a>-->
         </div>
         <div id="checkout-info" class="content-right">
@@ -284,7 +288,7 @@
             <div class="checkout-prices">
                 <div class="clearfix">
                     <div class="left">Initial Payment</div>
-                    <div class="right">$7.00</div>
+                    <div class="right">$47.00</div>
                 </div>
                 <div class="clearfix">
                     <div class="left">Tax</div>
@@ -292,7 +296,7 @@
                 </div>
                 <div id="checkout-total" class="clearfix">
                     <div class="left">Today's Payment</div>
-                    <div class="right">$7.00</div>
+                    <div class="right">$47.00</div>
                 </div>
                 <p>
                     Immediate access to this product or service is available once payment is approved.
@@ -306,12 +310,12 @@
                         Monthly Payment of
                     </div>
                     <div class="right">
-                        $197.00
+                        $47.00
                     </div>
                 </div>
                 <p>
                     *<br>
-                    Next payment will be billed on 12/15/2015.
+                    Next payment will be billed on {{nextPaymentDate}}.
                     Amount includes taxes subject to change based on customer location and rate
                     adjustments.
                 </p>

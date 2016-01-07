@@ -36,6 +36,8 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 funnel_id: 1
             };
 
+            $scope.nextPaymentDate = moment().add(3, 'D').format('MM/DD/YYYY');
+
             $scope.userData = {};
 
             vm.feelExpMonth = function () {
