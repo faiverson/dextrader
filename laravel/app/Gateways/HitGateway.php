@@ -29,12 +29,15 @@ class HitGateway extends AbstractGateway {
 
 	public function create(array $data)
 	{
-		if(array_key_exists('tag', $data)) {
-			$data['tag_id'] = $this->tag->getIdByTag($data['tag']);
+		if(array_key_exists('enroller', $data)) {
+			$enroller_id = $this->user->getIdByUsername($data['enroller']);
+			if($enroller_id) {
+				$data['enroller_id'] = $enroller_id;
+			}
 		}
 
-		if(array_key_exists('enroller', $data)) {
-			$data['enroller_id'] = $this->user->getIdByUsername($data['enroller']);
+		if(array_key_exists('tag', $data) && array_key_exists('enroller_id', $data)) {
+			$data['tag_id'] = $this->tag->getIdByTag($data['enroller_id'], $data['tag']);
 		}
 
 		if( ! $this->createValidator->with($data)->passes() )
