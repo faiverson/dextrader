@@ -121,17 +121,17 @@ class TransactionGateway extends AbstractGateway {
 			return false;
 		}
 
-		if(array_key_exists('tag', $data)) {
-			$tag = $this->tag->getIdByTag($data['user_id'], $data['tag']);
-			if($tag) {
-				$data['tag_id'] = $tag->id;
-			}
-		}
-
 		if(array_key_exists('enroller', $data)) {
 			$enroller_id = $this->user->getIdByUsername($data['enroller']);
 			if($enroller_id) {
 				$data['enroller_id'] = $enroller_id;
+			}
+		}
+
+		if(array_key_exists('tag', $data) && array_key_exists('enroller_id', $data) ) {
+			$tag = $this->tag->getIdByTag($data['enroller_id'], $data['tag']);
+			if($tag) {
+				$data['tag_id'] = $tag->id;
 			}
 		}
 
