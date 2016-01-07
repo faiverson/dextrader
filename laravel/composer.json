@@ -16,7 +16,8 @@
         "anlutro/curl": "^1.4",
 		"torann/geoip": "0.2.*@dev",
         "barryvdh/laravel-dompdf": "0.6.*",
-        "laravelcollective/html": "5.1.*"
+        "laravelcollective/html": "5.1.*",
+        "twilio/sdk": "^4.9"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",

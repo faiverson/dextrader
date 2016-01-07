@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
 //        \App\Console\Commands\Inspire::class,
+		\App\Console\Commands\GRCampaigns::class,
 		\App\Console\Commands\MonthlyPayments::class
     ];
 

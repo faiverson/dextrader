@@ -73,7 +73,8 @@ abstract class Repository implements RepositoryInterface {
 	 * @return mixed
 	 */
 	public function update(array $data, $id) {
-		return $this->model->where('id', $id)->update($data);
+		$data = $this->setAttributtes($data);
+		return $this->model->find($id)->update($data);
 	}
 
 	/**
@@ -115,5 +116,12 @@ abstract class Repository implements RepositoryInterface {
 			}
 		}
 		return $query->where($attribute, '=', $value)->get($columns);
+	}
+
+	protected function setAttributtes(array $data)
+	{
+		$data = array_map('trim', $data);
+		$data = array_filter($data);
+		return $data;
 	}
 }
