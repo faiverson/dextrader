@@ -14,11 +14,16 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
 		'App\Events\CheckoutEvent' => [
-			'App\Listeners\CheckoutCommissionListener'
+			'App\Listeners\CheckoutCommissionListener',
+			'App\Listeners\GetResponseBuyersListener'
+		],
+		'App\Events\CheckoutFailedEvent' => [
+			'App\Listeners\GetResponsePartialListener'
 		],
 		'App\Events\CommissionEvent' => [
 		],
 		'App\Events\SubscriptionCancelEvent' => [
+			'App\Listeners\GetResponseInactiveListener'
 		],
 		'App\Events\SubscriptionFailEvent' => [
 		],

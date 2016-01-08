@@ -664,6 +664,31 @@ class GetResponse
 		return $return;
 	}
 
+	public function moveContactToCampaign($contact_id, $campaign_id)
+	{
+		// ok, if we made it here, then we need to actually faciliate the move from one campaign to another
+		$method = 'move_contact';
+		$params = array(
+			'campaign'      =>  $campaign_id,
+			'contact'       =>  $contact_id
+		);
+		$request = $this->assemble($method, $params);
+		$response = $this->execute($request);
+		$return = $response;
+
+		if ( $response->updated == '1' ) {
+			// now we need to reset the user back to day 0 since they are in the new campaign
+			$method = 'set_contact_cycle';
+			$params = array(
+				'contact'       =>  $contact_id,
+				'cycle_day'     =>  0
+			);
+			$request = $this->assemble($method, $params);
+			$response = $this->execute($request);
+		}
+		return $return;
+	}
+
 	/**
 	 * Return a campaign ID by name
 	 *

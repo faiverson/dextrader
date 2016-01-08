@@ -14,7 +14,7 @@ class SubscriptionRepository extends AbstractRepository implements SubscriptionR
 	}
 
 	public function findByUser($user_id, $columns = array('*'), $limit = null, $offset = null) {
-		$query = $this->model->with('card')->with('product')->with('address')->where('user_id', $user_id);
+		$query = $this->model->with('card')->with('product')->with('address')->where('status', 'active')->where('user_id', $user_id);
 
 		if($limit != null) {
 			$query = $query->take($limit);
@@ -27,7 +27,7 @@ class SubscriptionRepository extends AbstractRepository implements SubscriptionR
 	}
 
 	public function isOwner($user_id, $subscription_id) {
-		return $this->model->where('user_id', $user_id)->where('subscription_id', $subscription_id)->count();
+		return $this->model->where('status', 'active')->where('user_id', $user_id)->where('subscription_id', $subscription_id)->count();
 	}
 
 	/**

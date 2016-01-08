@@ -50,6 +50,8 @@ class TransactionGateway extends AbstractGateway {
 
 	protected $tag;
 
+	protected $lead;
+
 	protected $errors;
 
 	public function __construct(TransactionRepository $repository,
@@ -63,7 +65,8 @@ class TransactionGateway extends AbstractGateway {
 								ProductGateway $product,
 								CardGateway $card,
 								BillingAddressGateway $address,
-								TagGateway $tag)
+								TagGateway $tag,
+								LeadGateway $lead)
 	{
 		$this->repository = $repository;
 		$this->detail = $detail;
@@ -77,6 +80,7 @@ class TransactionGateway extends AbstractGateway {
 		$this->card = $card;
 		$this->address = $address;
 		$this->tag = $tag;
+		$this->lead = $lead;
 
 	}
 
@@ -114,7 +118,11 @@ class TransactionGateway extends AbstractGateway {
 		// get info about user, product and tags
 		$user = $this->user->find($data['user_id']);
 		$products = $this->product->findIn($data['products']);
-		$subs = $this->subscription->findBy('user_id', $data['user_id'], ['product_id']);
+		$subs = $this->subscription->findByUser($data['user_id'], ['product_id']);
+		if($subs->count() > 0 ) {
+			$this->errors = 'You are trying to checkout but you have a subscription in the system';
+			return false;
+		}
 		$canBuy = $this->product->userCanBuy($subs, $products);
 		if(!$canBuy) {
 			$this->errors = $this->product->errors();
@@ -144,6 +152,7 @@ class TransactionGateway extends AbstractGateway {
 			'first_name' => $user->first_name,
 			'last_name' => $user->last_name,
 			'email' => $user->email,
+			'username' => $user->username,
 			'card_network' => $card['type'],
 			'description' => implode(array_column($products->toArray(), 'name'), ' - '),
 			'products' => $this->setDetail($products),
@@ -332,6 +341,7 @@ class TransactionGateway extends AbstractGateway {
 
 				$role_id = $this->user->getRoleByName($product['roles']);
 				$this->user->attachRole($data['user_id'], $role_id);
+				$this->user->update(['active' => 1], $data['user_id']);
 			}
 		}
 		catch(\Exception $e) {
@@ -486,6 +496,22 @@ class TransactionGateway extends AbstractGateway {
 		}
 
 		return $data;
+	}
+
+	public function addLead(array $data)
+	{
+		if(array_key_exists('billing_phone', $data)) {
+			$data['phone'] = $data['billing_phone'];
+		}
+
+		$lead = $this->lead->findByEmail($data['email']);
+		if($lead) {
+			$this->lead->update($data, $lead->id);
+		} else {
+			$this->lead->create($data);
+		}
+
+		$this->user->update(['active', 0], $data['user_id']);
 	}
 
 }
