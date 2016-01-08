@@ -14,7 +14,7 @@ class TestimonialsSeeder extends Seeder
     {
         Testimonial::unguard();
         Testimonial::create([
-            'text' => 'Signals365.com is my favourite signals provider. They offer more profitable signals than any other competitors and the support is great and transparent about their services. Also you can see all past results verified on their website once you login.',
+            'text' => 'Des Signals is my favorite signals provider. They offer more profitable signals than any other competitors and the support is great and transparent about their services. Also you can see all past results verified on their website once you login.',
             'author' => 'Alan Simons',
             'image' =>'testimonial-1.png'
         ]);

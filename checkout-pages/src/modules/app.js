@@ -18,7 +18,8 @@ angular.module('app', [
         'app.privacy',
         'app.disclosure',
         'app.term-and-conditions',
-        'app.whitelist'
+        'app.whitelist',
+        'app.refund'
     ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {
