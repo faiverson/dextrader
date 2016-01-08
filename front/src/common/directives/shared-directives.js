@@ -124,13 +124,12 @@ angular.module('app.shared-directives', [])
             }
         };
     }])
-
-    .directive('ngChref', ['$site-configs', function($configs) {
+    .directive('ngChref', ['$site-configs', function ($configs) {
         return {
             priority: 99,
-            link: function(scope, element, attr) {
-                attr.$observe('ngChref', function(value) {
-                    if (!value){
+            link: function (scope, element, attr) {
+                attr.$observe('ngChref', function (value) {
+                    if (!value) {
                         return;
                     }
 

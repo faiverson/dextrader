@@ -1,26 +1,31 @@
-<section id="quicklinks">
-    <div id="ql-wrapper">
-        <a id="ql-joingroup" href="#">Join Our Private Facebook Group</a>
-        <a id="ql-earnmoney" href="http://www.dextrader.com/affiliates/how-it-works">Earn Money For Referring People</a>
-        <a id="ql-contact" href="http://www.dextrader.com/support">Contact Our Support Desk</a>
-    </div>
-</section>
+<div data-ng-controller="FooterCtrl">
+    <section id="quicklinks">
+        <div id="ql-wrapper">
+            <a id="ql-joingroup" href="#">Join Our Private Facebook Group</a>
+            <a id="ql-earnmoney" href="http://www.dextrader.com/affiliates/how-it-works">Earn Money For Referring
+                People</a>
+            <a id="ql-contact" href="#" data-ng-click="loadChat()">Contact Our Support Desk</a>
+        </div>
+    </section>
 
-<footer>
-    <span id="footer-italic">Refer to our policies and disclosures here</span>
-    <div id="footer-links">
-        <a ui-sref="privacy">Privacy</a>
-        <a ui-sref="terms_and_conditions">Terms</a>
-        <a ui-sref="disclosure">Disclosure</a>
-        <!--<a href="#">Compliance </a>-->
-        <!--<a href="#">Affiliates</a>-->
-        <a ui-sref="whitelist">Whitelist</a>
-        <a ui-sref="refund">Refunds</a>
-    </div>
-    <span>Copyright © 2015 DexTrader.com</span>
-    <span>All international Right Reserved – Dublication Without Permission Is Prohibited!</span>
-    <div id="footer-social">
-        <a href="#"><img src="/assets/images/social-fb.png"></a>
-        <a href="#"><img src="/assets/images/social-twitter.png"></a>
-    </div>
-</footer>
+    <footer>
+        <span id="footer-italic">Refer to our policies and disclosures here</span>
+
+        <div id="footer-links">
+            <a ui-sref="privacy">Privacy</a>
+            <a ui-sref="terms_and_conditions">Terms</a>
+            <a ui-sref="disclosure">Disclosure</a>
+            <!--<a href="#">Compliance </a>-->
+            <!--<a href="#">Affiliates</a>-->
+            <a ui-sref="whitelist">Whitelist</a>
+            <a ui-sref="refund">Refunds</a>
+        </div>
+        <span>Copyright © 2015 DexTrader.com</span>
+        <span>All international Right Reserved – Dublication Without Permission Is Prohibited!</span>
+
+        <div id="footer-social">
+            <a href="#"><img src="/assets/images/social-fb.png"></a>
+            <a href="#"><img src="/assets/images/social-twitter.png"></a>
+        </div>
+    </footer>
+</div>

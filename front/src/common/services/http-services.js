@@ -41,7 +41,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         function isLoggedIn() {
             var token = localStorageService.get('token');
 
-            return token != null && angular.isDefined(token);
+            return token !== null && angular.isDefined(token);
         }
 
         function getLoggedInUser() {
@@ -165,7 +165,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 if ($config.withCredentials !== false) {
                     $config.withCredentials = true;
                     header = 'Bearer ' + localStorageService.get('token');
-                    $config.headers['Authorization'] = header;
+                    $config.headers.Authorization = header;
                 }
                 return $config;
             }
@@ -969,6 +969,46 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             query: query
         };
 
+    }])
+
+    .factory('ChatService', ['AuthService', function (AuthService) {
+
+        // jshint ignore:start
+        window.zEmbed || function (e, t) {// jshint ignore:line
+            var n, o, d, i, s, a = [], r = document.createElement("iframe");// jshint ignore:line
+            window.zEmbed = function () {// jshint ignore:line
+                a.push(arguments) // jshint ignore:line
+            }, window.zE = window.zE || window.zEmbed, r.src = "javascript:false", r.title = "", r.role = "presentation", (r.frameElement || r).style.cssText = "display: none", d = document.getElementsByTagName("script"), d = d[d.length - 1], d.parentNode.insertBefore(r, d), i = r.contentWindow, s = i.document;// jshint ignore:line
+            try {// jshint ignore:line
+                o = s// jshint ignore:line
+            } catch (c) {// jshint ignore:line
+                n = document.domain, r.src = 'javascript:var d=document.open();d.domain="' + n + '";void(0);', o = s// jshint ignore:line
+            }// jshint ignore:line
+            o.open()._l = function () {// jshint ignore:line
+                var o = this.createElement("script");// jshint ignore:line
+                n && (this.domain = n), o.id = "js-iframe-async", o.src = e, this.t = +new Date, this.zendeskHost = t, this.zEQueue = a, this.body.appendChild(o)// jshint ignore:line
+            }, o.write('<body onload="document._l();">'), o.close()// jshint ignore:line
+        }("https://assets.zendesk.com/embeddable_framework/main.js", "ourcityinvestments.zendesk.com");// jshint ignore:line
+        // jshint ignore:end
+
+        function show() {
+            zE.activate({hideOnClose: true});
+        }
+
+        function setup(){
+
+            zE.hide();
+            zE.setLocale('en');
+            zE.identify({
+                name: AuthService.getLoggedInUser().username,
+                email: AuthService.getLoggedInUser().email,
+                externalId: AuthService.getLoggedInUser().user_id
+            });
+        }
+
+        return {
+            show: show
+        };
     }])
 
     .factory('UserRolesService', ['$http', '$q', '$site-configs', function ($http, $q, $configs) {
