@@ -44,7 +44,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-		Log::info('Exception ');
+		Log::info('Exception!!!');
 		if ($e instanceof Tymon\JWTAuth\Exceptions\TokenExpiredException) {
 			return response()->error('The token has expired.' , $e->getStatusCode());
 		}

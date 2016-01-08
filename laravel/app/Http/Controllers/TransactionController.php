@@ -60,6 +60,7 @@ class TransactionController extends Controller
 			$response = array_merge($response, $purchase);
 			Event::fire(new CheckoutEvent($response));
 		} else {
+			$this->transaction->addLead($response);
 			Log::info('Merchant', $response);
 			if(!array_key_exists('responsetext', $response)) {
 				$response['responsetext'] = 'There is a problem with the Merchant. Please contact support to solve the problem!';

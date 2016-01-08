@@ -566,24 +566,27 @@ class GetResponse
 	 *
 	 * @return object
 	 */
-	public function addContact($campaign, $name, $email, $action = 'standard', $cycle_day = 0, $customs = array())
+	public function addContact($campaign, $name, $email, $action = 'standard', $cycle_day = 0, $customs = array(), $ip = null)
 	{
-		$params = array('campaign' => $campaign, 'action' => $action, 'name' => $name,
-			'email'    => $email, 'cycle_day' => $cycle_day);
-		if ( $this->isValidIp($_SERVER['REMOTE_ADDR']) ) {
-			//echo '<h2>';
-			//echo $_SERVER['REMOTE_ADDR'];
-			//echo '</h2>';
-			array_push($params, $_SERVER['REMOTE_ADDR']);
+		$params = [
+			'campaign' => $campaign,
+			'action' => $action,
+			'name' => $name,
+			'email' => $email,
+			'cycle_day' => $cycle_day
+		];
+
+		if (!empty($ip) && $this->isValidIp($ip) ) {
+			array_push($params, ['ip' => $ip]);
 		}
+
 		if ( !empty($customs) ) {
-			foreach ( $customs as $key => $val ) $c[] = array('name' => $key, 'content' => $val);
+			foreach ( $customs as $key => $val ) {
+				$c[] = array('name' => $key, 'content' => $val);
+			}
 			$params['customs'] = $c;
 		}
-
-		// FIXME:
-		$params['consumer_key'] = globalvars::$getresponse['consumer_key'];
-
+//	dd($params);
 		$request = $this->prepRequest('add_contact', $params);
 		$response = $this->execute($request);
 
@@ -622,7 +625,7 @@ class GetResponse
 	 */
 	public function moveEmailToCampaign($email, $campaignName)
 	{
-		$campaign_id = $this->getCampaignByName($campaignName);
+		$campaign_id = $this->getCampaignIdByName($campaignName);
 		if ( !$campaign_id )
 		{
 			return false;
@@ -648,8 +651,32 @@ class GetResponse
 		$response = $this->execute($request);
 		$return = $response;
 
-		if ( $response->updated == '1' )
-		{
+		if ( $response->updated == '1' ) {
+			// now we need to reset the user back to day 0 since they are in the new campaign
+			$method = 'set_contact_cycle';
+			$params = array(
+				'contact'       =>  $contact_id,
+				'cycle_day'     =>  0
+			);
+			$request = $this->assemble($method, $params);
+			$response = $this->execute($request);
+		}
+		return $return;
+	}
+
+	public function moveContactToCampaign($contact_id, $campaign_id)
+	{
+		// ok, if we made it here, then we need to actually faciliate the move from one campaign to another
+		$method = 'move_contact';
+		$params = array(
+			'campaign'      =>  $campaign_id,
+			'contact'       =>  $contact_id
+		);
+		$request = $this->assemble($method, $params);
+		$response = $this->execute($request);
+		$return = $response;
+
+		if ( $response->updated == '1' ) {
 			// now we need to reset the user back to day 0 since they are in the new campaign
 			$method = 'set_contact_cycle';
 			$params = array(
@@ -672,6 +699,12 @@ class GetResponse
 	public function getCampaignByName($name)
 	{
 		$request = $this->prepRequest('get_campaigns', array('name' => array('EQUALS' => $name)));
+		return $this->execute($request);
+	}
+
+	public function getCampaignIdByName($name)
+	{
+		$request = $this->prepRequest('get_campaigns', array('name' => array('EQUALS' => $name)));
 		$response = $this->execute($request);
 
 		return key($response);
@@ -691,7 +724,9 @@ class GetResponse
 	{
 		$params = null;
 		$params['email'] = $this->prepTextOp($operator, $email);
-		if ( is_array($campaigns) ) $params['campaigns'] = $campaigns;
+		if ( is_array($campaigns) ) {
+			$params['campaigns'] = $campaigns;
+		}
 		$request = $this->prepRequest('get_contacts', $params);
 		$response = $this->execute($request);
 

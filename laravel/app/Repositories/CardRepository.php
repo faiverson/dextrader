@@ -13,9 +13,9 @@ class CardRepository extends AbstractRepository implements CardRepositoryInterfa
 		return CreditCard::class;
 	}
 
-	public function isCard($number)
+	public function isCard($number, $user_id)
 	{
-		return CreditCard::where('number', Encrypt::encrypt($number))->count();
+		return CreditCard::where('number', Encrypt::encrypt($number))->where('user_id', '!=', $user_id)->count();
 	}
 
 	public function findUserCard($user_id, $card_id)

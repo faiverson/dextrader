@@ -52,7 +52,7 @@ class CardGateway extends AbstractGateway {
 			return false;
 		}
 
-		if($this->repository->isCard($data['number']) > 0) {
+		if($this->repository->isCard($data['number'], $data['user_id']) > 0) {
 			$this->errors = ['This credit card is in the system! Please contact support immediately!'];
 			return false;
 		}
