@@ -17,7 +17,7 @@ class MarketingLinks extends Migration
 			$table->increments('id');
 			$table->string('title')->nullable(false);
 			$table->string('image')->nullable();
-			$table->string('link')->nullable(false);
+			$table->string('link')->nullable(false)->index();
 			$table->text('description')->nullable();
 
 			$table->integer('campaign_id')->unsigned()->nullable()->default(null);

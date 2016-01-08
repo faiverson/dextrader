@@ -21,16 +21,16 @@ class MarketingLinksSeeder extends Seeder
 			'title' => 'IB sales',
 			'campaign_id' => $fc->id,
 			'description' => 'IB sale page',
-			'image' => 'http://dextrader.com/ib',
-			'link' => 'http://dextrader.com/ib',
+			'image' => 'dextrader.com/ib',
+			'link' => 'dextrader.com/ib',
 		]);
 
 		MarketingLink::create([
 			'title' => 'IB checkout',
 			'campaign_id' => $fc->id,
 			'description' => 'IB checkout page',
-			'image' => 'http://dextrader.com/ib',
-			'link' => 'https://secure.dextrader.com/ib',
+			'image' => 'dextrader.com/ib',
+			'link' => 'secure.dextrader.com/ib',
 		]);
 
 		if (App::Environment() === 'local') {

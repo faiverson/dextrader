@@ -31,29 +31,4 @@ class PurchasesController extends Controller
 		return response()->ok($response);
 	}
 
-    public function emailPurchase(Purchase $purchase)
-	{
-		$purchase->email = 'fa.iverson@gmail.com'; // @TODO remove please
-		$beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-		$beautymail->send('emails.purchase', ['purchase' => $purchase], function ($message) use ($purchase) {
-			$message
-				->from(Config::get('dextrader.from'))
-				->to($purchase->email)
-				->subject('Yey! Your purchase has been approved!');
-		});
-	}
-
-	public function emailComms(User $user)
-	{
-//		$purchase->email = 'fa.iverson@gmail.com'; // @TODO remove please
-//		$beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-//		$beautymail->send('emails.comms', ['purchase' => $purchase], function ($message) use ($purchase) {
-//			$message
-//				->from(Config::get('dextrader.from'))
-//				->to($purchase->email)
-//				->subject('Yey! Your receive a new commission!');
-//		});
-	}
-
-
 }
