@@ -66,7 +66,8 @@ class TransactionGateway extends AbstractGateway {
 								CardGateway $card,
 								BillingAddressGateway $address,
 								TagGateway $tag,
-								LeadGateway $lead)
+								LeadGateway $lead,
+								SpecialOfferGateway $offer)
 	{
 		$this->repository = $repository;
 		$this->detail = $detail;
@@ -81,6 +82,7 @@ class TransactionGateway extends AbstractGateway {
 		$this->address = $address;
 		$this->tag = $tag;
 		$this->lead = $lead;
+		$this->offer = $offer;
 
 	}
 
@@ -143,11 +145,25 @@ class TransactionGateway extends AbstractGateway {
 			}
 		}
 
+		if(array_key_exists('offer_id', $data)) {
+			$offer = $this->offer->find($data['offer_id']);
+			if($offer) {
+				$amount = $offer->amount;
+			} else {
+				unset($data['offer_id']);
+			}
+		}
+		else {
+			unset($data['offer_id']);
+			$amount = $this->product->total($products);
+		}
+
+
+
 		// add geo location
 		$data['info'] = $this->setInfo($data);
 
 		// prepare the information
-		$amount = $this->product->total($products);
 		$data = array_merge($data, [
 			'first_name' => $user->first_name,
 			'last_name' => $user->last_name,
@@ -214,6 +230,9 @@ class TransactionGateway extends AbstractGateway {
 			if($transaction) {
 				foreach($data['products'] as $product) {
 					$product['transaction_id'] = $transaction->id;
+					if(array_key_exists('offer_id', $data)) {
+						$product['product_amount'] = $data['amount'];
+					}
 					$detail = $this->detail->create($product);
 					if(!$detail) {
 						$this->errors = $this->detail->errors();
@@ -318,6 +337,11 @@ class TransactionGateway extends AbstractGateway {
 					return false;
 				}
 
+				// set the offer price in the invoice detail
+				if(array_key_exists('offer_id', $data)) {
+					$product['product_amount'] = $data['amount'];
+				}
+
 				$invoice_detail = $this->invoice->addDetail(array_merge($product, [
 					'subscription_id' => $subscription->id,
 					'invoice_id' => $invoice->id
@@ -384,6 +408,7 @@ class TransactionGateway extends AbstractGateway {
 					$this->errors = $this->invoice->errors();
 					return false;
 				}
+
 				Event::fire(new SubscriptionRenewedEvent([
 					'subscription_id' => $data['subscription_id'],
 					'user_id' => $data['user_id'],

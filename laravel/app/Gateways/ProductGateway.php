@@ -33,6 +33,7 @@ class ProductGateway extends AbstractGateway {
 		}
 		return $total;
 	}
+
 	public function getPrice(Product $product)
 	{
 		return $this->repository->getPrice($product);
