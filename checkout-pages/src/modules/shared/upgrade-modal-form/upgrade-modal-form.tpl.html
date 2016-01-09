@@ -1,0 +1,191 @@
+<div class="modal-header">
+    <button type="button" class="close" data-ng-click="close()" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <h3 class="modal-title">Upgrade Form</h3>
+</div>
+<div class="modal-body upgrade-modal-form">
+    <form id="formCheckout" name="formCheckout" novalidate="novalidate" autocomplete="off">
+        <div id="checkout-forms" class="checkout-forms content-left">
+            <div>
+                <h3 id="co-f1">Account Details</h3>
+
+                <div class="form-wrapper">
+
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="email">Email</label>
+                        <input type="email"
+                               name="email"
+                               readonly="readonly"
+                               autocomplete="address-level4"
+                               class="form-control"
+                               id="email"
+                               required
+                               data-ng-model="userData.email">
+                    </div>
+
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="email">Username</label>
+                        <input type="text"
+                               name="username"
+                               readonly="readonly"
+                               class="form-control"
+                               id="username"
+                               data-ng-model="userData.username">
+                    </div>
+
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="first_name">First Name</label>
+                        <input type="text"
+                               name="first_name"
+                               readonly="readonly"
+                               data-ng-blur="autoCompleteBillingName()"
+                               class="form-control"
+                               id="first_name"
+                               required
+                               data-ng-model="userData.first_name">
+                    </div>
+
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="last_name">Last Name</label>
+                        <input type="text"
+                               name="last_name"
+                               readonly="readonly"
+                               data-ng-blur="autoCompleteBillingName()"
+                               class="form-control"
+                               id="last_name"
+                               required
+                               data-ng-model="userData.last_name">
+                    </div>
+
+                    <div class="form-group has-feedback" data-show-errors>
+                        <label for="phone">Mobile Phone</label>
+                        <input type="text"
+                               name="phone"
+                               readonly="readonly"
+                               data-ng-minlength="10"
+                               data-ng-maxlength="12"
+                               class="form-control"
+                               id="phone"
+                               data-ng-model="userData.phone">
+                    </div>
+
+                </div>
+            </div>
+            <div>
+                <h3 id="">Billing Address</h3>
+
+                <div class="form-wrapper">
+
+                    <div class="form-group has-feedback" data-show-errors>
+                        <select class="form-control"
+                                ng-model="address"
+                                name="address"
+                                required
+                                ng-options="address.address for address in addresses">
+                        </select>
+                        <span class="glyphicon glyphicon-map-marker form-control-feedback"
+                              aria-hidden="true"></span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h3 id="co-f3" class="left">Payment Information</h3>
+
+                <div class="clearfix">
+                    <div class="right credit-cards">
+                        <img src="/assets/images/creditcards/amex.png" width="30">
+                        <img src="/assets/images/creditcards/visa.png" width="30">
+                        <img src="/assets/images/creditcards/mastercard.png" width="30">
+                        <img src="/assets/images/creditcards/discover.png" width="30">
+                    </div>
+                </div>
+
+                <div class="form-wrapper">
+
+                    <div class="form-group has-feedback" data-show-errors>
+                        <select class="form-control"
+                                name="card"
+                                ng-model="card"
+                                required
+                                ng-options="card.last_four for card in cards">
+                        </select>
+                <span class="glyphicon glyphicon-credit-card form-control-feedback"
+                      aria-hidden="true"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group has-feedback">
+                <input type="checkbox"
+                       name="terms"
+                       id="terms"
+                       data-ng-model="formData.terms"
+                       required>
+                <label for="terms" uib-tooltip="Check terms!" tooltip-is-open="showAgreementWarning"
+                       tooltip-class="error">
+                    I agree to the payment terms as stated above
+                </label>
+            </div>
+        </div>
+        <div id="checkout-info" class="content-right">
+            <div style="background: #f6f1eb">
+                <h3>Dex Signals Monthly International</h3>
+
+                <p>
+                    Getting Binary Option Signals From Dex
+                    Signals Helps Both The Novice And
+                    Experienced Binary Option Traders Stop Guessing And Start Winning!
+
+                </p>
+
+                <div class="form-wrapper">
+                    <select name="currency">
+                        <option>USD</option>
+                    </select>
+                </div>
+            </div>
+            <div class="checkout-prices">
+                <div class="clearfix">
+                    <div class="left">Initial Payment</div>
+                    <div class="right">{{promotionalPrice.initial_payment | currency: '$'}}</div>
+                </div>
+                <div class="clearfix">
+                    <div class="left">Tax</div>
+                    <div class="right">$0.00</div>
+                </div>
+                <div id="checkout-total" class="clearfix">
+                    <div class="left">Today's Payment</div>
+                    <div class="right">{{promotionalPrice.initial_payment | currency: '$'}}</div>
+                </div>
+                <p>
+                    Immediate access to this product or service is available once payment is approved.
+                </p>
+            </div>
+            <div class="checkout-prices">
+                <h3>Future Payments</h3>
+
+                <div id="checkout-price-monthly" class="clearfix">
+                    <div class="left">
+                        Monthly Payment of
+                    </div>
+                    <div class="right">
+                        {{promotionalPrice.future_payments | currency: '$'}}
+                    </div>
+                </div>
+                <p>
+                    *<br>
+                    Next payment will be billed on {{nextPaymentDate}}.
+                    Amount includes taxes subject to change based on customer location and rate
+                    adjustments.
+                </p>
+            </div>
+        </div>
+    </form>
+    <div class="clearfix"></div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning btn-block"
+            data-ng-click="send()">Upgrade
+    </button>
+</div>

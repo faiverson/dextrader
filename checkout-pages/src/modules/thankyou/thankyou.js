@@ -40,6 +40,7 @@ angular.module('app.thankyou', ['ui.router'])
             };
 
             vm.init = function () {
+                $scope.order_date = moment.unix($stateParams.invoice).format('DD/MM/YYYY');
                 if (angular.isDefined($stateParams.invoice)) {
                     vm.loadInvoice($stateParams.invoice);
                 }

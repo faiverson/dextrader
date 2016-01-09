@@ -23,7 +23,8 @@ angular.module('app', [
         'app.term-and-conditions',
         'app.dex-na',
         'app.dex-fx',
-        'app.whitelist'
+        'app.whitelist',
+        'app.refund'
     ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {
