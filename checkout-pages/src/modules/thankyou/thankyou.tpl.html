@@ -55,9 +55,9 @@
         <h3>Billed To</h3>
 
         <div id="billed-to">
-            <h3 class="size17 bold">[full name]</h3>
-            [address],
-            [zip code]
+            <h3 class="size17 bold">{{invoice.first_name}} {{invoice.last_name}}</h3>
+            {{invoice.billing_address}},
+            {{invoice.billing_zip}}
         </div>
         <div id="billing-data" class="bg-gray">
             <div class="clearfix">
@@ -70,10 +70,10 @@
             </div>
             <div class="clearfix">
                 <div class="left">
-                    Order Data
+                    Order Date
                 </div>
                 <div class="right">
-                    [order date]
+                    {{order_date}}
                 </div>
             </div>
             <div class="bold">
@@ -103,21 +103,13 @@
                     PRICE
                 </div>
             </div>
-            <div class="clearfix">
+            <div class="clearfix" data-ng-repeat="prd in invoice.products">
                 <div class="left">
-                    <span class="bold">[product_name]</span> – $[product_amount] today and the re-bills for $[product_amount] every
+                    <span class="bold">{{prd.product_display_name}}</span> – {{prd.product_amount | currency:'$'}} today and the re-bills for {{prd.product_amount | currency:'$'}} every
                     30 days until you decide to cancel
                 </div>
                 <div class="right">
-                    $[product_amount]
-                </div>
-            </div>
-            <div class="clearfix">
-                <div class="left">
-                    <span class="bold">Silver Traffic Package?????</span>
-                </div>
-                <div class="right">
-                    $660.00????
+                    {{prd.product_amount | currency:'$'}}
                 </div>
             </div>
             <div id="checkout-total" class="clearfix">
@@ -125,7 +117,7 @@
                     Total
                 </div>
                 <div class="right">
-                    $[total]
+                    {{invoice.amount | currency:'$'}}
                 </div>
             </div>
             <p>

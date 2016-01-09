@@ -1,4 +1,4 @@
-angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
+angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-form'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('dex_ib', {
@@ -301,8 +301,27 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed'])
     .controller('DexIBProCtrl', ['$scope', function ($scope) {
 
     }])
-    .controller('DexIBProUpgradeCtrl', ['$scope', function ($scope) {
+    .controller('DexIBProUpgradeCtrl', ['$scope', '$uibModal', 'Notification', function ($scope, $uibModal, Notification) {
         $scope.videoId = 'lYKRPzOi1zI';
+
+        $scope.openOrderNowForm = function (cc_id) {
+
+            var modalInstance = $uibModal.open({
+                templateUrl: 'modules/shared/upgrade-modal-form/upgrade-modal-form.tpl.html',
+                controller: 'UpgradeModalFormCtrl',
+                size: 'lg',
+                resolve: {
+                    products: function() { return [2]; }
+                }
+            });
+
+            modalInstance.result.then(function (email) {
+                Notification.success('Upgrade complete successfully!');
+            }, function () {
+                //$log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
     }])
 
     .controller('DexIBSalesCtrl', ['$scope', 'TestimonialsService', '$stateParams', function ($scope, TestimonialsService, $stateParams) {

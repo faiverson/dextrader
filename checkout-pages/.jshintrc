@@ -25,6 +25,7 @@
     "angular": true,
     "process": true,
     "moment": true,
-    "zE": true
+    "zE": true,
+    "zEmbed": true
   }
 }

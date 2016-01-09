@@ -1,4 +1,4 @@
-angular.module('app.upsell', ['ui.router'])
+angular.module('app.upsell', ['ui.router', 'app.upgrade-modal-form'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('upsell', {
@@ -11,6 +11,62 @@ angular.module('app.upsell', ['ui.router'])
             });
     })
 
-    .controller('UpsellCtrl', ['$scope', '$stateParams', function ($scope, $stateParams) {
-        $scope.invoice = $stateParams.invoice;
-    }]);
+    .controller('UpsellCtrl', ['$scope', '$stateParams', '$state', 'InvoicesService', '$uibModal', 'Notification',
+        function ($scope, $stateParams, $state, InvoicesService, $uibModal, Notification) {
+            var vm = this;
+            $scope.invoice = $stateParams.invoice;
+
+            vm.loadInvoice = function (id) {
+                $scope.invoice_details = InvoicesService.getInvoice(id);
+                console.log($scope.invoice_details);
+            };
+
+            vm.init = function () {
+                if (angular.isDefined($stateParams.invoice)) {
+                    vm.loadInvoice($stateParams.invoice);
+                }
+            };
+
+            vm.init();
+
+            $scope.timerFinish = function () {
+                if(angular.isDefined(vm.upgradeModalForm)){
+                    vm.upgradeModalForm.dismiss('close');
+                }
+                $state.go('thankyou', {invoice: $stateParams.invoice});
+            };
+
+            $scope.timerChange = function (remainSeconds) {
+                $scope.invoice_details.upsell_timer_seconds = remainSeconds;
+                InvoicesService.setInvoice($stateParams.invoice, $scope.invoice_details);
+            };
+
+            $scope.openUpgradeForm = function () {
+
+                vm.upgradeModalForm = $uibModal.open({
+                    templateUrl: 'modules/shared/upgrade-modal-form/upgrade-modal-form.tpl.html',
+                    controller: 'UpgradeModalFormCtrl',
+                    size: 'lg',
+                    resolve: {
+                        products: function () {
+                            return [2];
+                        },
+                        invoiceData: function () {
+                            return $scope.invoice_details;
+                        },
+                        promotionalPrice: function () {
+                            return {
+                                initial_payment: 1,
+                                future_payments: 47
+                            };
+                        }
+                    }
+                });
+
+                vm.upgradeModalForm.result.then(function (email) {
+                    Notification.success('Upgrade complete successfully!');
+                }, function () {
+                    //$log.info('Modal dismissed at: ' + new Date());
+                });
+            };
+        }]);

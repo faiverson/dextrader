@@ -113,7 +113,7 @@ class GetResponse
 			return $response->result;
 		}
 		else if ( $this->errorsOn ) {
-            var_dump($response);
+            //var_dump($response);
 			return $response->error;
 		}
 		return $response;

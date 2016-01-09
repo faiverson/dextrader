@@ -189,8 +189,32 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
 
         }
 
+        function upgrade(data, user_id, token) {
+            var endpoint = service,
+                deferred = $q.defer();
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http({
+                method: "POST",
+                url: endpoint,
+                data: data,
+                headers: {'Authorization': 'Bearer ' + token}
+            }).then(success, error);
+
+            return deferred.promise;
+
+        }
+
         return {
-            send: send
+            send: send,
+            upgrade: upgrade
         };
 
     }])
@@ -348,6 +372,8 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 externalId: AuthService.isLoggedIn() ? AuthService.getLoggedInUser().username : 'Anonymous'
             });
         }
+
+        zEmbed(setup);
 
         return {
             show: show

@@ -1,0 +1,163 @@
+<div class="modal-header">
+    <button type="button" class="close" data-ng-click="close()" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+    <h3 class="modal-title">Upgrade Form</h3>
+</div>
+<div class="modal-body">
+    <form id="formCheckout" name="formCheckout" novalidate="novalidate" autocomplete="off">
+        <div class="">
+            <div>
+                <h3 id="co-f1">Account Details</h3>
+
+                <div class="form-wrapper">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group has-feedback" data-show-errors>
+                                <label for="email">Email</label>
+                                <input type="email"
+                                       name="email"
+                                       autocomplete="address-level4"
+                                       class="form-control"
+                                       id="email"
+                                       required
+                                       data-ng-model="userData.email">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group has-feedback" data-show-errors>
+                                <label for="email">Username</label>
+                                <input type="text"
+                                       name="username"
+                                       class="form-control"
+                                       id="username"
+                                       data-ng-model="userData.username">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group has-feedback" data-show-errors>
+                                <label for="first_name">First Name</label>
+                                <input type="text"
+                                       name="first_name"
+                                       data-ng-blur="autoCompleteBillingName()"
+                                       class="form-control"
+                                       id="first_name"
+                                       required
+                                       data-ng-model="userData.first_name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group has-feedback" data-show-errors>
+                                <label for="last_name">Last Name</label>
+                                <input type="text"
+                                       name="last_name"
+                                       data-ng-blur="autoCompleteBillingName()"
+                                       class="form-control"
+                                       id="last_name"
+                                       required
+                                       data-ng-model="userData.last_name">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group has-feedback" data-show-errors>
+                                <label for="phone">Mobile Phone</label>
+                                <input type="text"
+                                       name="phone"
+                                       data-ng-minlength="10"
+                                       data-ng-maxlength="12"
+                                       class="form-control"
+                                       id="phone"
+                                       data-ng-model="userData.phone">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3 id="co-f2">Billing Address</h3>
+
+                        <div class="form-wrapper">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="form-group has-feedback" data-show-errors>
+                                        <select class="form-control"
+                                                ng-model="address"
+                                                name="address"
+                                                required
+                                                ng-options="address.address for address in addresses">
+                                        </select>
+                                <span class="glyphicon glyphicon-credit-card form-control-feedback"
+                                      aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-primary btn-block" data-ng-click="closeAndNew()">
+                                        <i class="glyphicon glyphicon-plus"></i> New
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h3 id="co-f3" class="left">Payment Information</h3>
+
+                        <div class="clearfix">
+                            <div class="right credit-cards">
+                                <img src="/front/assets/images/creditcards/amex.png" width="30">
+                                <img src="/front/assets/images/creditcards/visa.png" width="30">
+                                <img src="/front/assets/images/creditcards/mastercard.png" width="30">
+                                <img src="/front/assets/images/creditcards/discover.png" width="30">
+                            </div>
+                        </div>
+
+                        <div class="form-wrapper">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="form-group has-feedback" data-show-errors>
+                                        <select class="form-control"
+                                                name="card"
+                                                ng-model="card"
+                                                required
+                                                ng-options="card.last_four for card in cards">
+                                        </select>
+                                <span class="glyphicon glyphicon-credit-card form-control-feedback"
+                                      aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-primary btn-block" data-ng-click="closeAndNew()">
+                                        <i class="glyphicon glyphicon-plus"></i> New
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="checkbox"
+                       name="terms"
+                       id="terms"
+                       data-ng-model="formData.terms"
+                       required>
+                <label for="terms" uib-tooltip="Check terms!" tooltip-is-open="showAgreementWarning"
+                       tooltip-class="warning">
+                    I agree to the payment terms as stated above
+                </label>
+            </div>
+
+            <!--<a href="#" class="submitbutton bg-orange align-center">Create Account</a>-->
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning btn-block"
+            data-ng-click="send()">Upgrade
+    </button>
+</div>

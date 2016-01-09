@@ -1006,9 +1006,42 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             });
         }
 
+        zEmbed(setup);
+
         return {
             show: show
         };
+    }])
+
+    .factory('CheckoutService', ['$q', '$site-configs', '$http', function ($q, $config, $http) {
+        var service = $config.API_BASE_URL + 'checkout';
+
+        function send(data, user_id) {
+            var endpoint = service + '/upgrade/' + user_id,
+                deferred = $q.defer();
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http({
+                method: "POST",
+                url: endpoint,
+                data: data,
+            }).then(success, error);
+
+            return deferred.promise;
+
+        }
+
+        return {
+            send: send
+        };
+
     }])
 
     .factory('UserRolesService', ['$http', '$q', '$site-configs', function ($http, $q, $configs) {

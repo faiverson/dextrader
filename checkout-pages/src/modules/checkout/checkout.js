@@ -36,8 +36,6 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 funnel_id: 1
             };
 
-            $scope.nextPaymentDate = moment().add(3, 'D').format('MM/DD/YYYY');
-
             $scope.userData = {};
 
             vm.feelExpMonth = function () {
@@ -211,8 +209,11 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
 
             vm.success = function (res) {
                 var internalId = moment().unix();
+                var invoice_details = res.data;
+                invoice_details.upsell_timer_seconds = 240;
+                invoice_details.downsell_timer_seconds = 240;
 
-                InvoicesService.setInvoice(internalId, res.data);
+                InvoicesService.setInvoice(internalId, invoice_details);
 
                 $state.go('upsell', { invoice: internalId });
                 Notification.success('Congratulations!!! Account has been created!');
