@@ -11,7 +11,6 @@ class Token {
 
 	public static function getId($request)
 	{
-
 		$payload = JWTAuth::setRequest($request)->getPayload();
 		return $payload['sub'];
 	}

@@ -108,6 +108,13 @@ class TransactionController extends Controller
 
 		}
 
-		return response()->ok($response);
+		try {
+			$token = Token::add($response['user_id']);
+		}
+		catch (JWTException $e) {
+			return response()->error('Could not create a token', $e->getStatusCode());
+		}
+
+		return response()->ok(compact('token'));
 	}
 }

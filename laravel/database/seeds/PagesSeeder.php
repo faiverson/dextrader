@@ -16,6 +16,7 @@ class PagesSeeder extends Seeder
 			$this->fetching();
 		}
 		else {
+
 			Page::create([
 				'site' => 'secure.dextrader.com',
 				'domain' => 'sales',
