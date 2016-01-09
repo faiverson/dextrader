@@ -8,6 +8,7 @@ use Config;
 use Event;
 use App\Events\CheckoutEvent;
 use Log;
+use Token;
 
 class TransactionController extends Controller
 {

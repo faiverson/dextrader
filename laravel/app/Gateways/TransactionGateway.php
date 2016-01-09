@@ -158,8 +158,6 @@ class TransactionGateway extends AbstractGateway {
 			$amount = $this->product->total($products);
 		}
 
-
-
 		// add geo location
 		$data['info'] = $this->setInfo($data);
 
