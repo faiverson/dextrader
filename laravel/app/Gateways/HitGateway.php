@@ -36,8 +36,11 @@ class HitGateway extends AbstractGateway {
 			}
 		}
 
-		if(array_key_exists('tag', $data) && array_key_exists('enroller_id', $data)) {
-			$data['tag_id'] = $this->tag->getIdByTag($data['enroller_id'], $data['tag']);
+		if(array_key_exists('tag', $data) && array_key_exists('enroller_id', $data) ) {
+			$tag = $this->tag->getIdByTag($data['enroller_id'], $data['tag']);
+			if($tag) {
+				$data['tag_id'] = $tag->id;
+			}
 		}
 
 		if( ! $this->createValidator->with($data)->passes() )

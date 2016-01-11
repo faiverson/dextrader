@@ -10,6 +10,7 @@ use App\Repositories\CommissionRepository;
 use Config;
 use Event;
 
+
 class CommissionGateway extends AbstractGateway {
 
 	protected $repository;
@@ -65,5 +66,10 @@ class CommissionGateway extends AbstractGateway {
 			]);
 			Event::fire(new CommissionEvent($comm));
 		}
+	}
+
+	public function getCommissionToPay()
+	{
+		return $this->repository->getCommissionToPay();
 	}
 }

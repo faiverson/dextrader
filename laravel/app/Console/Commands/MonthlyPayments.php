@@ -7,6 +7,7 @@ use App\Gateways\TransactionGateway;
 use Illuminate\Console\Command;
 use Log;
 
+
 class MonthlyPayments extends Command
 {
     /**

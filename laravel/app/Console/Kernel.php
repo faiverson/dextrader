@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
 //        \App\Console\Commands\Inspire::class,
 		\App\Console\Commands\GRCampaigns::class,
-		\App\Console\Commands\MonthlyPayments::class
+		\App\Console\Commands\MonthlyPayments::class,
+		\App\Console\Commands\CommissionsPayments::class
     ];
 
 	protected $bootstrappers = [
@@ -40,6 +41,9 @@ class Kernel extends ConsoleKernel
     {
 		$path = storage_path('logs/payments-monthly-' . date('Y-m-d') . '.log');
 		// run the cronjob every 2 hours
-		$schedule->command('payments:monthly')->cron('0 */2 * * * *')->sendOutputTo($path);;
+		$schedule->command('payments:monthly')->cron('0 */2 * * * *')->sendOutputTo($path);
+
+		$path = storage_path('logs/comms-weekly-' . date('Y-m-d') . '.log');
+		$schedule->command('comms:weekly')->cron('0 */2 * * * *')->sendOutputTo($path);
     }
 }

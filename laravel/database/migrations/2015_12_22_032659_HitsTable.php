@@ -34,6 +34,9 @@ class HitsTable extends Migration
 				->references('id')->on('products')
 				->onUpdate('cascade')->onDelete('cascade');
 
+			$table->string('tag', 80)->nullable();
+			$table->string('enroller', 80)->nullable();
+
 			$table->text('info')->nullable();
 			$table->timestamps();
 		});

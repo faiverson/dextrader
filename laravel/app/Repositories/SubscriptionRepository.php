@@ -6,6 +6,7 @@ use App\Repositories\Abstracts\Repository as AbstractRepository;
 use App\Models\Subscription;
 use DateTime;
 
+
 class SubscriptionRepository extends AbstractRepository implements SubscriptionRepositoryInterface
 {
 	public function model()
