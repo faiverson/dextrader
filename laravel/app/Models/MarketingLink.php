@@ -20,7 +20,7 @@ class MarketingLink extends Model
 
 	protected $appends = array('funnel_id');
 
-	protected $fillable = ['title', 'image', 'link', 'description', 'campaign_id'];
+	protected $fillable = ['title', 'image', 'link', 'products', 'description', 'campaign_id'];
 
 	public function getMarketingLinkIdAttribute()
 	{

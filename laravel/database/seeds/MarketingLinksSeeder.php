@@ -23,6 +23,7 @@ class MarketingLinksSeeder extends Seeder
 			'description' => 'IB sale page',
 			'image' => 'dextrader.com/ib',
 			'link' => 'dextrader.com/ib',
+			'products' => '1,2'
 		]);
 
 		MarketingLink::create([
@@ -31,6 +32,7 @@ class MarketingLinksSeeder extends Seeder
 			'description' => 'IB checkout page',
 			'image' => 'dextrader.com/ib',
 			'link' => 'secure.dextrader.com/ib',
+			'products' => '1,2,3,4',
 		]);
 
 		if (App::Environment() === 'local') {

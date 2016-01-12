@@ -18,7 +18,7 @@ class PaymentsTable extends Migration
 			$table->decimal('prev_balance', 10, 2)->signed()->nullable(false);
 			$table->decimal('balance', 10, 2)->signed()->nullable(false);
 			$table->string('ledger_type');
-			$table->dateTime('payout_dt');
+			$table->dateTime('payout_dt')->index();
 			$table->timestamps();
 		});
     }

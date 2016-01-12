@@ -19,6 +19,7 @@ class MarketingLinks extends Migration
 			$table->string('image')->nullable();
 			$table->string('link')->nullable(false)->index();
 			$table->text('description')->nullable();
+			$table->string('products')->nullable();
 
 			$table->integer('campaign_id')->unsigned()->nullable()->default(null);
 			$table->foreign('campaign_id')->references('id')->on('funnel_campaigns')
