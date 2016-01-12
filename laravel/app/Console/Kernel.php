@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
 //        \App\Console\Commands\Inspire::class,
 		\App\Console\Commands\GRCampaigns::class,
 		\App\Console\Commands\MonthlyPayments::class,
+		\App\Console\Commands\CommissionsStatus::class,
 		\App\Console\Commands\CommissionsPayments::class
     ];
 

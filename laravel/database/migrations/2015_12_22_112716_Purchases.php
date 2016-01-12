@@ -47,7 +47,6 @@ class Purchases extends Migration
 				->references('id')->on('subscriptions')
 				->onUpdate('cascade')->onDelete('cascade');
 
-
 			$table->dateTime('refunded_at')->nulleable(false)->default(null);
 			$table->dateTime('cancelled_at')->nulleable(false)->default(null);
 

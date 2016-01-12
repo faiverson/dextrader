@@ -40,8 +40,9 @@ class CommissionsPayments extends Command
      */
     public function handle()
     {
-		$this->info('Starting commission proccess');
-		$comms = $this->commissionGateway->getCommissionToPay('today');
+		$this->info('Starting commission payment proccess');
+		$comms = $this->commissionGateway->getCommissionToPay();
+		$this->paymentGateway->getCommissionToPay($comms);
 		dd($comms->toArray());
     }
 }
