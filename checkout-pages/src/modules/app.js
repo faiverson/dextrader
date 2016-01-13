@@ -26,6 +26,8 @@ angular.module('app', [
 
         $urlRouterProvider.otherwise('ib');
         showErrorsConfigProvider.showSuccess(true);
+        $httpProvider.interceptors.push('httpRequestInterceptor');
+
         NotificationProvider.setOptions({
             delay: 10000,
             startTop: 20,
@@ -37,6 +39,7 @@ angular.module('app', [
         });
 
         localStorageServiceProvider
+            .setStorageType('sessionStorage')
             .setPrefix('dextraderCP');
 
         $locationProvider.html5Mode(true);

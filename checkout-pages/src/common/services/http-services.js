@@ -2,34 +2,36 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
 
     .factory('AuthService', ['$http', '$q', '$site-configs', 'localStorageService', 'jwtHelper', '$objects', '$filter', '$rootScope',
         function ($http, $q, $configs, localStorageService, jwtHelper, $objects, $filter, $rootScope) {
+            var service = $configs.API_BASE_URL + 'pages';
 
-            function login(username, password) {
-                var endpoint = $configs.API_BASE_URL + 'login';
-                var deferred = $q.defer();
+            function login() {
+                var endpoint = service,
+                    deferred = $q.defer(),
+                    data = {'domain': 'sales', 'password': 'sAles_dexTr4d3r'};
 
                 function success(res) {
                     if (res.data.success) {
-                        deferred.resolve(res.data);
+                        // Set the token into local storage
+                        localStorageService.set('token', res.data.data.token);
+
+                        deferred.resolve();
                     } else {
                         deferred.reject(res);
                     }
                 }
 
                 function error(err) {
-                    deferred.reject(err.data);
+                    deferred.reject(err);
                 }
+
 
                 $http({
                     url: endpoint,
                     method: 'POST',
                     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-                    withCredentials: false,
-                    data: $objects.toUrlString({
-                        username: username,
-                        password: password
-                    })
+                    data: $objects.toUrlString(data),
+                    withCredentials: false
                 }).then(success, error);
-
 
                 return deferred.promise;
             }
@@ -147,6 +149,58 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             };
         }])
 
+    .factory('httpRequestInterceptor', ['$q', 'localStorageService', '$injector', function ($q, localStorageService, $injector) {
+        var alreadyRequestToken = false;
+        var requestsWaitingForToken = [];
+        return {
+            request: function ($config) {
+                var header;
+                var deferred = $q.defer();
+
+                // Skip authentication for any requests ending in .html
+                if ($config.url.substr($config.url.length - 5) === '.html') {
+                    deferred.resolve($config);
+                    return deferred.promise;
+                }
+
+                if ($config.withCredentials !== false) {
+                    var AuthService = $injector.get('AuthService');
+                    if (!AuthService.isLoggedIn()) {
+
+                        requestsWaitingForToken.push({ def: deferred, config: $config });
+
+                        if(!alreadyRequestToken){
+
+                            AuthService.login()
+                                .then(function (res) {
+
+                                    requestsWaitingForToken.forEach(function(def){
+                                        def.config.withCredentials = true;
+                                        header = 'Bearer ' + localStorageService.get('token');
+                                        def.config.headers.Authorization = header;
+                                        def.def.resolve(def.config);
+                                    });
+
+                                    alreadyRequestToken = false;
+                                });
+
+                            alreadyRequestToken = true;
+                        }
+
+                    }else{
+                        $config.withCredentials = true;
+                        header = 'Bearer ' + localStorageService.get('token');
+                        $config.headers.Authorization = header;
+                        deferred.resolve($config);
+                    }
+                }else{
+                    deferred.resolve($config);
+                }
+                return deferred.promise; //$config;
+            }
+        };
+    }])
+
     .factory('InvoicesService', ['$http', '$q', '$site-configs', 'localStorageService', function ($http, $q, $configs, localStorageService) {
 
         function getInvoice(id) {
@@ -215,6 +269,39 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         return {
             send: send,
             upgrade: upgrade
+        };
+
+    }])
+
+    .factory('SpecialOffersService', ['$q', '$site-configs', '$http', function ($q, $config, $http) {
+        var service = $config.API_BASE_URL + 'offers';
+
+        function query(funnel_id) {
+            var endpoint = service,
+                deferred = $q.defer();
+
+            if (angular.isUndefined(funnel_id)) {
+                deferred.reject('Funnel ID is required');
+            }
+
+            endpoint += '/' + funnel_id;
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+
+        }
+
+        return {
+            query: query
         };
 
     }])
@@ -309,35 +396,6 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
 
     }])
 
-    .factory('PageService', ['$q', '$site-configs', '$http', function ($q, $config, $http) {
-        var service = $config.API_BASE_URL + 'pages';
-
-        function getToken() {
-            var endpoint = service,
-                deferred = $q.defer(),
-                data = {'domain': 'sales', 'password': 'sAles_dexTr4d3r'};
-
-            function success(res) {
-                deferred.resolve(res.data);
-            }
-
-            function error(err) {
-                deferred.reject(err);
-            }
-
-
-            $http.post(endpoint, data).then(success, error);
-
-            return deferred.promise;
-
-        }
-
-        return {
-            getToken: getToken
-        };
-
-    }])
-
     .factory('ChatService', ['AuthService', function (AuthService) {
 
         // jshint ignore:start
@@ -362,7 +420,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             zE.activate({hideOnClose: true});
         }
 
-        function setup(){
+        function setup() {
 
             zE.hide();
             zE.setLocale('en');
