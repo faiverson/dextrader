@@ -52,4 +52,9 @@ class FXSignal extends Model
 	{
 		$this->attributes['end_price'] = number_format($value, 5, '.', '');
 	}
+
+	public function setAssetAttribute($value)
+	{
+		$this->attributes['asset'] = strlen($value) === 6 ? substr($value, 0, 3) . '/' . substr($value, -3) : $value;
+	}
 }
