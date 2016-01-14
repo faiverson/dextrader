@@ -4,6 +4,37 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         function ($http, $q, $configs, localStorageService, jwtHelper, $objects, $filter, $rootScope) {
             var service = $configs.API_BASE_URL + 'pages';
 
+            function userLogin(username, password) {
+                var endpoint = $configs.API_BASE_URL + 'login';
+                var deferred = $q.defer();
+
+                function success(res) {
+                    if (res.data.success) {
+                        deferred.resolve(res.data);
+                    } else {
+                        deferred.reject(res);
+                    }
+                }
+
+                function error(err) {
+                    deferred.reject(err.data);
+                }
+
+                $http({
+                    url: endpoint,
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+                    withCredentials: false,
+                    data: $objects.toUrlString({
+                        username: username,
+                        password: password
+                    })
+                }).then(success, error);
+
+
+                return deferred.promise;
+            }
+
             function login() {
                 var endpoint = service,
                     deferred = $q.defer(),
@@ -139,6 +170,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             }
 
             return {
+                userLogin: userLogin,
                 login: login,
                 getLoggedInUser: getLoggedInUser,
                 isLoggedIn: isLoggedIn,

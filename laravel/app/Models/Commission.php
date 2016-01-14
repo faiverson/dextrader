@@ -45,9 +45,10 @@ class Commission extends Model
 		return $this->attributes['id'];
 	}
 
-	public function setHoldbackAttribute()
+	public function setAmountAttribute($value)
 	{
-		$this->attributes['holdback'] = $this->attributes['amount'] * Config::get('dextrader.holdback');
+		$this->attributes['amount'] = $value;
+		$this->attributes['holdback'] = $value * Config::get('dextrader.holdback');
 	}
 
 	public function from()
@@ -63,7 +64,7 @@ class Commission extends Model
 	public function products()
 	{
 		$query = $this->hasMany(InvoiceDetail::class, 'invoice_id', 'invoice_id');
-		return $query->select(['invoice_id', 'invoices_detail.product_display_name']);
+		return $query->select(['invoice_id', 'invoices_detail.product_display_name', 'invoices_detail.product_amount']);
 	}
 
 

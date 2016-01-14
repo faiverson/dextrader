@@ -256,7 +256,22 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
         $scope.pagination = {
             totalItems: 20,
             currentPage: 1,
-            itemsPerPage: 5
+            itemsPerPage: 10
+        };
+
+        $scope.sortBy = {
+            column: 'created_at',
+            dir: 'desc',
+            sort: function (col) {
+                if (col === this.column) {
+                    this.dir = this.dir === 'asc' ? 'desc' : 'asc';
+                } else {
+                    this.column = col;
+                    this.dir = 'asc';
+                }
+
+                vm.getCommissions();
+            }
         };
 
         $scope.filters = {
@@ -269,6 +284,18 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
             apply: function () {
                 //TODO call api
             }
+        };
+        
+        $scope.calculateRetail = function (products) {
+            var amount = 0;
+
+            if(angular.isArray(products)){
+                angular.forEach(products, function (prd) {
+                    amount += prd.product_amount;
+                });
+            }
+
+            return amount;
         };
 
         vm.getCommissionTotals = function () {
@@ -285,6 +312,15 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
         };
 
         vm.getCommissions = function () {
+            var order = [];
+            order[$scope.sortBy.column] = $scope.sortBy.dir;
+
+            var params = {
+                offset: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
+                limit: $scope.pagination.itemsPerPage,
+                order: order
+            };
+
             function success(res) {
                 $scope.commissions = res.data;
             }
@@ -293,7 +329,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 Notification.error('Ups! there was an error trying to load commissions!');
             }
 
-            CommissionService.getCommissions()
+            CommissionService.getCommissions(params)
                 .then(success, error);
         };
 

@@ -89,28 +89,42 @@
     <table class="base-table table-commissions">
         <thead>
         <tr>
-            <th>Date</th>
-            <th>Status</th>
+            <th sortable="created_at"
+                current-sort="sortBy.column"
+                current-dir="sortBy.dir"
+                data-ng-click="sortBy.sort('created_at')">Date</th>
+            <th sortable="status"
+                current-sort="sortBy.column"
+                current-dir="sortBy.dir"
+                data-ng-click="sortBy.sort('status')">Status</th>
             <th>Customer</th>
             <th>Enroller</th>
             <th>Product</th>
             <th>Retail</th>
-            <th>Comission</th>
-            <th>10% h</th>
+            <th sortable="amount"
+                current-sort="sortBy.column"
+                current-dir="sortBy.dir"
+                data-ng-click="sortBy.sort('amount')">Comission</th>
+            <th sortable="holdback"
+                current-sort="sortBy.column"
+                current-dir="sortBy.dir"
+                data-ng-click="sortBy.sort('holdback')">10% h</th>
             <th>Income</th>
         </tr>
         </thead>
         <tbody>
         <tr data-ng-repeat="commission in commissions">
-            <td data-ng-bind="commission.date | date : 'dd MMM yyyy'"></td>
+            <td data-ng-bind="commission.created_at | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY'"></td>
             <td data-ng-bind="commission.status"></td>
-            <td data-ng-bind="commission.customer"></td>
+            <td data-ng-bind="commission.from.full_name"></td>
             <td data-ng-bind="commission.enroller"></td>
-            <td data-ng-bind="commission.product"></td>
-            <td data-ng-bind="commission.retail | currency: '$'"></td>
-            <td data-ng-bind="commission.commission  | currency: '$'"></td>
-            <td data-ng-bind="commission.p | currency: '$'"></td>
-            <td data-ng-bind="commission.income | currency: '$'"></td>
+            <td>
+                <p class="prd-name" data-ng-repeat="prd in commission.products" data-ng-bind="prd.product_display_name"></p>
+            </td>
+            <td data-ng-bind="calculateRetail(commission.products) | currency: '$'"></td>
+            <td data-ng-bind="commission.amount  | currency: '$'"></td>
+            <td data-ng-bind="commission.holdback | currency: '$'"></td>
+            <td data-ng-bind="(commission.amount - commission.holdback) | currency: '$'"></td>
         </tr>
 
         </tbody>
