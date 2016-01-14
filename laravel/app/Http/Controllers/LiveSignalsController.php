@@ -43,7 +43,7 @@ class LiveSignalsController extends Controller
 
 	public function store_by_page(Request $request)
 	{
-		$type = $request->input('type_product');
+		$type = strtolower($request->input('type_product'));
 		if(in_array($type, $this->types)) {
 			return $this->store($request->all(), $type);
 		}
@@ -59,6 +59,10 @@ class LiveSignalsController extends Controller
 
 	public function store($data, $type)
 	{
+		if(array_key_exists('trade_type', $data)) {
+			$data['trade_type'] = strtoupper($data['trade_type']);
+		}
+
 		$response = $this->gateway->add($data, $type);
 		if(!$response) {
 			return response()->error($this->gateway->errors());
@@ -69,8 +73,9 @@ class LiveSignalsController extends Controller
 	public function update_by_page(Request $request)
 	{
 		$mt_id = $request->signal_id;
-		$type = $request->input('type_product');
-		$trade = $request->input('trade_type');
+		$type = strtolower($request->input('type_product'));
+		$trade = strtoupper($request->input('trade_type'));
+
 		if(empty($mt_id) || empty($type) || empty($trade)) {
 			return response()->error('Missing fields');
 		}
@@ -90,7 +95,7 @@ class LiveSignalsController extends Controller
 	public function update_signal(Request $request)
 	{
 		$signal_id = $request->signal_id;
-		$product = $request->product;
+		$product = strtolower($request->product);
 		return $this->update($signal_id, $product, $request->all());
 	}
 

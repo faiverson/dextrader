@@ -31,7 +31,11 @@ class CommissionsController extends Controller
 		$offset = $request->input('offset') ? $request->input('offset') : 0;
 		$order_by = $request->input('order') ? $request->input('order') : ['id' => 'desc'];
 		$filters = $request->input('filter') ? $request->input('filter') : [];
-		$response = $this->gateway->getUserCommissions($id, $limit, $offset, $order_by, $filters);
-		return response()->ok($response);
+		$commissions = $this->gateway->getUserCommissions($id, $limit, $offset, $order_by, $filters);
+		$total = $this->gateway->getTotalUserCommissions($id, $filters);
+		return response()->ok([
+			'commissions' => $commissions,
+			'total' => $total
+		]);
 	}
 }

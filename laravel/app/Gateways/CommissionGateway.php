@@ -114,4 +114,9 @@ class CommissionGateway extends AbstractGateway {
 	{
 		return $this->repository->getUserCommissions($id, $limit, $offset, $order_by, $where);
 	}
+
+	public function getTotalUserCommissions($id, $where)
+	{
+		return $this->repository->getTotalUserCommissions($id, $where);
+	}
 }
