@@ -42,9 +42,13 @@ class Kernel extends ConsoleKernel
     {
 		$path = storage_path('logs/payments-monthly-' . date('Y-m-d') . '.log');
 		// run the cronjob every 2 hours
-		$schedule->command('payments:monthly')->cron('0 */2 * * * *')->sendOutputTo($path);
+		$schedule->command('payments:monthly')->withoutOverlapping()->cron('0 */2 * * * *')->sendOutputTo($path);
+		// 0 0,2,4,6,8,10,12,14,16,18,20,22 * * * make the precise hs
+
+		$path = storage_path('logs/comms-pending-' . date('Y-m-d') . '.log');
+		$schedule->command('comms:pending')->withoutOverlapping()->cron('0 1,3,5,7,9,11,14,15,17,19,21,23 * * *')->sendOutputTo($path);
 
 		$path = storage_path('logs/comms-weekly-' . date('Y-m-d') . '.log');
-		$schedule->command('comms:weekly')->cron('0 */2 * * * *')->sendOutputTo($path);
+		$schedule->command('comms:weekly')->weekly()->fridays()->at('23:30')->sendOutputTo($path);
     }
 }

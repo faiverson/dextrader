@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Gateways\CommissionGateway;
+use App\Gateways\PaymentGateway;
 use Illuminate\Console\Command;
 use DB;
 use Log;
@@ -14,7 +15,7 @@ class CommissionsStatus extends Command
      *
      * @var string
      */
-    protected $signature = 'comms:status';
+    protected $signature = 'comms:pending';
 
     /**
      * The console command description.
@@ -28,10 +29,11 @@ class CommissionsStatus extends Command
      *
      * @return void
      */
-	public function __construct(CommissionGateway $commissionGateway)
+	public function __construct(CommissionGateway $commissionGateway, PaymentGateway $paymentGateway)
 	{
 		parent::__construct();
 		$this->commissionGateway = $commissionGateway;
+		$this->paymentGateway = $paymentGateway;
 	}
 
     /**
@@ -46,10 +48,16 @@ class CommissionsStatus extends Command
 		try {
 			$comms = $this->commissionGateway->getPendingToReady();
 			if($comms) {
-				foreach($comms as $commission) {
+				foreach($comms as $index => $commission) {
 					$response = $this->commissionGateway->updateToReady($commission);
+//					if($index == 0) {
+//						$balance = $this->paymentGateway->getBalance($commission->user_id);
+//					}
+//					$this->paymentGateway->payCommission($commission, $balance);
+
 					if($response) {
 						$this->info('Commission user: ' . $commission->user_id . ' processed');
+						$this->commissionGateway->create($commission);
 					}
 					else {
 						$this->warn('user: ' . $commission->user_id);
@@ -72,8 +80,8 @@ class CommissionsStatus extends Command
 			}
 		} catch(\Exception $e) {
 			DB::rollback();
-			$this->warn('ERROR in comms:status');
-			Log::info('ERROR in comms:status', (array) $e->getMessage());
+			$this->warn('ERROR in comms:pending');
+			Log::info('ERROR in comms:pending', (array) $e->getMessage());
 		}
 		DB::commit();
 		$this->info('Commissions Finished - ' . $comms);

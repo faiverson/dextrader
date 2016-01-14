@@ -10,5 +10,5 @@ class Payment extends Model
 
 	protected $dates = ['created_at', 'updated_at'];
 
-	protected $fillable = ['id', 'user_id', 'prev_balance', 'balance', 'ledger_type'];
+	protected $fillable = ['id', 'user_id', 'prev_balance', 'balance', 'ledger_type', 'info', 'paid_dt'];
 }
