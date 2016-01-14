@@ -9,4 +9,6 @@ use App\Repositories\Contracts\RepositoryInterface;
  * this interface must also provide all the standard eloquent methods (find, all, etc.)
  */
 interface LiveSignalRepositoryInterface extends RepositoryInterface {
+	public function find_signal($mt_id, $trade);
+	public function total();
 }

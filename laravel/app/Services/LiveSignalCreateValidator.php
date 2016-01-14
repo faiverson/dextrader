@@ -1,6 +1,8 @@
 <?php namespace App\Services;
 
-use App\Models\LiveSignal;
+use App\Models\IBSignal;
+use App\Models\FXSignal;
+use App\Models\NASignal;
 use Illuminate\Validation\Factory;
 
 class LiveSignalCreateValidator extends AbstractValidator {
@@ -10,13 +12,15 @@ class LiveSignalCreateValidator extends AbstractValidator {
 	 * @var array
 	 */
 	protected $rules = array(
-		'signal_date' => 'required|date_format:Y-m-d',
+		'mt_id' => 'required',
 		'signal_time' => ['required', 'regex:/^[0-9]{2}\:[0-9]{2}$/'],
 		'expiry_time' => ['sometimes', 'regex:/^[0-9]{2}\:[0-9]{2}$/'],
 		'asset' => ['required', 'regex:/^[a-zA-Z]{3}\/[a-zA-Z]{3}$/'],
-		'asset_rate' => ['required', 'regex:/^[0-9]{2}$/'],
+//		'asset_rate' => ['required', 'regex:/^[0-9]{2}$/'],
+		'trade_type' => ['required', 'regex:/^([M1|M5|M15|M30|H1|H4|D1|W1|MN1]+)+$/'],
 		'target_price'=> ['required','regex:/[0-9]+[.,]?[0-9]*/'],
-		'end_price'=> ['sometimes','regex:/[0-9]+[.,]?[0-9]*/']
+		'end_price'=> ['sometimes', 'regex:/[0-9]+[.,]?[0-9]*/'],
+		'close_price'=> ['sometimes','regex:/[0-9]+[.,]?[0-9]*/']
 	);
 
 	public function __construct(Factory $validator)
@@ -27,14 +31,22 @@ class LiveSignalCreateValidator extends AbstractValidator {
 	public function after($validator)
 	{
 		$data = $validator->getData();
-		if(array_key_exists('signal_date', $data) && array_key_exists('asset', $data)) {
-			$many = LiveSignal::where('signal_date', $data['signal_date'])
-				->where('asset', $data['asset'])
-				->count();
+		if(array_key_exists('mt_id', $data) &&
+			array_key_exists('trade_type', $data) &&
+			array_key_exists('type_product', $data)) {
+			if($data['type_product'] == 'ib') {
+				$many = IBSignal::where('mt_id', $data['mt_id'])->where('trade_type', $data['trade_type'])->count();
+			}
+			elseif($data['type_product'] == 'na') {
+				$many = NASignal::where('mt_id', $data['mt_id'])->where('trade_type', $data['trade_type'])->count();
+			}
+			elseif($data['type_product'] == 'fx') {
+				$many = FXSignal::where('mt_id', $data['mt_id'])->where('trade_type', $data['trade_type'])->count();
+			}
+
 			if($many > 0) {
-				$validator->errors()->add('signal_date', 'There is a current asset for that date.');
+				$validator->errors()->add('trade_type', 'There is a current signal with that ID and trade type');
 			}
 		}
-
 	}
 }

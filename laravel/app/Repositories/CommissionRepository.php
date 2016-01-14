@@ -158,6 +158,36 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 		return $query->get();
 	}
 
+	public function getTotalUserCommissions($id, $where)
+	{
+		$query =  $this->model;
+
+		$query = $query->with('from')->with('products')->where('to_user_id', $id);
+
+
+		if(array_key_exists('from', $where) && $where['from'] != null) {
+			$from = new DateTime($where['from']);
+			$query = $query->whereDate('created_at', '>=', $from);
+		}
+
+		if(array_key_exists('to', $where) && $where['to'] != null) {
+			$from = new DateTime($where['to']);
+			$query = $query->whereDate('created_at', '<=', $from);
+		}
+
+		if(array_key_exists('status', $where) && $where['status'] != null) {
+			$query = $query->where('status', '=', $where['status']);
+		}
+
+		if(array_key_exists('product', $where) && $where['product'] != null) {
+			$query = $query->whereHas('products', function($q) use ($where) {
+				$q->where('invoices_detail.product_display_name', '=', $where['product']);
+			});
+		}
+
+		return $query->count();
+	}
+
 	protected function takePaymentDay()
 	{
 		$now = new DateTime('now');
