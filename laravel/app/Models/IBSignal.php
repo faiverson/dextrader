@@ -43,13 +43,28 @@ class IBSignal extends Model
 		$this->attributes['target_price'] = number_format($value, 2, '.', '');
 	}
 
-	public function getEndPriceAttribute()
+	public function getClosePriceAttribute()
 	{
-		return number_format($this->attributes['end_price'], 5, '.', ',');
+		return number_format($this->attributes['close_price'], 5, '.', ',');
 	}
 
-	public function setEndPriceAttribute($value)
+	public function setClosePriceAttribute($value)
 	{
-		$this->attributes['end_price'] = number_format($value, 5, '.', '');
+		$this->attributes['close_price'] = number_format($value, 5, '.', '');
+	}
+
+	public function getOpenPriceAttribute()
+	{
+		return number_format($this->attributes['open_price'], 5, '.', ',');
+	}
+
+	public function setOpenPriceAttribute($value)
+	{
+		$this->attributes['open_price'] = number_format($value, 5, '.', '');
+	}
+
+	public function setAssetAttribute($value)
+	{
+		$this->attributes['asset'] = strlen($value) === 6 ? substr($value, 0, 3) . '/' . substr($value, -3) : $value;
 	}
 }
