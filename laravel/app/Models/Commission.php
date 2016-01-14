@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Sofa\Eloquence\Eloquence; // base trait
 use Sofa\Eloquence\Mappable;
+use Config;
 
 class Commission extends Model
 {
@@ -28,7 +29,7 @@ class Commission extends Model
      *
      * @var array
      */
-	protected $fillable = ['id', 'amount', 'from_user_id', 'to_user_id', 'invoice_id', 'payout_dt', 'refund_dt', 'status', 'type', 'holdback_paid', 'refund_by',  'created_at', 'updated_at'];
+	protected $fillable = ['id', 'amount', 'from_user_id', 'to_user_id', 'invoice_id', 'payout_dt', 'holdback', 'refund_dt', 'status', 'type', 'holdback_paid', 'refund_by',  'created_at', 'updated_at'];
 
 	protected $appends = array('commission_id');
 
@@ -42,6 +43,11 @@ class Commission extends Model
 	public function getPurchaseIdAttribute()
 	{
 		return $this->attributes['id'];
+	}
+
+	public function setHoldbackAttribute()
+	{
+		$this->attributes['holdback'] = $this->attributes['amount'] * Config::get('dextrader.holdback');
 	}
 
 	public function from()

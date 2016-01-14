@@ -22,8 +22,10 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 	}
 
 	/**
-	 * take the pending comms they are ready
-	 * find all commissions with 2 weeks of time
+	 * Find which pendings comms are ready to
+	 * change to 'ready' status
+	 * all commissions are ready after 2 weeks of since
+	 * the transaction/sale was made
 	 *
 	 */
 	public function getPendingToReady($limit = 50)
@@ -31,26 +33,7 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 		// we set sunday as the first day of this week
 		$from = new DateTime('today');
 		$from->modify('-2 weeks');
-
-		$query = $this->model
-			->select([
-				DB::raw('GROUP_CONCAT(id SEPARATOR ",") AS ids'),
-				DB::raw('to_user_id AS user_id'),
-				DB::raw('SUM(amount) AS total'),
-				DB::raw('TRUNCATE((SUM(amount) / 10), 2) AS holdback')
-			])
-			->where('status', 'pending')
-			->WhereNull('payout_dt')
-			->WhereNull('refund_dt')
-			->whereDate('created_at', '<=', $from)
-			->groupBy('to_user_id')
-			->take($limit);
-		return $query->get();
-	}
-
-	public function getPendingHoldbakToReady($limit = 50)
-	{
-		// we set sunday as the first day of this week
+		// After 3 months the holdback can be collected
 		$holdback_dt = new DateTime('today');
 		$holdback_dt->modify('-3 months');
 
@@ -58,23 +41,36 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 			->select([
 				DB::raw('GROUP_CONCAT(id SEPARATOR ",") AS ids'),
 				DB::raw('to_user_id AS user_id'),
-				DB::raw('TRUNCATE((SUM(amount) / 10), 2) AS holdback')
+				DB::raw('SUM(amount) AS total'),
+				DB::raw('SUM(holdback) AS holdbacks')
 			])
-			->where('status', 'ready')
-			->where('holdback_paid', 0)
-			->WhereNull('holdback_dt')
-			->whereDate('created_at', '<=', $holdback_dt)
+			->where(function ($q) use ($from) {
+				$q->where('status', 'pending')
+					->WhereNull('payout_dt')
+					->WhereNull('refund_dt')
+					->whereDate('created_at', '<=', $from);
+			})
+			->orWhere(function ($q) use ($holdback_dt) {
+				$q->where('status', 'ready')
+					->where('holdback_paid', 0)
+					->WhereNull('holdback_dt')
+					->whereDate('created_at', '<=', $holdback_dt);
+			})
 			->groupBy('to_user_id')
 			->take($limit);
 		return $query->get();
 	}
 
+	/**
+	 * @param $ids of commissions
+	 * @return mixed
+	 */
 	public function updateToReady($ids)
 	{
 		if(!is_array($ids)) {
 			$ids = explode(',', $ids);
 		}
-		$now = new DateTime('now');
+		$now = $this->takePaymentDay();
 		return $this->model->whereIn('id', $ids)->update([
 			'status' => 'ready',
 			'payout_dt' => $now->format('Y-m-d H:i:s')
@@ -86,7 +82,7 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 		if(!is_array($ids)) {
 			$ids = explode(',', $ids);
 		}
-		$now = new DateTime('now');
+		$now = $this->takePaymentDay();
 		return $this->model->whereIn('id', $ids)->update([
 			'holdback_dt' => $now->format('Y-m-d H:i:s')
 		]);
@@ -102,7 +98,18 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 				DB::raw('SUM(amount) AS total'),
 				DB::raw('TRUNCATE((SUM(amount) / 10), 2) AS holdback')
 			])
-			->where('status', 'ready')
+			->where(function ($q) use ($from) {
+				$q->where('status', 'pending')
+					->WhereNull('payout_dt')
+					->WhereNull('refund_dt')
+					->whereDate('created_at', '<=', $from);
+			})
+			->orWhere(function ($q) use ($holdback_dt) {
+				$q->where('status', 'ready')
+					->where('holdback_paid', 0)
+					->WhereNull('holdback_dt')
+					->whereDate('created_at', '<=', $holdback_dt);
+			})
 			->groupBy('to_user_id')
 			->having('total', '>+' ,'20');
 		return $query->get();
@@ -151,6 +158,13 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 		return $query->get();
 	}
 
-
+	protected function takePaymentDay()
+	{
+		$now = new DateTime('now');
+		if($now->format('l') !== 'friday') {
+			$now->modify('next friday');
+		}
+		return $now;
+	}
 
 }
