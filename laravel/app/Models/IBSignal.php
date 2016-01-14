@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Sofa\Eloquence\Eloquence;
 
-class LiveSignal extends Model
+class IBSignal extends Model
 {
 	use Eloquence, SoftDeletes;
 
@@ -15,7 +15,7 @@ class LiveSignal extends Model
      *
      * @var string
      */
-    protected $table = 'live_signals';
+    protected $table = 'na_signals';
 
 	protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
@@ -24,7 +24,7 @@ class LiveSignal extends Model
      *
      * @var array
      */
-	protected $fillable = ['signal_date', 'signal_time', 'expiry_time', 'asset', 'asset_rate', 'target_price', 'end_price'];
+	protected $fillable = ['mt_id', 'signal_time', 'expiry_time', 'direction', 'asset', 'trade_type', 'open_price', 'target_price', 'close_price', 'winloss'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -51,10 +51,5 @@ class LiveSignal extends Model
 	public function setEndPriceAttribute($value)
 	{
 		$this->attributes['end_price'] = number_format($value, 5, '.', '');
-	}
-
-	public function getAssetRateAttribute()
-	{
-		return $this->attributes['asset_rate'] . '%';
 	}
 }

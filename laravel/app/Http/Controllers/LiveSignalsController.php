@@ -9,9 +9,11 @@ use Event;
 
 class LiveSignalsController extends Controller
 {
-	public function __construct(LiveSignalGateway $live_gateway)
+	protected $types = ['ib', 'na', 'fx'];
+
+	public function __construct(LiveSignalGateway $gateway)
 	{
-		$this->live_gateway = $live_gateway;
+		$this->gateway = $gateway;
 		$this->limit = Config::get('dextrader.limit');
 	}
 
@@ -21,66 +23,75 @@ class LiveSignalsController extends Controller
 	 * @param  \Illuminate\Http\Request $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function all_live(Request $request)
+	public function all(Request $request)
 	{
+		$product = $request->product;
 		$limit = $request->input('limit') ? $request->input('limit') : $this->limit;
 		$offset = $request->input('offset') ? $request->input('offset') : 0;
-		$order_by = $request->input('order') ? $request->input('order') : ['signal_date' => 'desc', 'signal_time' => 'desc', 'asset' => 'asc'];
-		$response = $this->live_gateway->all(null, $limit, $offset, $order_by);
+		$order_by = $request->input('order') ? $request->input('order') : ['signal_time' => 'desc', 'asset' => 'asc'];
+		$response = $this->gateway->all_signals($product, $limit, $offset, $order_by);
 		return response()->ok($response);
 	}
 
 	public function show(Request $request)
 	{
 		$id = $request->signal_id;
-		$response = $this->live_gateway->find($id);
+		$product = $request->product;
+		$response = $this->gateway->findByType($product, $id);
 		return response()->ok($response);
 	}
 
 	public function store_by_page(Request $request)
 	{
-		$type = $request->input('type');
-		if($type == 'live') {
-			return $this->store($request->all(), 'live');
+		$type = $request->input('type_product');
+		if(in_array($type, $this->types)) {
+			return $this->store($request->all(), $type);
 		}
-		return response()->error('You need to set a type');
+
+		return response()->error('You need to set a product type');
 	}
 
-	public function store_live(Request $request)
+	public function store_signal(Request $request)
 	{
-		return $this->store($request->all(), 'live');
+		$product = $request->product;
+		return $this->store($request->all(), $product);
 	}
 
 	public function store($data, $type)
 	{
-		$response = false;
-		if($type == 'live') {
-			$response = $this->live_gateway->create($data);
-		}
+		$response = $this->gateway->add($data, $type);
 		if(!$response) {
-			return response()->error($this->live_gateway->errors());
+			return response()->error($this->gateway->errors());
 		}
 		return response()->ok($response);
 	}
 
 	public function update_by_page(Request $request)
 	{
-		$signal_id = $request->signal_id;
-		$type = $request->input('type');
+		$mt_id = $request->signal_id;
+		$type = $request->input('type_product');
+		$trade = $request->input('trade_type');
+		if(empty($mt_id) || empty($type) || empty($trade)) {
+			return response()->error('Missing fields');
+		}
 		$data = [
 			'expiry_time' => $request->input('expiry_time'),
-			'end_price' => $request->input('end_price')
+			'target_price' => $request->input('target_price'),
+			'close_price' => $request->input('close_price'),
+			'winloss' => $request->input('winloss'),
 		];
-		if($type == 'live') {
-			return $this->update($signal_id, $type, $data);
+		$signal = $this->gateway->find_signal($mt_id, $trade, $type);
+		if(!$signal) {
+			return response()->error('The signal is not in database');
 		}
-		return response()->error('You need to set a type');
+		return $this->update($signal->id, $type, $data);
 	}
 
-	public function update_live(Request $request)
+	public function update_signal(Request $request)
 	{
 		$signal_id = $request->signal_id;
-		return $this->update($signal_id, 'live', $request->all());
+		$product = $request->product;
+		return $this->update($signal_id, $product, $request->all());
 	}
 
 	/**
@@ -91,32 +102,20 @@ class LiveSignalsController extends Controller
 	 */
 	public function update($signal_id, $type, $data)
 	{
-		$response = false;
-		if($type == 'live') {
-			$response = $this->live_gateway->update($data, $signal_id);
-		}
-
+		$response = $response = $this->gateway->edit($data, $signal_id, $type);
 		if(!$response) {
-			return response()->error($this->live_gateway->errors());
+			return response()->error($this->gateway->errors());
 		}
 		return response()->ok($response);
 	}
 
-	public function destroy_live(Request $request)
+	public function destroy(Request $request)
 	{
 		$signal_id = $request->signal_id;
-		return $this->destroy($signal_id, 'live');
-	}
-
-	public function destroy($signal_id, $type)
-	{
-		$response = false;
-		if($type == 'live') {
-			$response = $this->live_gateway->destroy($signal_id);
-		}
-
+		$product = $request->product;
+		$response = $this->gateway->destroyByType($signal_id, $product);
 		if(!$response) {
-			return response()->error($this->live_gateway->errors());
+			return response()->error($this->gateway->errors());
 		}
 		return response()->ok($response);
 	}
