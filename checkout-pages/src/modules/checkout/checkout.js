@@ -2,23 +2,47 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('checkout', {
-                url: '/ib/:enroller',
-                templateUrl: 'modules/checkout/checkout.tpl.html',
-                controller: 'CheckoutCtrl',
-                data: {
-                    pageTitle: 'Checkout Page'
-                }
-            })
-            .state('checkout2', {
-                url: '/ib/:enroller/:tag',
-                templateUrl: 'modules/checkout/checkout.tpl.html',
-                controller: 'CheckoutCtrl',
-                data: {
-                    pageTitle: 'Checkout Page'
-                }
-            })
-            .state('checkout_root', {
                 url: '/ib',
+                templateUrl: 'modules/checkout/checkout.tpl.html',
+                controller: 'CheckoutCtrl',
+                data: {
+                    pageTitle: 'Checkout Page'
+                }
+            })
+            .state('checkout.enroller', {
+                url: '/:enroller?',
+                templateUrl: 'modules/checkout/checkout.tpl.html',
+                controller: 'CheckoutCtrl',
+                data: {
+                    pageTitle: 'Checkout Page'
+                }
+            })
+            .state('checkout.enroller.tag', {
+                url: '/:tag?',
+                templateUrl: 'modules/checkout/checkout.tpl.html',
+                controller: 'CheckoutCtrl',
+                data: {
+                    pageTitle: 'Checkout Page'
+                }
+            })
+            .state('ckdownsell', {
+                url: '/downsell/ib',
+                templateUrl: 'modules/checkout/checkout.tpl.html',
+                controller: 'CheckoutCtrl',
+                data: {
+                    pageTitle: 'Checkout Page'
+                }
+            })
+            .state('ckdownsell.enroller', {
+                url: '/:enroller?',
+                templateUrl: 'modules/checkout/checkout.tpl.html',
+                controller: 'CheckoutCtrl',
+                data: {
+                    pageTitle: 'Checkout Page'
+                }
+            })
+            .state('ckdownsell.enroller.tag', {
+                url: '/:tag?',
                 templateUrl: 'modules/checkout/checkout.tpl.html',
                 controller: 'CheckoutCtrl',
                 data: {
@@ -27,8 +51,8 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             });
     })
 
-    .controller('CheckoutCtrl', ['$scope', 'CheckoutService', 'UserService', 'CountriesService', '$q', 'os-info', '$stateParams', 'PageService', 'Notification', 'HitsService', 'TestimonialsService', '$state', 'InvoicesService',
-        function ($scope, CheckoutService, UserService, CountriesService, $q, osInfo, $stateParams, PageService, Notification, HitsService, TestimonialsService, $state, InvoicesService) {
+    .controller('CheckoutCtrl', ['$scope', 'CheckoutService', 'UserService', 'CountriesService', '$q', 'os-info', '$stateParams', 'Notification', 'HitsService', 'TestimonialsService', '$state', 'InvoicesService', 'SpecialOffersService', '$filter',
+        function ($scope, CheckoutService, UserService, CountriesService, $q, osInfo, $stateParams, Notification, HitsService, TestimonialsService, $state, InvoicesService, SpecialOffersService, $filter) {
             var vm = this;
             $scope.formData = {
                 billing_address2: "",
@@ -199,14 +223,6 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 HitsService.send(data, $scope.token);
             };
 
-            vm.getToken = function () {
-                var promise = PageService.getToken();
-                promise.then(function (res) {
-                    $scope.token = res.data.token;
-                });
-                return promise;
-            };
-
             vm.success = function (res) {
                 var internalId = moment().unix();
                 var invoice_details = res.data;
@@ -215,7 +231,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
 
                 InvoicesService.setInvoice(internalId, invoice_details);
 
-                $state.go('upsell', { invoice: internalId });
+                $state.go('upsell', {invoice: internalId});
                 Notification.success('Congratulations!!! Account has been created!');
             };
 
@@ -239,15 +255,34 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 return osInfo.getOS();
             };
 
+            vm.getSpecialOffer = function () {
+                SpecialOffersService.query($scope.formData.funnel_id)
+                    .then(function (res) {
+                        $scope.products = [];
+                        $scope.formData.products.forEach(function (prd) {
+                            var offers = $filter('filter')(res.data.offers, {product_id: prd});
+                            var product = $filter('filter')(res.data.products, {product_id: prd});
+
+                            if (offers.length > 0 && $state.includes('ckdownsell')) {
+                                var offer = offers[0];
+                                offer.product = product[0];
+                                $scope.products.push(offer);
+                            } else {
+                                $scope.products.push(product[0]);
+                            }
+                        });
+                    });
+
+            };
+
             vm.init = function () {
+                $scope.nextPaymentDate = moment().add(3, 'd').format('MM/DD/YYYY');
+
                 vm.feelExpMonth();
                 vm.feelExpYear();
                 vm.getTestimonials();
-
-                vm.getToken()
-                    .then(function () {
-                        vm.sendHit();
-                    });
+                vm.getSpecialOffer();
+                vm.sendHit();
             };
 
             vm.init();

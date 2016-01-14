@@ -288,7 +288,7 @@
             <div class="checkout-prices">
                 <div class="clearfix">
                     <div class="left">Initial Payment</div>
-                    <div class="right">$47.00</div>
+                    <div class="right">{{products[0].amount | currency: '$'}}</div>
                 </div>
                 <div class="clearfix">
                     <div class="left">Tax</div>
@@ -296,7 +296,7 @@
                 </div>
                 <div id="checkout-total" class="clearfix">
                     <div class="left">Today's Payment</div>
-                    <div class="right">$47.00</div>
+                    <div class="right">{{products[0].amount | currency: '$'}}</div>
                 </div>
                 <p>
                     Immediate access to this product or service is available once payment is approved.
@@ -310,7 +310,7 @@
                         Monthly Payment of
                     </div>
                     <div class="right">
-                        $47.00
+                        {{(products[0].product && products[0].product.amount || products[0].amount) | currency: '$'}}
                     </div>
                 </div>
                 <p>
