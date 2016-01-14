@@ -167,14 +167,14 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                     var AuthService = $injector.get('AuthService');
                     if (!AuthService.isLoggedIn()) {
 
-                        requestsWaitingForToken.push({ def: deferred, config: $config });
+                        requestsWaitingForToken.push({def: deferred, config: $config});
 
-                        if(!alreadyRequestToken){
+                        if (!alreadyRequestToken) {
 
                             AuthService.login()
                                 .then(function (res) {
 
-                                    requestsWaitingForToken.forEach(function(def){
+                                    requestsWaitingForToken.forEach(function (def) {
                                         def.config.withCredentials = true;
                                         header = 'Bearer ' + localStorageService.get('token');
                                         def.config.headers.Authorization = header;
@@ -187,13 +187,13 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                             alreadyRequestToken = true;
                         }
 
-                    }else{
+                    } else {
                         $config.withCredentials = true;
                         header = 'Bearer ' + localStorageService.get('token');
                         $config.headers.Authorization = header;
                         deferred.resolve($config);
                     }
-                }else{
+                } else {
                     deferred.resolve($config);
                 }
                 return deferred.promise; //$config;
@@ -220,7 +220,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
     .factory('CheckoutService', ['$q', '$site-configs', '$http', function ($q, $config, $http) {
         var service = $config.API_BASE_URL + 'checkout';
 
-        function send(data, token) {
+        function send(data) {
             var endpoint = service,
                 deferred = $q.defer();
 
@@ -232,19 +232,14 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 deferred.reject(err);
             }
 
-            $http({
-                method: "POST",
-                url: endpoint,
-                data: data,
-                headers: {'Authorization': 'Bearer ' + token}
-            }).then(success, error);
+            $http.post(endpoint, data).then(success, error);
 
             return deferred.promise;
 
         }
 
-        function upgrade(data, user_id, token) {
-            var endpoint = service,
+        function upgrade(data, user_id) {
+            var endpoint = service + '/up-down-upgrade/' + user_id,
                 deferred = $q.defer();
 
             function success(res) {
@@ -255,12 +250,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 deferred.reject(err);
             }
 
-            $http({
-                method: "POST",
-                url: endpoint,
-                data: data,
-                headers: {'Authorization': 'Bearer ' + token}
-            }).then(success, error);
+            $http.post(endpoint, data).then(success, error);
 
             return deferred.promise;
 
@@ -273,31 +263,57 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
 
     }])
 
-    .factory('SpecialOffersService', ['$q', '$site-configs', '$http', function ($q, $config, $http) {
+    .factory('SpecialOffersService', ['$q', '$site-configs', '$http', '$filter', 'localStorageService', function ($q, $config, $http, $filter, localStorageService) {
         var service = $config.API_BASE_URL + 'offers';
 
-        function query(funnel_id) {
+        function query(funnelId, productIds, checkForOffers) {
             var endpoint = service,
-                deferred = $q.defer();
+                deferred = $q.defer(),
+                tmpPrices = localStorageService.get('productPrices' + funnelId);
 
-            if (angular.isUndefined(funnel_id)) {
+            if (angular.isUndefined(funnelId)) {
                 deferred.reject('Funnel ID is required');
             }
 
-            endpoint += '/' + funnel_id;
+            endpoint += '/' + funnelId;
 
             function success(res) {
-                deferred.resolve(res.data);
+                localStorageService.set('productPrices' + funnelId, res.data);
+
+                deferred.resolve(processOffers(res.data, productIds, checkForOffers));
             }
 
             function error(err) {
                 deferred.reject(err);
             }
 
-            $http.get(endpoint).then(success, error);
+            if (tmpPrices != null && angular.isDefined(tmpPrices)) {
+                deferred.resolve(processOffers(tmpPrices, productIds, checkForOffers));
+            } else {
+                $http.get(endpoint).then(success, error);
+            }
 
             return deferred.promise;
 
+        }
+
+        function processOffers(res, productIds, checkForOffers) {
+            var products = [];
+
+            productIds.forEach(function (prd) {
+                var offers = $filter('filter')(res.data.offers, {product_id: prd});
+                var product = $filter('filter')(res.data.products, {product_id: prd});
+
+                if (offers.length > 0 && checkForOffers) {
+                    var offer = offers[0];
+                    offer.product = product[0];
+                    products.push(offer);
+                } else {
+                    products.push(product[0]);
+                }
+            });
+
+            return products;
         }
 
         return {
@@ -324,6 +340,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             $http({
                 method: "POST",
                 url: endpoint,
+                withCredentials: false,
                 data: data
             }).then(success, error);
 

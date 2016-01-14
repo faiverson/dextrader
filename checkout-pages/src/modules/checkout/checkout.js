@@ -2,23 +2,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('checkout', {
-                url: '/ib',
-                templateUrl: 'modules/checkout/checkout.tpl.html',
-                controller: 'CheckoutCtrl',
-                data: {
-                    pageTitle: 'Checkout Page'
-                }
-            })
-            .state('checkout.enroller', {
-                url: '/:enroller?',
-                templateUrl: 'modules/checkout/checkout.tpl.html',
-                controller: 'CheckoutCtrl',
-                data: {
-                    pageTitle: 'Checkout Page'
-                }
-            })
-            .state('checkout.enroller.tag', {
-                url: '/:tag?',
+                url: '/ib?user&tag',
                 templateUrl: 'modules/checkout/checkout.tpl.html',
                 controller: 'CheckoutCtrl',
                 data: {
@@ -26,29 +10,14 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 }
             })
             .state('ckdownsell', {
-                url: '/downsell/ib',
-                templateUrl: 'modules/checkout/checkout.tpl.html',
-                controller: 'CheckoutCtrl',
-                data: {
-                    pageTitle: 'Checkout Page'
-                }
-            })
-            .state('ckdownsell.enroller', {
-                url: '/:enroller?',
-                templateUrl: 'modules/checkout/checkout.tpl.html',
-                controller: 'CheckoutCtrl',
-                data: {
-                    pageTitle: 'Checkout Page'
-                }
-            })
-            .state('ckdownsell.enroller.tag', {
-                url: '/:tag?',
+                url: '/downsell/ib?user&tag',
                 templateUrl: 'modules/checkout/checkout.tpl.html',
                 controller: 'CheckoutCtrl',
                 data: {
                     pageTitle: 'Checkout Page'
                 }
             });
+
     })
 
     .controller('CheckoutCtrl', ['$scope', 'CheckoutService', 'UserService', 'CountriesService', '$q', 'os-info', '$stateParams', 'Notification', 'HitsService', 'TestimonialsService', '$state', 'InvoicesService', 'SpecialOffersService', '$filter',
@@ -90,8 +59,8 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 if ($scope.formCheckout.$valid) {
                     $scope.formData.data = vm.getUserBrowserData();
 
-                    if (angular.isDefined($stateParams.enroller) && $stateParams.enroller.length > 0) {
-                        $scope.formData.enroller = $stateParams.enroller;
+                    if (angular.isDefined($stateParams.user) && $stateParams.user.length > 0) {
+                        $scope.formData.enroller = $stateParams.user;
                     }
 
                     if (angular.isDefined($stateParams.tag)) {
@@ -212,8 +181,8 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                     product_id: 1
                 };
 
-                if (angular.isDefined($stateParams.enroller) && $stateParams.enroller.length > 0) {
-                    data.enroller = $stateParams.enroller;
+                if (angular.isDefined($stateParams.user) && $stateParams.user.length > 0) {
+                    data.enroller = $stateParams.user;
                 }
 
                 if (angular.isDefined($stateParams.tag)) {
@@ -256,21 +225,10 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             };
 
             vm.getSpecialOffer = function () {
-                SpecialOffersService.query($scope.formData.funnel_id)
+                var checkForOffers = $state.includes('ckdownsell');
+                SpecialOffersService.query($scope.formData.funnel_id, $scope.formData.products, checkForOffers)
                     .then(function (res) {
-                        $scope.products = [];
-                        $scope.formData.products.forEach(function (prd) {
-                            var offers = $filter('filter')(res.data.offers, {product_id: prd});
-                            var product = $filter('filter')(res.data.products, {product_id: prd});
-
-                            if (offers.length > 0 && $state.includes('ckdownsell')) {
-                                var offer = offers[0];
-                                offer.product = product[0];
-                                $scope.products.push(offer);
-                            } else {
-                                $scope.products.push(product[0]);
-                            }
-                        });
+                        $scope.products = res;
                     });
 
             };

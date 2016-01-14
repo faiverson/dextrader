@@ -69,29 +69,7 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
             })
 
             .state('dex_ib_sales', {
-                url: '/ib',
-                templateUrl: 'modules/dex-ib/dex-ib.sales.tpl.html',
-                controller: 'DexIBSalesCtrl',
-                data: {
-                    pageTitle: 'Dex IB',
-                    bodyClass: 'dex-in-sales',
-                    isPublic: true
-                }
-            })
-
-            .state('dex_ib_sales1', {
-                url: '/ib/:sponsor',
-                templateUrl: 'modules/dex-ib/dex-ib.sales.tpl.html',
-                controller: 'DexIBSalesCtrl',
-                data: {
-                    pageTitle: 'Dex IB',
-                    bodyClass: 'dex-in-sales',
-                    isPublic: true
-                }
-            })
-
-            .state('dex_ib_sales2', {
-                url: '/ib/:sponsor/:tag',
+                url: '/ib?user&tag',
                 templateUrl: 'modules/dex-ib/dex-ib.sales.tpl.html',
                 controller: 'DexIBSalesCtrl',
                 data: {
@@ -301,6 +279,7 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
     .controller('DexIBProCtrl', ['$scope', function ($scope) {
 
     }])
+
     .controller('DexIBProUpgradeCtrl', ['$scope', '$uibModal', 'Notification', function ($scope, $uibModal, Notification) {
         $scope.videoId = 'lYKRPzOi1zI';
 
@@ -324,7 +303,7 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
 
     }])
 
-    .controller('DexIBSalesCtrl', ['$scope', 'TestimonialsService', '$stateParams', function ($scope, TestimonialsService, $stateParams) {
+    .controller('DexIBSalesCtrl', ['$scope', 'TestimonialsService', '$stateParams', '$objects', function ($scope, TestimonialsService, $stateParams, $objects) {
         var vm = this;
 
         $scope.orderNowLink = '/ib';
@@ -356,14 +335,17 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
 
         vm.init = function () {
             vm.getTestimonials();
+            var params = {};
 
-            if (angular.isDefined($stateParams.sponsor)) {
-                $scope.orderNowLink += '/' + $stateParams.sponsor;
+            if (angular.isDefined($stateParams.user)) {
+                params.user = $stateParams.user;
             }
 
             if (angular.isDefined($stateParams.tag)) {
-                $scope.orderNowLink += '/' + $stateParams.tag;
+                params.tag = $stateParams.tag;
             }
+
+            $scope.orderNowLink += '?' + $objects.toUrlString(params);
         };
 
         vm.init();

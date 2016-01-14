@@ -89,9 +89,9 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
         $scope.createEWallet = function () {
             EWalletService.createEWallet()
                 .then(function (res) {
-                        if(angular.isDefined(res.data.code) && res.data.code === 'USERNAME_EXISTS'){
+                        if (angular.isDefined(res.data.code) && res.data.code === 'USERNAME_EXISTS') {
                             window.location.href = $configs.EWALLET_LOGIN;
-                        }else{
+                        } else {
                             Notification.success('Account has created successfully!');
                         }
                     },
@@ -107,7 +107,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
         };
     }])
 
-    .controller('MarketingLinksCtrl', ['$scope', 'MarketingLinksService', 'Notification', function ($scope, MarketingLinksService, Notification) {
+    .controller('MarketingLinksCtrl', ['$scope', 'MarketingLinksService', 'Notification', 'AuthService', function ($scope, MarketingLinksService, Notification, AuthService) {
         var vm = this;
 
         vm.getMarketingLinks = function () {
@@ -116,6 +116,13 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
         };
 
         vm.success = function (res) {
+
+            var user = AuthService.getLoggedInUser().username;
+
+            angular.forEach(res.data, function (mLink) {
+                mLink.link += '?user=' + user;
+            });
+
             $scope.mLinks = res.data;
         };
 

@@ -21,8 +21,8 @@ class MarketingLinksSeeder extends Seeder
 			'title' => 'IB sales',
 			'campaign_id' => $fc->id,
 			'description' => 'IB sale page',
-			'image' => 'dextrader.com/ib',
-			'link' => 'dextrader.com/ib',
+			'image' => 'http://dextrader.com/ib',
+			'link' => 'http://dextrader.com/ib',
 			'products' => '1,2'
 		]);
 
@@ -30,8 +30,8 @@ class MarketingLinksSeeder extends Seeder
 			'title' => 'IB checkout',
 			'campaign_id' => $fc->id,
 			'description' => 'IB checkout page',
-			'image' => 'dextrader.com/ib',
-			'link' => 'secure.dextrader.com/ib',
+			'image' => 'http://dextrader.com/ib',
+			'link' => 'http://secure.dextrader.com/ib',
 			'products' => '1,2,3,4',
 		]);
 

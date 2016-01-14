@@ -62,7 +62,7 @@ angular.module('app.upgrade-modal-form', [])
                     $scope.formData.card_id = $scope.card.cc_id;
 
                     if (angular.isDefined(invoiceData.user_id)) {
-                        CheckoutService.send($scope.formData, invoiceData.user_id)
+                        CheckoutService.upgrade($scope.formData, invoiceData.user_id)
                             .then(vm.success, vm.error);
                     }
 
