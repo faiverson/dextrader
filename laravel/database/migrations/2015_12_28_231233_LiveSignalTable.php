@@ -15,6 +15,13 @@ class LiveSignalTable extends Migration
 	 * W = Week Value ( == 1 )
 	 * MN = Month ( == 1 )
 	 *
+	 * DIRECTION ( 0 == BUY || 1 == SELL )
+	 * SYMBOL ( This is the stock/symbol that the user will understand, IE: GBPUSD || USDJPY )
+	 * OPEN_PRICE ( This is the current price as of this signal )
+	 * TARGET_PRICE ( == 0 for now, this will get updated later )
+	 * CLOSE_PRICE ( This comes in on the update api, this will be the price that this signal closed with when the signal expired )
+	 * WINLOSS ( 0 == LOSS || 1 == WIN )
+	 *
      * @return void
      */
     public function up()

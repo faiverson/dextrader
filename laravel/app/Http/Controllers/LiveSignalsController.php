@@ -29,8 +29,12 @@ class LiveSignalsController extends Controller
 		$limit = $request->input('limit') ? $request->input('limit') : $this->limit;
 		$offset = $request->input('offset') ? $request->input('offset') : 0;
 		$order_by = $request->input('order') ? $request->input('order') : ['signal_time' => 'desc', 'asset' => 'asc'];
-		$response = $this->gateway->all_signals($product, $limit, $offset, $order_by);
-		return response()->ok($response);
+		$signals = $this->gateway->all_signals($product, $limit, $offset, $order_by);
+		$total = $this->gateway->total_signals($product);
+		return response()->ok([
+			'signals' => $signals,
+			'total' => $total
+		]);
 	}
 
 	public function show(Request $request)

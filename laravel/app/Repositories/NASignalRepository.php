@@ -17,4 +17,9 @@ class NASignalRepository extends AbstractRepository implements LiveSignalReposit
 	{
 		return $this->model->where('mt_id', $mt_id)->where('trade_type', $trade)->first(['id']);
 	}
+
+	public function total()
+	{
+		return $this->model->count();
+	}
 }
