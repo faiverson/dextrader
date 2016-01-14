@@ -20,6 +20,7 @@ class CommissionTotals extends Migration
 			$table->decimal('paid', 10, 2)->signed()->nullable(false)->default(0);
 			$table->decimal('ready', 10, 2)->signed()->nullable(false)->default(0);
 			$table->decimal('pending', 10, 2)->signed()->nullable(false)->default(0);
+			$table->decimal('holdback', 10, 2)->signed()->nullable(false)->default(0);
 		});
     }
 

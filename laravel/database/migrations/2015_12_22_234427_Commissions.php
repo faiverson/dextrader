@@ -25,6 +25,7 @@ class Commissions extends Migration
 			$table->foreign('invoice_id')->references('id')->on('invoices');
 
 			$table->decimal('amount', 10, 2)->signed()->nullable(false);
+			$table->decimal('holdback', 10, 2)->signed()->nullable(false);
 			$table->enum('status', ['pending', 'paid', 'refund', 'ready'])->default('pending');
 			$table->enum('type', ['enroller', 'parent', 'admin', 'refund'])->default('enroller');
 			$table->dateTime('payout_dt')->nullable();

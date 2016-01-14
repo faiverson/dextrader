@@ -49,32 +49,19 @@ class CommissionsStatus extends Command
 			$comms = $this->commissionGateway->getPendingToReady();
 			if($comms) {
 				foreach($comms as $index => $commission) {
-					$response = $this->commissionGateway->updateToReady($commission);
-//					if($index == 0) {
-//						$balance = $this->paymentGateway->getBalance($commission->user_id);
-//					}
-//					$this->paymentGateway->payCommission($commission, $balance);
+					if(!$commission->holdback_dt) {
+						$response = $this->commissionGateway->updateToReady($commission);
+					}
+					else {
+						$response = $this->commissionGateway->updateHoldbackToReady($commission);
+					}
 
 					if($response) {
 						$this->info('Commission user: ' . $commission->user_id . ' processed');
-						$this->commissionGateway->create($commission);
 					}
 					else {
 						$this->warn('user: ' . $commission->user_id);
 						Log::info('user: ' . $commission->user_id);
-					}
-				}
-			}
-			$holdbacks = $this->commissionGateway->getPendingHoldbacksToReady();
-			if($holdbacks) {
-				foreach($holdbacks as $commission) {
-					$response = $this->commissionGateway->updateHoldbackToReady($commission);
-					if($response) {
-						$this->info('Commission holdback user: ' . $commission->user_id . ' processed');
-					}
-					else {
-						$this->warn('user holdback: ' . $commission->user_id);
-						Log::info('user holdback: ' . $commission->user_id);
 					}
 				}
 			}
