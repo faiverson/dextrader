@@ -40,9 +40,22 @@ class CommissionsPayments extends Command
      */
     public function handle()
     {
-		$this->info('Starting commission payment proccess');
-		$comms = $this->commissionGateway->getCommissionToPay();
-		$this->paymentGateway->getCommissionToPay($comms);
-		dd($comms->toArray());
+		$this->info('Starting commission payment process');
+		DB::beginTransaction();
+		try {
+			$comms = $this->commissionGateway->getCommissionToPay();
+			foreach($comms as $commission) {
+
+			}
+
+//			$this->paymentGateway->getCommissionToPay($commission);
+			$this->info('Commission user: ' . $commission->user_id);
+		} catch(\Exception $e) {
+			DB::rollback();
+			$this->warn('ERROR in comms:weekly');
+			Log::info('ERROR in comms:weekly', (array) $e->getMessage());
+		}
+		DB::commit();
+		$this->info('Finished commission payment proccess');
     }
 }

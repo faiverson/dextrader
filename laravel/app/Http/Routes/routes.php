@@ -12,7 +12,7 @@ Route::group(['namespace' => 'Auth', 'prefix' => 'api'], function () {
 //{
 //	print $query.'<br>';
 //	var_dump($params);
-//	exit;
+////	exit;
 //});
 
 //Event::listen('router.matched', function($route, $request)

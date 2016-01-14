@@ -44,4 +44,21 @@ class Commission extends Model
 		return $this->attributes['id'];
 	}
 
+	public function from()
+	{
+		return $this->hasOne(User::class, 'id', 'from_user_id')->select(['user_id', 'first_name', 'last_name', 'username', 'email']);
+	}
+
+	public function to()
+	{
+		return $this->hasOne(User::class, 'id', 'to_user_id')->select(['user_id', 'first_name', 'last_name', 'username', 'email']);
+	}
+
+	public function products()
+	{
+		$query = $this->hasMany(InvoiceDetail::class, 'invoice_id', 'invoice_id');
+		return $query->select(['invoice_id', 'invoices_detail.product_display_name']);
+	}
+
+
 }

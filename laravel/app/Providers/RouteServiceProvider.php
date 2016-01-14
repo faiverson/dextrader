@@ -45,10 +45,6 @@ class RouteServiceProvider extends ServiceProvider
 			$this->loadRoutesFrom(app_path('Http/Routes/admin.php'));
 		}
 
-		if ($request->is('secure*') || $request->is('secure/*')) {
-			$this->loadRoutesFrom(app_path('Http/Routes/sales.php'));
-		}
-
 		$router->group(['prefix' => 'api'], function () use($request) {
 			if ($request->is('api/users*')) {
 				$this->loadRoutesFrom(app_path('Http/Routes/users.php'));
