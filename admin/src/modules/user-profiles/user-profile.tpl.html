@@ -146,6 +146,54 @@
                             </tbody>
                         </table>
                     </uib-tab>
+                    <uib-tab heading="Commissions" select="commissions.loadUserCommissions(user.user_id)">
+                        <table class="table table-commissions">
+                            <thead>
+                            <tr>
+                                <th sortable="created_at"
+                                    current-sort="commissions.sortBy.column"
+                                    current-dir="commissions.sortBy.dir"
+                                    data-ng-click="commissions.sortBy.sort('created_at')">Date</th>
+                                <th sortable="status"
+                                    current-sort="commissions.sortBy.column"
+                                    current-dir="commissions.sortBy.dir"
+                                    data-ng-click="commissions.sortBy.sort('status')">Status</th>
+                                <th>Customer</th>
+                                <th>Enroller</th>
+                                <th>Product</th>
+                                <th>Retail</th>
+                                <th sortable="amount"
+                                    current-sort="commissions.sortBy.column"
+                                    current-dir="commissions.sortBy.dir"
+                                    data-ng-click="commissions.sortBy.sort('amount')">Comission</th>
+                                <th sortable="holdback"
+                                    current-sort="commissions.sortBy.column"
+                                    current-dir="commissions.sortBy.dir"
+                                    data-ng-click="commissions.sortBy.sort('holdback')">10% h</th>
+                                <th>Income</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="commission in commissions.data">
+                                <td data-ng-bind="commission.created_at | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY'"></td>
+                                <td data-ng-bind="commission.status"></td>
+                                <td data-ng-bind="commission.from.full_name"></td>
+                                <td data-ng-bind="commission.enroller"></td>
+                                <td>
+                                    <p class="prd-name" data-ng-repeat="prd in commission.products" data-ng-bind="prd.product_display_name"></p>
+                                </td>
+                                <td data-ng-bind="calculateRetail(commission.products) | currency: '$'"></td>
+                                <td data-ng-bind="commission.amount  | currency: '$'"></td>
+                                <td data-ng-bind="commission.holdback | currency: '$'"></td>
+                                <td data-ng-bind="(commission.amount - commission.holdback) | currency: '$'"></td>
+                            </tr>
+
+                            <tr data-ng-if="commissions.data.length == 0">
+                                <td class="text-center" colspan="9"> --- No commissions were found --- </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </uib-tab>
                 </uib-tabset>
             </div>
         </div>

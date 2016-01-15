@@ -20,7 +20,7 @@ angular.module('app.thankyou', ['ui.router'])
                 $scope.$broadcast('show-errors-check-validity');
 
                 if ($scope.loginFormDetails.$valid) {
-                    AuthService.login($scope.user.username, $scope.user.password)
+                    AuthService.userLogin($scope.user.username, $scope.user.password)
                         .then(vm.successLogin, vm.errorLogin);
                 }
 

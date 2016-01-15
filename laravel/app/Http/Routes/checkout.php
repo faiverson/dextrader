@@ -1,6 +1,9 @@
 <?php
-Route::post('/checkout', ['middleware' => 'page:checkout',
-						  'uses' => 'TransactionController@checkout']);
+Route::group(['middleware' => 'page:checkout'], function () {
+	Route::post('/checkout', 'TransactionController@checkout');
+	Route::post('/checkout/up-down-upgrade/{id}', 'TransactionController@upgrade')->where('id', '[0-9]+');
+});
+
 
 Route::group(['middleware' => 'jwt.auth'], function () {
 	Route::group(['middleware' => 'is.user'], function () {

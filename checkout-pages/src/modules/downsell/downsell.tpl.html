@@ -2,7 +2,7 @@
     <div id="header-content">
         <div id="logo"><a ui-sref="home"><img src="/assets/images/logo.png" alt="DEX Trader"></a></div>
         <div id="udt-info">
-            Do You Want To Try It Out For <span class="bold orange">Only $1.00</span> Today?
+            Do You Want To Try It Out For <span class="bold orange">Only {{specialOffers[0].amount | currency: '$'}}</span> Today?
         </div>
         <div class="clear"></div>
     </div>
@@ -17,14 +17,17 @@
     <button type="button"
             data-ng-click="openUpgradeForm()"
             data-ng-disabled="invoice_details.upsell_timer_seconds <= 0"
-            class="btn btn-warning submitbutton bg-orange btn-block">Upgrade Now For Only $1.00</button>
+            class="btn btn-warning submitbutton bg-orange btn-block">Upgrade Now For Only {{specialOffers[0].amount | currency: '$'}}</button>
 
     <div class="spacer-big"></div>
     <div class="align-center bold size15">
-        Hurry! Your <span class="orange">$50 $1 Trial Offer</span> Expires In
+        <div class="align-center bold size15">
+            Hurry! Your <span class="orange">{{specialOffers[0].product.amount | currency: '$'}} {{specialOffers[0].amount | currency: '$'}} Trial Offer</span> Expires In
+        </div>
     </div>
     <count-down
-            total-seconds="invoice_details.downsell_timer_seconds"
+            ng-if="specialOffers[0].countdown"
+            total-seconds="specialOffers[0].countdown"
             on-finish="timerFinish()"
             on-change="timerChange(remainSeconds)"></count-down>
     <div class="size17" style="line-height: 28px">

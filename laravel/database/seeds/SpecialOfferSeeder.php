@@ -17,7 +17,7 @@ class SpecialOfferSeeder extends Seeder
 		$this->command->info("Creating specials offers");
 		Training::unguard();
 
-		$mk = MarketingLink::where('link','dextrader.com/ib')->first();
+		$mk = MarketingLink::where('link','http://dextrader.com/ib')->first();
 		$prod = Product::where('name', 'IB')->first();
 		SpecialOffer::create([
 			'funnel_id' => $mk->id,
