@@ -89,6 +89,7 @@ class LiveSignalsController extends Controller
 			'close_price' => $request->input('close_price'),
 			'winloss' => $request->input('winloss'),
 		];
+
 		$signal = $this->gateway->find_signal($mt_id, $trade, $type);
 		if(!$signal) {
 			return response()->error('The signal is not in database');

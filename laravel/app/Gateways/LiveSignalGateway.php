@@ -38,7 +38,7 @@ class LiveSignalGateway extends AbstractGateway {
 
 	public function total_signals($type)
 	{
-		return $this->repository[$type]->total();
+		return $this->repository[$type]->all();
 	}
 
 	public function findByType($product, $id)
@@ -59,7 +59,6 @@ class LiveSignalGateway extends AbstractGateway {
 
 	public function edit($data, $id, $type)
 	{
-		$data['id'] = $id;
 		if( ! $this->updateValidator->with($data)->passes() )
 		{
 			$this->errors = $this->updateValidator->errors();

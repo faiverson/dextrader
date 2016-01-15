@@ -15,7 +15,7 @@ class IBSignal extends Model
      *
      * @var string
      */
-    protected $table = 'na_signals';
+    protected $table = 'ib_signals';
 
 	protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 

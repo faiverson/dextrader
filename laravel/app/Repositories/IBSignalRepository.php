@@ -15,11 +15,12 @@ class IBSignalRepository extends AbstractRepository implements LiveSignalReposit
 
 	public function find_signal($mt_id, $trade)
 	{
-		return $this->model->where('mt_id', $mt_id)->where('trade_type', $trade)->get(['id']);
+		return $this->model->where('mt_id', $mt_id)->where('trade_type', $trade)->first(['id']);
 	}
 
 	public function total()
 	{
 		return $this->model->count();
 	}
+
 }

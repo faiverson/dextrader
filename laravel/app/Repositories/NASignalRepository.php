@@ -22,4 +22,5 @@ class NASignalRepository extends AbstractRepository implements LiveSignalReposit
 	{
 		return $this->model->count();
 	}
+
 }
