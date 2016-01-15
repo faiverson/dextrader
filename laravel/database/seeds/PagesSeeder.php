@@ -25,7 +25,7 @@ class PagesSeeder extends Seeder
 			]);
 
 			Page::create([
-				'site' => 'dextrader.com',
+				'site' => '162.219.24.11',
 				'domain' => 'signals',
 				'password' => 'siGN4l_dexTr4d3r',
 				'access' => 'signal'
