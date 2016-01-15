@@ -10,8 +10,8 @@ angular.module('app.user-profile', [])
                 }
             });
     })
-    .controller('UserProfileController', ['$scope', '$state', '$stateParams', 'UserService', 'BillingAddressService', 'CreditCardService', 'Notification', 'InvoiceService', 'SubscriptionService',
-        function ($scope, $state, $stateParams, UserService, BillingAddressService, CreditCardService, Notification, InvoiceService, SubscriptionService) {
+    .controller('UserProfileController', ['$scope', '$state', '$stateParams', 'UserService', 'BillingAddressService', 'CreditCardService', 'Notification', 'InvoiceService', 'SubscriptionService', 'CommissionService',
+        function ($scope, $state, $stateParams, UserService, BillingAddressService, CreditCardService, Notification, InvoiceService, SubscriptionService, CommissionService) {
             var vm = this;
 
             vm.loadUser = function (id) {
@@ -48,6 +48,76 @@ angular.module('app.user-profile', [])
 
                 return prom;
             };
+
+            $scope.commissions = {
+                filters: {
+                    from: {
+                        format: 'dd MMM yyyy'
+                    },
+                    to: {
+                        format: 'dd MMM yyyy'
+                    },
+                    products: [
+                        {id: 1, name: 'IB'},
+                        {id: 2, name: 'IB PRO'}
+                    ],
+                    status: [
+                        'Pending', 'Ready to Pay', 'Paid'
+                    ],
+                    apply: function () {
+                        //TODO call api
+                    }
+                },
+                sortBy: {
+                    column: 'created_at',
+                    dir: 'desc',
+                    sort: function (col) {
+                        if (col === this.column) {
+                            this.dir = this.dir === 'asc' ? 'desc' : 'asc';
+                        } else {
+                            this.column = col;
+                            this.dir = 'asc';
+                        }
+
+                        this.loadUserCommissions($scope.user.user_id);
+                    }
+                },
+                pagination: {
+                    totalItems: 20,
+                    currentPage: 1,
+                    itemsPerPage: 10,
+                    pageChange: function () {
+                        this.loadUserCommissions($scope.user.user_id);
+                    }
+                },
+                loadUserCommissions: function (user_id) {
+
+                    var order = [];
+                    order[this.sortBy.column] = this.sortBy.dir;
+
+                    var params = {
+                        offset: (this.pagination.currentPage - 1) * this.pagination.itemsPerPage,
+                        limit: this.pagination.itemsPerPage,
+                        order: order
+                    };
+
+                    var prom = CommissionService.getCommissions(params, user_id);
+
+                    function success(res) {
+                        $scope.commissions.pagination.totalItems = res.data.total;
+                        $scope.commissions.data = res.data.commissions;
+                    }
+
+                    function error(err) {
+                        Notification.error(err.data.error);
+                    }
+
+                    prom.then(success, error);
+
+                    return prom;
+                }
+            };
+
 
             $scope.loadUserCreditCards = function (user_id) {
                 var prom = CreditCardService.query(user_id);

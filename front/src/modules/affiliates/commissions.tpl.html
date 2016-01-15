@@ -75,13 +75,13 @@
                        close-text="Close"/>
             </div>
             <div class="col-md-3">
-                <select style="width: 100%">
-                    <option>Show All Products</option>
+                <select style="width: 100%" data-ng-model="filters.product" data-ng-options="prd.name for prd in filters.products">
+                    <option value="">Show All Products</option>
                 </select>
             </div>
             <div class="col-md-3">
-                <select style="width: 100%">
-                    <option>All Results</option>
+                <select style="width: 100%" data-ng-model="filters.status" data-ng-options="st for st in filters.status">
+                    <option value="">All Results</option>
                 </select>
             </div>
         </div>
@@ -127,6 +127,9 @@
             <td data-ng-bind="(commission.amount - commission.holdback) | currency: '$'"></td>
         </tr>
 
+        <tr data-ng-if="commissions.length == 0">
+            <td class="text-center" colspan="9"> --- No commissions were found --- </td>
+        </tr>
         </tbody>
     </table>
     <div class="table-nav row">
@@ -134,6 +137,7 @@
             <uib-pagination direction-links="false"
                             total-items="pagination.totalItems"
                             ng-model="pagination.currentPage"
+                            ng-change="pagination.pageChange()"
                             items-per-page="pagination.itemsPerPage"
                             num-pages="smallnumPages"></uib-pagination>
         </div>
@@ -141,6 +145,7 @@
         <div class="col-md-4">
             <uib-pager total-items="pagination.totalItems"
                        items-per-page="pagination.itemsPerPage"
+                       ng-change="pagination.pageChange()"
                        ng-model="pagination.currentPage"></uib-pager>
         </div>
     </div>

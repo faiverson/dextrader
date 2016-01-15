@@ -838,4 +838,53 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         return {
             getRoles: getRoles
         };
+    }])
+
+    .factory('CommissionService', ['$http', '$q', '$site-configs', 'AuthService', '$objects', function ($http, $q, $configs, AuthService, $objects) {
+
+        function getCommissionTotals() {
+            var deferred = $q.defer();
+
+            setTimeout(function () {
+                deferred.resolve({
+                    data: {
+                        'today': 1231,
+                        'yesterday': 324.34,
+                        'last_week': 123345,
+                        'last_month': 423433,
+                        'last_year': 124234,
+                        'all_time': 3242344
+                    }
+                });
+            }, 500);
+
+            return deferred.promise;
+
+        }
+
+        function getCommissions(params, user_id) {
+            var endpoint = $configs.API_BASE_URL + 'users/' + user_id + '/commissions',
+                deferred = $q.defer();
+
+            if (angular.isObject(params)) {
+                endpoint += '?' + $objects.serializeUrl(params);
+            }
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
+        return {
+            getCommissionTotals: getCommissionTotals,
+            getCommissions: getCommissions
+        };
     }]);

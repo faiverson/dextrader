@@ -256,7 +256,10 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
         $scope.pagination = {
             totalItems: 20,
             currentPage: 1,
-            itemsPerPage: 10
+            itemsPerPage: 10,
+            pageChange: function () {
+                vm.getCommissions();
+            }
         };
 
         $scope.sortBy = {
@@ -281,6 +284,13 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
             to: {
                 format: 'dd MMM yyyy'
             },
+            products: [
+                { id: 1, name: 'IB' },
+                { id: 2, name: 'IB PRO' }
+            ],
+            status: [
+                'Pending', 'Ready to Pay', 'Paid'
+            ],
             apply: function () {
                 //TODO call api
             }
@@ -322,7 +332,8 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
             };
 
             function success(res) {
-                $scope.commissions = res.data;
+                $scope.pagination.totalItems = res.data.total;
+                $scope.commissions = res.data.commissions;
             }
 
             function error(res) {
