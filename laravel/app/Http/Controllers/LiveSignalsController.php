@@ -84,8 +84,6 @@ class LiveSignalsController extends Controller
 			return response()->error('Missing fields');
 		}
 		$data = [
-			'expiry_time' => $request->input('expiry_time'),
-			'target_price' => $request->input('target_price'),
 			'close_price' => $request->input('close_price'),
 			'winloss' => $request->input('winloss'),
 		];
