@@ -17,6 +17,7 @@ class PaymentsTable extends Migration
 			$table->bigInteger('user_id')->unsigned();
 			$table->decimal('prev_balance', 10, 2)->signed()->nullable(false);
 			$table->decimal('amount', 10, 2)->signed()->nullable(false);
+			$table->decimal('amount', 10, 2)->signed()->nullable(false);
 			$table->decimal('balance', 10, 2)->signed()->nullable(false);
 			$table->string('ledger_type');
 			$table->text('info')->nullable();

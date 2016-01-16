@@ -29,11 +29,10 @@ class CommissionsStatus extends Command
      *
      * @return void
      */
-	public function __construct(CommissionGateway $commissionGateway, PaymentGateway $paymentGateway)
+	public function __construct(CommissionGateway $commissionGateway)
 	{
 		parent::__construct();
 		$this->commissionGateway = $commissionGateway;
-		$this->paymentGateway = $paymentGateway;
 	}
 
     /**

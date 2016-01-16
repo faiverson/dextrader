@@ -82,6 +82,11 @@ class CommissionGateway extends AbstractGateway {
 		return $this->repository->getCommissionToPay();
 	}
 
+	public function getHoldbackToPay()
+	{
+		return $this->repository->getHoldbackToPay();
+	}
+
 	public function getPendingToReady()
 	{
 		return $this->repository->getPendingToReady();
@@ -99,6 +104,37 @@ class CommissionGateway extends AbstractGateway {
 			return $this->totalGateway->setToReady($commission);
 		}
 		return $response;
+	}
+
+	public function payNextWeekCommission(Commission $commission)
+	{
+		$c = $this->repository->payNextWeekCommission($commission->comms_ids);
+		$h = $this->repository->payNextWeekHoldbacks($commission->holdbacks_ids);
+		return ($c & $h);
+	}
+
+	public function updateToPaid(Commission $commission)
+	{
+		if($commission->comms_ids) {
+			$c_response = $this->repository->updateToPaid($commission->comms_ids);
+			if(!$c_response) {
+				$this->errors = ['Failed updateToPaid ' . $commission->comms_ids];
+				return false;
+			}
+		}
+		if($commission->holdbacks_ids) {
+			$h_response = $this->repository->updateHoldbackToPaid($commission->holdbacks_ids);
+			if(!$h_response) {
+				$this->errors = ['Failed updateHoldbackToPaid ' . $commission->holdbacks_ids];
+				return false;
+			}
+		}
+		$response = $this->totalGateway->setToPaid($commission);
+		if(!$response) {
+			$this->errors = ['Failed setToPaid '];
+			return false;
+		}
+		return true;
 	}
 
 	public function updateHoldbackToReady(Commission $commission)

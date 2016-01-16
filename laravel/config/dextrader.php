@@ -19,6 +19,8 @@ return [
 
 	'holdback' => .10, /// 10 % for holdbacks
 
+	'paid_limit' => 20, /// 10 % for holdbacks
+
 	// encrypting numbers like CC
 	'salt' => env('ENCRYPT_SALT', "CXRhW%r:m1rpq.a4'c{(-/98Q[Z^8i"),
 ];

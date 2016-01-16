@@ -42,12 +42,11 @@ class CommissionTotalGateway extends AbstractGateway {
 	public function setToReady(Commission $commission)
 	{
 		$user_id = $commission->user_id;
-		$ready = $commission->total - $commission->holdback;
 		$commsTotal = $this->repository->findByUserId($user_id);
 		if($commsTotal) {
 			$commsTotal->holdback += $commission->holdback;
 			$commsTotal->pending -= $commission->total;
-			$commsTotal->ready += $ready;
+			$commsTotal->ready += $commission->total;
 			$commsTotal->save();
 		}
 		return $commsTotal;
@@ -60,6 +59,19 @@ class CommissionTotalGateway extends AbstractGateway {
 		if($commsTotal) {
 			$commsTotal->holdback -= $commission->holdback;
 			$commsTotal->ready += $commission->holdback;
+			$commsTotal->save();
+		}
+		return $commsTotal;
+	}
+
+	public function setToPaid(Commission $commission)
+	{
+		$user_id = $commission->user_id;
+		$commsTotal = $this->repository->findByUserId($user_id);
+		if($commsTotal) {
+			$commsTotal->holdback -= $commission->total_holdbacks;
+			$commsTotal->ready -= $commission->total;
+			$commsTotal->paid += $commission->total;
 			$commsTotal->save();
 		}
 		return $commsTotal;
