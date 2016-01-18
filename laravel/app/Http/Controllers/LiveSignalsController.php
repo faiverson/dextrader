@@ -6,7 +6,7 @@ use App\Gateways\LiveSignalGateway;
 use Illuminate\Http\Request;
 use Config;
 use Event;
-
+use DateTime;
 class LiveSignalsController extends Controller
 {
 	protected $types = ['ib', 'na', 'fx'];
@@ -47,9 +47,9 @@ class LiveSignalsController extends Controller
 
 	public function store_by_page(Request $request)
 	{
-		$type = strtolower($request->input('type_product'));
-		if(in_array($type, $this->types)) {
-			return $this->store($request->all(), $type);
+		$data = $request->all();
+		if(in_array(strtolower($data['type_product']), $this->types)) {
+			return $this->store($data, $data['type_product']);
 		}
 
 		return response()->error('You need to set a product type');
@@ -63,6 +63,18 @@ class LiveSignalsController extends Controller
 
 	public function store($data, $type)
 	{
+		if(array_key_exists('expiry_time', $data)) {
+			$data['signal_date'] = str_replace('.', '-', $data['signal_date']);
+		}
+		if(array_key_exists('expiry_time', $data)) {
+			$data['expiry_time'] = str_replace('.', '-', $data['expiry_time']);
+		}
+		if(array_key_exists('date_close', $data)) {
+			$data['date_close'] = str_replace('.', '-', $data['date_close']);
+		}
+		if(array_key_exists('type_product', $data)) {
+			$type = strtolower($data['type_product']);
+		}
 		if(array_key_exists('trade_type', $data)) {
 			$data['trade_type'] = strtoupper($data['trade_type']);
 		}

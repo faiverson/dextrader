@@ -38,7 +38,7 @@ class LiveSignalGateway extends AbstractGateway {
 
 	public function total_signals($type)
 	{
-		return $this->repository[$type]->all();
+		return $this->repository[$type]->total();
 	}
 
 	public function findByType($product, $id)

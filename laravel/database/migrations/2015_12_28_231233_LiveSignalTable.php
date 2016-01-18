@@ -29,15 +29,15 @@ class LiveSignalTable extends Migration
 		Schema::create('ib_signals', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->bigInteger('mt_id')->signed();
-//			$table->date('signal_date')->nullable(false)->index();
-			$table->string('signal_time', 6)->nullable(false);
-			$table->string('expiry_time', 6)->nullable();
-			$table->string('direction', 4)->nullable();
+			$table->dateTime('signal_time')->nullable();
+			$table->dateTime('expiry_time')->nullable();
+			$table->tinyInteger('direction')->default(0);
 			$table->string('asset', 10)->nullable()->index(); // symbol
 			$table->string('trade_type', 4)->nullable();
-			$table->decimal('open_price', 11, 5)->signed()->nullable(false);
+			$table->decimal('open_price', 11, 5)->signed()->nullable();
 			$table->decimal('target_price', 11, 5)->signed()->nullable();
 			$table->decimal('close_price', 11, 5)->signed()->nullable();
+			$table->dateTime('close_time')->nullable();
 			$table->tinyInteger('winloss');
 
 			$table->softDeletes();
@@ -47,15 +47,15 @@ class LiveSignalTable extends Migration
 		Schema::create('fx_signals', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->bigInteger('mt_id')->signed();
-//			$table->date('signal_date')->nullable(false)->index();
-			$table->string('signal_time', 6)->nullable(false);
-			$table->string('expiry_time', 6)->nullable();
-			$table->string('direction', 4)->nullable();
+			$table->dateTime('signal_time')->nullable();
+			$table->dateTime('expiry_time')->nullable();
+			$table->tinyInteger('direction')->default(0);
 			$table->string('asset', 10)->nullable()->index(); // symbol
 			$table->string('trade_type', 4)->nullable();
-			$table->decimal('open_price', 11, 5)->signed()->nullable(false);
+			$table->decimal('open_price', 11, 5)->signed()->nullable();
 			$table->decimal('target_price', 11, 5)->signed()->nullable();
 			$table->decimal('close_price', 11, 5)->signed()->nullable();
+			$table->dateTime('close_time')->nullable();
 			$table->tinyInteger('winloss');
 
 			$table->softDeletes();
@@ -65,15 +65,15 @@ class LiveSignalTable extends Migration
 		Schema::create('na_signals', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->bigInteger('mt_id')->signed();
-//			$table->date('signal_date')->nullable(false)->index();
-			$table->string('signal_time', 6)->nullable(false);
-			$table->string('expiry_time', 6)->nullable();
-			$table->string('direction', 4)->nullable();
+			$table->dateTime('signal_time')->nullable();
+			$table->dateTime('expiry_time')->nullable();
+			$table->tinyInteger('direction')->default(0);
 			$table->string('asset', 10)->nullable()->index(); // symbol
 			$table->string('trade_type', 4)->nullable();
-			$table->decimal('open_price', 11, 5)->signed()->nullable(false);
+			$table->decimal('open_price', 11, 5)->signed()->nullable();
 			$table->decimal('target_price', 11, 5)->signed()->nullable();
 			$table->decimal('close_price', 11, 5)->signed()->nullable();
+			$table->dateTime('close_time')->nullable();
 			$table->tinyInteger('winloss');
 
 			$table->softDeletes();
