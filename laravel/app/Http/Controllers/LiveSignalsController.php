@@ -48,8 +48,18 @@ class LiveSignalsController extends Controller
 	public function store_by_page(Request $request)
 	{
 		$data = $request->all();
+		$type_product = $data['type_product'];
+		if($type_product == 'nadex') {
+			$type_product = 'na';
+		}
+		elseif($type_product == 'dibs') {
+			$type_product = 'ib';
+		}
+		if($type_product == 'forex') {
+			$type_product = 'fx';
+		}
 		if(in_array(strtolower($data['type_product']), $this->types)) {
-			return $this->store($data, $data['type_product']);
+			return $this->store($data, $type_product);
 		}
 
 		return response()->error('You need to set a product type');
