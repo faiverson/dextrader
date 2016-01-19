@@ -54,6 +54,7 @@
             </div>
             <div class="col-md-2">
                 <input type="text"
+                       data-ng-change="filters.apply()"
                        placeholder="From"
                        data-ng-focus="filters.from.opened = true"
                        class="form-control"
@@ -66,21 +67,28 @@
             <div class="col-md-2">
                 <input type="text"
                        class="form-control"
+                       data-ng-change="filters.apply()"
                        data-ng-focus="filters.to.opened = true"
                        placeholder="To"
                        uib-datepicker-popup="{{filters.to.format}}"
                        ng-model="filters.to.value"
                        is-open="filters.to.opened"
-                       min-date="from.value"
+                       min-date="filters.from.value"
                        close-text="Close"/>
             </div>
             <div class="col-md-3">
-                <select style="width: 100%" data-ng-model="filters.product" data-ng-options="prd.name for prd in filters.products">
+                <select style="width: 100%"
+                        data-ng-model="filters.selectedProduct"
+                        data-ng-options="prd.name for prd in filters.products"
+                        data-ng-change="filters.apply()">
                     <option value="">Show All Products</option>
                 </select>
             </div>
             <div class="col-md-3">
-                <select style="width: 100%" data-ng-model="filters.status" data-ng-options="st for st in filters.status">
+                <select style="width: 100%"
+                        data-ng-model="filters.status"
+                        data-ng-change="filters.apply()"
+                        data-ng-options="st for st in filters.selectedStatus">
                     <option value="">All Results</option>
                 </select>
             </div>
@@ -117,7 +125,7 @@
             <td data-ng-bind="commission.created_at | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY'"></td>
             <td data-ng-bind="commission.status"></td>
             <td data-ng-bind="commission.from.full_name"></td>
-            <td data-ng-bind="commission.enroller"></td>
+            <td data-ng-bind="user.full_name"></td>
             <td>
                 <p class="prd-name" data-ng-repeat="prd in commission.products" data-ng-bind="prd.product_display_name"></p>
             </td>

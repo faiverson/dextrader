@@ -12,7 +12,7 @@ class LiveSignalCreateValidator extends AbstractValidator {
 	 * @var array
 	 */
 	protected $rules = array(
-		'mt_id' => 'required',
+//		'mt_id' => 'required',
 		'signal_time' => ['required', 'regex:/^[0-9]{2}\:[0-9]{2}$/'],
 		'expiry_time' => ['sometimes', 'regex:/^[0-9]{2}\:[0-9]{2}$/'],
 		'asset' => ['required', 'regex:/^[a-zA-Z]{3}\/{0,1}[a-zA-Z]{3}$/'],

@@ -8,31 +8,44 @@
                     <!--'signal_date', 'signal_time', 'expiry_time', 'asset', 'asset_rate', 'target_price', 'end_price'-->
                     <div class="panel-heading">Signal Information</div>
                     <div class="panel-body">
-                        <div class="form-group" data-show-errors>
-                            <label for="signal_date">Date</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="filterProducts">Product</label>
+                                    <select class="form-control" id="filterProducts"
+                                            data-ng-model="product" data-ng-options="prd.name for prd in products">
+                                        <option value="">Show All Products</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group" data-show-errors>
+                                    <label for="signal_date">Date</label>
 
-                            <p class="input-group">
-                                <input type="date"
-                                       id="signal_date"
-                                       name="signal_date"
-                                       class="form-control"
-                                       uib-datepicker-popup
-                                       data-ng-model="signal_date"
-                                       is-open="dateDatepickerOpen"
-                                       min-date="minDate"
-                                       max-date="maxDate"
-                                       datepicker-options="dateOptions"
-                                       date-disabled="disabled(date, mode)"
-                                       ng-required="true"
-                                       close-text="Close"/>
+                                    <p class="input-group">
+                                        <input type="date"
+                                               id="signal_date"
+                                               name="signal_date"
+                                               class="form-control"
+                                               uib-datepicker-popup
+                                               data-ng-model="signal_date"
+                                               is-open="dateDatepickerOpen"
+                                               min-date="minDate"
+                                               max-date="maxDate"
+                                               datepicker-options="dateOptions"
+                                               date-disabled="disabled(date, mode)"
+                                               ng-required="true"
+                                               close-text="Close"/>
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default" ng-click="open($event)"><i
                                             class="glyphicon glyphicon-calendar"></i></button>
                                 </span>
-                            </p>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Signal Time</label>
                                     <uib-timepicker ng-model="signal_time"
@@ -44,7 +57,7 @@
                                                     minute-step="1" show-meridian="false"></uib-timepicker>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Expiry Time</label>
                                     <uib-timepicker ng-model="expiry_time"
@@ -56,7 +69,22 @@
                                                     minute-step="1" show-meridian="false"></uib-timepicker>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Direction</label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="radio" data-ng-model="signal.direction" value="0"/>
+                                            <img src="/assets/images/ico-reddown.png" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="radio" data-ng-model="signal.direction" value="1"/>
+                                            <img src="/assets/images/ico-greenup.png">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
                                 <div class="form-group" data-show-errors>
                                     <label for="asset">Asset</label>
                                     <input class="form-control"
@@ -69,20 +97,29 @@
                                            ui-mask-placeholder-char=" ">
                                 </div>
                             </div>
+                            <div class="col-md-3">
+                                <div class="form-group" data-show-errors>
+                                    <label for="trade_type">Trade Type</label>
+                                    <input type="text"
+                                           name="trade_type"
+                                           class="form-control"
+                                           id="trade_type"
+                                           placeholder="Trade type"
+                                           data-ng-model="signal.trade_type"
+                                           required>
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group" data-show-errors>
-                                    <label for="asset_rate">Asset Rate</label>
-                                    <input type="text"
-                                           name="asset_rate"
+                                    <label for="open_price">Open Price</label>
+                                    <input type="number"
+                                           name="open_price"
                                            class="form-control"
-                                           id="asset_rate"
-                                           ui-mask="99 %"
-                                           ui-mask-placeholder=""
-                                           ui-mask-placeholder-char=" "
-                                           placeholder="Asset Rate"
-                                           data-ng-model="signal.asset_rate"
+                                           id="open_price"
+                                           placeholder="Open Price"
+                                           data-ng-model="signal.open_price"
                                            required>
                                 </div>
                             </div>
@@ -100,13 +137,13 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group" data-show-errors>
-                                    <label for="end_price">End Price</label>
+                                    <label for="close_price">End Price</label>
                                     <input type="number"
-                                           name="end_price"
+                                           name="close_price"
                                            class="form-control"
-                                           id="end_price"
+                                           id="close_price"
                                            placeholder="End Price"
-                                           data-ng-model="signal.end_price"
+                                           data-ng-model="signal.close_price"
                                            required>
                                 </div>
                             </div>

@@ -249,7 +249,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
         vm.init();
     }])
 
-    .controller('CommissionsCtrl', ['$scope', 'CommissionService', 'Notification', function ($scope, CommissionService, Notification) {
+    .controller('CommissionsCtrl', ['$scope', 'CommissionService', 'Notification', 'AuthService', function ($scope, CommissionService, Notification, AuthService) {
 
         var vm = this;
 
@@ -261,6 +261,8 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 vm.getCommissions();
             }
         };
+
+        $scope.user = AuthService.getLoggedInUser();
 
         $scope.sortBy = {
             column: 'created_at',
@@ -292,8 +294,17 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 'Pending', 'Ready to Pay', 'Paid'
             ],
             apply: function () {
-                //TODO call api
-            }
+                if(angular.isDefined(this.from.value)){
+                    this.toApply.from = moment(this.from.value).format('YYYY-MM-DD');
+                }
+
+                if(angular.isDefined(this.to.value)){
+                    this.toApply.to = moment(this.to.value).format('YYYY-MM-DD');
+                }
+
+                vm.getCommissions();
+            },
+            toApply: {}
         };
         
         $scope.calculateRetail = function (products) {
@@ -328,7 +339,8 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
             var params = {
                 offset: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
                 limit: $scope.pagination.itemsPerPage,
-                order: order
+                order: order,
+                filter: $scope.filters.toApply
             };
 
             function success(res) {

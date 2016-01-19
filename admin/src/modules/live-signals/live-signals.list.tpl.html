@@ -4,6 +4,19 @@
         <button class="btn btn-sm btn-primary pull-right" ui-sref="live_signals.new">NEW SIGNAL</button>
     </h1>
 
+    <div class="filters">
+        <div class="col-md-4 pull-right">
+            <div class="form-group">
+                <label for="filterProducts">Product</label>
+                <select class="form-control" id="filterProducts"
+                        data-ng-change="filters.apply()"
+                        data-ng-model="filters.product" data-ng-options="prd.name for prd in filters.products">
+                    <option value="">Show All Products</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
     <table class="table">
         <thead>
         <tr>
@@ -22,7 +35,7 @@
                 current-dir="sortBy.dir"
                 data-ng-click="sortBy.sort(3)">Expiry Time
             </th>
-            <th>Review</th>
+            <th>Direction</th>
             <th sortable="4"
                 current-sort="sortBy.column"
                 current-dir="sortBy.dir"
@@ -31,30 +44,37 @@
             <th sortable="5"
                 current-sort="sortBy.column"
                 current-dir="sortBy.dir"
-                data-ng-click="sortBy.sort(5)">Asset Rate
+                data-ng-click="sortBy.sort(5)">Asset Win Rate
             </th>
             <th sortable="6"
                 current-sort="sortBy.column"
                 current-dir="sortBy.dir"
                 data-ng-click="sortBy.sort(6)">End Price
             </th>
-            <th sortable="7"
+            <th sortable="6"
                 current-sort="sortBy.column"
                 current-dir="sortBy.dir"
                 data-ng-click="sortBy.sort(7)">Target Price
+            </th>
+            <th sortable="7"
+                current-sort="sortBy.column"
+                current-dir="sortBy.dir"
+                data-ng-click="sortBy.sort(8)">Win
             </th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         <tr data-ng-repeat="signal in signals">
-            <td data-ng-bind="::signal.signal_date | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY'"></td>
-            <td data-ng-bind="::signal.signal_time"></td>
-            <td data-ng-bind="::signal.expiry_time"></td>
+            <td data-ng-bind="::signal.created_at | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY'"></td>
+            <td data-ng-bind="::signal.signal_time" class="green"></td>
+            <td data-ng-bind="::signal.expiry_time" class="red"></td>
+            <td><img data-ng-src="{{signal.direction == 0 && '/assets/images/ico-reddown.png' || '/assets/images/ico-greenup.png'}}"></td>
             <td data-ng-bind="::signal.asset"></td>
-            <td data-ng-bind="::signal.asset_rate"></td>
-            <td data-ng-bind="::signal.target_price"></td>
-            <td data-ng-bind="::signal.end_price"></td>
+            <td data-ng-bind="::signal.winloss"></td>
+            <td data-ng-bind="::signal.target_price" class="green"></td>
+            <td data-ng-bind="::signal.close_price" class="red"></td>
+            <td class="green">Win</td>
             <td>
                 <div class="btn-group">
                     <button type="button"
@@ -64,7 +84,7 @@
                         Actions <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a ui-sref="live_signals.edit({id:signal.id})">Edit</a></li>
+                        <li><a ui-sref="live_signals.edit({id:signal.id, prd: filters.product.name.toLowerCase() })">Edit</a></li>
                         <li><a href="#" data-ng-click="openDeleteConfirm(signal.id)">Remove</a></li>
                     </ul>
                 </div>

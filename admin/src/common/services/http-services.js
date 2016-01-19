@@ -254,11 +254,13 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
     }])
 
     .factory('LiveSignalsService', ['$http', '$q', '$site-configs', '$objects', function ($http, $q, $configs, $objects) {
-        var service = $configs.API_BASE_URL + 'signals/live';
+        var service = $configs.API_BASE_URL + 'signals/';
 
-        function query(params) {
+        function query(product, params) {
             var deferred = $q.defer(),
                 endpoint = service;
+
+            endpoint += product;
 
             if (angular.isDefined(params)) {
                 endpoint += '?' + $objects.toUrlString(params);
@@ -277,10 +279,9 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
-        function save(data) {
+        function save(product, data) {
             var endpoint = service,
                 deferred = $q.defer();
-
 
             function success(res) {
                 deferred.resolve(res.data);
@@ -291,16 +292,17 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             }
 
             if (angular.isDefined(data.id)) {
-                endpoint += '/' + data.id;
+                endpoint += product + '/' + data.id;
                 $http.put(endpoint, data).then(success, error);
             } else {
+                endpoint += 'add/' + product;
                 $http.post(endpoint, data).then(success, error);
             }
 
             return deferred.promise;
         }
 
-        function getOne(id) {
+        function getOne(id, prd) {
             var deferred = $q.defer(),
                 endpoint = service;
 
@@ -308,7 +310,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 deferred.reject('ID field is required!');
             }
 
-            endpoint += '/' + id;
+            endpoint +=  prd + '/' + id;
 
             function success(res) {
                 deferred.resolve(res.data);

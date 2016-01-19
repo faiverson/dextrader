@@ -216,8 +216,72 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
         };
     }])
 
-    .controller('LiveSignalsCtrl', ['$scope', function ($scope) {
+    .controller('LiveSignalsCtrl', ['$scope', 'LiveSignalsService', function ($scope, LiveSignalsService) {
+        var vm = this;
 
+        $scope.pagination = {
+            totalItems: 20,
+            currentPage: 1,
+            itemsPerPage: 10,
+            pageChange: function () {
+                vm.getLiveSignals();
+            }
+        };
+
+        $scope.filters = {
+            products: [
+                {id: 1, name: 'IB'},
+                {id: 3, name: 'NA'},
+                {id: 4, name: 'FX'}
+            ],
+            apply: function () {
+                vm.getLiveSignals();
+            }
+        };
+
+        $scope.sortBy = {
+            column: 1,
+            dir: 'asc',
+            sort: function (col) {
+                if (col === this.column) {
+                    this.dir = this.dir === 'asc' ? 'desc' : 'asc';
+                } else {
+                    this.column = col;
+                    this.dir = 'asc';
+                }
+
+                vm.getLiveSignals();
+            }
+        };
+
+        vm.getLiveSignals = function () {
+
+            var params = {
+                offset: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
+                limitt: $scope.pagination.itemsPerPage,
+                sortBy: $scope.sortBy.column,
+                sortDir: $scope.sortBy.dir
+            };
+
+            function success(res) {
+                $scope.pagination.totalItems = res.data.total;
+                $scope.signals = res.data.signals;
+            }
+
+            function error(err) {
+                Notification.error('Ups! there was an error trying to load signals!');
+            }
+
+            LiveSignalsService.query($scope.filters.product.name.toLowerCase(), params)
+                .then(success, error);
+        };
+
+        vm.init = function () {
+            $scope.filters.product = $scope.filters.products[0];
+            vm.getLiveSignals();
+        };
+
+        vm.init();
     }])
 
     .controller('DexScoreCtrl', ['$scope', 'ProvidersService', 'Notification', function ($scope, ProvidersService, Notification) {
@@ -290,7 +354,9 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
                 controller: 'UpgradeModalFormCtrl',
                 size: 'lg',
                 resolve: {
-                    products: function() { return [2]; }
+                    products: function () {
+                        return [2];
+                    }
                 }
             });
 

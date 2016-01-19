@@ -30,133 +30,37 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>19 Oct 2015</td>
-            <td class="green">20:02</td>
-            <td class="red">20:12</td>
-            <td><img src="/front/assets/images/ico-greenup.png"></td>
-            <td>AUD/NZD</td>
-            <td>65%</td>
-            <td class="green">1.06638</td>
-            <td class="red">1.06638</td>
+        <tr data-ng-repeat="signal in signals">
+            <td data-ng-bind="::signal.created_at | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY'"></td>
+            <td data-ng-bind="::signal.signal_time" class="green"></td>
+            <td data-ng-bind="::signal.expiry_time" class="red"></td>
+            <td><img data-ng-src="{{signal.direction == 0 && '/front/assets/images/ico-reddown.png' || '/front/assets/images/ico-greenup.png'}}"></td>
+            <td data-ng-bind="::signal.asset"></td>
+            <td data-ng-bind="::signal.winloss"></td>
+            <td data-ng-bind="::signal.target_price" class="green"></td>
+            <td data-ng-bind="::signal.close_price" class="red"></td>
             <td class="green">Win</td>
         </tr>
-        <tr>
-            <td>19 Oct 2015</td>
-            <td class="green">18:27</td>
-            <td class="red">18:37</td>
-            <td><img src="/front/assets/images/ico-greenup.png"></td>
-            <td>NZD/USD</td>
-            <td>75%</td>
-            <td class="green">1.06638</td>
-            <td class="red">1.06638</td>
-            <td class="green">Win</td>
-        </tr>
-        <tr>
-            <td>19 Oct 2015</td>
-            <td class="green">18:02</td>
-            <td class="red">18:22</td>
-            <td><img src="/front/assets/images/ico-reddown.png"></td>
-            <td>EUR/GBP</td>
-            <td>62%</td>
-            <td class="green">1.06638</td>
-            <td class="red">1.06638</td>
-            <td class="green">Win</td>
-        </tr>
-        <tr>
-            <td>19 Oct 2015</td>
-            <td class="green">17:14</td>
-            <td class="red">17:24</td>
-            <td><img src="/front/assets/images/ico-greenup.png"></td>
-            <td>EUR/GBP</td>
-            <td>58%</td>
-            <td class="green">1.06638</td>
-            <td class="red">1.06638</td>
-            <td class="red">Loss</td>
-        </tr>
-        <tr>
-            <td>19 Oct 2015</td>
-            <td class="green">15:10</td>
-            <td class="red">15:20</td>
-            <td><img src="/front/assets/images/ico-greenup.png"></td>
-            <td>CAD/CHF</td>
-            <td>70%</td>
-            <td class="green">1.06638</td>
-            <td class="red">1.06638</td>
-            <td class="green">Win</td>
-        </tr>
-        <tr>
-            <td>19 Oct 2015</td>
-            <td class="green">12:38</td>
-            <td class="red">12:48</td>
-            <td><img src="/front/assets/images/ico-reddown.png"></td>
-            <td>EUR/USD</td>
-            <td>70%</td>
-            <td class="green">1.06638</td>
-            <td class="red">1.06638</td>
-            <td class="green">Win</td>
-        </tr>
-        <tr>
-            <td>19 Oct 2015</td>
-            <td class="green">12:07</td>
-            <td class="red">12:17</td>
-            <td><img src="/front/assets/images/ico-reddown.png"></td>
-            <td>AUD/USD</td>
-            <td>68%</td>
-            <td class="green">1.06638</td>
-            <td class="red">1.06638</td>
-            <td class="green">Win</td>
-        </tr>
-        <tr>
-            <td>19 Oct 2015</td>
-            <td class="green">10:15</td>
-            <td class="red">10:25</td>
-            <td><img src="/front/assets/images/ico-greenup.png"></td>
-            <td>AUD/USD</td>
-            <td>60%</td>
-            <td class="green">1.06638</td>
-            <td class="red">1.06638</td>
-            <td class="green">Win</td>
-        </tr>
-        <tr>
-            <td>19 Oct 2015</td>
-            <td class="green">09:37</td>
-            <td class="red">09:57</td>
-            <td><img src="/front/assets/images/ico-greenup.png"></td>
-            <td>AUD/JPY</td>
-            <td>68%</td>
-            <td class="green">1.06638</td>
-            <td class="red">1.06638</td>
-            <td class="green">Win</td>
-        </tr>
-        <tr>
-            <td>19 Oct 2015</td>
-            <td class="green">08:45</td>
-            <td class="red">08:55</td>
-            <td><img src="/front/assets/images/ico-reddown.png"></td>
-            <td>AUD/NZD</td>
-            <td>69%</td>
-            <td class="green">1.06638</td>
-            <td class="red">1.06638</td>
-            <td class="red">Loss</td>
+        <tr data-ng-if="signals.length === 0">
+            <td colspan="9" class="text-center">--- No Signals Were Found ---</td>
         </tr>
         </tbody>
     </table>
-    <div class="table-nav">
-        <div class="table-nav-pagination">
-            <a href="#">1</a>
-            <a class="active" href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">5</a>
-            <a href="#">6</a>
-            <a href="#">7</a>
-            <span>...</span>
-            <a href="#">16</a>
+    <div class="table-nav row">
+        <div class="col-md-8">
+            <uib-pagination direction-links="false"
+                            total-items="pagination.totalItems"
+                            ng-model="pagination.currentPage"
+                            ng-change="pagination.pageChange()"
+                            items-per-page="pagination.itemsPerPage"
+                            num-pages="smallnumPages"></uib-pagination>
         </div>
-        <div class="table-nav-buttons clearfix">
-            <a class="table-nav-prev button" href="#">Previous</a>
-            <a class="table-nav-next button" href="#">Next</a>
+
+        <div class="col-md-4">
+            <uib-pager total-items="pagination.totalItems"
+                       items-per-page="pagination.itemsPerPage"
+                       ng-change="pagination.pageChange()"
+                       ng-model="pagination.currentPage"></uib-pager>
         </div>
     </div>
 </section>

@@ -834,6 +834,37 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
 
     }])
 
+    .factory('LiveSignalsService', ['$http', '$q', '$site-configs', '$objects', function ($http, $q, $configs, $objects) {
+        var service = $configs.API_BASE_URL + 'signals/';
+
+        function query(product, params) {
+            var deferred = $q.defer(),
+                endpoint = service;
+
+            endpoint += product;
+
+            if (angular.isDefined(params)) {
+                endpoint += '?' + $objects.toUrlString(params);
+            }
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
+        return {
+            query: query
+        };
+    }])
+
     .factory('ChatService', ['AuthService', function (AuthService) {
 
         // jshint ignore:start

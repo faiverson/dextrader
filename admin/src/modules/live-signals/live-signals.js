@@ -28,7 +28,7 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
                 }
             })
             .state('live_signals.edit', {
-                url: '/edit/:id',
+                url: '/edit/:prd/:id',
                 templateUrl: 'modules/live-signals/live-signals.form.tpl.html',
                 controller: 'LiveSignalsFormCtrl',
                 data: {
@@ -44,11 +44,21 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
 
             var vm = this;
 
-            $scope.signal = {};
+            $scope.signal = {
+                direction: 0
+            };
 
             $scope.open = function ($event) {
                 $scope.dateDatepickerOpen = true;
             };
+
+            $scope.products = [
+                { id: 1, name: 'IB' },
+                { id: 3, name: 'NA' },
+                { id: 4, name: 'FX' }
+            ];
+
+            $scope.product = $scope.products[0];
 
             $scope.save = function () {
                 $scope.$broadcast('show-errors-check-validity');
@@ -65,10 +75,7 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
                         $scope.signal.asset = $scope.asset;
                     }
 
-
-                    $scope.signal.asset_rate = parseInt($scope.signal.asset_rate.replace('%', ''));
-
-                    LiveSignalsService.save($scope.signal)
+                    LiveSignalsService.save($scope.product.name.toLowerCase(), $scope.signal)
                         .then(vm.success, vm.error);
                 }
             };
@@ -82,13 +89,14 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
                 Notification.error("Ups! there was an error trying to save the signal!");
             };
 
-            vm.getSignalForEdit = function (id) {
-                LiveSignalsService.getOne(id)
+            vm.getSignalForEdit = function (id, prd) {
+                LiveSignalsService.getOne(id, prd)
                     .then(function (res) {
                         $scope.signal.id = res.data.id;
                         $scope.signal.target_price = parseFloat(res.data.target_price);
-                        $scope.signal.end_price = parseFloat(res.data.end_price);
-                        $scope.signal.asset_rate = res.data.asset_rate;
+                        $scope.signal.close_price = parseFloat(res.data.close_price);
+                        $scope.signal.open_price = parseFloat(res.data.open_price);
+                        $scope.signal.trade_type = res.data.trade_type;
                         $scope.signal_date = moment(res.data.signal_date, "YYYY-MM-DD").toDate();
                         $scope.signal_time = moment(res.data.signal_time, "HH:mm");
                         $scope.expiry_time = moment(res.data.expiry_time, "HH:mm");
@@ -98,8 +106,8 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
             };
 
             vm.init = function () {
-                if (angular.isDefined($stateParams.id)) {
-                    vm.getSignalForEdit($stateParams.id);
+                if (angular.isDefined($stateParams.id) && angular.isDefined($stateParams.prd)) {
+                    vm.getSignalForEdit($stateParams.id, $stateParams.prd);
                 }
             };
 
@@ -114,6 +122,17 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
             currentPage: 1,
             itemsPerPage: 10,
             pageChange: function () {
+                vm.getLiveSignals();
+            }
+        };
+
+        $scope.filters = {
+            products: [
+                { id: 1, name: 'IB' },
+                { id: 3, name: 'NA' },
+                { id: 4, name: 'FX' }
+            ],
+            apply: function () {
                 vm.getLiveSignals();
             }
         };
@@ -165,19 +184,20 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
             };
 
             function success(res) {
-                $scope.pagination.totalItems = res.data.totalItems;
-                $scope.signals = res.data;
+                $scope.pagination.totalItems = res.data.total;
+                $scope.signals = res.data.signals;
             }
 
             function error(err) {
                 Notification.error('Ups! there was an error trying to load providers!');
             }
 
-            LiveSignalsService.query(params)
+            LiveSignalsService.query($scope.filters.product.name.toLowerCase(), params)
                 .then(success, error);
         };
 
         vm.init = function () {
+            $scope.filters.product = $scope.filters.products[0];
             vm.getLiveSignals();
         };
 
