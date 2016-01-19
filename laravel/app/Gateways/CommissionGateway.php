@@ -192,4 +192,11 @@ class CommissionGateway extends AbstractGateway {
 	{
 		return $this->repository->getSummaryUserCommissions($id);
 	}
+
+	public function getBalance($id)
+	{
+		return $this->totalGateway->findBy('user_id', $id);
+	}
+
+
 }
