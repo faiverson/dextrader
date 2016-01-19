@@ -256,6 +256,29 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 		return $query->count();
 	}
 
+	public function getSummaryUserCommissions($id)
+	{
+		$query =  $this->model;
+		$from = new DateTime('yesterday');
+		$yesterday = $from->format('Y-m-d');
+		$today = $from->modify('+1 day')->format('Y-m-d');
+		$week = $from->modify('-1 week')->format('Y-m-d');
+		$month = $from->modify('+1 week')->modify('-1 month')->format('Y-m-d');
+		$year = $from->modify('+1 month')->modify('-1 year')->format('Y-m-d');
+
+		// creating the query
+		$query = $query->where('to_user_id', $id);
+		$query->groupBy('to_user_id');
+		return $query->select([
+			DB::raw("(SELECT SUM(c1.amount) FROM commissions c1 WHERE DATE(created_at) = '{$yesterday}' AND c1.to_user_id = commissions.to_user_id) AS yesterday"),
+			DB::raw("(SELECT SUM(c2.amount) FROM commissions c2 WHERE DATE(created_at) = '{$today}' AND c2.to_user_id = commissions.to_user_id) AS today"),
+			DB::raw("(SELECT SUM(c3.amount) FROM commissions c3 WHERE DATE(created_at) >= '{$week}' AND c3.to_user_id = commissions.to_user_id) AS last_week"),
+			DB::raw("(SELECT SUM(c4.amount) FROM commissions c4 WHERE DATE(created_at) >= '{$month}' AND c4.to_user_id = commissions.to_user_id) AS last_month"),
+			DB::raw("(SELECT SUM(c5.amount) FROM commissions c5 WHERE DATE(created_at) >= '{$year}' AND c5.to_user_id = commissions.to_user_id) AS last_year"),
+			DB::raw("(SELECT (paid + pending + ready) FROM commissions_total WHERE user_id = commissions.to_user_id) AS all_time"),
+		])->first();
+	}
+
 	/**
 	 * We calculate when is the following date
 	 * where we make the payments
