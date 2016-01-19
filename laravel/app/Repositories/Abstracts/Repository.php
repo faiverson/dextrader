@@ -42,7 +42,7 @@ abstract class Repository implements RepositoryInterface {
 	public function all($columns = array('*'), $limit = null, $offset = null, $order_by = null) {
 		$query = $this->model;
 		if($limit != null) {
-			$query = $this->model->take($limit);
+			$query = $query->take($limit);
 		}
 
 		if($offset != null) {

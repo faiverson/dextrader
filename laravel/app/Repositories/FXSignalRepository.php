@@ -22,4 +22,5 @@ class FXSignalRepository extends AbstractRepository implements LiveSignalReposit
 	{
 		return $this->model->count();
 	}
+
 }

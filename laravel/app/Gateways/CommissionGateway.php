@@ -41,10 +41,13 @@ class CommissionGateway extends AbstractGateway {
 				'invoice_id' => $data['invoice_id'],
 				'amount' => $data['amount'] * $enroller->commissions
 			]);
+
 			$this->totalGateway->add([
 				'user_id' => $data['enroller_id'],
-				'pending' => $data['amount'] * $enroller->commissions
+				'pending' => $data['amount'] * $enroller->commissions,
+				'holdback' => $comm->holdback
 			]);
+
 			$this->parent($data);
 			Event::fire(new CommissionEvent($comm));
 		}
@@ -69,10 +72,13 @@ class CommissionGateway extends AbstractGateway {
 				'type' => 'parent',
 				'amount' => $data['amount'] * $parent->parent_commissions
 			]);
+
 			$this->totalGateway->add([
 				'user_id' => $parent->enroller_id,
-				'pending' => $data['amount'] * $parent->parent_commissions
+				'pending' => $data['amount'] * $parent->parent_commissions,
+				'holdback' => $comm->holdback
 			]);
+
 			Event::fire(new CommissionEvent($comm));
 		}
 	}
@@ -80,6 +86,11 @@ class CommissionGateway extends AbstractGateway {
 	public function getCommissionToPay()
 	{
 		return $this->repository->getCommissionToPay();
+	}
+
+	public function getHoldbackToPay()
+	{
+		return $this->repository->getHoldbackToPay();
 	}
 
 	public function getPendingToReady()
@@ -94,20 +105,77 @@ class CommissionGateway extends AbstractGateway {
 
 	public function updateToReady(Commission $commission)
 	{
-		$response = $this->repository->updateToReady($commission->ids);
+		if($commission->comms_ids) {
+			$response = $this->repository->updateToReady($commission->comms_ids);
+			if(!$response) {
+				$this->errors = ['Failed updateToReady ' . $commission->comms_ids];
+				return false;
+			}
+		}
+
+		if($commission->holdbacks_ids) {
+			$response = $this->repository->updateHoldbackToReady($commission->ids);
+			if(!$response) {
+				$this->errors = ['Failed updateHoldbackToReady ' . $commission->comms_ids];
+				return false;
+			}
+		}
+
 		if($response) {
-			return $this->totalGateway->setToReady($commission);
+			$response = $this->totalGateway->setToReady($commission);
+			if($response) {
+				$this->errors = ['Failed totalGateway setToReady '];
+				return false;
+			}
 		}
 		return $response;
 	}
 
-	public function updateHoldbackToReady(Commission $commission)
+	public function payCommissionOnNextDate(Commission $commission)
 	{
-		$response = $this->repository->updateHoldbackToReady($commission->ids);
-		if($response) {
-			return $this->totalGateway->setHoldbackToReady($commission);
+		if($commission->comms_ids) {
+			$response = $this->repository->payCommissionOnNextDate($commission->comms_ids);
+			if (!$response) {
+				$this->errors = ['Failed payCommissionOnNextDate ' . $commission->comms_ids];
+				return false;
+			}
 		}
+
+		if($commission->holdbacks_ids) {
+			$response = $this->repository->payHoldbacksOnNextDate($commission->holdbacks_ids);
+			if(!$response) {
+				$this->errors = ['Failed payHoldbacksOnNextDate ' . $commission->holdbacks_ids];
+				return false;
+			}
+		}
+
 		return $response;
+	}
+
+	public function updateToPaid(Commission $commission)
+	{
+		if($commission->comms_ids) {
+			$c_response = $this->repository->updateToPaid($commission->comms_ids);
+			if(!$c_response) {
+				$this->errors = ['Failed updateToPaid ' . $commission->comms_ids];
+				return false;
+			}
+		}
+
+		if($commission->holdbacks_ids) {
+			$h_response = $this->repository->updateHoldbackToPaid($commission->holdbacks_ids);
+			if(!$h_response) {
+				$this->errors = ['Failed updateHoldbackToPaid ' . $commission->holdbacks_ids];
+				return false;
+			}
+		}
+
+		$response = $this->totalGateway->setToPaid($commission);
+		if(!$response) {
+			$this->errors = ['Failed setToPaid '];
+			return false;
+		}
+		return true;
 	}
 
 	public function getUserCommissions($id, $limit, $offset, $order_by, $where)

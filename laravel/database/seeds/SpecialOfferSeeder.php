@@ -8,7 +8,7 @@ use App\Models\Product;
 class SpecialOfferSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Run the database seeds
      *
      * @return void
      */
@@ -22,7 +22,16 @@ class SpecialOfferSeeder extends Seeder
 		SpecialOffer::create([
 			'funnel_id' => $mk->id,
 			'product_id' => $prod->id,
-			'amount' => 1,
+			'amount' => 27,
+			'countdown' => (60 * 60 * 2) // 2 hs
+		]);
+
+		$mk = MarketingLink::where('link','http://dextrader.com/ib-pro')->first();
+		$prod = Product::where('name', 'PRO')->first();
+		SpecialOffer::create([
+			'funnel_id' => $mk->id,
+			'product_id' => $prod->id,
+			'amount' => 67,
 			'countdown' => (60 * 60 * 2) // 2 hs
 		]);
 

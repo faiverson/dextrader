@@ -23,7 +23,7 @@ class MarketingLinksSeeder extends Seeder
 			'description' => 'IB sale page',
 			'image' => 'http://dextrader.com/ib',
 			'link' => 'http://dextrader.com/ib',
-			'products' => '1,2'
+			'products' => '1'
 		]);
 
 		MarketingLink::create([
@@ -33,6 +33,33 @@ class MarketingLinksSeeder extends Seeder
 			'image' => 'http://dextrader.com/ib',
 			'link' => 'http://secure.dextrader.com/ib',
 			'products' => '1,2,3,4',
+		]);
+
+		MarketingLink::create([
+			'title' => 'IB PRO sales',
+			'campaign_id' => $fc->id,
+			'description' => 'IB PRO sale page',
+			'image' => 'http://dextrader.com/ib-pro',
+			'link' => 'http://dextrader.com/ib-pro',
+			'products' => '2'
+		]);
+
+		MarketingLink::create([
+			'title' => 'NA sales',
+			'campaign_id' => $fc->id,
+			'description' => 'IB PRO sale page',
+			'image' => 'http://dextrader.com/na',
+			'link' => 'http://dextrader.com/na',
+			'products' => '3'
+		]);
+
+		MarketingLink::create([
+			'title' => 'FX sales',
+			'campaign_id' => $fc->id,
+			'description' => 'FX sale page',
+			'image' => 'http://dextrader.com/fx',
+			'link' => 'http://dextrader.com/fx',
+			'products' => '4'
 		]);
 
 		if (App::Environment() === 'local') {

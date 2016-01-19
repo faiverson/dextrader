@@ -59,7 +59,6 @@ class LiveSignalGateway extends AbstractGateway {
 
 	public function edit($data, $id, $type)
 	{
-		$data['id'] = $id;
 		if( ! $this->updateValidator->with($data)->passes() )
 		{
 			$this->errors = $this->updateValidator->errors();

@@ -29,11 +29,10 @@ class CommissionsStatus extends Command
      *
      * @return void
      */
-	public function __construct(CommissionGateway $commissionGateway, PaymentGateway $paymentGateway)
+	public function __construct(CommissionGateway $commissionGateway)
 	{
 		parent::__construct();
 		$this->commissionGateway = $commissionGateway;
-		$this->paymentGateway = $paymentGateway;
 	}
 
     /**
@@ -49,13 +48,7 @@ class CommissionsStatus extends Command
 			$comms = $this->commissionGateway->getPendingToReady();
 			if($comms) {
 				foreach($comms as $index => $commission) {
-					if(!$commission->holdback_dt) {
-						$response = $this->commissionGateway->updateToReady($commission);
-					}
-					else {
-						$response = $this->commissionGateway->updateHoldbackToReady($commission);
-					}
-
+					$response = $this->commissionGateway->updateToReady($commission);
 					if($response) {
 						$this->info('Commission user: ' . $commission->user_id . ' processed');
 					}
@@ -72,5 +65,6 @@ class CommissionsStatus extends Command
 		}
 		DB::commit();
 		$this->info('Commissions Finished - ' . $comms);
+		Log::info('Commissions Finished');
 	}
 }

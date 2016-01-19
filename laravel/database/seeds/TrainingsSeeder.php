@@ -69,27 +69,67 @@ class TrainingsSeeder extends Seeder
 	public function addAffiliates()
 	{
 		Training::create([
-			'title' => 'Hello laidy',
+			'title' => 'Introduction',
 			'time' => '02:33',
 			'video_id' => 'ncnJpYTi-hY',
 			'filename' => 'ncnJpYTi-hY.mp4',
-			'description' => 'Lorem Ipsum',
+			'description' => 'Introduction',
 			'type' => 'affiliates'
 		]);
 		Training::create([
-			'title' => 'Favourite Game',
+			'title' => 'Social Media',
 			'time' => '12:33',
 			'video_id' => 'Qq-I4orlEhE',
 			'filename' => 'Qq-I4orlEhE.mp4',
-			'description' => 'Lorem Ipsum 2',
+			'description' => 'Social Media',
 			'type' => 'affiliates'
 		]);
 		Training::create([
-			'title' => 'Sweet Child',
+			'title' => 'Emailing Leads',
 			'time' => '08:22',
 			'video_id' => 'ubvV498pyIM',
 			'filename' => 'ubvV498pyIM.mp4',
-			'description' => 'Music video by No Doubt performing It\'s My Life. (C) 2003 Interscope Records',
+			'description' => 'Emailing Leads',
+			'type' => 'affiliates'
+		]);
+		Training::create([
+			'title' => 'Facebook Events',
+			'time' => '03:20',
+			'video_id' => 'Qq-I4orlEhE',
+			'filename' => 'Qq-I4orlEhE.mp4',
+			'description' => 'Facebook Events',
+			'type' => 'affiliates'
+		]);
+		Training::create([
+			'title' => 'Twitter Crowdfinder',
+			'time' => '01:13',
+			'video_id' => 'Qq-I4orlEhE',
+			'filename' => 'Qq-I4orlEhE.mp4',
+			'description' => 'Twitter Crowdfinder',
+			'type' => 'affiliates'
+		]);
+		Training::create([
+			'title' => 'Creating Videos',
+			'time' => '12:33',
+			'video_id' => 'Qq-I4orlEhE',
+			'filename' => 'Qq-I4orlEhE.mp4',
+			'description' => 'Creating Videos',
+			'type' => 'affiliates'
+		]);
+		Training::create([
+			'title' => 'Posting Banners',
+			'time' => '02:33',
+			'video_id' => 'Qq-I4orlEhE',
+			'filename' => 'Qq-I4orlEhE.mp4',
+			'description' => 'Posting Banners',
+			'type' => 'affiliates'
+		]);
+		Training::create([
+			'title' => 'Referring Affiliates',
+			'time' => '05:53',
+			'video_id' => 'Qq-I4orlEhE',
+			'filename' => 'Qq-I4orlEhE.mp4',
+			'description' => 'Referring Affiliates',
 			'type' => 'affiliates'
 		]);
 	}

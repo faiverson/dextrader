@@ -8,13 +8,12 @@ class LiveSignalUpdateValidator extends AbstractValidator {
 	 * @var array
 	 */
 	protected $rules = array(
-//		'signal_date' => 'sometimes|date_format:Y-m-d',
-		'signal_time' => ['sometimes', 'regex:/^[0-9]{2}\:[0-9]{2}$/'],
-		'expiry_time' => ['sometimes', 'regex:/^[0-9]{2}\:[0-9]{2}$/'],
+		'signal_time' => ['sometimes', 'date_format: Y-m-d H:i:s'],
+		'expiry_time' => ['sometimes', 'date_format: Y-m-d H:i:s'],
 		'asset' => ['sometimes', 'regex:/^[a-zA-Z]{3}\/{0,1}[a-zA-Z]{3}$/'],
-//		'asset_rate' => ['sometimes', 'regex:/^[0-9]{2}$/'],
 		'target_price'=> ['sometimes','regex:/[0-9]+[.,]?[0-9]*/'],
 		'end_price'=> ['sometimes','regex:/[0-9]+[.,]?[0-9]*/'],
+		'close_time' => ['sometimes', 'date_format: Y-m-d H:i:s'],
 		'close_price'=> ['sometimes','regex:/[0-9]+[.,]?[0-9]*/']
 	);
 

@@ -6,6 +6,7 @@ use App\Models\Commission;
 use App\Repositories\PaymentRepository;
 use App\Services\PaymentCreateValidator;
 use App\Services\PaymentUpdateValidator;
+use DateTime;
 
 class PaymentGateway extends AbstractGateway {
 
@@ -33,15 +34,36 @@ class PaymentGateway extends AbstractGateway {
 		return 0;
 	}
 
-	public function payCommission(Commission $commission, $balance)
+	public function payCommission($commissions)
 	{
-		$this->create([
-			'user_id' => $commission->user_id,
-			'prev_balance' => $balance,
-			'balance' => $balance + $commission->amount,
-			'ledger_type' => 'commission',
-			'info' => $commission->id,
+		// let grab the last payment to update balances
+		$lastPayment = $this->repository->findLastByUser($commissions->user_id);
+		$last = $lastPayment ? $lastPayment->balance : 0;
+		$now = new DateTime('now');
+		return $this->repository->create([
+			'user_id' => $commissions->user_id,
+			'prev_balance' => $last,
+			'amount' => $commissions->total,
+			'balance' => $last + $commissions->total,
+			'ledger_type' => 'commissions',
+			'paid_dt' => $now->format('Y-m-d H:i:s'),
+			'info' => [
+				'comms' => $commissions->comms_ids,
+				'holdbacks' => $commissions->holdbacks_ids,
+				'total_comms' => $commissions->total_comms,
+				'total_holdbacks' => $commissions->total_holdbacks
+			],
 		]);
+	}
+
+	public function getUserPayments($id, $limit, $offset, $order_by, $where)
+	{
+		return $this->repository->getUserPayments($id, $limit, $offset, $order_by, $where);
+	}
+
+	public function getTotalUserPayments($id, $where)
+	{
+		return $this->repository->getTotalUserPayments($id, $where);
 	}
 
 }

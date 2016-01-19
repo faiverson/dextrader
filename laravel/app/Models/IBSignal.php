@@ -15,7 +15,7 @@ class IBSignal extends Model
      *
      * @var string
      */
-    protected $table = 'na_signals';
+    protected $table = 'ib_signals';
 
 	protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
@@ -24,7 +24,7 @@ class IBSignal extends Model
      *
      * @var array
      */
-	protected $fillable = ['mt_id', 'signal_time', 'expiry_time', 'direction', 'asset', 'trade_type', 'open_price', 'target_price', 'close_price', 'winloss'];
+	protected $fillable = ['mt_id', 'signal_time', 'expiry_time', 'direction', 'asset', 'trade_type', 'open_price', 'target_price', 'close_price', 'close_time', 'winloss'];
 
     /**
      * The attributes excluded from the model's JSON form.

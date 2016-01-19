@@ -12,5 +12,5 @@ class CommissionTotal extends Model
 
 	protected $dates = ['created_at', 'updated_at'];
 
-	protected $fillable = ['id', 'user_id', 'paid', 'ready', 'pending'];
+	protected $fillable = ['id', 'user_id', 'paid', 'ready', 'pending', 'holdback'];
 }

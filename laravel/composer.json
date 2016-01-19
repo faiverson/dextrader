@@ -17,7 +17,8 @@
 		"torann/geoip": "0.2.*@dev",
         "barryvdh/laravel-dompdf": "0.6.*",
         "laravelcollective/html": "5.1.*",
-        "twilio/sdk": "^4.9"
+        "twilio/sdk": "^4.9",
+        "league/csv": "^8.0"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",

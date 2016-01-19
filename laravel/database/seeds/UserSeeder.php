@@ -59,6 +59,14 @@ class UserSeeder extends Seeder
 			'password' => 'jcullins'
 		])->attachRoles([$roleAdmin]);
 
+		User::create([
+			'first_name' => 'Maxx',
+			'last_name' => 'Fairo',
+			'username' => 'maxxfairo',
+			'email' => 'maxx.fairo@gmail.com',
+			'password' => 'm4xxf41r0'
+		])->attachRoles([$roleAdmin]);
+
 		$roleIB = Role::where('name', 'IB')->first();
 		User::create([
 				'first_name' => 'Dex',
