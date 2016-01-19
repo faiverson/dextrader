@@ -48,6 +48,14 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
                 direction: 0
             };
 
+            $scope.signal_time = {
+                value: moment().toDate()
+            };
+
+            $scope.expiry_time = {
+                value: moment().toDate()
+            };
+
             $scope.open = function ($event) {
                 $scope.dateDatepickerOpen = true;
             };
@@ -66,8 +74,8 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
                 if ($scope.liveSignalsForm.$valid) {
 
                     $scope.signal.signal_date = moment($scope.signal_date).format("YY-M-D");
-                    $scope.signal.signal_time = moment($scope.signal_time).format("HH:mm");
-                    $scope.signal.expiry_time = moment($scope.expiry_time).format("HH:mm");
+                    $scope.signal.signal_time = moment($scope.signal_time.value).format("YYYY-MM-DD HH:mm:ss");
+                    $scope.signal.expiry_time = moment($scope.expiry_time.value).format("YYYY-MM-DD HH:mm:ss");
 
                     if ($scope.asset.indexOf('/') < 0) {
                         $scope.signal.asset = $scope.asset.substring(0, 3) + '/' + $scope.asset.substring(3, 6);
@@ -86,7 +94,21 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
             };
 
             vm.error = function (err) {
-                Notification.error("Ups! there was an error trying to save the signal!");
+                if (err.data && angular.isDefined(err.data.error)) {
+                    for(var er in err.data.error){
+                        var arr = err.data.error[er];
+
+                        if (angular.isArray(arr)) {
+                            for(var a=0; a<arr.length; a++){
+                                Notification.error(arr[a]);
+                            }
+                        } else {
+                            Notification.error(er);
+                        }
+                    }
+                } else {
+                    Notification.error("Ups! there was an error trying to save the signal!");
+                }
             };
 
             vm.getSignalForEdit = function (id, prd) {
@@ -98,8 +120,8 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
                         $scope.signal.open_price = parseFloat(res.data.open_price);
                         $scope.signal.trade_type = res.data.trade_type;
                         $scope.signal_date = moment(res.data.signal_date, "YYYY-MM-DD").toDate();
-                        $scope.signal_time = moment(res.data.signal_time, "HH:mm");
-                        $scope.expiry_time = moment(res.data.expiry_time, "HH:mm");
+                        $scope.signal_time.value = moment(res.data.signal_time, "YYYY-MM-DD HH:mm:ss").toDate();
+                        $scope.expiry_time.value = moment(res.data.expiry_time, "YYYY-MM-DD HH:mm:ss").toDate();
                         $scope.asset = res.data.asset;
 
                     });

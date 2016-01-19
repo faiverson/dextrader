@@ -15,7 +15,8 @@
     "angular-loading-bar": "~0.8.0",
     "angular-moment": "~0.10.3",
     "angular-animate": "~1.4.8",
-    "angular-ui-mask": "~1.6.5"
+    "angular-ui-mask": "~1.6.5",
+    "angular-ui-bootstrap-datetimepicker": "~0.14.4"
   },
   "devDependencies": {
     "angular-cookies": "~1.4.7",

@@ -12,6 +12,7 @@ angular.module('app', [
         'app.shared-directives',
         'ui.bootstrap.tpls',
         'ui.bootstrap',
+        'ui.bootstrap.datetimepicker',
         'ngAnimate',
         'app.ui-services',
         'app.shared-filters',

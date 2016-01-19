@@ -9,7 +9,7 @@
                     <div class="panel-heading">Signal Information</div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="filterProducts">Product</label>
                                     <select class="form-control" id="filterProducts"
@@ -18,7 +18,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group" data-show-errors>
                                     <label for="signal_date">Date</label>
 
@@ -43,33 +43,48 @@
                                     </p>
                                 </div>
                             </div>
+                            <div class="col-md-4">
+                                <div class="form-group" data-show-errors>
+                                    <label for="asset">Asset</label>
+                                    <input class="form-control"
+                                           data-ng-model="asset"
+                                           required
+                                           name="asset"
+                                           id="asset"
+                                           ui-mask="AAA/AAA"
+                                           ui-mask-placeholder=""
+                                           ui-mask-placeholder-char=" ">
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Signal Time</label>
-                                    <uib-timepicker ng-model="signal_time"
-                                                    ng-change="changed()"
-                                                    hour-step="1"
-                                                    name="signal_time"
-                                                    required
-                                                    show-spinners="false"
-                                                    minute-step="1" show-meridian="false"></uib-timepicker>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <datetimepicker ng-model="signal_time.value"
+                                                            date-format="dd-MMM-yyyy"
+                                                            show-meridian="showMeridian">
+                                            </datetimepicker>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Expiry Time</label>
-                                    <uib-timepicker ng-model="expiry_time"
-                                                    ng-change="changed()"
-                                                    name="expiry_time"
-                                                    required
-                                                    show-spinners="false"
-                                                    hour-step="1"
-                                                    minute-step="1" show-meridian="false"></uib-timepicker>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <datetimepicker ng-model="expiry_time.value"
+                                                            date-format="dd-MMM-yyyy"
+                                                            show-meridian="showMeridian">
+                                            </datetimepicker>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Direction</label>
                                     <div class="row">
@@ -82,19 +97,6 @@
                                             <img src="/assets/images/ico-greenup.png">
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group" data-show-errors>
-                                    <label for="asset">Asset</label>
-                                    <input class="form-control"
-                                           data-ng-model="asset"
-                                           required
-                                           name="asset"
-                                           id="asset"
-                                           ui-mask="AAA/AAA"
-                                           ui-mask-placeholder=""
-                                           ui-mask-placeholder-char=" ">
                                 </div>
                             </div>
                             <div class="col-md-3">
