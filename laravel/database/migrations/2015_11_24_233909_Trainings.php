@@ -18,7 +18,7 @@ class Trainings extends Migration
 			$table->string('title', 150)->nullable();
 			$table->string('filename', 150)->nullable(false);
 			$table->text('description')->nullable();
-			$table->string('time', 8)->nullable();
+			$table->string('time', 8)->nullable()->default('00:00');
 			$table->integer('unlock_at')->nullable()->default(0); //seconds
 			$table->enum('type', ['certification', 'pro', 'affiliates'])->nullable(false);
 			$table->timestamps();

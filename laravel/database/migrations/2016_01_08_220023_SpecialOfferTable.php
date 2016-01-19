@@ -21,6 +21,9 @@ class SpecialOfferTable extends Migration
 			$table->smallInteger('product_id')->unsigned();
 			$table->foreign('product_id')->references('id')->on('products');
 
+			$table->string('type')->default('downsell');
+			$table->integer('order')->default(1);
+
 			$table->decimal('amount', 8, 2)->signed()->nullable(false);
 			$table->date('ending_dt')->nullable();
 			$table->integer('countdown')->nullable()->default(0); // in seconds

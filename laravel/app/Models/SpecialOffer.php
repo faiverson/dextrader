@@ -20,7 +20,8 @@ class SpecialOffer extends Model
 		'product_id',
 		'amount',
 		'ending_dt',
-		'countdown'
+		'countdown',
+		'type'
 	];
 
 	public function getOfferIdAttribute()
