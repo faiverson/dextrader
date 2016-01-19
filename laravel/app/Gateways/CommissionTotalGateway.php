@@ -58,7 +58,6 @@ class CommissionTotalGateway extends AbstractGateway {
 		$user_id = $commission->user_id;
 		$commsTotal = $this->repository->findByUserId($user_id);
 		if($commsTotal) {
-			$commsTotal->holdback -= $commission->total_holdbacks;
 			$commsTotal->ready -= $commission->total;
 			$commsTotal->paid += $commission->total;
 			$commsTotal->save();

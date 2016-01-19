@@ -36,6 +36,7 @@ class PaymentGateway extends AbstractGateway {
 
 	public function payCommission($commissions)
 	{
+		// let grab the last payment to update balances
 		$lastPayment = $this->repository->findLastByUser($commissions->user_id);
 		$last = $lastPayment ? $lastPayment->balance : 0;
 		$now = new DateTime('now');
