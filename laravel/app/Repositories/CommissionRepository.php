@@ -67,7 +67,7 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 	public function getCommissionToPay()
 	{
 		$today = new DateTime('now');
-		$today = new DateTime('2016-01-22 12:00:00');  // @TODO remove
+//		$today = new DateTime('2016-01-22 12:00:00');  // @TODO remove
 		$today = $today->format('Y-m-d');
 		$query = $this->model
 			->select([

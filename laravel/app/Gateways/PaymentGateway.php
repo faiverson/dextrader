@@ -47,13 +47,23 @@ class PaymentGateway extends AbstractGateway {
 			'balance' => $last + $commissions->total,
 			'ledger_type' => 'commissions',
 			'paid_dt' => $now->format('Y-m-d H:i:s'),
-			'info' => json_encode([
+			'info' => [
 				'comms' => $commissions->comms_ids,
 				'holdbacks' => $commissions->holdbacks_ids,
 				'total_comms' => $commissions->total_comms,
 				'total_holdbacks' => $commissions->total_holdbacks
-			]),
+			],
 		]);
+	}
+
+	public function getUserPayments($id, $limit, $offset, $order_by, $where)
+	{
+		return $this->repository->getUserPayments($id, $limit, $offset, $order_by, $where);
+	}
+
+	public function getTotalUserPayments($id, $where)
+	{
+		return $this->repository->getTotalUserPayments($id, $where);
 	}
 
 }
