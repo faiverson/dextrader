@@ -12,12 +12,11 @@ class LiveSignalCreateValidator extends AbstractValidator {
 	 * @var array
 	 */
 	protected $rules = array(
-		//'mt_id' => 'required',
 		'signal_time' => ['required', 'date_format: Y-m-d H:i:s'],
 		'expiry_time' => ['sometimes', 'date_format: Y-m-d H:i:s'],
 		'asset' => ['required', 'regex:/^[a-zA-Z]{3}\/{0,1}[a-zA-Z]{3}$/'],
 		'trade_type' => ['required', 'regex:/^([M1|M5|M15|M30|H1|H4|D1|W1|MN1]+)+$/'],
-		'target_price'=> ['required','regex:/[0-9]+[.,]?[0-9]*/'],
+		'target_price'=> ['sometimes','regex:/[0-9]+[.,]?[0-9]*/'],
 		'end_price'=> ['sometimes', 'regex:/[0-9]+[.,]?[0-9]*/'],
 		'close_time' => ['sometimes', 'date_format: Y-m-d H:i:s'],
 		'close_price'=> ['sometimes','regex:/[0-9]+[.,]?[0-9]*/']

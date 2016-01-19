@@ -24,7 +24,7 @@ class IBSignal extends Model
      *
      * @var array
      */
-	protected $fillable = ['mt_id', 'signal_time', 'expiry_time', 'direction', 'asset', 'trade_type', 'open_price', 'target_price', 'close_price', 'close_time', 'winloss'];
+	protected $fillable = ['mt_id', 'signal_time', 'expiry_time', 'close_time', 'direction', 'asset', 'trade_type', 'open_price', 'close_price', 'target_price', 'winloss'];
 
     /**
      * The attributes excluded from the model's JSON form.
