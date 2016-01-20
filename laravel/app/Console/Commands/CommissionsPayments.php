@@ -9,7 +9,7 @@ use Config;
 use DB;
 use League\Csv\Writer;
 use Log;
-
+use DateTime;
 
 class CommissionsPayments extends Command
 {
@@ -41,7 +41,8 @@ class CommissionsPayments extends Command
 		parent::__construct();
 		$this->commissionGateway = $commissionGateway;
 		$this->paymentGateway = $paymentGateway;
-		$this->filename = base_path() . '/resources/assets/csv/payments-' . date('Y-m-d') . '.csv';
+		$this->day = new DateTime('now');
+		$this->filename = base_path() . '/resources/assets/csv/payments-' . $this->day->format('Y-m-d') . '.csv';
 	}
 
     /**
@@ -54,7 +55,7 @@ class CommissionsPayments extends Command
 		$this->info('Starting commission payment process');
 		DB::beginTransaction();
 		try {
-			$comms = $this->commissionGateway->getCommissionToPay();
+			$comms = $this->commissionGateway->getCommissionToPay($this->day);
 			if($comms->count() > 0) {
 				$this->createCSV();
 				foreach ($comms as $commissions) {
@@ -66,7 +67,7 @@ class CommissionsPayments extends Command
 								$this->warn('Failed updateToPaid user: ' . $commissions->user_id);
 								Log::info('Failed updateToPaid user: ' . $commissions->user_id, $this->commissionGateway->errors());
 							}
-							$this->addRowToCSV($payment->toArray());
+							$this->addRowToCSV($commissions, $payment);
 						} else {
 							$this->warn('Failed payCommission user: ' . $commissions->user_id);
 							Log::info('Failed payCommission user: ' . $commissions->user_id);
@@ -78,6 +79,7 @@ class CommissionsPayments extends Command
 							Log::info('Failed payCommissionOnNextDate user: ' . $commissions->user_id);
 						}
 					}
+
 					$this->info('Commission user: ' . $commissions->user_id);
 				}
 			}
@@ -99,12 +101,13 @@ class CommissionsPayments extends Command
 		$this->csv = Writer::createFromFileObject(new \SplFileObject($this->filename, 'w'));
 		$header = [
 			'user_id',
-			'prev_balance',
-			'amount',
-			'balance',
+			'first_name',
+			'last_name',
+			'email',
+			'username',
 			'ledger_type',
-			'paid_dt',
-			'info'
+			'amount',
+			'paid_dt'
 		];
 		$this->csv->setDelimiter("\t"); //the delimiter will be the tab character
 		$this->csv->setNewline("\r\n"); //use windows line endings for compatibility with some csv libraries
@@ -112,9 +115,18 @@ class CommissionsPayments extends Command
 		$this->csv->insertOne($header);
 	}
 
-	protected function addRowToCSV($row)
+	protected function addRowToCSV($commissions, $payment)
 	{
-		$this->csv->insertOne($row);
+		$this->csv->insertOne([
+			$payment->user_id,
+			$commissions->to->first_name,
+			$commissions->to->last_name,
+			$commissions->to->email,
+			$commissions->to->username,
+			$payment->ledger_type,
+			$payment->amount,
+			$payment->paid_dt
+		]);
 	}
 
 	protected function outputCSV()

@@ -40,8 +40,8 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 		$query = $this->model
 			->select([
 				DB::raw('GROUP_CONCAT(id SEPARATOR ",") AS ids'),
-				DB::raw('GROUP_CONCAT(CASE WHEN holdback_dt IS NULL THEN id END SEPARATOR \',\') AS comms_ids'),
-				DB::raw('GROUP_CONCAT(CASE WHEN holdback_dt IS NOT NULL THEN id END SEPARATOR \',\') AS holdbacks_ids'),
+				DB::raw('GROUP_CONCAT(CASE WHEN payout_dt IS NULL THEN id END SEPARATOR \',\') AS comms_ids'),
+				DB::raw('GROUP_CONCAT(CASE WHEN holdback_dt IS NULL THEN id END SEPARATOR \',\') AS holdbacks_ids'),
 				DB::raw('to_user_id AS user_id'),
 				DB::raw('SUM( CASE WHEN holdback_dt IS NULL THEN (amount - holdback) ELSE holdback END ) AS total'),
 				DB::raw('SUM( CASE WHEN holdback_dt IS NULL THEN (amount - holdback) ELSE 0 END ) AS total_comms'),
@@ -54,7 +54,7 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 					->whereDate('created_at', '<=', $from);
 			})
 			->orWhere(function ($q) use ($holdback_dt) {
-				$q->where('status', 'ready')
+				$q->whereIn('status', ['ready', 'paid'])
 					->where('holdback_paid', 0)
 					->WhereNull('holdback_dt')
 					->whereDate('created_at', '<=', $holdback_dt);
@@ -64,30 +64,31 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 		return $query->get();
 	}
 
-	public function getCommissionToPay()
+	public function getCommissionToPay(DateTime $date)
 	{
-		$today = new DateTime('now');
-//		$today = new DateTime('2016-01-22 12:00:00');  // @TODO remove
-		$today = $today->format('Y-m-d');
 		$query = $this->model
+			->has('active') // check if the user is active
+			->with('to') // add user info
 			->select([
+				'*',
 				DB::raw('GROUP_CONCAT(id) AS ids'),
 				DB::raw('GROUP_CONCAT(CASE WHEN holdback_dt IS NULL THEN id END SEPARATOR \',\') AS comms_ids'),
 				DB::raw('GROUP_CONCAT(CASE WHEN holdback_dt IS NOT NULL THEN id END SEPARATOR \',\') AS holdbacks_ids'),
 				DB::raw('to_user_id AS user_id'),
 				DB::raw('SUM( CASE WHEN holdback_dt IS NULL THEN (amount - holdback) ELSE holdback END ) AS total')
 			])
-			->where(function ($q) use ($today) {
-				$q->where(DB::raw('DATE(payout_dt)'), $today)
+			->where(function ($q) use ($date) {
+				$q->where(DB::raw('DATE(payout_dt)'), $date->format('Y-m-d'))
 					->where('status', 'ready')
 					->whereNull('refund_dt');
 			})
-			->orWhere(function ($q) use ($today) {
-				$q->where(DB::raw('DATE(holdback_dt)'), $today)
+			->orWhere(function ($q) use ($date) {
+				$q->where(DB::raw('DATE(holdback_dt)'), $date->format('Y-m-d'))
 					->whereNull('refund_dt')
 					->whereIn('status', ['ready', 'paid'])
 					->where('holdback_paid', 0);
 			})
+
 			->groupBy('to_user_id');
 
 		return $query->get();
@@ -254,6 +255,29 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 		}
 
 		return $query->count();
+	}
+
+	public function getSummaryUserCommissions($id)
+	{
+		$query =  $this->model;
+		$from = new DateTime('yesterday');
+		$yesterday = $from->format('Y-m-d');
+		$today = $from->modify('+1 day')->format('Y-m-d');
+		$week = $from->modify('-1 week')->format('Y-m-d');
+		$month = $from->modify('+1 week')->modify('-1 month')->format('Y-m-d');
+		$year = $from->modify('+1 month')->modify('-1 year')->format('Y-m-d');
+
+		// creating the query
+		$query = $query->where('to_user_id', $id);
+		$query->groupBy('to_user_id');
+		return $query->select([
+			DB::raw("(SELECT SUM(c1.amount) FROM commissions c1 WHERE DATE(created_at) = '{$yesterday}' AND c1.to_user_id = commissions.to_user_id) AS yesterday"),
+			DB::raw("(SELECT SUM(c2.amount) FROM commissions c2 WHERE DATE(created_at) = '{$today}' AND c2.to_user_id = commissions.to_user_id) AS today"),
+			DB::raw("(SELECT SUM(c3.amount) FROM commissions c3 WHERE DATE(created_at) >= '{$week}' AND c3.to_user_id = commissions.to_user_id) AS last_week"),
+			DB::raw("(SELECT SUM(c4.amount) FROM commissions c4 WHERE DATE(created_at) >= '{$month}' AND c4.to_user_id = commissions.to_user_id) AS last_month"),
+			DB::raw("(SELECT SUM(c5.amount) FROM commissions c5 WHERE DATE(created_at) >= '{$year}' AND c5.to_user_id = commissions.to_user_id) AS last_year"),
+			DB::raw("(SELECT (paid + pending + ready) FROM commissions_total WHERE user_id = commissions.to_user_id) AS all_time"),
+		])->first();
 	}
 
 	/**

@@ -29,6 +29,8 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 		Route::delete('/users/{id}/billing-address/{address_id}', 'BillingAddressController@destroy')->where('id', '[0-9]+')->where('address_id', '[0-9]+');
 
 		Route::get('/users/{id}/commissions', 'CommissionsController@index')->where('id', '[0-9]+');
+		Route::get('/users/{id}/commissions/total', 'CommissionsController@summary')->where('id', '[0-9]+');
+		Route::get('/users/{id}/balance', 'CommissionsController@balance')->where('id', '[0-9]+');
 		Route::get('/users/{id}/payments', 'PaymentsController@index')->where('id', '[0-9]+');
 	});
 });

@@ -47,19 +47,9 @@ class LiveSignalsController extends Controller
 
 	public function store_by_page(Request $request)
 	{
-		$data = $request->all();
-		$type_product = $data['type_product'];
-		if($type_product == 'nadex') {
-			$type_product = 'na';
-		}
-		elseif($type_product == 'dibs') {
-			$type_product = 'ib';
-		}
-		if($type_product == 'forex') {
-			$type_product = 'fx';
-		}
+		$data = $this->parse($request->all());
 		if(in_array(strtolower($data['type_product']), $this->types)) {
-			return $this->store($data, $type_product);
+			return $this->store($data, $data['type_product']);
 		}
 
 		return response()->error('You need to set a product type');
@@ -73,22 +63,6 @@ class LiveSignalsController extends Controller
 
 	public function store($data, $type)
 	{
-		if(array_key_exists('expiry_time', $data)) {
-			$data['signal_date'] = str_replace('.', '-', $data['signal_date']);
-		}
-		if(array_key_exists('expiry_time', $data)) {
-			$data['expiry_time'] = str_replace('.', '-', $data['expiry_time']);
-		}
-		if(array_key_exists('date_close', $data)) {
-			$data['date_close'] = str_replace('.', '-', $data['date_close']);
-		}
-		if(array_key_exists('type_product', $data)) {
-			$type = strtolower($data['type_product']);
-		}
-		if(array_key_exists('trade_type', $data)) {
-			$data['trade_type'] = strtoupper($data['trade_type']);
-		}
-
 		$response = $this->gateway->add($data, $type);
 		if(!$response) {
 			return response()->error($this->gateway->errors());
@@ -99,22 +73,33 @@ class LiveSignalsController extends Controller
 	public function update_by_page(Request $request)
 	{
 		$mt_id = $request->signal_id;
-		$type = strtolower($request->input('type_product'));
-		$trade = strtoupper($request->input('trade_type'));
-
-		if(empty($mt_id) || empty($type) || empty($trade)) {
-			return response()->error('Missing fields');
+		$data = $this->parse($request->all());
+		if(empty($mt_id)) {
+			return response()->error('Missing MT-ID');
 		}
+
+		if(!array_key_exists('type_product', $data)) {
+			return response()->error('Missing type product');
+		}
+
+		if(!array_key_exists('trade_type', $data)) {
+			return response()->error('Missing trade type');
+		}
+
+		// remove everything else
 		$data = [
-			'close_price' => $request->input('close_price'),
-			'winloss' => $request->input('winloss'),
+			'trade_type' => array_key_exists('trade_type', $data) ? $data['trade_type'] : null,
+			'type_product' => array_key_exists('type_product', $data) ? $data['type_product'] : null,
+			'close_time' => array_key_exists('close_time', $data) ? $data['close_time'] : null,
+			'close_price' => array_key_exists('close_price', $data) ? $data['close_price'] : null,
+			'winloss' => array_key_exists('winloss', $data) ? $data['winloss'] : null
 		];
 
-		$signal = $this->gateway->find_signal($mt_id, $trade, $type);
+		$signal = $this->gateway->find_signal($mt_id, $data['trade_type'], $data['type_product']);
 		if(!$signal) {
 			return response()->error('The signal is not in database');
 		}
-		return $this->update($signal->id, $type, $data);
+		return $this->update($signal->id, $data['type_product'], $data);
 	}
 
 	public function update_signal(Request $request)
@@ -150,4 +135,36 @@ class LiveSignalsController extends Controller
 		return response()->ok($response);
 	}
 
+	protected function parse(array $data)
+	{
+		if(array_key_exists('signal_time', $data)) {
+			$data['signal_time'] = str_replace('.', '-', $data['signal_time']);
+		}
+
+		if(array_key_exists('expiry_time', $data)) {
+			$data['expiry_time'] = str_replace('.', '-', $data['expiry_time']);
+		}
+
+		if(array_key_exists('close_time', $data)) {
+			$data['close_time'] = str_replace('.', '-', $data['close_time']);
+		}
+
+		if(array_key_exists('type_product', $data)) {
+			$data['type_product'] = strtolower($data['type_product']);
+			if($data['type_product'] == 'nadex') {
+				$data['type_product'] = 'na';
+			}
+			elseif($data['type_product'] == 'dibs') {
+				$data['type_product'] = 'ib';
+			}
+			if($data['type_product'] == 'forex') {
+				$data['type_product'] = 'fx';
+			}
+		}
+		if(array_key_exists('trade_type', $data)) {
+			$data['trade_type'] = strtoupper($data['trade_type']);
+		}
+
+		return $data;
+	}
 }

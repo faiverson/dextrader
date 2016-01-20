@@ -67,5 +67,10 @@ class Commission extends Model
 		return $query->select(['invoice_id', 'invoices_detail.product_display_name', 'invoices_detail.product_amount']);
 	}
 
+	public function active()
+	{
+		return $this->hasOne(User::class, 'id', 'to_user_id')->where('users.active', 1)->select(['user_id', 'first_name', 'last_name', 'username', 'email']);
+	}
+
 
 }

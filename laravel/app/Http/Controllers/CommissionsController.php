@@ -38,4 +38,24 @@ class CommissionsController extends Controller
 			'total' => $total
 		]);
 	}
+
+	/**
+	 * Show array of total commission
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function summary(Request $request)
+	{
+		$id = $request->id;
+		$totals = $this->gateway->getSummaryUserCommissions($id);
+		return response()->ok($totals);
+	}
+
+	public function balance(Request $request)
+	{
+		$id = $request->id;
+		$response = $this->gateway->getBalance($id);
+		return response()->ok($response);
+	}
 }

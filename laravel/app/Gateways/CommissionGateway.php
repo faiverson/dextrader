@@ -10,7 +10,7 @@ use App\Services\CommissionUpdateValidator;
 use App\Repositories\CommissionRepository;
 use Config;
 use Event;
-use Illuminate\Database\Eloquent\Collection;
+use DateTime;
 
 class CommissionGateway extends AbstractGateway {
 
@@ -83,9 +83,9 @@ class CommissionGateway extends AbstractGateway {
 		}
 	}
 
-	public function getCommissionToPay()
+	public function getCommissionToPay(DateTime $date)
 	{
-		return $this->repository->getCommissionToPay();
+		return $this->repository->getCommissionToPay($date);
 	}
 
 	public function getHoldbackToPay()
@@ -187,4 +187,16 @@ class CommissionGateway extends AbstractGateway {
 	{
 		return $this->repository->getTotalUserCommissions($id, $where);
 	}
+
+	public function getSummaryUserCommissions($id)
+	{
+		return $this->repository->getSummaryUserCommissions($id);
+	}
+
+	public function getBalance($id)
+	{
+		return $this->totalGateway->findBy('user_id', $id);
+	}
+
+
 }
