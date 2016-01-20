@@ -10,5 +10,6 @@ use App\Repositories\Contracts\RepositoryInterface;
  */
 interface LiveSignalRepositoryInterface extends RepositoryInterface {
 	public function find_signal($mt_id, $trade);
-	public function total();
+	public function total($where);
+	public function getSignals($select, $limit, $offset, $order_by, $where);
 }

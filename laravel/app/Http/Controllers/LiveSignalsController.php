@@ -26,11 +26,13 @@ class LiveSignalsController extends Controller
 	public function all(Request $request)
 	{
 		$product = $request->product;
+		$this->checkPermission($request, $product);
 		$limit = $request->input('limit') ? $request->input('limit') : $this->limit;
 		$offset = $request->input('offset') ? $request->input('offset') : 0;
 		$order_by = $request->input('order') ? $request->input('order') : ['signal_time' => 'desc', 'asset' => 'asc'];
-		$signals = $this->gateway->all_signals($product, $limit, $offset, $order_by);
-		$total = $this->gateway->total_signals($product);
+		$filters = $request->input('filter') ? $request->input('filter') : [];
+		$signals = $this->gateway->allSignals($product, $limit, $offset, $order_by, $filters);
+		$total = $this->gateway->totalSignals($product, $filters);
 		return response()->ok([
 			'signals' => $signals,
 			'total' => $total
@@ -166,5 +168,12 @@ class LiveSignalsController extends Controller
 		}
 
 		return $data;
+	}
+
+	protected function checkPermission($request, $product)
+	{
+		if($request->user()->can($product)) {
+			response()->error('You do not have permission to access');
+		}
 	}
 }

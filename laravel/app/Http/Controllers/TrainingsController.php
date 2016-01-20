@@ -11,7 +11,7 @@ use DateTime;
 use Token;
 use Files;
 
-class Trainings extends Controller
+class TrainingsController extends Controller
 {
 
 	protected $user;
@@ -32,7 +32,7 @@ class Trainings extends Controller
 	 */
     public function affiliates()
     {
-        $trainings = Training::where('type', 'affiliates')->get();
+		$trainings = Training::where('type', 'affiliates')->get();
 		return response()->ok($trainings);
     }
 
@@ -46,6 +46,7 @@ class Trainings extends Controller
 	public function certification(Request $request)
 	{
 		$userId = $this->userId;
+
 		$fields = [
 			't.id',
 			't.video_id',
