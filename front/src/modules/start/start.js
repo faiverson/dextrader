@@ -13,7 +13,9 @@ angular.module('app.start', ['ui.router'])
             });
     })
 
-    .controller('StartCtrl', ['$scope', '$uibModal', function ($scope, $uibModal) {
+    .controller('StartCtrl', ['$scope', '$uibModal', '$site-configs', function ($scope, $uibModal, $config) {
+
+        $scope.secure_url = $config.SECURE_URL;
 
         $scope.openVideo = function () {
             var modalInstance = $uibModal.open({
