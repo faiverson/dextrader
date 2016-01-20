@@ -24,7 +24,8 @@ angular.module('app', [
         'app.dex-na',
         'app.dex-fx',
         'app.whitelist',
-        'app.refund'
+        'app.refund',
+        'app.start'
     ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {

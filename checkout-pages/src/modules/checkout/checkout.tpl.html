@@ -1,9 +1,9 @@
 <header>
     <div id="header-content">
-        <div id="logo"><a href="http://dextrader.com"><img src="/assets/images/logo-ib.png" alt="DEX Trader"></a></div>
+        <div id="logo"><a href="http://dextrader.com"><img height="33" src="/assets/images/logo-{{product.name.toLowerCase()}}.png" alt="DEX Trader"></a></div>
         <div class="logo-text">
             <p>Secure Payment Website For</p>
-            <span>www.dextrader.com/ib</span>
+            <span>www.dextrader.com/{{product.name.toLowerCase()}}</span>
         </div>
         <div id="secure-ib"></div>
 
@@ -270,14 +270,9 @@
         </div>
         <div id="checkout-info" class="content-right">
             <div style="background: #f6f1eb">
-                <h3>Dex Signals Monthly International</h3>
+                <h3>{{productsData[product.id].name}}</h3>
 
-                <p>
-                    Getting Binary Option Signals From Dex
-                    Signals Helps Both The Novice And
-                    Experienced Binary Option Traders Stop Guessing And Start Winning!
-
-                </p>
+                <p>{{productsData[product.id].description}}</p>
 
                 <div class="form-wrapper">
                     <select name="currency">

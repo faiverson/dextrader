@@ -20,7 +20,7 @@ class ProductsSeeder extends Seeder
 		$ib = Product::create([
 			'name' => 'IB',
 			'display_name' => 'IB',
-			'amount' => 97,
+			'amount' => 47,
 			'discount' => 0,
 			'roles' => 'IB'
 		]);
@@ -37,7 +37,7 @@ class ProductsSeeder extends Seeder
 		Product::create([
 			'name' => 'NA',
 			'display_name' => 'NA',
-			'amount' => 47,
+			'amount' => 67,
 			'discount' => 0,
 			'roles' => 'NA'
 		]);
@@ -45,9 +45,16 @@ class ProductsSeeder extends Seeder
 		Product::create([
 			'name' => 'FX',
 			'display_name' => 'FX',
-			'amount' => 85,
+			'amount' => 97,
 			'discount' => 0,
 			'roles' => 'FX'
+		]);
+		Product::create([
+				'name' => 'ACADEMY',
+				'display_name' => 'ACADEMY',
+				'amount' => 497,
+				'discount' => 0,
+				'roles' => 'FX'
 		]);
 		Product::reguard();
 
