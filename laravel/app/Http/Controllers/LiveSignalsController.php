@@ -137,8 +137,8 @@ class LiveSignalsController extends Controller
 
 	protected function parse(array $data)
 	{
-		if(array_key_exists('expiry_time', $data)) {
-			$data['signal_date'] = str_replace('.', '-', $data['signal_date']);
+		if(array_key_exists('signal_time', $data)) {
+			$data['signal_time'] = str_replace('.', '-', $data['signal_time']);
 		}
 
 		if(array_key_exists('expiry_time', $data)) {

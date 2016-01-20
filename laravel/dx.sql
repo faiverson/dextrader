@@ -1,4 +1,5 @@
--- MySQL dump 10.13  Distrib 5.7.10, for osx10.9 (x86_64)
+Terminal close -- exit!
+trib 5.7.10, for osx10.9 (x86_64)
 --
 -- Host: localhost    Database: dex_trader
 -- ------------------------------------------------------
