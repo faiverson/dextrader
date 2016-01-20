@@ -21,7 +21,7 @@ class TransactionUpdateValidator extends AbstractValidator {
 	protected $rules = array(
 		'first_name' => 'sometimes|required',
 		'last_name' => 'sometimes|required',
-		'email' => 'sometimes|required|email|unique:users|max:150',
+		'email' => 'sometimes|required|email|max:150',
 
 		'enroller_id' => 'sometimes|exists:users,id',
 		'funnel_id'=> 'sometimes|exists:funnels,id',

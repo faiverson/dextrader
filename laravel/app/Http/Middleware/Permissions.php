@@ -32,7 +32,7 @@ class Permissions
 	 *
 	 * @param  \Illuminate\Http\Request $request
 	 * @param  Closure $next
-	 * @param  $roles
+	 * @param  $perms
 	 * @return mixed
 	 */
 	public function handle($request, Closure $next, $perms)

@@ -18,6 +18,8 @@ class Training extends Model
 		'training_id' => 'id',
 	];
 
+	protected $fillable	 = ['video_id', 'type', 'title', 'filename', 'description', 'time', 'unlock_at'];
+
 	protected $appends = array('training_id');
 
 	public function getTrainingIdAttribute()

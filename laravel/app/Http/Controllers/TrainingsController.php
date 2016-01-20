@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Gateways\TrainingGateway;
 use Illuminate\Http\Request;
 use Auth;
-use Training;
+use App\Models\Training;
 use DB;
 use Role;
 use DateTime;
@@ -13,14 +14,45 @@ use Files;
 
 class TrainingsController extends Controller
 {
-
-	protected $user;
-	protected $userId;
-
-	public function __construct()
+	public function __construct(TrainingGateway $gateway)
 	{
-		$this->user = Auth::user();
-		$this->userId = $this->user->id;
+		$this->gateway = $gateway;
+	}
+
+	/**
+	 *
+	 * Store new trainings
+	 *
+	 * @param Request $request
+	 * @return mixed json object
+	 */
+	public function store(Request $request)
+	{
+		$data = $request->all();
+		if(array_key_exists('video_id', $data)) {
+			$data['video_id'] = $this->gateway->parse_youtube($data['video_id']);
+		}
+
+		$response = $this->gateway->create($data);
+		if(!$response) {
+			return response()->error($this->gateway->errors());
+		}
+		return response()->ok($response);
+	}
+
+	public function update(Request $request)
+	{
+		$id = $request->training_id;
+		$data = $request->all();
+		if(array_key_exists('video_id', $data)) {
+			$data['video_id'] = $this->gateway->parse_youtube($data['video_id']);
+		}
+
+		$response = $this->gateway->update($data, $id);
+		if(!$response) {
+			return response()->error($this->gateway->errors());
+		}
+		return response()->ok($response);
 	}
 
 	/**
@@ -32,8 +64,11 @@ class TrainingsController extends Controller
 	 */
     public function affiliates()
     {
-		$trainings = Training::where('type', 'affiliates')->get();
-		return response()->ok($trainings);
+		$response = $this->gateway->findBy('type', 'affiliates');
+		if(!$response) {
+			return response()->error($this->gateway->errors());
+		}
+		return response()->ok($response);
     }
 
 	/**
@@ -45,25 +80,12 @@ class TrainingsController extends Controller
 	 */
 	public function certification(Request $request)
 	{
-		$userId = $this->userId;
-
-		$fields = [
-			't.id',
-			't.video_id',
-			't.title',
-			't.description',
-			't.time',
-			't.unlock_at',
-			DB::raw('IF(ut.user_id, 1, 0) as completed')
-		];
-		$trainings = DB::table('trainings as t')
-			->select($fields)
-			->leftJoin('users_trainings as ut', function ($join) use ($userId) {
-				$join->on('ut.training_id', '=', 't.id')->on('ut.user_id', '=', DB::raw($userId));
-			})
-			->where('t.type', 'certification')
-			->get();
-		return response()->ok($trainings);
+		$userId = $request->user()->id;
+		$response = $this->gateway->getCertification($userId);
+		if(!$response) {
+			return response()->error($this->gateway->errors());
+		}
+		return response()->ok($response);
 	}
 
 	/**
@@ -75,8 +97,11 @@ class TrainingsController extends Controller
 	 */
 	public function pro()
 	{
-		$trainings = Training::where('type', 'pro')->get();
-		return response()->ok($trainings);
+		$response = $this->gateway->findBy('type', 'pro');
+		if(!$response) {
+			return response()->error($this->gateway->errors());
+		}
+		return response()->ok($response);
 	}
 
 	/**
@@ -84,36 +109,25 @@ class TrainingsController extends Controller
 	 * Save a checkpoint when the user has watched a training video
 	 *
 	 * @param Request $request
-	 * @return mixed (token if all the traning has been watched)
+	 * @return mixed (token if all the training has been watched)
 	 */
-	public function checkpoint(Request $request)
+	public function checkpoint_certification(Request $request)
 	{
+		$userId = $userId = $request->user()->id;
 		$training_id = $request->input('training_id');
-
-		// since there isn't support in Eloquent to
-		// composite primary keys, I decided to use
-		// query builder instead
-		$now = new DateTime('now');
-		$isOne = $this->getUserTraining($training_id);
-		if($isOne <= 0) {
-			DB::table('users_trainings')->insert([
-				'training_id' => $training_id,
-				'user_id' => $this->userId,
-				'type' => 'certification',
-				'created_at' => $now->format('Y-m-d H:i:s')
-			]);
-		} else {
-			return response()->error('The training is already completed');
+		$response = $this->gateway->checkpoint($training_id, $userId, 'certification');
+		if(!$response) {
+			return response()->error($this->gateway->errors());
 		}
 
 		// check if the trainings are completed
-		$total_training = $this->getTotalTrainings('certification');
+		$total_training = $this->gateway->getTotalTrainings('certification');
 		// we want to update the token with a new permission
-		$total_completed = $this->getTrainingCompletedByUser('certification');
+		$total_completed = $this->gateway->getTrainingCompletedByUser('certification', $userId);
 
 		if($total_training == $total_completed) {
 			$role = Role::where('name', 'certification.training')->first();
-			$this->user->attachRole($role->id);
+			$request->user()->attachRole($role->id);
 			$token = Token::refresh($request);
 			return response()->ok(array('token' => $token));
 		}
@@ -121,58 +135,22 @@ class TrainingsController extends Controller
 		return response()->added();
 	}
 
+	/**
+	 * @param Request $request
+	 * @return mixed
+	 * @TODO remove this permanently?!
+	 */
 	public function download(Request $request)
 	{
 		$training_id = $request->training_id;
 		$doc = Training::find($training_id);
 		if($doc->type === 'certification') {
-			$unblock = $this->getUserTraining($training_id);
-			if($unblock <= 0) {
-				return response()->error('The user does not unblock the video.');
-//				return view('errors.404', array('error' => 'The user does not unblock the video.'));
-			}
+////			$unblock = $this->getUserTraining($training_id);
+//			if($unblock <= 0) {
+//				return response()->error('The user does not unblock the video.');
+////				return view('errors.404', array('error' => 'The user does not unblock the video.'));
+//			}
 		}
 		return Files::download('trainings/' . $doc->filename, true, $doc->filename);
-	}
-
-	/**
-	 *
-	 * Check if the user has a specific training
-	 *
-	 * @param Integer $training_id
-	 * @return Integer
-	 */
-	protected function getUserTraining($training_id)
-	{
-		return DB::table('users_trainings')
-			->where('training_id', $training_id)
-			->where('user_id', $this->userId)
-			->count();
-	}
-
-	/**
-	 *
-	 * How many trainings a user has
-	 *
-	 * @param String $type the type of the training [affiliate|pro|certification]
-	 * @return Integer
-	 */
-	protected function getTrainingCompletedByUser($type)
-	{
-		return DB::table('users_trainings')
-			->where('type', $type)
-			->where('user_id', $this->userId)
-			->count();
-	}
-
-	/**
-	 *
-	 * How many trainings by type
-	 *
-	 * @return Integer
-	 */
-	protected function getTotalTrainings($type)
-	{
-		return Training::where('type', $type)->count();
 	}
 }
