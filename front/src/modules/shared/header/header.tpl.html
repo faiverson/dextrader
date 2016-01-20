@@ -1,7 +1,7 @@
 <header data-ng-controller="HeaderCtrl">
     <div id="header-content">
         <div id="logo"><a ui-sref="dashboard"><img src="/front/assets/images/logo.png" alt="DEX Trader"></a></div>
-        <ul id="header-nav">
+        <ul id="header-nav" data-ng-class="{'no-right-border' :!isLoggedIn()}">
             <li><a id="nav-dashboard"
                    ui-sref="dashboard"
                    ui-sref-active="active">Dashboard</a></li>
@@ -14,11 +14,11 @@
             <li><a id="nav-dexfx"
                    ui-sref="dex_fx.coming_soon"
                    ui-sref-active="active">Dex FX</a></li>
-            <li><a id="nav-affiliates"
+            <li data-ng-if="isLoggedIn()"><a id="nav-affiliates"
                    ui-sref="affiliates"
                    ui-sref-active="active">Affiliates</a></li>
         </ul>
-        <ul id="nav-profile">
+        <ul id="nav-profile"  data-ng-if="isLoggedIn()">
             <li>
                 <a ui-sref="user.profile">Profile</a>
                 <ul>

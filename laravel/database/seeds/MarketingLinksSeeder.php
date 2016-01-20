@@ -62,6 +62,15 @@ class MarketingLinksSeeder extends Seeder
 			'products' => '4'
 		]);
 
+		MarketingLink::create([
+				'title' => 'ACADEMY sales',
+				'campaign_id' => $fc->id,
+				'description' => 'FX sale page',
+				'image' => 'http://dextrader.com/academy',
+				'link' => 'http://dextrader.com/academy',
+				'products' => '5'
+		]);
+
 		if (App::Environment() === 'local') {
 			$this->fetching();
 		}

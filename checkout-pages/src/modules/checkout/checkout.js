@@ -7,6 +7,11 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 controller: 'CheckoutCtrl',
                 data: {
                     pageTitle: 'Checkout Page'
+                },
+                resolve: {
+                    product: function () {
+                        return {id: 1, name: 'ib', funnel_id: 1};
+                    }
                 }
             })
             .state('ckdownsell', {
@@ -15,19 +20,77 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 controller: 'CheckoutCtrl',
                 data: {
                     pageTitle: 'Checkout Page'
+                },
+                resolve: {
+                    product: function () {
+                        return {id: 1, name: 'ib', funnel_id: 1};
+                    }
+                }
+            })
+            .state('checkoutNA', {
+                url: '/na?user&tag',
+                templateUrl: 'modules/checkout/checkout.tpl.html',
+                controller: 'CheckoutCtrl',
+                data: {
+                    pageTitle: 'Checkout Page'
+                },
+                resolve: {
+                    product: function () {
+                        return {id: 3, name: 'na', funnel_id: 4};
+                    }
+                }
+            })
+            .state('checkoutFX', {
+                url: '/fx?user&tag',
+                templateUrl: 'modules/checkout/checkout.tpl.html',
+                controller: 'CheckoutCtrl',
+                data: {
+                    pageTitle: 'Checkout Page'
+                },
+                resolve: {
+                    product: function () {
+                        return {id: 4, name: 'fx', funnel_id: 5};
+                    }
+                }
+            })
+            .state('checkoutACADEMY', {
+                url: '/academy?user&tag',
+                templateUrl: 'modules/checkout/checkout.tpl.html',
+                controller: 'CheckoutCtrl',
+                data: {
+                    pageTitle: 'Checkout Page'
+                },
+                resolve: {
+                    product: function () {
+                        return {id: 5, name: 'academy', funnel_id: 6};
+                    }
                 }
             });
 
     })
 
-    .controller('CheckoutCtrl', ['$scope', 'CheckoutService', 'UserService', 'CountriesService', '$q', 'os-info', '$stateParams', 'Notification', 'HitsService', 'TestimonialsService', '$state', 'InvoicesService', 'SpecialOffersService', '$filter',
-        function ($scope, CheckoutService, UserService, CountriesService, $q, osInfo, $stateParams, Notification, HitsService, TestimonialsService, $state, InvoicesService, SpecialOffersService, $filter) {
+    .controller('CheckoutCtrl', ['$scope', 'CheckoutService', 'UserService', 'CountriesService', '$q', 'os-info', '$stateParams', 'Notification', 'HitsService', 'TestimonialsService', '$state', 'InvoicesService', 'SpecialOffersService', 'product',
+        function ($scope, CheckoutService, UserService, CountriesService, $q, osInfo, $stateParams, Notification, HitsService, TestimonialsService, $state, InvoicesService, SpecialOffersService, product) {
             var vm = this;
+
+            $scope.product = product;
             $scope.formData = {
                 billing_address2: "",
-                products: [1],
-                funnel_id: 1
+                products: [product.id],
+                funnel_id: product.funnel_id
             };
+
+            $scope.productsData = [
+                {name: '', description: ''},
+                {
+                    name: 'International Binary Options',
+                    description: 'Getting Binary Option Signals From Dex Signals Helps Both The Novice And Experienced Binary Option Traders Stop Guessing And Start Winning!'
+                },
+                {name: 'International Binary Options PRO', description: ''},
+                {name: 'North American Derivatives', description: ''},
+                {name: 'Forex Options Newsletter', description: ''},
+                {name: 'Dex Trading Academy', description: ''}
+            ];
 
             $scope.userData = {};
 
