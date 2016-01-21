@@ -844,7 +844,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             endpoint += product;
 
             if (angular.isDefined(params)) {
-                endpoint += '?' + $objects.toUrlString(params);
+                endpoint += '?' + $objects.serializeUrl(params);
             }
 
             function success(res) {

@@ -50,7 +50,8 @@ module.exports = {
                 'vendor/moment/min/moment.min.js',
                 'vendor/angular-file-saver/dist/angular-file-saver.bundle.js',
                 'vendor/angular-ui-mask/dist/mask.js',
-                'vendor/angular-loading-bar/build/loading-bar.js'
+                'vendor/angular-loading-bar/build/loading-bar.js',
+                'vendor/angular-ui-bootstrap-datetimepicker/datetimepicker.js'
             ],
             output: 'vendor.js'
         },

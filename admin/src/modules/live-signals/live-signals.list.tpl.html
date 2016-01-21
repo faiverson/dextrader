@@ -17,64 +17,34 @@
         </div>
 
     </div>
-    <table class="table">
+    <table class="table live-signals-table">
         <thead>
         <tr>
-            <th sortable="1"
-                current-sort="sortBy.column"
-                current-dir="sortBy.dir"
-                data-ng-click="sortBy.sort(1)">Date
-            </th>
-            <th sortable="2"
-                current-sort="sortBy.column"
-                current-dir="sortBy.dir"
-                data-ng-click="sortBy.sort(2)">Signal Time
-            </th>
-            <th sortable="3"
-                current-sort="sortBy.column"
-                current-dir="sortBy.dir"
-                data-ng-click="sortBy.sort(3)">Expiry Time
-            </th>
+            <th>Date</th>
+            <th>Signal Time</th>
+            <th>Expiry Time</th>
+            <th>Close Time</th>
             <th>Direction</th>
-            <th sortable="4"
-                current-sort="sortBy.column"
-                current-dir="sortBy.dir"
-                data-ng-click="sortBy.sort(4)">Asset
-            </th>
-            <th sortable="5"
-                current-sort="sortBy.column"
-                current-dir="sortBy.dir"
-                data-ng-click="sortBy.sort(5)">Asset Win Rate
-            </th>
-            <th sortable="6"
-                current-sort="sortBy.column"
-                current-dir="sortBy.dir"
-                data-ng-click="sortBy.sort(6)">End Price
-            </th>
-            <th sortable="6"
-                current-sort="sortBy.column"
-                current-dir="sortBy.dir"
-                data-ng-click="sortBy.sort(7)">Target Price
-            </th>
-            <th sortable="7"
-                current-sort="sortBy.column"
-                current-dir="sortBy.dir"
-                data-ng-click="sortBy.sort(8)">Win
-            </th>
+            <th>Asset</th>
+            <th>Open Price</th>
+            <th>Target Price</th>
+            <th>End Price</th>
+            <th>Result</th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         <tr data-ng-repeat="signal in signals">
-            <td data-ng-bind="::signal.created_at | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY'"></td>
-            <td data-ng-bind="::signal.signal_time" class="green"></td>
-            <td data-ng-bind="::signal.expiry_time" class="red"></td>
+            <td data-ng-bind="::signal.signal_time | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY'"></td>
+            <td data-ng-bind="::signal.signal_time | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'HH:mm'" class="green"></td>
+            <td data-ng-bind="::signal.expiry_time | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'HH:mm'" class="red"></td>
+            <td data-ng-bind="::signal.close_time | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'HH:mm'" class="red"></td>
             <td><img data-ng-src="{{signal.direction == 0 && '/assets/images/ico-reddown.png' || '/assets/images/ico-greenup.png'}}"></td>
             <td data-ng-bind="::signal.asset"></td>
-            <td data-ng-bind="::signal.winloss"></td>
+            <td data-ng-bind="::signal.open_price"></td>
             <td data-ng-bind="::signal.target_price" class="green"></td>
             <td data-ng-bind="::signal.close_price" class="red"></td>
-            <td class="green">Win</td>
+            <td data-ng-class="{'green': signal.winloss == 1, 'red': signal.winloss == 0}">{{ ::signal.winloss == 1 && 'Win' || 'Loss' }}</td>
             <td>
                 <div class="btn-group">
                     <button type="button"
@@ -84,7 +54,8 @@
                         Actions <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a ui-sref="live_signals.edit({id:signal.id, prd: filters.product.name.toLowerCase() })">Edit</a></li>
+                        <li><a ui-sref="live_signals.edit({id:signal.id, prd: filters.product.name.toLowerCase() })">Edit</a>
+                        </li>
                         <li><a href="#" data-ng-click="openDeleteConfirm(signal.id)">Remove</a></li>
                     </ul>
                 </div>

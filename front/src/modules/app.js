@@ -12,6 +12,7 @@ angular.module('app', [
         'ui-notification',
         'ui.bootstrap.tpls',
         'ui.bootstrap',
+        'ui.bootstrap.datetimepicker',
         'app.http-services',
         'app.shared-directives',
         'app.shared-filters',
