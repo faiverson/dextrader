@@ -16,8 +16,9 @@ class LiveSignalCreateValidator extends AbstractValidator {
 		'expiry_time' => ['sometimes', 'date_format: Y-m-d H:i:s'],
 		'asset' => ['required', 'regex:/^[a-zA-Z]{3}\/{0,1}[a-zA-Z]{3}$/'],
 		'trade_type' => ['required', 'regex:/^([M1|M5|M15|M30|H1|H4|D1|W1|MN1]+)+$/'],
-		'target_price'=> ['sometimes','regex:/[0-9]+[.,]?[0-9]*/'],
-		'end_price'=> ['sometimes', 'regex:/[0-9]+[.,]?[0-9]*/'],
+		'target_sleep'=> ['sometimes','regex:/[0-9]+[.,]?[0-9]*/'],
+		'target_sleep'=> ['sometimes','regex:/[0-9]+[.,]?[0-9]*/'],
+		'target_to'=> ['sometimes', 'regex:/[0-9]+[.,]?[0-9]*/'],
 		'close_time' => ['sometimes', 'date_format: Y-m-d H:i:s'],
 		'close_price'=> ['sometimes','regex:/[0-9]+[.,]?[0-9]*/']
 	);

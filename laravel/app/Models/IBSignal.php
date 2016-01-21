@@ -24,7 +24,7 @@ class IBSignal extends Model
      *
      * @var array
      */
-	protected $fillable = ['mt_id', 'signal_time', 'expiry_time', 'close_time', 'direction', 'asset', 'trade_type', 'open_price', 'close_price', 'target_price', 'winloss'];
+	protected $fillable = ['mt_id', 'signal_time', 'expiry_time', 'close_time', 'direction', 'asset', 'trade_type', 'open_price', 'close_price', 'target_to', 'target_sleep', 'winloss'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -33,14 +33,24 @@ class IBSignal extends Model
      */
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
 
-	public function getTargetPriceAttribute()
+	public function getTargetToPriceAttribute()
 	{
-		return number_format($this->attributes['target_price'], 2, '.', ',');
+		return number_format($this->attributes['target_to'], 5, '.', ',');
 	}
 
-	public function setTargetPriceAttribute($value)
+	public function setTargetToAttribute($value)
 	{
-		$this->attributes['target_price'] = number_format($value, 2, '.', '');
+		$this->attributes['target_to'] = number_format($value, 5, '.', '');
+	}
+
+	public function getTargetSleepPriceAttribute()
+	{
+		return number_format($this->attributes['target_sleep'], 5, '.', ',');
+	}
+
+	public function setTargetSleepAttribute($value)
+	{
+		$this->attributes['target_sleep'] = number_format($value, 5, '.', '');
 	}
 
 	public function getClosePriceAttribute()
