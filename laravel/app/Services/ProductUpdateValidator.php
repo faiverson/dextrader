@@ -13,7 +13,7 @@ class ProductUpdateValidator extends AbstractValidator {
 	 * @var array
 	 */
 	protected $rules = array(
-		'name' => 'sometimes|unique:products|alpha',
+		'name' => 'sometimes|alpha',
 		'display_name' => 'sometimes|alpha',
 		'amount' => ['sometimes', 'regex:/[0-9]+[.,]?[0-9]*/'],
 		'discount' => ['sometimes', 'regex:/[0-9]+[.,]?[0-9]*/'],

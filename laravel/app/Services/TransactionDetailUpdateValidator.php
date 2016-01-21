@@ -21,7 +21,7 @@ class TransactionDetailUpdateValidator extends AbstractValidator {
 	protected $rules = array(
 		'transaction_id' => 'sometimes|exists:transactions,id',
 		'product_id' => 'sometimes|exists:products,id',
-		'product_name' => 'sometimes|required|unique:products|alpha',
+		'product_name' => 'sometimes|required|alpha',
 		'product_amount' => ['sometimes', 'required', 'regex:/[0-9]+[.,]?[0-9]*/'],
 		'product_discount' => ['sometimes', 'required', 'regex:/[0-9]+[.,]?[0-9]*/']
 	);

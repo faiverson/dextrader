@@ -31,14 +31,14 @@ class LiveSignalGateway extends AbstractGateway {
 		$this->updateValidator = $updateValidator;
 	}
 
-	public function all_signals($type, $limit = null, $offset = null, $order_by = null)
+	public function allSignals($type, $limit = null, $offset = null, $order_by = null, $filters = null)
 	{
-		return $this->repository[$type]->all(array('*'), $limit, $offset, $order_by);
+		return $this->repository[$type]->getSignals(array('*'), $limit, $offset, $order_by, $filters);
 	}
 
-	public function total_signals($type)
+	public function totalSignals($type, $filters)
 	{
-		return $this->repository[$type]->total();
+		return $this->repository[$type]->total($filters);
 	}
 
 	public function findByType($product, $id)

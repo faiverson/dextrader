@@ -8,8 +8,9 @@ use App\Repositories\Contracts\RepositoryInterface;
  * Note that we extend from RepositoryInterface, so any class that implements
  * this interface must also provide all the standard eloquent methods (find, all, etc.)
  */
-interface LiveSignalRepositoryInterface extends RepositoryInterface {
-	public function find_signal($mt_id, $trade);
-	public function total($where);
-	public function getSignals($select, $limit, $offset, $order_by, $where);
+interface TrainingRepositoryInterface extends RepositoryInterface {
+	public function getCertification($userId);
+	public function getUserTraining($training_id, $userId);
+	public function getTrainingCompletedByUser($type, $userId);
+	public function getTotalTrainings($type);
 }
