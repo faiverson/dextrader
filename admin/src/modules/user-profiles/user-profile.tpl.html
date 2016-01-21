@@ -1,20 +1,32 @@
 <div class="user-profile">
     <div class="container">
         <h1>User Profile
-            <button class="btn btn-sm btn-primary pull-right" ui-sref="users">BACK TO USERS</button>&nbsp;
-            <button class="btn btn-sm btn-warning pull-right" ui-sref="users-edit({ id: user.user_id})">Edit <i class="fa fa-edit"></i></button></h1>
+            <div class="menu pull-right">
+
+                <button class="btn btn-sm btn-success" data-ng-click="loginAsUser(user)">Login As<i
+                        class="fa fa-edit"></i></button>
+                <button class="btn btn-sm btn-warning" ui-sref="users-edit({ id: user.user_id})">Edit <i
+                        class="fa fa-edit"></i></button>
+                <button class="btn btn-sm btn-primary" ui-sref="users">BACK TO USERS</button>
+            </div>
+        </h1>
+
         <div class="row">
-            <div class="col-md-4 user-data">
+            <div class="col-md-3 user-data">
                 <h3>{{user.full_name}}</h3>
+
                 <p>User ID: {{user.user_id}}</p>
+
                 <p>Email: {{user.email}}</p>
+
                 <p data-ng-if="user.phone">Phone: {{user.phone}}</p>
+
                 <div class="role-list">
                     <p class="title">Roles</p>
                     <span data-ng-repeat="role in user.roles">{{role.name}}</span>
                 </div>
             </div>
-            <div class="col-md-8 user-details">
+            <div class="col-md-9 user-details">
                 <uib-tabset justified="true">
                     <uib-tab heading="Billing Addresses">
                         <table class="table table-striped">
@@ -42,7 +54,9 @@
                                 <td>{{ba.default_address == 1 && 'Yes' || 'No'}}</td>
                             </tr>
                             <tr>
-                                <td colspan="8" data-ng-if="billing_addresses.length == 0" class="text-center">-- No Billing Address Were Found --</td>
+                                <td colspan="8" data-ng-if="billing_addresses.length == 0" class="text-center">-- No
+                                    Billing Address Were Found --
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -64,12 +78,14 @@
                                 <td>{{cc.name}}</td>
                                 <td>{{cc.first_six}}</td>
                                 <td>{{cc.last_four}}</td>
-                                <td><img width="40" data-ng-src="/assets/images/creditcards/{{cc.network}}.png" /> </td>
+                                <td><img width="40" data-ng-src="/assets/images/creditcards/{{cc.network}}.png"/></td>
                                 <td>{{cc.exp_month}}/{{cc.exp_year}}</td>
                                 <td>{{cc.default_card == 1 && 'Yes' || 'No'}}</td>
                             </tr>
                             <tr>
-                                <td colspan="8" data-ng-if="credit_cards.length == 0" class="text-center">-- No Credit Cards Were Found --</td>
+                                <td colspan="8" data-ng-if="credit_cards.length == 0" class="text-center">-- No Credit
+                                    Cards Were Found --
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -87,16 +103,22 @@
                             </thead>
                             <tbody>
                             <tr data-ng-repeat="invoice in invoices">
-                                <td>{{invoice.created_at | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY HH:mm'}}</td>
+                                <td>{{invoice.created_at | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY
+                                    HH:mm'}}
+                                </td>
                                 <td>
-                                    <p data-ng-repeat="prod in invoice.detail">{{prod.product_display_name}} - {{prod.product_amount | currency: '$'}}</p>
+                                    <p data-ng-repeat="prod in invoice.detail">{{prod.product_display_name}} -
+                                        {{prod.product_amount | currency: '$'}}</p>
                                 </td>
                                 <td class="small">
                                     <p>{{invoice.billing_address}} - {{invoice.billing_zip}}</p>
-                                    <p>{{invoice.billing_city}} - {{invoice.billing_state}} - {{invoice.billing_country}}</p>
+
+                                    <p>{{invoice.billing_city}} - {{invoice.billing_state}} -
+                                        {{invoice.billing_country}}</p>
                                 </td>
                                 <td class="small">
                                     <p>{{invoice.card_name}}</p>
+
                                     <p>{{invoice.card_first_six}}*******{{invoice.card_last_four}}</p>
                                 </td>
                                 <td>
@@ -104,7 +126,9 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="5" data-ng-if="invoices.length == 0" class="text-center">-- No Invoices Were Found --</td>
+                                <td colspan="5" data-ng-if="invoices.length == 0" class="text-center">-- No Invoices
+                                    Were Found --
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -124,24 +148,34 @@
                             <tbody>
                             <tr data-ng-repeat="subscription in subscriptions">
                                 <td>
-                                    {{subscription.product.display_name}} - {{subscription.product.amount | currency: '$'}}
+                                    {{subscription.product.display_name}} - {{subscription.product.amount | currency:
+                                    '$'}}
                                 </td>
                                 <td class="small">
                                     <p>{{subscription.address.address}} - {{subscription.address.zip}}</p>
-                                    <p>{{subscription.address.city}} - {{subscription.address.state}} - {{subscription.address.country}}</p>
+
+                                    <p>{{subscription.address.city}} - {{subscription.address.state}} -
+                                        {{subscription.address.country}}</p>
                                 </td>
                                 <td class="small">
                                     <p>{{subscription.card.name}}</p>
+
                                     <p>{{subscription.card.first_six}}*******{{subscription.card.last_four}}</p>
                                 </td>
-                                <td>{{subscription.last_billing | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY HH:mm'}}</td>
-                                <td>{{subscription.next_billing | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY HH:mm'}}</td>
+                                <td>{{subscription.last_billing | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM
+                                    YYYY HH:mm'}}
+                                </td>
+                                <td>{{subscription.next_billing | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM
+                                    YYYY HH:mm'}}
+                                </td>
                                 <td>
                                     <button class="btn btn-sm btn-primary">More Info</button>
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="5" data-ng-if="subscriptions.length == 0" class="text-center">-- No Subscriptions Were Found --</td>
+                                <td colspan="5" data-ng-if="subscriptions.length == 0" class="text-center">-- No
+                                    Subscriptions Were Found --
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -153,11 +187,13 @@
                                 <th sortable="created_at"
                                     current-sort="commissions.sortBy.column"
                                     current-dir="commissions.sortBy.dir"
-                                    data-ng-click="commissions.sortBy.sort('created_at')">Date</th>
+                                    data-ng-click="commissions.sortBy.sort('created_at')">Date
+                                </th>
                                 <th sortable="status"
                                     current-sort="commissions.sortBy.column"
                                     current-dir="commissions.sortBy.dir"
-                                    data-ng-click="commissions.sortBy.sort('status')">Status</th>
+                                    data-ng-click="commissions.sortBy.sort('status')">Status
+                                </th>
                                 <th>Customer</th>
                                 <th>Enroller</th>
                                 <th>Product</th>
@@ -165,11 +201,13 @@
                                 <th sortable="amount"
                                     current-sort="commissions.sortBy.column"
                                     current-dir="commissions.sortBy.dir"
-                                    data-ng-click="commissions.sortBy.sort('amount')">Comission</th>
+                                    data-ng-click="commissions.sortBy.sort('amount')">Comission
+                                </th>
                                 <th sortable="holdback"
                                     current-sort="commissions.sortBy.column"
                                     current-dir="commissions.sortBy.dir"
-                                    data-ng-click="commissions.sortBy.sort('holdback')">10% h</th>
+                                    data-ng-click="commissions.sortBy.sort('holdback')">10% h
+                                </th>
                                 <th>Income</th>
                             </tr>
                             </thead>
@@ -180,7 +218,8 @@
                                 <td data-ng-bind="commission.from.full_name"></td>
                                 <td data-ng-bind="commission.enroller"></td>
                                 <td>
-                                    <p class="prd-name" data-ng-repeat="prd in commission.products" data-ng-bind="prd.product_display_name"></p>
+                                    <p class="prd-name" data-ng-repeat="prd in commission.products"
+                                       data-ng-bind="prd.product_display_name"></p>
                                 </td>
                                 <td data-ng-bind="calculateRetail(commission.products) | currency: '$'"></td>
                                 <td data-ng-bind="commission.amount  | currency: '$'"></td>
@@ -189,7 +228,41 @@
                             </tr>
 
                             <tr data-ng-if="commissions.data.length == 0">
-                                <td class="text-center" colspan="9"> --- No commissions were found --- </td>
+                                <td class="text-center" colspan="9"> --- No commissions were found ---</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </uib-tab>
+                    <uib-tab heading="Payments" select="payments.loadUserPayments(user.user_id)">
+                        <table class="table table-payments">
+                            <thead>
+                            <tr>
+                                <th sortable="created_at"
+                                    current-sort="payments.sortBy.column"
+                                    current-dir="payments.sortBy.dir"
+                                    data-ng-click="payments.sortBy.sort('paid_dt')">Date
+                                </th>
+                                <th sortable="status"
+                                    current-sort="payments.sortBy.column"
+                                    current-dir="payments.sortBy.dir"
+                                    data-ng-click="payments.sortBy.sort('ledger_type')">Status
+                                </th>
+                                <th sortable="amount"
+                                    current-sort="payments.sortBy.column"
+                                    current-dir="payments.sortBy.dir"
+                                    data-ng-click="payments.sortBy.sort('amount')">Total
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="payment in payments.data">
+                                <td data-ng-bind="payment.paid_dt | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY'"></td>
+                                <td>{{payment.ledger_type == 'commissions' && 'Payout' || 'Refund'}}</td>
+                                <td data-ng-bind="payment.amount | currency: '$'"></td>
+                            </tr>
+
+                            <tr data-ng-if="payments.data.length == 0">
+                                <td class="text-center" colspan="3"> --- No payments were found ---</td>
                             </tr>
                             </tbody>
                         </table>

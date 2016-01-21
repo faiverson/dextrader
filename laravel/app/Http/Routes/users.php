@@ -12,6 +12,12 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 
 	// check if it's the user
 	Route::group(['middleware' => 'is.user'], function () {
+
+		Route::group(['namespace' => 'Auth'], function () {
+			Route::post('/users/loginAs/{id}', 'AuthController@loginAs')->where('id', '[0-9]+');
+		});
+
+
 		Route::get('/users/{id}', 'UsersController@show')->where('id', '[0-9]+');
 		Route::put('/users/{id}', 'UsersController@update')->where('id', '[0-9]+');
 		Route::delete('/users/{id}', 'UsersController@destroy')->where('id', '[0-9]+');

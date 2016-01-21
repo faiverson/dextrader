@@ -56,6 +56,10 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
                 value: moment().toDate()
             };
 
+            $scope.close_time = {
+                value: moment().toDate()
+            };
+
             $scope.open = function ($event) {
                 $scope.dateDatepickerOpen = true;
             };
@@ -76,6 +80,7 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
                     $scope.signal.signal_date = moment($scope.signal_date).format("YY-M-D");
                     $scope.signal.signal_time = moment($scope.signal_time.value).format("YYYY-MM-DD HH:mm:ss");
                     $scope.signal.expiry_time = moment($scope.expiry_time.value).format("YYYY-MM-DD HH:mm:ss");
+                    $scope.signal.close_time = moment($scope.close_time.value).format("YYYY-MM-DD HH:mm:ss");
 
                     if ($scope.asset.indexOf('/') < 0) {
                         $scope.signal.asset = $scope.asset.substring(0, 3) + '/' + $scope.asset.substring(3, 6);
@@ -122,6 +127,8 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
                         $scope.signal_date = moment(res.data.signal_date, "YYYY-MM-DD").toDate();
                         $scope.signal_time.value = moment(res.data.signal_time, "YYYY-MM-DD HH:mm:ss").toDate();
                         $scope.expiry_time.value = moment(res.data.expiry_time, "YYYY-MM-DD HH:mm:ss").toDate();
+                        $scope.close_time.value = moment(res.data.close_time, "YYYY-MM-DD HH:mm:ss").toDate();
+                        $scope.signal.winloss = res.data.winloss;
                         $scope.asset = res.data.asset;
 
                     });

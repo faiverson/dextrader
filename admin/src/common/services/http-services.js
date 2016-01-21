@@ -310,7 +310,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 deferred.reject('ID field is required!');
             }
 
-            endpoint +=  prd + '/' + id;
+            endpoint += prd + '/' + id;
 
             function success(res) {
                 deferred.resolve(res.data);
@@ -419,10 +419,29 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
+        function loginAsUser(id) {
+            var deferred = $q.defer(),
+                endpoint = service + '/loginAs/' + id;
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            $http.post(endpoint).then(success, error);
+
+
+            return deferred.promise;
+        }
+
         return {
             getUsers: getUsers,
             saveUser: save,
-            getUser: getUser
+            getUser: getUser,
+            loginAsUser: loginAsUser
         };
     }])
 
@@ -505,7 +524,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         var service = $configs.API_BASE_URL + 'users/';
 
         function query(user_id) {
-            var endpoint = service+ user_id + '/cards',
+            var endpoint = service + user_id + '/cards',
                 deferred = $q.defer();
 
             function success(res) {
@@ -888,5 +907,53 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         return {
             getCommissionTotals: getCommissionTotals,
             getCommissions: getCommissions
+        };
+    }])
+
+    .factory('PaymentService', ['$http', '$q', '$site-configs', 'AuthService', '$objects', function ($http, $q, $configs, AuthService, $objects) {
+        var service = $configs.API_BASE_URL + 'users/';
+
+        function getPaymentTotals(user_id) {
+            var endpoint = service + user_id + '/balance',
+                deferred = $q.defer();
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+
+        }
+
+        function getPayments(params, user_id) {
+            var endpoint = service + user_id + '/payments',
+                deferred = $q.defer();
+
+            if (angular.isObject(params)) {
+                endpoint += '?' + $objects.serializeUrl(params);
+            }
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
+        return {
+            getPaymentTotals: getPaymentTotals,
+            getPayments: getPayments
         };
     }]);

@@ -734,21 +734,18 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         var service = $configs.API_BASE_URL + 'users/' + AuthService.getLoggedInUser().user_id + '/commissions';
 
         function getCommissionTotals() {
-            var endpoint = service,
+            var endpoint = service + '/total',
                 deferred = $q.defer();
 
-            setTimeout(function () {
-                deferred.resolve({
-                    data: {
-                        'today': 1231,
-                        'yesterday': 324.34,
-                        'last_week': 123345,
-                        'last_month': 423433,
-                        'last_year': 124234,
-                        'all_time': 3242344
-                    }
-                });
-            }, 500);
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.get(endpoint).then(success, error);
 
             return deferred.promise;
 
@@ -778,6 +775,54 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         return {
             getCommissionTotals: getCommissionTotals,
             getCommissions: getCommissions
+        };
+    }])
+
+    .factory('PaymentService', ['$http', '$q', '$site-configs', 'AuthService', '$objects', function ($http, $q, $configs, AuthService, $objects) {
+        var service = $configs.API_BASE_URL + 'users/' + AuthService.getLoggedInUser().user_id;
+
+        function getPaymentTotals() {
+            var endpoint = service+ '/balance',
+                deferred = $q.defer();
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+
+        }
+
+        function getPayments(params) {
+            var endpoint = service + '/payments',
+                deferred = $q.defer();
+
+            if (angular.isObject(params)) {
+                endpoint += '?' + $objects.serializeUrl(params);
+            }
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
+        return {
+            getPaymentTotals: getPaymentTotals,
+            getPayments: getPayments
         };
     }])
 
@@ -844,7 +889,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             endpoint += product;
 
             if (angular.isDefined(params)) {
-                endpoint += '?' + $objects.toUrlString(params);
+                endpoint += '?' + $objects.serializeUrl(params);
             }
 
             function success(res) {

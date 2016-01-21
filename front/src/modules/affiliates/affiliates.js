@@ -365,6 +365,106 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
 
     }])
 
-    .controller('PaymentsCtrl', ['$scope', function ($scope) {
+    .controller('PaymentsCtrl', ['$scope', 'PaymentService', 'Notification', 'AuthService', function ($scope, PaymentService, Notification, AuthService) {
+        var vm = this;
 
+        $scope.pagination = {
+            totalItems: 20,
+            currentPage: 1,
+            itemsPerPage: 10,
+            pageChange: function () {
+                vm.getCommissions();
+            }
+        };
+
+        $scope.user = AuthService.getLoggedInUser();
+
+        $scope.sortBy = {
+            column: 'created_at',
+            dir: 'desc',
+            sort: function (col) {
+                if (col === this.column) {
+                    this.dir = this.dir === 'asc' ? 'desc' : 'asc';
+                } else {
+                    this.column = col;
+                    this.dir = 'asc';
+                }
+
+                vm.getCommissions();
+            }
+        };
+
+        $scope.filters = {
+            from: {
+                format: 'dd MMM yyyy'
+            },
+            to: {
+                format: 'dd MMM yyyy'
+            },
+            products: [
+                { id: 1, name: 'IB' },
+                { id: 2, name: 'IB PRO' }
+            ],
+            status: [
+                'Pending', 'Ready to Pay', 'Paid'
+            ],
+            apply: function () {
+                if(angular.isDefined(this.from.value)){
+                    this.toApply.from = moment(this.from.value).format('YYYY-MM-DD');
+                }
+
+                if(angular.isDefined(this.to.value)){
+                    this.toApply.to = moment(this.to.value).format('YYYY-MM-DD');
+                }
+
+                vm.getCommissions();
+            },
+            toApply: {}
+        };
+
+        vm.getPaymentTotals = function () {
+            function success(res) {
+                if(angular.isArray(res.data)){
+                    $scope.paymentTotals = res.data[0];
+                }
+            }
+
+            function error(res) {
+                Notification.error('Ups! there was an error trying to load payment totals!');
+            }
+
+            PaymentService.getPaymentTotals()
+                .then(success, error);
+        };
+
+        vm.getPayments = function () {
+            var order = [];
+            order[$scope.sortBy.column] = $scope.sortBy.dir;
+
+            var params = {
+                offset: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
+                limit: $scope.pagination.itemsPerPage,
+                order: order,
+                filter: $scope.filters.toApply
+            };
+
+            function success(res) {
+                $scope.pagination.totalItems = res.data.total;
+                $scope.payments = res.data.payments;
+            }
+
+            function error(res) {
+                Notification.error('Ups! there was an error trying to load payments!');
+            }
+
+            PaymentService.getPayments(params)
+                .then(success, error);
+        };
+
+        vm.init = function () {
+            vm.getPaymentTotals();
+            vm.getPayments();
+        };
+
+        vm.init();
     }]);

@@ -1,4 +1,4 @@
-<div class="provider-form">
+<div class="live-signals-from">
     <h1>Live Signals</h1>
 
     <form name="liveSignalsForm" novalidate="novalidate">
@@ -9,7 +9,7 @@
                     <div class="panel-heading">Signal Information</div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="filterProducts">Product</label>
                                     <select class="form-control" id="filterProducts"
@@ -18,32 +18,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group" data-show-errors>
-                                    <label for="signal_date">Date</label>
-
-                                    <p class="input-group">
-                                        <input type="date"
-                                               id="signal_date"
-                                               name="signal_date"
-                                               class="form-control"
-                                               uib-datepicker-popup
-                                               data-ng-model="signal_date"
-                                               is-open="dateDatepickerOpen"
-                                               min-date="minDate"
-                                               max-date="maxDate"
-                                               datepicker-options="dateOptions"
-                                               date-disabled="disabled(date, mode)"
-                                               ng-required="true"
-                                               close-text="Close"/>
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default" ng-click="open($event)"><i
-                                            class="glyphicon glyphicon-calendar"></i></button>
-                                </span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group" data-show-errors>
                                     <label for="asset">Asset</label>
                                     <input class="form-control"
@@ -54,6 +29,36 @@
                                            ui-mask="AAA/AAA"
                                            ui-mask-placeholder=""
                                            ui-mask-placeholder-char=" ">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Direction</label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="radio" data-ng-model="signal.direction" value="0"/>
+                                            <img src="/assets/images/ico-reddown.png" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="radio" data-ng-model="signal.direction" value="1"/>
+                                            <img src="/assets/images/ico-greenup.png">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Win?</label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="radio" data-ng-model="signal.winloss" value="0"/>
+                                            <label class="red">Loss</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="radio" data-ng-model="signal.winloss" value="1"/>
+                                            <label class="green">Win</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -86,15 +91,13 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>Direction</label>
+                                    <label>Close Time</label>
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <input type="radio" data-ng-model="signal.direction" value="0"/>
-                                            <img src="/assets/images/ico-reddown.png" />
-                                        </div>
-                                        <div class="col-md-6">
-                                            <input type="radio" data-ng-model="signal.direction" value="1"/>
-                                            <img src="/assets/images/ico-greenup.png">
+                                        <div class="col-xs-12">
+                                            <datetimepicker ng-model="close_time.value"
+                                                            date-format="dd-MMM-yyyy"
+                                                            show-meridian="showMeridian">
+                                            </datetimepicker>
                                         </div>
                                     </div>
                                 </div>

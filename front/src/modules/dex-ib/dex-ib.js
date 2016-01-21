@@ -234,9 +234,36 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
                 {id: 3, name: 'NA'},
                 {id: 4, name: 'FX'}
             ],
+            from: undefined,
+            to: undefined,
+            result: undefined,
+            trade_type: undefined,
+            direction: undefined,
             apply: function () {
+
+                if (angular.isDefined(this.from)) {
+                    this.toApply.from = moment(this.from).format('YYYY-MM-DD HH:mm');
+                }
+
+                if (angular.isDefined(this.to)) {
+                    this.toApply.to = moment(this.to).format('YYYY-MM-DD HH:mm');
+                }
+
+                if (angular.isDefined(this.result)) {
+                    this.toApply.winloss = this.result;
+                }
+
+                if (angular.isDefined(this.direction)) {
+                    this.toApply.direction = this.direction;
+                }
+
+                if (angular.isDefined(this.trade_type)) {
+                    this.toApply.trade_type = this.trade_type;
+                }
+
                 vm.getLiveSignals();
-            }
+            },
+            toApply: {}
         };
 
         $scope.sortBy = {
@@ -254,13 +281,26 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
             }
         };
 
+        $scope.$watch('filters.from', function (nv, ov) {
+            if (angular.isDefined(nv) && nv !== ov) {
+                $scope.filters.apply();
+            }
+        });
+
+        $scope.$watch('filters.to', function (nv, ov) {
+            if (angular.isDefined(nv) && nv !== ov) {
+                $scope.filters.apply();
+            }
+        });
+
         vm.getLiveSignals = function () {
 
             var params = {
                 offset: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
-                limitt: $scope.pagination.itemsPerPage,
+                limit: $scope.pagination.itemsPerPage,
                 sortBy: $scope.sortBy.column,
-                sortDir: $scope.sortBy.dir
+                sortDir: $scope.sortBy.dir,
+                filter: $scope.filters.toApply
             };
 
             function success(res) {
