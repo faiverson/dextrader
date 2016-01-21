@@ -23,27 +23,27 @@
     </div>
     <div id="commission-stats" class="centeredboxes">
         <div>
-            <h2 data-ng-bind="commissionTotals.today | currency: '$'"></h2>
+            <h2 data-ng-bind="(commissionTotals.today || 0) | currency: '$'"></h2>
             TODAY
         </div>
         <div>
-            <h2 data-ng-bind="commissionTotals.yesterday | currency: '$'"></h2>
+            <h2 data-ng-bind="(commissionTotals.yesterday || 0) | currency: '$'"></h2>
             YESTERDAY
         </div>
         <div>
-            <h2 data-ng-bind="commissionTotals.last_week | currency: '$'"></h2>
+            <h2 data-ng-bind="(commissionTotals.last_week || 0) | currency: '$'"></h2>
             LAST WEEK
         </div>
         <div>
-            <h2 data-ng-bind="commissionTotals.last_month | currency: '$'"></h2>
+            <h2 data-ng-bind="(commissionTotals.last_month || 0) | currency: '$'"></h2>
             LAST MONTH
         </div>
         <div>
-            <h2 data-ng-bind="commissionTotals.last_year | currency: '$'"></h2>
+            <h2 data-ng-bind="(commissionTotals.last_year || 0) | currency: '$'"></h2>
             LAST YEAR
         </div>
         <div>
-            <h2 data-ng-bind="commissionTotals.all_time | currency: '$'"></h2>
+            <h2 data-ng-bind="(commissionTotals.all_time || 0) | currency: '$'"></h2>
             ALL TIME
         </div>
     </div>

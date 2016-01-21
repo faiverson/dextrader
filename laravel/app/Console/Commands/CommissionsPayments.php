@@ -59,7 +59,8 @@ class CommissionsPayments extends Command
 			if($comms->count() > 0) {
 				$this->createCSV();
 				foreach ($comms as $commissions) {
-					if ($commissions->total >= Config::get('dextrader.paid_limit')) {
+
+					if ((float)$commissions->total <= (float)Config::get('dextrader.paid_limit')) {
 						$payment = $this->paymentGateway->payCommission($commissions);
 						if ($payment) {
 							$response = $this->commissionGateway->updateToPaid($commissions);
