@@ -43,73 +43,71 @@ class AuthController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param  array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
     {
-		return Validator::make($data, [
-			'username' => 'required|max:255|unique:users',
-			'email' => 'required|email|max:255|unique:users',
-			'password' => 'required|confirmed|min:6',
-		]);
+        return Validator::make($data, [
+            'username' => 'required|max:255|unique:users',
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required|confirmed|min:6',
+        ]);
     }
 
-	/**
-	 * @param Request $request
-	 * @return mixed
-	 *
-	 * We can set a email or username to create the authentication
-	 * after this the session is created
-	 *
-	 */
-	public function login(Request $request)
-	{
-		$email = $request->input('email');
-		$username = $request->input('username');
-		$password = $request->input('password');
-		if(($email || $username)  && $password) {
-			try {
-				$u = DB::table('users')
-					->select('id', 'password')
-					->where('active', 1)
-					->where(function($q) use ($email, $username)
-					{
-						$q->where('email', $email)
-							->orWhere('username', $username);
-					})
-					->first();
+    /**
+     * @param Request $request
+     * @return mixed
+     *
+     * We can set a email or username to create the authentication
+     * after this the session is created
+     *
+     */
+    public function login(Request $request)
+    {
+        $email = $request->input('email');
+        $username = $request->input('username');
+        $password = $request->input('password');
+        if (($email || $username) && $password) {
+            try {
+                $u = DB::table('users')
+                    ->select('id', 'password')
+                    ->where('active', 1)
+                    ->where(function ($q) use ($email, $username) {
+                        $q->where('email', $email)
+                            ->orWhere('username', $username);
+                    })
+                    ->first();
 
-				if(empty($u)) {
-					return response()->error('Invalid Credentials', 401);
-				}
+                if (empty($u)) {
+                    return response()->error('Invalid Credentials', 401);
+                }
 
-				if(!Hash::check($password, $u->password)) {
-					return response()->error('Wrong Password', 401);
-				}
+                if (!Hash::check($password, $u->password)) {
+                    return response()->error('Wrong Password', 401);
+                }
 
-				$user = User::with('roles.permissions')->find($u->id);
-				if(!$user->hasRole(['owner', 'admin', 'editor'])) {
-					return response()->error('Not Allowed', 401);
-				}
+                $user = User::with('roles.permissions')->find($u->id);
+                if (!$user->hasRole(['owner', 'admin', 'editor'])) {
+                    return response()->error('Not Allowed', 401);
+                }
 
-				$token = Token::add($u->id, '+1 day', 'admin');
-				if($token) {
-					return response()->ok(compact('token'));
-				}
-			}
-			catch (JWTException $e) {
-				return response()->error('Could not create a token', $e->getStatusCode());
-			}
-		}
-		return response()->error("The credentials are wrong", 400);
-	}
+                $token = Token::add($u->id, '+1 day', 'admin');
+                if ($token) {
+                    return response()->ok(compact('token'));
+                }
+            } catch (JWTException $e) {
+                return response()->error('Could not create a token', $e->getStatusCode());
+            }
+        }
+        return response()->error("The credentials are wrong", 400);
+    }
 
-	public function logout(Request $request)
-	{
-		$token = JWTAuth::setRequest($request)->getToken();
-		JWTAuth::invalidate($token);
-		return response()->ok();
-	}
+    public function logout(Request $request)
+    {
+        $token = JWTAuth::setRequest($request)->getToken();
+        JWTAuth::invalidate($token);
+        return response()->ok();
+    }
 
 }

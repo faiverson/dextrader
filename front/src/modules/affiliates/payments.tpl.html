@@ -3,19 +3,19 @@
 
     <div id="aff-stats" class="centeredboxes">
         <div id="aff-stats-pen" tooltip-append-to-body="true" tooltip="This amount is the addition of all the commissions including the 10% holdback">
-            <h2>{{paymentTotals.pending | currency: '$'}}</h2>
+            <h2>{{(paymentTotals.pending || 0) | currency: '$'}}</h2>
             PENDING
         </div>
         <div id="aff-stats-hol" class="holdback">
-            <h2>{{paymentTotals.holdback | currency: '$'}}</h2>
+            <h2>{{(paymentTotals.holdback || 0) | currency: '$'}}</h2>
             10% HOLDBACKS
         </div>
         <div id="aff-stats-rtp">
-            <h2>{{paymentTotals.ready | currency: '$'}}</h2>
+            <h2>{{(paymentTotals.ready || 0) | currency: '$'}}</h2>
             READY TO PAY
         </div>
         <div id="aff-stats-tot">
-            <h2>{{paymentTotals.paid | currency: '$'}}</h2>
+            <h2>{{(paymentTotals.paid || 0) | currency: '$'}}</h2>
             TOTAL PAID
         </div>
     </div>
@@ -39,6 +39,9 @@
             <td data-ng-bind="payment.paid_dt | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY'"></td>
             <td>{{payment.ledger_type == 'commissions' && 'Payout' || 'Refund'}}</td>
             <td data-ng-bind="payment.amount | currency: '$'"></td>
+        </tr>
+        <tr data-ng-if="payments.length == 0">
+            <td class="text-center" colspan="3"> --- No payments were found --- </td>
         </tr>
         </tbody>
     </table>

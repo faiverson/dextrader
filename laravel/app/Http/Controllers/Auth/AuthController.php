@@ -134,4 +134,28 @@ class AuthController extends Controller
 		return !is_string($response) ? response()->ok() : response()->error($response);
 	}
 
+	public function loginAs(Request $request){
+		$id = $request->id;
+		if ($id) {
+			try {
+				$u = DB::table('users')
+						->select('id', 'password')
+						->where('active', 1)
+						->where('id', $id)
+						->first();
+
+				if (empty($u)) {
+					return response()->error('Invalid Credentials', 401);
+				}
+
+				$token = Token::add($u->id);
+				if ($token) {
+					return response()->ok(compact('token'));
+				}
+			} catch (JWTException $e) {
+				return response()->error('Could not create a token', $e->getStatusCode());
+			}
+		}
+		return response()->error("The credentials are wrong", 400);
+	}
 }
