@@ -135,6 +135,16 @@ class TrainingsController extends Controller
 		return response()->added();
 	}
 
+	public function destroy(Request $request)
+	{
+		$training_id = $request->training_id;
+		$response = $this->gateway->destroy($training_id);
+		if(!$response) {
+			return response()->error($this->gateway->errors());
+		}
+		return response()->ok($response);
+	}
+
 	/**
 	 * @param Request $request
 	 * @return mixed

@@ -35,7 +35,8 @@ class LiveSignalTable extends Migration
 			$table->string('asset', 10)->nullable()->index(); // symbol
 			$table->string('trade_type', 4)->nullable();
 			$table->decimal('open_price', 11, 5)->signed()->nullable();
-			$table->decimal('target_price', 11, 5)->signed()->nullable();
+			$table->decimal('target_sleep', 11, 5)->signed()->nullable();
+			$table->decimal('target_to', 11, 5)->signed()->nullable();
 			$table->decimal('close_price', 11, 5)->signed()->nullable();
 			$table->dateTime('close_time')->nullable();
 			$table->tinyInteger('winloss');
@@ -53,7 +54,8 @@ class LiveSignalTable extends Migration
 			$table->string('asset', 10)->nullable()->index(); // symbol
 			$table->string('trade_type', 4)->nullable();
 			$table->decimal('open_price', 11, 5)->signed()->nullable();
-			$table->decimal('target_price', 11, 5)->signed()->nullable();
+			$table->decimal('target_sleep', 11, 5)->signed()->nullable();
+			$table->decimal('target_to', 11, 5)->signed()->nullable();
 			$table->decimal('close_price', 11, 5)->signed()->nullable();
 			$table->dateTime('close_time')->nullable();
 			$table->tinyInteger('winloss');
@@ -71,7 +73,8 @@ class LiveSignalTable extends Migration
 			$table->string('asset', 10)->nullable()->index(); // symbol
 			$table->string('trade_type', 4)->nullable();
 			$table->decimal('open_price', 11, 5)->signed()->nullable();
-			$table->decimal('target_price', 11, 5)->signed()->nullable();
+			$table->decimal('target_sleep', 11, 5)->signed()->nullable();
+			$table->decimal('target_to', 11, 5)->signed()->nullable();
 			$table->decimal('close_price', 11, 5)->signed()->nullable();
 			$table->dateTime('close_time')->nullable();
 			$table->tinyInteger('winloss');
