@@ -27,7 +27,8 @@
             <th>Direction</th>
             <th>Asset</th>
             <th>Open Price</th>
-            <th>Target Price</th>
+            <th>Target To</th>
+            <th>Target Sleep</th>
             <th>End Price</th>
             <th>Result</th>
             <th>Actions</th>
@@ -42,7 +43,8 @@
             <td><img data-ng-src="{{signal.direction == 0 && '/assets/images/ico-reddown.png' || '/assets/images/ico-greenup.png'}}"></td>
             <td data-ng-bind="::signal.asset"></td>
             <td data-ng-bind="::signal.open_price"></td>
-            <td data-ng-bind="::signal.target_price" class="green"></td>
+            <td data-ng-bind="::signal.target_to" class="green"></td>
+            <td data-ng-bind="::signal.target_sleep" class="green"></td>
             <td data-ng-bind="::signal.close_price" class="red"></td>
             <td data-ng-class="{'green': signal.winloss == 1, 'red': signal.winloss == 0}">{{ ::signal.winloss == 1 && 'Win' || 'Loss' }}</td>
             <td>

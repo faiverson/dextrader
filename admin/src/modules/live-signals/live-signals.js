@@ -120,7 +120,8 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
                 LiveSignalsService.getOne(id, prd)
                     .then(function (res) {
                         $scope.signal.id = res.data.id;
-                        $scope.signal.target_price = parseFloat(res.data.target_price);
+                        $scope.signal.target_to = parseFloat(res.data.target_to);
+                        $scope.signal.target_sleep = parseFloat(res.data.target_sleep);
                         $scope.signal.close_price = parseFloat(res.data.close_price);
                         $scope.signal.open_price = parseFloat(res.data.open_price);
                         $scope.signal.trade_type = res.data.trade_type;

@@ -116,7 +116,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group" data-show-errors>
                                     <label for="open_price">Open Price</label>
                                     <input type="number"
@@ -128,19 +128,31 @@
                                            required>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group" data-show-errors>
-                                    <label for="target_price">Target Price</label>
+                                    <label for="target_to">Target To</label>
                                     <input type="number"
-                                           name="target_price"
+                                           name="target_to"
                                            class="form-control"
-                                           id="target_price"
-                                           placeholder="Target Price"
-                                           data-ng-model="signal.target_price"
+                                           id="target_to"
+                                           placeholder="Target To"
+                                           data-ng-model="signal.target_to"
                                            required>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <div class="form-group" data-show-errors>
+                                    <label for="target_sleep">Target Sleep</label>
+                                    <input type="number"
+                                           name="target_sleep"
+                                           class="form-control"
+                                           id="target_sleep"
+                                           placeholder="Target Sleep"
+                                           data-ng-model="signal.target_sleep"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
                                 <div class="form-group" data-show-errors>
                                     <label for="close_price">End Price</label>
                                     <input type="number"
