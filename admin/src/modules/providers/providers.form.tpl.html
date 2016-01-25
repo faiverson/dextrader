@@ -91,7 +91,11 @@
                                  ngf-drag-over-class="{pattern: 'image/*', accept:'acceptClass', reject:'rejectClass', delay:100}"
                                  class="drop-box">Or drop an image here</div>
                         </div>
-
+                        <br>
+                        <div class="alert alert-warning" ng-show="providerForm.file.$invalid">
+                            <p>* Image height should be > 100px</p>
+                            <p>* Image size should be < 20MB</p>
+                        </div>
                     </div>
                 </div>
             </div>
