@@ -46,21 +46,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Win?</label>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <input type="radio" data-ng-model="signal.winloss" value="0"/>
-                                            <label class="red">Loss</label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <input type="radio" data-ng-model="signal.winloss" value="1"/>
-                                            <label class="green">Win</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-3">
@@ -82,19 +67,6 @@
                                     <div class="row">
                                         <div class="col-xs-12">
                                             <datetimepicker ng-model="expiry_time.value"
-                                                            date-format="dd-MMM-yyyy"
-                                                            show-meridian="showMeridian">
-                                            </datetimepicker>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Close Time</label>
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <datetimepicker ng-model="close_time.value"
                                                             date-format="dd-MMM-yyyy"
                                                             show-meridian="showMeridian">
                                             </datetimepicker>
@@ -130,30 +102,6 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group" data-show-errors>
-                                    <label for="target_to">Target To</label>
-                                    <input type="number"
-                                           name="target_to"
-                                           class="form-control"
-                                           id="target_to"
-                                           placeholder="Target To"
-                                           data-ng-model="signal.target_to"
-                                           required>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group" data-show-errors>
-                                    <label for="target_sleep">Target Sleep</label>
-                                    <input type="number"
-                                           name="target_sleep"
-                                           class="form-control"
-                                           id="target_sleep"
-                                           placeholder="Target Sleep"
-                                           data-ng-model="signal.target_sleep"
-                                           required>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group" data-show-errors>
                                     <label for="close_price">End Price</label>
                                     <input type="number"
                                            name="close_price"
@@ -164,6 +112,21 @@
                                            required>
                                 </div>
                             </div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label>Win?</label>
+									<div class="row">
+										<div class="col-md-6">
+											<input type="radio" data-ng-model="signal.winloss" value="0"/>
+											<label class="red">Loss</label>
+										</div>
+										<div class="col-md-6">
+											<input type="radio" data-ng-model="signal.winloss" value="1"/>
+											<label class="green">Win</label>
+										</div>
+									</div>
+								</div>
+							</div>
                         </div>
                     </div>
                 </div>
