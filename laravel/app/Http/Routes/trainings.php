@@ -15,6 +15,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 	});
 
 	Route::group(['middleware' => 'perms:trainings'], function () {
+		Route::get('/training/{training_id}', 'TrainingsController@show')->where('training_id', '[0-9]+');
 		Route::post('/training', 'TrainingsController@store');
 		Route::put('/training/{training_id}', 'TrainingsController@update')->where('training_id', '[0-9]+');
 		Route::delete('/training/{training_id}', 'TrainingsController@destroy')->where('training_id', '[0-9]+');

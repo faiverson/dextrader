@@ -37,7 +37,7 @@
         </thead>
         <tbody>
         <tr data-ng-repeat="training in trainings">
-            <td><img data-ng-csrc="/assets/images/{{testimonial.image}}" class="img-responsive" width="20"></td>
+            <td><img src="http://img.youtube.com/vi/{{training.video_id}}/1.jpg" class="img-responsive" width="60"></td>
             <td data-ng-bind="training.title"></td>
             <td data-ng-bind="training.description"></td>
             <td data-ng-bind="training.time"></td>
@@ -51,7 +51,7 @@
                         Actions <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a ui-sref="testimonia.edit({id:testimonial.id})">Edit</a></li>
+                        <li><a ui-sref="trainings.edit({id:training.training_id})">Edit</a></li>
                         <li><a href="#">Remove</a></li>
                     </ul>
                 </div>

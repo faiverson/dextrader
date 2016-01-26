@@ -60,10 +60,10 @@
                                    name="url"
                                    class="form-control"
                                    id="url"
+                                   data-ng-required="!training.video_id"
                                    data-ng-model="url"
                                    placeholder="Video id or YouTube video url"
-                                   ng-change="parseYTId()"
-                                   required>
+                                   ng-change="parseYTId()">
                         </div>
                         <div class="video-container">
                             <youtube-video video-id="training.video_id"

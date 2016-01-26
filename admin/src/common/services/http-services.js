@@ -562,8 +562,8 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 deferred.reject(res);
             }
 
-            if (angular.isDefined(data.id)) {
-                $http.put(endpoint, data).then(success, error);
+            if (angular.isDefined(data.training_id)) {
+                $http.put(endpoint + '/' + data.training_id, data).then(success, error);
             } else {
                 $http.post(endpoint, data).then(success, error);
             }

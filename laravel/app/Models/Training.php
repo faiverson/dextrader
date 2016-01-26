@@ -12,7 +12,7 @@ class Training extends Model
 
 	protected $table = 'trainings';
 
-	protected $hidden = ['id', 'type', 'updated_at', 'created_at'];
+	protected $hidden = ['id', 'updated_at', 'created_at'];
 
 	protected $maps = [
 		'training_id' => 'id',

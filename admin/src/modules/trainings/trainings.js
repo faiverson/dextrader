@@ -54,7 +54,7 @@ angular.module('app.trainings', ['ui.router', 'youtube-embed'])
                 if ($scope.trainingForm.$valid) {
 
                     $scope.training.time = moment($scope.video_time).format('HH:mm:ss');
-                    $scope.training.unlock_at = moment($scope.video_time).diff(moment($scope.unlock_at), 'seconds');
+                    $scope.training.unlock_at = (parseInt(moment($scope.unlock_at).format('HH')) * 60 *60) + (parseInt(moment($scope.unlock_at).format('mm')) *60) + parseInt(moment($scope.unlock_at).format('ss'));
 
                     TrainingsService.save($scope.training)
                         .then(vm.success, vm.error);
@@ -62,24 +62,35 @@ angular.module('app.trainings', ['ui.router', 'youtube-embed'])
             };
 
             $scope.parseYTId = function () {
+                $scope.changeVideo = true;
                 $scope.training.video_id = youtubeEmbedUtils.getIdFromURL($scope.url);
             };
 
             $scope.$on('youtube.player.ready', function ($event, player) {
                 // play it again
-                var defaultUnlockTime = (player.getDuration() - Math.round(player.getDuration() * 10 / 100, 0));
+                if(angular.isUndefined($scope.training.training_id) || $scope.changeVideo){
+                    var defaultUnlockTime = (player.getDuration() - Math.round(player.getDuration() * 10 / 100, 0));
 
-                $scope.video_time = moment().hour(0).minute(0).seconds(0).add(player.getDuration(), 's');
-                $scope.training.time = moment().hour(0).minute(0).seconds(0).add(player.getDuration(), 's').format('HH:mm:ss');
+                    $scope.video_time = moment().hour(0).minute(0).seconds(0).add(player.getDuration(), 's');
+                    $scope.training.time = moment().hour(0).minute(0).seconds(0).add(player.getDuration(), 's').format('HH:mm:ss');
 
-                $scope.unlock_at = moment().hour(0).minute(0).seconds(0).add(defaultUnlockTime, 's');
-                $scope.training.unlock_at = defaultUnlockTime;
+                    $scope.unlock_at = moment().hour(0).minute(0).seconds(0).add(defaultUnlockTime, 's');
+                    $scope.training.unlock_at = defaultUnlockTime;
+
+                    $scope.changeVideo = false;
+                }
             });
 
             vm.getTrainingForEdit = function (id) {
                 TrainingsService.getOne(id)
                     .then(function (res) {
                         $scope.training = res.data;
+
+                        var video_time = moment($scope.training.time, 'HH:mm:ss');
+
+                        $scope.video_time = moment().hour(video_time.format('HH')).minutes(video_time.format('mm')).seconds(video_time.format('ss'));
+
+                        $scope.unlock_at = moment().hour(0).minutes(0).seconds(0).add($scope.training.unlock_at, 'seconds');
                     });
             };
 
@@ -143,7 +154,7 @@ angular.module('app.trainings', ['ui.router', 'youtube-embed'])
                 $scope.pagination.totalItems = res.data.totalItems;
 
                 angular.forEach(res.data, function (tr) {
-                    tr.unlock_at = moment(tr.time, 'HH:mm:SS').subtract(tr.unlock_at, 'seconds').format('HH:mm:SS');
+                    tr.unlock_at = moment().hour(0).minutes(0).seconds(0).add(tr.unlock_at, 'seconds').format('HH:mm:ss');
                 });
                 $scope.trainings = res.data;
             }

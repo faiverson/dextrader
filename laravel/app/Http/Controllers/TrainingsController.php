@@ -19,6 +19,13 @@ class TrainingsController extends Controller
 		$this->gateway = $gateway;
 	}
 
+	public function show(Request $request){
+		$training_id = $request->training_id;
+		$doc = Training::find($training_id);
+
+		return response()->ok($doc);
+	}
+
 	/**
 	 *
 	 * Store new trainings
