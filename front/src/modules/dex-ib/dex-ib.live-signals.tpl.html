@@ -76,7 +76,7 @@
                 class="red"></td>
             <!--<td data-ng-bind="::signal.close_time | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'HH:mm'"-->
                 <!--class="red"></td>-->
-            <td><img
+            <td><img tooltip="{{ signal.direction == 1 && 'Sell' || 'Buy' }}"
                     data-ng-src="{{signal.direction == 1 && '/front/assets/images/ico-reddown.png' || '/front/assets/images/ico-greenup.png'}}">
             </td>
             <td data-ng-bind="::signal.asset"></td>
