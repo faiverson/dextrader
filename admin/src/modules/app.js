@@ -21,7 +21,8 @@ angular.module('app', [
         'LocalStorageModule',
         'app.user-profile',
         'app.testimonials',
-        'app.live-signals'
+        'app.live-signals',
+        'app.trainings'
     ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {

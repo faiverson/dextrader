@@ -1,0 +1,92 @@
+<div class="provider-list">
+
+    <h1>Trainings
+        <button class="btn btn-sm btn-primary pull-right" ui-sref="trainings.new">NEW TRAINING</button>
+    </h1>
+
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="type">Type</label>
+                <select name="type"
+                        class="form-control"
+                        id="type"
+                        data-ng-change="getTrainings()"
+                        data-ng-model="type"
+                        placeholder="Type"
+                        required>
+                    <option value="certification">IB Certification</option>
+                    <option value="pro">IB Pro</option>
+                    <option value="affiliates">Affiliates</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Image</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Time</th>
+            <th>Unlock At (secs)</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="training in trainings">
+            <td><img data-ng-csrc="/assets/images/{{testimonial.image}}" class="img-responsive" width="20"></td>
+            <td data-ng-bind="training.title"></td>
+            <td data-ng-bind="training.description"></td>
+            <td data-ng-bind="training.time"></td>
+            <td data-ng-bind="training.unlock_at"></td>
+            <td>
+                <div class="btn-group">
+                    <button type="button"
+                            class="btn btn-default dropdown-toggle"
+                            data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        Actions <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a ui-sref="testimonia.edit({id:testimonial.id})">Edit</a></li>
+                        <li><a href="#">Remove</a></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+    <div class="table-nav row">
+        <div class="col-md-8">
+            <uib-pagination direction-links="false"
+                            total-items="pagination.totalItems"
+                            ng-model="pagination.currentPage"
+                            items-per-page="pagination.itemsPerPage"
+                            ng-change="pagination.pageChange()"
+                            num-pages="smallnumPages"></uib-pagination>
+        </div>
+
+        <div class="col-md-4">
+            <uib-pager total-items="pagination.totalItems"
+                       items-per-page="pagination.itemsPerPage"
+                       ng-model="pagination.currentPage"
+                       ng-change="pagination.pageChange()">
+            </uib-pager>
+        </div>
+    </div>
+</div>
+<script type="text/ng-template" id="TestimonialView.html">
+    <div class="modal-header">
+        <h3 class="modal-title">{{testimonial.author}}</h3>
+    </div>
+    <div class="modal-body">
+        {{testimonial.text}}
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="close()">Close</button>
+    </div>
+</script>

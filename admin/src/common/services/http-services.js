@@ -163,7 +163,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
     }])
 
-    .factory('httpRequestInterceptor', ['localStorageService', function (localStorageService) {
+    .factory('httpRequestInterceptor', ['localStorageService', '$q', function (localStorageService, $q) {
         return {
             request: function ($config) {
                 var header;
@@ -173,6 +173,15 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                     $config.headers['Authorization'] = header;
                 }
                 return $config;
+            },
+            'responseError': function(rejection) {
+                // do something on error
+                if(rejection.status === 401 && rejection.data.error === "token_expired"){
+                    localStorageService.clearAll();
+                    window.location.href = '/login';
+                }
+
+                return $q.reject(rejection);
             }
         };
     }])
@@ -450,6 +459,80 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
 
         function query(params) {
             var endpoint = service,
+                deferred = $q.defer();
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+
+        }
+
+        function save(data) {
+            var endpoint = service,
+                deferred = $q.defer();
+
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            if (angular.isDefined(data.id)) {
+                $http.put(endpoint, data).then(success, error);
+            } else {
+                $http.post(endpoint, data).then(success, error);
+            }
+
+            return deferred.promise;
+        }
+
+        function getOne(id) {
+            var deferred = $q.defer(),
+                endpoint = service;
+
+            if (angular.isUndefined(id)) {
+                deferred.reject('ID field is required!');
+            }
+
+            endpoint += '/' + id;
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
+        return {
+            query: query,
+            save: save,
+            getOne: getOne
+        };
+
+    }])
+
+    .factory('TrainingsService', ['$q', '$site-configs', '$http', function ($q, $config, $http) {
+        var service = $config.API_BASE_URL + 'training';
+
+        function query(params, type) {
+            var endpoint = service + '/' + type,
                 deferred = $q.defer();
 
             function success(res) {

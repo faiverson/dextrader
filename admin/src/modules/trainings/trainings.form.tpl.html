@@ -1,0 +1,116 @@
+<div class="training-form">
+    <h1>Training</h1>
+
+    <form name="trainingForm" novalidate="novalidate">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Training Information</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" data-show-errors>
+                                    <label for="title">Title</label>
+                                    <input type="text"
+                                           name="title"
+                                           class="form-control"
+                                           id="title"
+                                           data-ng-model="training.title"
+                                           placeholder="Title"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group" data-show-errors>
+                                    <label for="type">Type</label>
+                                    <select name="type"
+                                            class="form-control"
+                                            id="type"
+                                            data-ng-model="training.type"
+                                            placeholder="Title"
+                                            required>
+                                        <option value="certification">IB Certification</option>
+                                        <option value="pro">IB Pro</option>
+                                        <option value="affiliates">Affiliates</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" data-show-errors>
+                            <label for="description">Description</label>
+                            <textarea class="form-control"
+                                      id="description"
+                                      rows="4"
+                                      name="description"
+                                      data-ng-model="training.description"
+                                      required>
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Video Details</div>
+                    <div class="panel-body">
+                        <div class="form-group" data-show-errors>
+                            <label for="url">Video id or YouTube video url</label>
+                            <input type="text"
+                                   name="url"
+                                   class="form-control"
+                                   id="url"
+                                   data-ng-model="url"
+                                   placeholder="Video id or YouTube video url"
+                                   ng-change="parseYTId()"
+                                   required>
+                        </div>
+                        <div class="video-container">
+                            <youtube-video video-id="training.video_id"
+                                           player-width="'310px'"
+                                           player-height="'175px'"
+                                           player="ytPlayer"
+                                           player-vars="playerVars"></youtube-video>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" data-show-errors>
+                                    <label for="url">Video Time</label>
+                                    <uib-timepicker ng-model="video_time"
+                                                    ng-change="changed()"
+                                                    hour-step="1"
+                                                    minute-step="1"
+                                                    show-seconds="true"
+                                                    show-meridian="false"></uib-timepicker>
+                                    <input type="hidden" class="form-control" name="time" required
+                                           ng-model="training.time">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group" data-show-errors>
+                                    <label for="url">Unlock At</label>
+                                    <uib-timepicker ng-model="unlock_at"
+                                                    ng-change="changed()"
+                                                    hour-step="1"
+                                                    minute-step="1"
+                                                    show-seconds="true"
+                                                    show-meridian="false"></uib-timepicker>
+                                    <input type="hidden" class="form-control" name="unlock_at" required
+                                           ng-model="training.unlock_at">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body text-right">
+                        <button class="btn btn-success" data-ng-click="save()">Save</button>
+                        <button class="btn btn-danger" ui-sref="trainings.list">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

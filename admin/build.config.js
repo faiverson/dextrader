@@ -49,7 +49,8 @@ module.exports = {
                 'vendor/moment/min/moment.min.js',
                 'vendor/angular-animate/angular-animate.js',
                 'vendor/angular-ui-mask/dist/mask.js',
-                'vendor/angular-ui-bootstrap-datetimepicker/datetimepicker.js'
+                'vendor/angular-ui-bootstrap-datetimepicker/datetimepicker.js',
+                'vendor/angular-youtube-mb/dist/angular-youtube-embed.min.js'
             ],
             output: 'vendor.js'
         },
