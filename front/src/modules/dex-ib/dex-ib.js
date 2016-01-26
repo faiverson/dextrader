@@ -1,4 +1,4 @@
-angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-form'])
+angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-form', 'app.sign-up-modal-form'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('dex_ib', {
@@ -67,7 +67,6 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
                     redirectTo: 'dashboard'
                 }
             })
-
             .state('dex_ib_sales', {
                 url: '/ib?user&tag',
                 templateUrl: 'modules/dex-ib/dex-ib.sales.tpl.html',
@@ -75,6 +74,16 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
                 data: {
                     pageTitle: 'Dex IB',
                     bodyClass: 'dex-in-sales',
+                    isPublic: true
+                }
+            })
+            .state('dex_ib_affiliates_sales', {
+                url: '/ib/affiliates?user&tag',
+                templateUrl: 'modules/dex-ib/dex-ib.affiliates-sales.tpl.html',
+                controller: 'DexIBAffiliatesCtrl',
+                data: {
+                    pageTitle: 'Dex IB - Affiliates',
+                    bodyClass: 'spa',
                     isPublic: true
                 }
             });
@@ -455,4 +464,33 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
         };
 
         vm.init();
+    }])
+
+    .controller('DexIBAffiliatesCtrl', ['$scope', '$state', '$stateParams', '$uibModal', 'Notification', function ($scope, $state, $stateParams, $uibModal, Notification) {
+        $scope.videoId = 'lYKRPzOi1zI';
+
+        $scope.openOrderNowForm = function () {
+
+            var modalInstance = $uibModal.open({
+                templateUrl: 'modules/shared/sign-up-modal-form/sign-up-modal-form.tpl.html',
+                controller: 'SignUpModalFormCtrl',
+                size: 'md',
+                resolve: {
+                    enroller: function(){
+                        return  $stateParams.user;
+                    },
+                    tag: function(){
+                        return $stateParams.tag;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (email) {
+                Notification.success('Welcomo to Dextrader.com!');
+                $state.go('login');
+            }, function () {
+                //$log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
     }]);

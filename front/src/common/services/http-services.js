@@ -253,11 +253,35 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
+        function signUp(data) {
+            var endpoint = service + '/signup',
+                deferred = $q.defer();
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http({
+                method: "POST",
+                url: endpoint,
+                withCredentials: false,
+                data: data
+            }).then(success, error);
+
+            return deferred.promise;
+
+        }
+
         return {
             getUsers: getUsers,
             saveUser: save,
             getUser: getUser,
-            soon: soon
+            soon: soon,
+            signUp: signUp
         };
     }])
 

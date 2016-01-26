@@ -32,7 +32,7 @@ body {
 }
 
 .page-login {
-    background-image: url('/front/assets/images/bg-login.jpg');
+    background-image: url('/front/assets/images/bg-login.jpg')
 }
 
 .page-dashboard {
@@ -206,8 +206,7 @@ footer > span {
     height: 40px;
 }
 
-#footer-social > a img {
-    /*vertical-align: bottom;_NO__DOTCOMMA__AFTER__*/
+#footer-social > a img { /*vertical-align: bottom;_NO__DOTCOMMA__AFTER__*/
 }
 
 #footer-social > a:hover img {
@@ -268,7 +267,7 @@ h3 {
 #header-nav li {
     /*flex: 1;*/
     /*-webkit-flex: 1;*/
-    /*display: inline;*/
+    display: inline;
 }
 
 #header-nav li > a {
@@ -878,12 +877,12 @@ input {
     top: 10px;
 }
 
-.base-table {
+table {
     width: 100%;
     border-spacing: 0;
 }
 
-.base-table th {
+table th {
     text-align: left;
     font-weight: 400;
     color: #757575;
@@ -891,30 +890,30 @@ input {
     background-color: #eaeaea;
 }
 
-.base-table.minitable {
+table.minitable {
     font-size: 13px
 }
 
-.base-table.minitable th {
+table.minitable th {
     padding: 8px 10px
 }
 
-.base-table td {
+table td {
     font-weight: 700;
     padding: 15px 10px;
     padding-right: 5px;
 }
 
-.base-table.minitable td {
+table.minitable td {
     font-weight: 500;
     padding: 8px 10px;
 }
 
-.base-table tr:nth-child(2n+2) {
+table tr:nth-child(2n+2) {
     background-color: #f8f8f8
 }
 
-.base-table.minitable tr:nth-child(2n+2) {
+table.minitable tr:nth-child(2n+2) {
     background-color: #fff
 }
 
@@ -1365,26 +1364,10 @@ select {
 }
 
 table th.sortable {
-    cursor: pointer;
-    position: relative;
+    cursor: pointer
 }
 
 table th.sortable:after {
-    position: absolute;
-    top: 15px;
-}
-
-table th.sortable-asc:after {
-    content: url('/front/assets/images/ico-sort.png');
-    margin-left: 5px;
-    -webkit-transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
-    -o-transform: rotate(180deg);
-    transform: rotate(180deg);
-}
-
-table th.sortable-desc:after {
     content: url('/front/assets/images/ico-sort.png');
     margin-left: 5px;
 }
