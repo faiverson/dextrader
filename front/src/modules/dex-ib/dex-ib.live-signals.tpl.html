@@ -83,7 +83,7 @@
             <td data-ng-bind="::signal.open_price"></td>
             <!--<td data-ng-bind="::signal.target_to" class="green"></td>-->
             <!--<td data-ng-bind="::signal.target_sleep" class="green"></td>-->
-            <td data-ng-bind="::signal.close_price" class="red"></td>
+            <td class="red">{{signal.close_price > 0 && signal.close_price || ''}}</td>
             <td data-ng-class="{'green': signal.winloss == 1, 'red': signal.winloss == 0}">
                 {{ signal.winloss == 1 && 'Win' || (signal.winloss == 0 && 'Loss' || (signal.winloss == 2 && 'NA')) }}
             </td>
