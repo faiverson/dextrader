@@ -23,12 +23,9 @@
             <th>Date</th>
             <th>Signal Time</th>
             <th>Expiry Time</th>
-            <th>Close Time</th>
             <th>Direction</th>
             <th>Asset</th>
             <th>Open Price</th>
-            <th>Target To</th>
-            <th>Target Sleep</th>
             <th>End Price</th>
             <th>Result</th>
             <th>Actions</th>
@@ -39,12 +36,9 @@
             <td data-ng-bind="::signal.signal_time | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY'"></td>
             <td data-ng-bind="::signal.signal_time | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'HH:mm'" class="green"></td>
             <td data-ng-bind="::signal.expiry_time | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'HH:mm'" class="red"></td>
-            <td data-ng-bind="::signal.close_time | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'HH:mm'" class="red"></td>
             <td><img data-ng-src="{{signal.direction == 0 && '/assets/images/ico-reddown.png' || '/assets/images/ico-greenup.png'}}"></td>
             <td data-ng-bind="::signal.asset"></td>
             <td data-ng-bind="::signal.open_price"></td>
-            <td data-ng-bind="::signal.target_to" class="green"></td>
-            <td data-ng-bind="::signal.target_sleep" class="green"></td>
             <td data-ng-bind="::signal.close_price" class="red"></td>
             <td data-ng-class="{'green': signal.winloss == 1, 'red': signal.winloss == 0}">{{ ::signal.winloss == 1 && 'Win' || 'Loss' }}</td>
             <td>
