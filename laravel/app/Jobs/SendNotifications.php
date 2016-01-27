@@ -29,6 +29,5 @@ class SendNotifications extends Job implements SelfHandling, ShouldQueue
      */
     public function handle()
     {
-		var_dump($this->data);
     }
 }

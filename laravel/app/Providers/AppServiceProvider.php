@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\IBSignal;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +14,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+//		Item::created(function ($item) {
+//			Event::fire(new ItemCreated($item));
+//		});
     }
 
     /**
