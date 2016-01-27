@@ -1,40 +1,31 @@
-var app = require('express')();
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
-//var redis = require('redis');
-var Redis = require('ioredis');
-var redis = new Redis();
+var app = require('express')(),
+	server = require('http').Server(app),
+	io = require('socket.io')(server),
+	Redis = require('ioredis'),
+	redis = new Redis(),
+	port = process.env.PORT || 3000;
 
-server.listen(6379, function(){
-	console.log('listening on *:3001');
+redis.subscribe('signal.add', function(err, count) {
+	console.log("subscribe");
 });
 
-function handler(req, res) {
-	res.writeHead(200);
-	res.end('');
-}
-
-redis.psubscribe('*', function(err, count) {
-	console.log("psubscribe");
-});
-
-redis.on('pmessage', function(subscribed, channel, message) {
-	console.log("pmessage");
-});
+//app.get('/', function(req, res) {
+//	res.send('hello world');
+//});
 
 io.on('connection', function (socket) {
-
 	console.log("new client connected");
-	//var redisClient = redis.createClient();
-	//redisClient.subscribe('message');
-
-	redisClient.on("message", function(channel, message) {
-		console.log("mew message in queue "+ message + "channel");
+	redis.on('message', function(channel, message) {
 		socket.emit(channel, message);
 	});
 
 	socket.on('disconnect', function() {
-		redisClient.quit();
+		console.log("new client disconnect");
+		redis.quit();
 	});
 
+});
+
+server.listen(port, function(){
+	console.log('listening on ' + port);
 });
