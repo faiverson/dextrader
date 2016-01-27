@@ -8,6 +8,11 @@ Route::group(['namespace' => 'Auth', 'prefix' => 'api'], function () {
 	Route::post('/password/reset', 'PasswordController@postReset');
 });
 
+//Route::get('/testing', function() {
+//	$redis = \Illuminate\Support\Facades\Redis::connection();
+//	$redis->set("fafa", "jojo!");
+//	return $redis->get("fabi");
+//});
 //Event::listen('illuminate.query', function($query, $params)
 //{
 //	print $query.'<br>';

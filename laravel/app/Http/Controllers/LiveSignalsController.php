@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AddSignalEvent;
 use App\Gateways\LiveSignalGateway;
 use Illuminate\Http\Request;
 use Config;
 use Event;
 use DateTime;
+use Log;
+
 class LiveSignalsController extends Controller
 {
 	protected $types = ['ib', 'na', 'fx'];
@@ -65,10 +68,14 @@ class LiveSignalsController extends Controller
 
 	public function store($data, $type)
 	{
+//		Event::fire(new AddSignalEvent($data));
+//		return response()->ok();
 		$response = $this->gateway->add($data, $type);
 		if(!$response) {
+			Log::info('Error on add a signal', $data);
 			return response()->error($this->gateway->errors());
 		}
+//		Event::fire(new AddSignalEvent($response->toArray()));
 		return response()->ok($response);
 	}
 
@@ -77,14 +84,17 @@ class LiveSignalsController extends Controller
 		$mt_id = $request->signal_id;
 		$data = $this->parse($request->all());
 		if(empty($mt_id)) {
+			Log::info('Missing MT-ID: ', $data);
 			return response()->error('Missing MT-ID');
 		}
 
 		if(!array_key_exists('type_product', $data)) {
+			Log::info('Missing type product: ', $data);
 			return response()->error('Missing type product');
 		}
 
 		if(!array_key_exists('trade_type', $data)) {
+			Log::info('Missing trade type: ', $data);
 			return response()->error('Missing trade type');
 		}
 
@@ -99,6 +109,7 @@ class LiveSignalsController extends Controller
 
 		$signal = $this->gateway->find_signal($mt_id, $data['trade_type'], $data['type_product']);
 		if(!$signal) {
+			Log::info('The signal is not in database: ', $data);
 			return response()->error('The signal is not in database');
 		}
 		return $this->update($signal->id, $data['type_product'], $data);
@@ -121,6 +132,7 @@ class LiveSignalsController extends Controller
 	{
 		$response = $response = $this->gateway->edit($data, $signal_id, $type);
 		if(!$response) {
+			Log::info('The signal update in database: ', $data);
 			return response()->error($this->gateway->errors());
 		}
 		return response()->ok($response);
@@ -139,6 +151,7 @@ class LiveSignalsController extends Controller
 
 	protected function parse(array $data)
 	{
+		$data = array_map('trim', $data);
 		if(array_key_exists('signal_time', $data)) {
 			$data['signal_time'] = str_replace('.', '-', $data['signal_time']);
 		}
@@ -159,7 +172,7 @@ class LiveSignalsController extends Controller
 			elseif($data['type_product'] == 'dibs') {
 				$data['type_product'] = 'ib';
 			}
-			if($data['type_product'] == 'forex') {
+			elseif($data['type_product'] == 'forex') {
 				$data['type_product'] = 'fx';
 			}
 		}

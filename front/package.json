@@ -35,6 +35,7 @@
   "dependencies": {
     "del": "^1.2.0",
     "dotenv": "^1.2.0",
+    "express": "^4.13.4",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^2.3.1",
     "gulp-bump": "^1.0.0",
@@ -62,25 +63,28 @@
     "imagemin": "^4.0.0",
     "imagemin-gifsicle": "^4.2.0",
     "imagemin-optipng": "^4.3.0",
+    "ioredis": "^1.14.0",
     "jshint-stylish": "^2.0.1",
-    "lazypipe": "^0.2.4"
+    "lazypipe": "^0.2.4",
+    "redis": "^2.4.2",
+    "socket.io": "^1.4.4"
   },
   "devDependencies": {
-	"connect": "^2.14.5",
-	"gulp-concat": "^2.6.0",
-	"gulp-connect-php": "*",
-	"gulp-debug": "^2.1.2",
-	"gulp-if": "^2.0.0",
-	"gulp-inject": "^3.0.0",
-	"gulp-inject-string": "^1.0.0",
-	"gulp-jsbeautifier": "^1.0.1",
-	"gulp-less": "^3.0.5",
-	"gulp-ng-annotate": "^1.1.0",
-	"gulp-rename": "^1.2.2",
-	"gulp-replace-task": "^0.11.0",
-	"gulp-util": "^3.0.7",
-	"less-plugin-autoprefix": "^1.5.1",
-	"less-plugin-clean-css": "^1.5.1",
-	"run-sequence": "^1.1.5"
+    "connect": "^2.14.5",
+    "gulp-concat": "^2.6.0",
+    "gulp-connect-php": "*",
+    "gulp-debug": "^2.1.2",
+    "gulp-if": "^2.0.0",
+    "gulp-inject": "^3.0.0",
+    "gulp-inject-string": "^1.0.0",
+    "gulp-jsbeautifier": "^1.0.1",
+    "gulp-less": "^3.0.5",
+    "gulp-ng-annotate": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace-task": "^0.11.0",
+    "gulp-util": "^3.0.7",
+    "less-plugin-autoprefix": "^1.5.1",
+    "less-plugin-clean-css": "^1.5.1",
+    "run-sequence": "^1.1.5"
   }
 }

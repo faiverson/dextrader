@@ -60,6 +60,42 @@ class NMI {
 		return $this->send();
 	}
 
+	public function refund(array $data	)
+	{
+		$order = [
+			'username' => $this->username,
+			'password' => $this->password,
+
+			'ccnumber' => $data['number'],
+			'ccexp' => $data['card_exp_month'] . $data['card_exp_year'],
+			'amount' => number_format($data['amount'], 2, ".", ""),
+			'cvv' => array_key_exists('cvv', $data) ? $data['cvv'] : '',
+
+			'ipaddress' => array_key_exists('ip_address', $data) ? $data['ip_address'] : '',
+			'orderid' => $data['orderid'],
+			'orderdescription' => $data['description'],
+			'tax' => 0,
+			'shipping' => 0,
+			'ponumber' => '',
+
+			'firstname' => $data['first_name'],
+			'lastname' => $data['last_name'],
+			'email' => $data['email'],
+
+			'address1' => $data['billing_address'],
+			'address2' => array_key_exists('billing_address2', $data) ? $data['billing_address2'] : '',
+			'country' => $data['billing_country'],
+			'state' => $data['billing_state'],
+			'city' => $data['billing_city'],
+			'zip' => $data['billing_zip'],
+			'phone' => array_key_exists('billing_phone', $data) ? $data['billing_phone'] : '',
+			'type' => $type
+		];
+		$values = array_map("urlencode", array_values($order));
+		$this->data = array_combine(array_keys($order) , $values);
+		return $this->send();
+	}
+
 	protected function send()
 	{
 		$response = null;

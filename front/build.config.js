@@ -58,7 +58,8 @@ module.exports = {
         files: {
             input: [
                 'src/**/*.js',
-                '!src/**/*.spec.js',
+				'!src/server/server.js',
+				'!src/**/*.spec.js',
                 '!src/**/*.scenario.js'
             ],
             output: '../public_html/front/js/'
