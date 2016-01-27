@@ -51,3 +51,10 @@ Press Esc to exit vim's insert mode.
 
 Type ZZ (must be capital letters).
 Verify by using crontab -l
+
+### Notifications
+You need to install redis and socket.io in your system
+Once they are installed you need to run redis
+redis-server /usr/local/etc/redis.conf
+and also run node /front/src/server/server.js
+

@@ -32,6 +32,8 @@ class EventServiceProvider extends ServiceProvider
 		],
 		'App\Events\AddSignalEvent' => [
 		],
+		'App\Events\UpdateSignalEvent' => [
+		],
     ];
 
 	protected $subscribe = [

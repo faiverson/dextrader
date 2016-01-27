@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Events\AddSignalEvent;
+use App\Events\UpdateSignalEvent;
 use App\Gateways\LiveSignalGateway;
 use Illuminate\Http\Request;
 use Config;
 use Event;
-use DateTime;
 use Log;
 
 class LiveSignalsController extends Controller
@@ -133,7 +133,8 @@ class LiveSignalsController extends Controller
 			Log::info('The signal update in database: ', $data);
 			return response()->error($this->gateway->errors());
 		}
-		return response()->ok($response);
+		Event::fire(new UpdateSignalEvent($data));
+		return response()->ok();
 	}
 
 	public function destroy(Request $request)

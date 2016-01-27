@@ -5,8 +5,12 @@ var app = require('express')(),
 	redis = new Redis(),
 	port = process.env.PORT || 3000;
 
-redis.subscribe('signal.add', function(err, count) {
-	console.log("subscribe");
+server.listen(port, function(){
+	console.log('listening on ' + port);
+});
+
+redis.psubscribe('signal.*', function(err, count) {
+	console.log("subscribed to signal channel");
 });
 
 //app.get('/', function(req, res) {
@@ -14,18 +18,15 @@ redis.subscribe('signal.add', function(err, count) {
 //});
 
 io.on('connection', function (socket) {
-	console.log("new client connected");
-	redis.on('message', function(channel, message) {
+	console.log("Client connected");
+	redis.on('pmessage', function(pattern, channel, message) {
+		console.log(channel);
 		socket.emit(channel, message);
 	});
 
 	socket.on('disconnect', function() {
-		console.log("new client disconnect");
-		redis.quit();
+		console.log("Client disconnect");
+		//redis.quit();
 	});
 
-});
-
-server.listen(port, function(){
-	console.log('listening on ' + port);
 });
