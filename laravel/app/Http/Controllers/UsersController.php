@@ -54,7 +54,7 @@ class UsersController extends Controller
     {
 		$fields = $request->all();
 		$fields['ip_address'] = $request->ip();
-		$user = $this->gateway->create($fields);
+		$user = $this->gateway->add($fields);
 		if(!$user) {
 			return response()->error($this->gateway->errors()->all());
 		}

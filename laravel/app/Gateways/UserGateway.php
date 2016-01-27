@@ -27,15 +27,29 @@ class UserGateway extends AbstractGateway
         $this->role = $role;
     }
 
+    public function add(array $data)
+    {
+        if (array_key_exists('enroller', $data)) {
+            $enroller = $this->findBy('username', $data['enroller'], ['id'])->first();
+
+            if($enroller){
+                $data['enroller_id'] = $enroller->id;
+                unset($data['enroller']);
+            }
+        }
+
+        return $this->create($data);
+    }
+
     public function edit(array $data, $id)
     {
         if (array_key_exists('username', $data)) {
             unset($data['username']);
         }
 
-		if (array_key_exists('full_name', $data)) {
-			unset($data['full_name']);
-		}
+        if (array_key_exists('full_name', $data)) {
+            unset($data['full_name']);
+        }
 
         return $this->update($data, $id);
     }
@@ -54,7 +68,6 @@ class UserGateway extends AbstractGateway
     {
         return $this->repository->actives($columns, $limit, $offset, $order_by);
     }
-
 
 	public function revoke($user_id, $role_id)
 	{
