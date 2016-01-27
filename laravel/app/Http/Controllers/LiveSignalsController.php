@@ -67,8 +67,8 @@ class LiveSignalsController extends Controller
 
 	public function store($data, $type)
 	{
-		Event::fire(new AddSignalEvent($data));
-		return response()->ok();
+//		Event::fire(new AddSignalEvent($data));
+//		return response()->ok();
 		$response = $this->gateway->add($data, $type);
 		if(!$response) {
 			return response()->error($this->gateway->errors());
@@ -144,6 +144,7 @@ class LiveSignalsController extends Controller
 
 	protected function parse(array $data)
 	{
+		$data = array_map('trim', $data);
 		if(array_key_exists('signal_time', $data)) {
 			$data['signal_time'] = str_replace('.', '-', $data['signal_time']);
 		}
@@ -164,7 +165,7 @@ class LiveSignalsController extends Controller
 			elseif($data['type_product'] == 'dibs') {
 				$data['type_product'] = 'ib';
 			}
-			if($data['type_product'] == 'forex') {
+			elseif($data['type_product'] == 'forex') {
 				$data['type_product'] = 'fx';
 			}
 		}
