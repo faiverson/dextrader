@@ -247,10 +247,10 @@ class TransactionGateway extends AbstractGateway {
 		return $transaction;
 	}
 
-	public function gateway(array $data)
+	public function gateway(array $data, $type = 'sale')
 	{
 		$nmi = new NMI;
-		return $nmi->purchase($data);
+		return $nmi->purchase($data, $type);
 	}
 
 	public function set(array $data, $id)
@@ -535,6 +535,38 @@ class TransactionGateway extends AbstractGateway {
 		}
 
 		$this->user->update(['active', 0], $data['user_id']);
+	}
+
+	public function refund($transaction_id)
+	{
+		DB::beginTransaction();
+		try {
+			$ts = $this->repository->find($transaction_id);
+			$transaction = $this->create($ts->toArray());
+			if(!$transaction) {
+				return false;
+			}
+
+			// connect to the gateway merchant
+			$data['orderid'] = $transaction->id;
+			$gateway = $this->gateway($data, 'refund');
+
+			// save the response in the transaction
+			$response = $this->set($gateway, $transaction->id);
+			if(!$response) {
+				$this->errors = $this->errors();
+				return false;
+			} else {
+				$data = array_merge($gateway, $data);
+			}
+		}
+		catch(\Exception $e) {
+			DB::rollback();
+			$this->errors = [$e->getMessage()];
+			return false;
+		}
+		DB::commit();
+		return $data;
 	}
 
 }

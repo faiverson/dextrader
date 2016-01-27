@@ -40,8 +40,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-		$path = storage_path('logs/payments-monthly-' . date('Y-m-d') . '.log');
 		// run the cronjob every 2 hours
+		$path = storage_path('logs/payments-monthly-' . date('Y-m-d') . '.log');
 		$schedule->command('payments:monthly')->withoutOverlapping()->cron('0 */2 * * * *')->sendOutputTo($path);
 		// 0 0,2,4,6,8,10,12,14,16,18,20,22 * * * make the precise hs
 

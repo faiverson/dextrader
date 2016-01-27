@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AddSignalEvent;
 use App\Gateways\LiveSignalGateway;
 use Illuminate\Http\Request;
 use Config;
 use Event;
 use DateTime;
+
 class LiveSignalsController extends Controller
 {
 	protected $types = ['ib', 'na', 'fx'];
@@ -65,10 +67,13 @@ class LiveSignalsController extends Controller
 
 	public function store($data, $type)
 	{
+		Event::fire(new AddSignalEvent($data));
+		return response()->ok();
 		$response = $this->gateway->add($data, $type);
 		if(!$response) {
 			return response()->error($this->gateway->errors());
 		}
+		Event::fire(new AddSignalEvent($response->toArray()));
 		return response()->ok($response);
 	}
 

@@ -40,4 +40,9 @@ class TransactionRepository extends AbstractRepository implements TransactionRep
 		$query = $this->model;
 		return $query->with('detail')->find($id);
 	}
+
+	public function refund($id) {
+		$query = $this->model;
+		return $query->find($id)->update();
+	}
 }
