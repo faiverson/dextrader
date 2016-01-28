@@ -70,9 +70,9 @@ class TrainingsSeeder extends Seeder
 	{
 		Training::create([
 			'title' => 'Introduction',
-			'time' => '02:33',
-			'video_id' => 'ncnJpYTi-hY',
-			'filename' => 'ncnJpYTi-hY.mp4',
+			'time' => '01:54',
+			'video_id' => 'Tgm7ZpwuVfA',
+			'filename' => 'Tgm7ZpwuVfA.mp4',
 			'description' => 'Introduction',
 			'type' => 'affiliates'
 		]);

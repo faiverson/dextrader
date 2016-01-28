@@ -44,12 +44,5 @@
 	<!-- inject:js -->
 	<!-- endinject -->
 	<script src="https://cdn.socket.io/socket.io-1.4.4.js"></script>
-	<script>
-		var socket = io('http://local.dx.com:3001');
-		//		var socket = io('http://192.168.10.10:3000');
-		socket.on("add-signal:App\\Events\\AddSignalEvent", function(message){
-			console.log(message);
-		});
-	</script>
 </body>
 </html>

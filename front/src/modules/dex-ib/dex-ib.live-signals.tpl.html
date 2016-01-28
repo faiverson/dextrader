@@ -73,9 +73,9 @@
             <td data-ng-bind="::signal.signal_time | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'HH:mm'"
                 class="green"></td>
             <td data-ng-bind="::signal.expiry_time | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'HH:mm'"
-                class="red"></td>
+                class="blue"></td>
             <!--<td data-ng-bind="::signal.close_time | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'HH:mm'"-->
-                <!--class="red"></td>-->
+                <!--class="blue"></td>-->
             <td><img tooltip="{{ signal.direction == 1 && 'Sell' || 'Buy' }}"
                     data-ng-src="{{signal.direction == 1 && '/front/assets/images/ico-reddown.png' || '/front/assets/images/ico-greenup.png'}}">
             </td>
@@ -83,8 +83,8 @@
             <td data-ng-bind="::signal.open_price"></td>
             <!--<td data-ng-bind="::signal.target_to" class="green"></td>-->
             <!--<td data-ng-bind="::signal.target_sleep" class="green"></td>-->
-            <td class="red">{{signal.close_price > 0 && signal.close_price || ''}}</td>
-            <td data-ng-class="{'green': signal.winloss == 1, 'red': signal.winloss == 0}">
+            <td class="blue">{{signal.close_price > 0 && signal.close_price || ''}}</td>
+            <td data-ng-class="{'green': signal.winloss == 1, 'blue': signal.winloss == 0}">
                 {{ signal.winloss == 1 && 'Win' || (signal.winloss == 0 && 'Loss' || (signal.winloss == 2 && 'NA')) }}
             </td>
         </tr>
