@@ -51,7 +51,8 @@ module.exports = {
                 'vendor/angular-file-saver/dist/angular-file-saver.bundle.js',
                 'vendor/angular-ui-mask/dist/mask.js',
                 'vendor/angular-loading-bar/build/loading-bar.js',
-                'vendor/angular-ui-bootstrap-datetimepicker/datetimepicker.js'
+                'vendor/angular-ui-bootstrap-datetimepicker/datetimepicker.js',
+                'vendor/angular-socket-io/socket.js'
             ],
             output: 'vendor.js'
         },
@@ -129,6 +130,10 @@ module.exports = {
         {
             match: 'SECURE_URL',
             replacement: process.env.SECURE_URL
+        },
+        {
+            match: 'SOCKET_HOST',
+            replacement: process.env.SOCKET_HOST
         }
 	]
 };

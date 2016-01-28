@@ -44,14 +44,5 @@
 	<!-- inject:js -->
 	<!-- endinject -->
 	<script src="https://cdn.socket.io/socket.io-1.4.4.js"></script>
-	<script>
-		var socket = io('http://api.dx.com:3000');
-		socket.on("signal.add", function(message){
-			console.log(message);
-		});
-		socket.on("signal.update", function(message){
-			console.log(message);
-		});
-	</script>
 </body>
 </html>

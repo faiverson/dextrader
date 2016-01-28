@@ -19,7 +19,8 @@
     "angular-ui-mask": "~1.6.5",
     "angular-file-saver": "~1.0.2",
     "angular-loading-bar": "~0.8.0",
-    "angular-ui-bootstrap-datetimepicker": "~0.14.4"
+    "angular-ui-bootstrap-datetimepicker": "~0.14.4",
+    "angular-socket-io": "~0.7.0"
   },
   "devDependencies": {
     "angular-cookies": "~1.4.7",
