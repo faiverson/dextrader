@@ -78,15 +78,15 @@ class TrainingsSeeder extends Seeder
 		]);
 		Training::create([
 			'title' => 'Social Media',
-			'time' => '12:33',
-			'video_id' => 'Qq-I4orlEhE',
-			'filename' => 'Qq-I4orlEhE.mp4',
+			'time' => '18:27',
+			'video_id' => 'aKUGMvc_KNo',
+			'filename' => 'aKUGMvc_KNo.mp4',
 			'description' => 'Social Media',
 			'type' => 'affiliates'
 		]);
 		Training::create([
 			'title' => 'Emailing Leads',
-			'time' => '08:22',
+			'time' => '18:22',
 			'video_id' => 'ubvV498pyIM',
 			'filename' => 'ubvV498pyIM.mp4',
 			'description' => 'Emailing Leads',
