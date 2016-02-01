@@ -110,6 +110,7 @@ class LiveSignalsController extends Controller
 			Log::info('The signal is not in database: ', $data);
 			return response()->error('The signal is not in database');
 		}
+
 		return $this->update($signal->id, $data['type_product'], $data);
 	}
 
