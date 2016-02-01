@@ -280,6 +280,12 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 		])->first();
 	}
 
+	public function findByInvoice($invoice_id)
+	{
+		$query =  $this->model;
+		return $query->where('invoice_id', $invoice_id)->get();
+	}
+
 	/**
 	 * We calculate when is the following date
 	 * where we make the payments

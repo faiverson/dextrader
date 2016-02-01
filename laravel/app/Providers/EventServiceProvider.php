@@ -31,6 +31,7 @@ class EventServiceProvider extends ServiceProvider
 			'App\Listeners\SubscriptionCommissionListener'
 		],
 		'App\Events\RefundEvent' => [
+			'App\Listeners\RefundCommissionListener',
 		],
     ];
 

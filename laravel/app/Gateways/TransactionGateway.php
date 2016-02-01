@@ -547,28 +547,46 @@ class TransactionGateway extends AbstractGateway {
 
 	public function refund($transaction_id)
 	{
+
 		DB::beginTransaction();
 		try {
+			$are = $this->repository->findBy('orderid', $transaction_id);
+//			if($are->count() > 1) {
+//				$this->errors = ['This transaction has been processed already'];
+//				return false;
+//			}
 			$ts = $this->findWith($transaction_id)->toArray();
+			$card = $this->card->find($ts['card_id']);
+			$ts['number'] = $card->number;
+			$ts['products'] = $ts['detail'];
 			$transaction = $this->create($ts);
 			if(!$transaction) {
-				$this->error = ['The transaction could not been created'];
 				return false;
 			}
-			$data = $transaction->toArray();
-			// connect to the gateway merchant
-			$data['orderid'] = $transaction->id;
-			dd($data);
-			$gateway = $this->gateway($data, 'refund');
 
-			// save the response in the transaction
+			// connect to the gateway merchant
+			$ts['transactionid'] = $transaction->transactionid;
+			$ts['orderid'] = $ts['id'];
+			$ts['description'] = implode(array_column($ts['products'], 'product_name'), ' - ');
+			$ts['info'] = [
+				'transactionid' => $ts['transactionid'],
+				'orderid' => $ts['orderid']
+			];
+			$gateway = $this->gateway($ts, 'refund');
+
+			// save the response in the transaction no mather what
 			$response = $this->set($gateway, $transaction->id);
 			if(!$response) {
 				$this->errors = $this->errors();
 				return false;
 			} else {
-				$data = array_merge($gateway, $data);
+				$data = array_merge($gateway, $ts);
 			}
+			if(!array_key_exists('responsetext', $gateway) && strtolower($gateway['responsetext']) == 'success') {
+				$this->errors = [$response['responsetext']];
+				return false;
+			}
+
 			$transaction->amount = $transaction->amount * (-1);
 			$invoice = $this->invoice->create(array_merge($data, [
 				'card_id' => $transaction->card_id,
@@ -581,25 +599,35 @@ class TransactionGateway extends AbstractGateway {
 				return false;
 			}
 
-			foreach($transaction->detail as $detail) {
-				$sub = $this->subscription->findByUser($transaction->user_id);
-				$sub->status = 'cancel';
-				$sub->save();
-
-				$invoice_detail = $this->invoice->addDetail(array_merge($detail, [
-					'subscription_id' => $sub->id,
-					'invoice_id' => $invoice->id
-				]));
-				if (!$invoice_detail) {
-					$this->errors = $this->invoice->errors();
-					return false;
-				}
-
+			$last_invoice = $this->invoice->findBy('transaction_id', $ts['id'])->first();
+			if($last_invoice) {
+				$now = new DateTime('now');
+				$last_invoice->refunded_at = $now->format('Y-m-d H:i:s');
+				$last_invoice->save();
 			}
 
-//			$role_id = $this->user->getRoleByName($product['roles']);
-//			$this->user->attachRole($transaction->user_id, $role_id);
-//			$this->user->update(['active' => 1], $data['user_id']);
+			foreach($transaction->detail as $detail) {
+//				$sub = $this->subscription->findProductByUser($detail->product_id, $transaction->user_id);
+//				$sub->status = 'cancel';
+//				$sub->save();
+//
+//				$invoice_detail = $this->invoice->addDetail(array_merge($detail->toArray(), [
+//					'subscription_id' => $sub->id,
+//					'invoice_id' => $invoice->id
+//				]));
+//				if (!$invoice_detail) {
+//					$this->errors = $this->invoice->errors();
+//					return false;
+//				}
+//
+//				$product = $this->product->find($detail->product_id);
+//				$role_id = $this->user->getRoleByName($product->roles);
+//				$this->user->deatachRole($transaction->user_id, $role_id);
+				$subs = $this->subscription->findByUser($transaction->user_id);
+				if($subs->count() <= 0) {
+					$this->user->update(['active' => 0], $transaction->user_id);
+				}
+			}
 		}
 		catch(\Exception $e) {
 			DB::rollback();
@@ -607,7 +635,11 @@ class TransactionGateway extends AbstractGateway {
 			return false;
 		}
 		DB::commit();
-		return $data;
+		return array_merge($data, [
+			'transaction_id' => $data['orderid'],
+			// we return the last invoice to find the commissions
+			'invoice_id' => $last_invoice->id
+		]);
 	}
 
 }

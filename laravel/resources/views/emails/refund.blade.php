@@ -7,7 +7,9 @@
 	@include('beautymail::templates.sunny.contentStart', ['color' => '#0000FF'])
 	<p> Hi {{ $user->fullname }},<br/>
 
-		It is a shame but your purchase has been refunded! <br>
+		It is a shame you want remove your subscription. <br />
+		Anyway, your purchase has been refunded! <br>
+		Thanks!
 	</p>
 	@include('beautymail::templates.sunny.contentEnd')
 @stop
