@@ -89,7 +89,7 @@ class EmailEventListener //implements ShouldQueue
 	public function onTransactionRefund($event)
 	{
 		$user = $this->userGateway->find($event->data['user_id']);
-		$user->email = 'fa.iverson@gmail.com';
+//		$user->email = 'fa.iverson@gmail.com';
 		$this->mailer->send('emails.refund', ['user' => $user], function ($message) use ($user) {
 			$message
 				->from($this->from)

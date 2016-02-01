@@ -551,10 +551,10 @@ class TransactionGateway extends AbstractGateway {
 		DB::beginTransaction();
 		try {
 			$are = $this->repository->findBy('orderid', $transaction_id);
-//			if($are->count() > 1) {
-//				$this->errors = ['This transaction has been processed already'];
-//				return false;
-//			}
+			if($are->count() > 1) {
+				$this->errors = ['This transaction has been processed already'];
+				return false;
+			}
 			$ts = $this->findWith($transaction_id)->toArray();
 			$card = $this->card->find($ts['card_id']);
 			$ts['number'] = $card->number;
@@ -607,22 +607,22 @@ class TransactionGateway extends AbstractGateway {
 			}
 
 			foreach($transaction->detail as $detail) {
-//				$sub = $this->subscription->findProductByUser($detail->product_id, $transaction->user_id);
-//				$sub->status = 'cancel';
-//				$sub->save();
-//
-//				$invoice_detail = $this->invoice->addDetail(array_merge($detail->toArray(), [
-//					'subscription_id' => $sub->id,
-//					'invoice_id' => $invoice->id
-//				]));
-//				if (!$invoice_detail) {
-//					$this->errors = $this->invoice->errors();
-//					return false;
-//				}
-//
-//				$product = $this->product->find($detail->product_id);
-//				$role_id = $this->user->getRoleByName($product->roles);
-//				$this->user->deatachRole($transaction->user_id, $role_id);
+				$sub = $this->subscription->findProductByUser($detail->product_id, $transaction->user_id);
+				$sub->status = 'cancel';
+				$sub->save();
+
+				$invoice_detail = $this->invoice->addDetail(array_merge($detail->toArray(), [
+					'subscription_id' => $sub->id,
+					'invoice_id' => $invoice->id
+				]));
+				if (!$invoice_detail) {
+					$this->errors = $this->invoice->errors();
+					return false;
+				}
+
+				$product = $this->product->find($detail->product_id);
+				$role_id = $this->user->getRoleByName($product->roles);
+				$this->user->deatachRole($transaction->user_id, $role_id);
 				$subs = $this->subscription->findByUser($transaction->user_id);
 				if($subs->count() <= 0) {
 					$this->user->update(['active' => 0], $transaction->user_id);
