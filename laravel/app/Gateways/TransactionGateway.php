@@ -306,11 +306,19 @@ class TransactionGateway extends AbstractGateway {
 			$invoice = $this->invoice->create(array_merge($data, [
 				'card_id' => $card->id,
 				'billing_address_id' => $billing->id,
-				'status' => 'active',
 				'transaction_id' => $data['orderid']
 			]));
 			if(!$invoice) {
 				$this->errors = $this->invoice->errors();
+				return false;
+			}
+
+			$set = $this->set([
+				'card_id' => $card->id,
+				'billing_address_id' => $billing->id
+			], $data['orderid']);
+			if(!$set) {
+				$this->errors = ['Transaction update fails'];
 				return false;
 			}
 
@@ -541,14 +549,16 @@ class TransactionGateway extends AbstractGateway {
 	{
 		DB::beginTransaction();
 		try {
-			$ts = $this->repository->find($transaction_id);
-			$transaction = $this->create($ts->toArray());
+			$ts = $this->findWith($transaction_id)->toArray();
+			$transaction = $this->create($ts);
 			if(!$transaction) {
+				$this->error = ['The transaction could not been created'];
 				return false;
 			}
-
+			$data = $transaction->toArray();
 			// connect to the gateway merchant
 			$data['orderid'] = $transaction->id;
+			dd($data);
 			$gateway = $this->gateway($data, 'refund');
 
 			// save the response in the transaction
@@ -559,6 +569,37 @@ class TransactionGateway extends AbstractGateway {
 			} else {
 				$data = array_merge($gateway, $data);
 			}
+			$transaction->amount = $transaction->amount * (-1);
+			$invoice = $this->invoice->create(array_merge($data, [
+				'card_id' => $transaction->card_id,
+				'billing_address_id' => $transaction->billing_address_id,
+				'transaction_id' => $transaction->id,
+				'amount' => $transaction->amount
+			]));
+			if(!$invoice) {
+				$this->errors = $this->invoice->errors();
+				return false;
+			}
+
+			foreach($transaction->detail as $detail) {
+				$sub = $this->subscription->findByUser($transaction->user_id);
+				$sub->status = 'cancel';
+				$sub->save();
+
+				$invoice_detail = $this->invoice->addDetail(array_merge($detail, [
+					'subscription_id' => $sub->id,
+					'invoice_id' => $invoice->id
+				]));
+				if (!$invoice_detail) {
+					$this->errors = $this->invoice->errors();
+					return false;
+				}
+
+			}
+
+//			$role_id = $this->user->getRoleByName($product['roles']);
+//			$this->user->attachRole($transaction->user_id, $role_id);
+//			$this->user->update(['active' => 1], $data['user_id']);
 		}
 		catch(\Exception $e) {
 			DB::rollback();

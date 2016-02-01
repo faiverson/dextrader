@@ -60,11 +60,11 @@ class GetResponse
 		if ( !extension_loaded('curl') ) {
 			trigger_error('GetResponsePHP requires PHP cURL', E_USER_ERROR);
 		}
-		if ( is_null(Config('getresponse.key')) ) {
+		if ( is_null(Config::get('getresponse.key')) ) {
 			trigger_error('API key must be supplied', E_USER_ERROR);
 		}
-		$this->apiKey = Config('getresponse.key');
-		$this->errorsOn = Config('app.debug');
+		$this->apiKey = Config::get('getresponse.key');
+		$this->errorsOn = Config::get('app.debug');
 	}
 
 	/**
