@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Config;
 use Event;
 use App\Events\CheckoutEvent;
+use App\Events\RefundEvent;
 use Log;
 use Token;
 
@@ -122,19 +123,13 @@ class TransactionController extends Controller
 	public function refund(Request $request)
 	{
 		$transaction_id = $request->id;
-		dd($transaction_id);
 		$response = $this->transaction->refund($transaction_id);
-		if(array_key_exists('responsetext', $response) && strtolower($response['responsetext']) == 'success') {
-			Event::fire(new CheckoutEvent($response));
-		} else {
-			Log::info('Merchant', $response);
-			if(array_key_exists('responsetext', $response)) {
-				return response()->error($response['responsetext']);
-			} else {
-				return response()->error('There is a problem with the Merchant. Please contact support to solve the problem!');
-			}
-			return false;
+		if(!$response) {
+			return response()->error($this->transaction->errors());
 		}
+
+		$response['admin_id'] = $request->user()->id;
+		Event::fire(new RefundEvent($response));
 		return response()->ok($response);
 	}
 }

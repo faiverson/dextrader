@@ -53,7 +53,7 @@ class EmailEventListener //implements ShouldQueue
 	public function onSubscriptionCancel($event)
 	{
 		$user = $this->userGateway->find($event->subscription->user_id);
-		$user->email = 'fa.iverson@gmail.com';
+//		$user->email = 'fa.iverson@gmail.com';
 		$this->mailer->send('emails.subscription-cancel', ['user' => $user, 'subscription' => $event->subscription], function ($message) use ($user) {
 			$message
 				->from($this->from)
@@ -65,7 +65,7 @@ class EmailEventListener //implements ShouldQueue
 	public function onSubscriptionFailed($event)
 	{
 		$user = $this->userGateway->find($event->subscription->user_id);
-		$user->email = 'fa.iverson@gmail.com';
+//		$user->email = 'fa.iverson@gmail.com';
 		$this->mailer->send('emails.subscription-fail', ['user' => $user, 'subscription' => $event->subscription], function ($message) use ($user) {
 			$message
 				->from($this->from)
@@ -77,12 +77,24 @@ class EmailEventListener //implements ShouldQueue
 	public function onSubscriptionRenewed($event)
 	{
 		$user = $this->userGateway->find($event->data['user_id']);
-		$user->email = 'fa.iverson@gmail.com';
+//		$user->email = 'fa.iverson@gmail.com';
 		$this->mailer->send('emails.subscription-renewed', ['user' => $user], function ($message) use ($user) {
 			$message
 				->from($this->from)
 				->to($user->email)
 				->subject('Your subscription has been renewed!');
+		});
+	}
+
+	public function onTransactionRefund($event)
+	{
+		$user = $this->userGateway->find($event->data['user_id']);
+		$user->email = 'fa.iverson@gmail.com';
+		$this->mailer->send('emails.refund', ['user' => $user], function ($message) use ($user) {
+			$message
+				->from($this->from)
+				->to($user->email)
+				->subject('Your purchase has been refunded!');
 		});
 	}
 
@@ -99,6 +111,6 @@ class EmailEventListener //implements ShouldQueue
 		$events->listen('App\Events\SubscriptionCancelEvent', 'App\Listeners\EmailEventListener@onSubscriptionCancel');
 		$events->listen('App\Events\SubscriptionFailEvent', 'App\Listeners\EmailEventListener@onSubscriptionFailed');
 		$events->listen('App\Events\SubscriptionRenewedEvent', 'App\Listeners\EmailEventListener@onSubscriptionRenewed');
-
+		$events->listen('App\Events\RefundEvent', 'App\Listeners\EmailEventListener@onTransactionRefund');
 	}
 }

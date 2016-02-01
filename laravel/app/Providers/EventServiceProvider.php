@@ -34,6 +34,9 @@ class EventServiceProvider extends ServiceProvider
 		],
 		'App\Events\UpdateSignalEvent' => [
 		],
+		'App\Events\RefundEvent' => [
+			'App\Listeners\RefundCommissionListener',
+		],
     ];
 
 	protected $subscribe = [

@@ -60,7 +60,7 @@ class NMI {
 		return $this->send();
 	}
 
-	public function refund(array $data	)
+	public function refund(array $data, $type ='sale')
 	{
 		$order = [
 			'username' => $this->username,
