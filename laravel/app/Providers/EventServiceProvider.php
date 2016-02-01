@@ -30,8 +30,10 @@ class EventServiceProvider extends ServiceProvider
 		'App\Events\SubscriptionRenewedEvent' => [
 			'App\Listeners\SubscriptionCommissionListener'
 		],
-//		'App\Events\AddSignalEvent' => [
-//		],
+		'App\Events\AddSignalEvent' => [
+		],
+		'App\Events\UpdateSignalEvent' => [
+		],
     ];
 
 	protected $subscribe = [

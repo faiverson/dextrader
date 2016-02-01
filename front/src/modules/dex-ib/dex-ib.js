@@ -1,4 +1,4 @@
-angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-form', 'app.sign-up-modal-form'])
+angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-form', 'app.sign-up-modal-form', 'app.socket-services'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('dex_ib', {
@@ -225,7 +225,7 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
         };
     }])
 
-    .controller('LiveSignalsCtrl', ['$scope', 'LiveSignalsService', function ($scope, LiveSignalsService) {
+    .controller('LiveSignalsCtrl', ['$scope', 'LiveSignalsService', 'DexTraderSocket', function ($scope, LiveSignalsService, DexTraderSocket) {
         var vm = this;
 
         $scope.pagination = {
@@ -300,6 +300,14 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
             if (angular.isDefined(nv) && nv !== ov) {
                 $scope.filters.apply();
             }
+        });
+
+        DexTraderSocket.on("signal.add", function (data) {
+            vm.getLiveSignals();
+        });
+
+        DexTraderSocket.on("signal.update", function (data) {
+            vm.getLiveSignals();
         });
 
         vm.getLiveSignals = function () {
