@@ -84,7 +84,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
     }])
 
     .controller('HowItWorksCtrl', ['$scope', 'EWalletService', 'Notification', '$site-configs', function ($scope, EWalletService, Notification, $configs) {
-        $scope.youTubeVideoId = "lYKRPzOi1zI";
+        $scope.youTubeVideoId = "WoZiQeIcCR0";
 
         $scope.createEWallet = function () {
             EWalletService.createEWallet()

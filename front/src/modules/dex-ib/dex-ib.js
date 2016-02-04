@@ -467,7 +467,13 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
     }])
 
     .controller('DexIBAffiliatesCtrl', ['$scope', '$state', '$stateParams', '$uibModal', 'Notification', function ($scope, $state, $stateParams, $uibModal, Notification) {
-        $scope.videoId = 'lYKRPzOi1zI';
+        $scope.videoId = 'Aj-yHxSYQKc';
+
+        $scope.playerVars = {
+            controls: 0,
+            autoplay: 1,
+            showinfo: 0
+        };
 
         $scope.openOrderNowForm = function () {
 

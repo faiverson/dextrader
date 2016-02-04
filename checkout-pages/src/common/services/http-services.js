@@ -235,16 +235,20 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
 
     .factory('InvoicesService', ['$http', '$q', '$site-configs', 'localStorageService', function ($http, $q, $configs, localStorageService) {
 
-        function getInvoice(id) {
-            return localStorageService.get(id);
+        function getInvoices() {
+            return localStorageService.get('invoices');
         }
 
-        function setInvoice(id, data) {
-            return localStorageService.set(id, data);
+        function setInvoice(data) {
+            var invoices = localStorageService.get('invoices') || [];
+
+            invoices.push(data);
+
+            return localStorageService.set('invoices', invoices);
         }
 
         return {
-            getInvoice: getInvoice,
+            getInvoices: getInvoices,
             setInvoice: setInvoice
         };
     }])
@@ -298,7 +302,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
     .factory('SpecialOffersService', ['$q', '$site-configs', '$http', '$filter', 'localStorageService', function ($q, $config, $http, $filter, localStorageService) {
         var service = $config.API_BASE_URL + 'offers';
 
-        function query(funnelId, productIds, checkForOffers) {
+        function query(funnelId, productIds, checkForOffers, type) {
             var endpoint = service,
                 deferred = $q.defer(),
                 tmpPrices = localStorageService.get('productPrices' + funnelId);
@@ -312,28 +316,28 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             function success(res) {
                 localStorageService.set('productPrices' + funnelId, res.data);
 
-                deferred.resolve(processOffers(res.data, productIds, checkForOffers));
+                deferred.resolve(processOffers(res.data, productIds, checkForOffers, type));
             }
 
             function error(err) {
                 deferred.reject(err);
             }
 
-            if (tmpPrices != null && angular.isDefined(tmpPrices)) {
-                deferred.resolve(processOffers(tmpPrices, productIds, checkForOffers));
-            } else {
+            //if (tmpPrices != null && angular.isDefined(tmpPrices)) {
+            //    deferred.resolve(processOffers(tmpPrices, productIds, checkForOffers));
+            //} else {
                 $http.get(endpoint).then(success, error);
-            }
+            //}
 
             return deferred.promise;
 
         }
 
-        function processOffers(res, productIds, checkForOffers) {
+        function processOffers(res, productIds, checkForOffers, type) {
             var products = [];
 
             productIds.forEach(function (prd) {
-                var offers = $filter('filter')(res.data.offers, {product_id: prd});
+                var offers = $filter('filter')(res.data.offers, {product_id: prd, type: type}, true);
                 var product = $filter('filter')(res.data.products, {product_id: prd});
 
                 if (offers.length > 0 && checkForOffers) {

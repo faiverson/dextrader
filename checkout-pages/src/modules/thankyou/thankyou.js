@@ -2,7 +2,7 @@ angular.module('app.thankyou', ['ui.router'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('thankyou', {
-                url: '/thankyou/:invoice',
+                url: '/thankyou',
                 templateUrl: 'modules/thankyou/thankyou.tpl.html',
                 controller: 'ThankyouCtrl',
                 data: {
@@ -26,6 +26,16 @@ angular.module('app.thankyou', ['ui.router'])
 
             };
 
+            $scope.totalInvoices = function (invoices) {
+                var total = 0;
+
+                angular.forEach(invoices, function (invoice) {
+                    total += invoice.amount;
+                });
+
+                return total;
+            };
+
             vm.successLogin = function (res) {
                 window.location.href = $configs.DASHBOARD_URL + "/doLogin?token=" + res.data.token;
             };
@@ -34,16 +44,13 @@ angular.module('app.thankyou', ['ui.router'])
                 Notification.error(err.error);
             };
 
-            vm.loadInvoice = function (id) {
-                $scope.invoice = InvoicesService.getInvoice(id);
-                console.log($scope.invoice);
+            vm.loadInvoice = function () {
+                $scope.invoices = InvoicesService.getInvoices();
+                console.log($scope.invoices);
             };
 
             vm.init = function () {
-                $scope.order_date = moment.unix($stateParams.invoice).format('DD/MM/YYYY');
-                if (angular.isDefined($stateParams.invoice)) {
-                    vm.loadInvoice($stateParams.invoice);
-                }
+                vm.loadInvoice($stateParams.invoice);
             };
 
             vm.init();

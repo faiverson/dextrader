@@ -1,6 +1,6 @@
 angular.module('app.upgrade-modal-form', [])
-    .controller('UpgradeModalFormCtrl', ['$scope', 'CheckoutService', 'products', '$uibModalInstance', 'Notification', '$state', 'invoiceData', 'promotionalPrice',
-        function ($scope, CheckoutService, products, $uibModalInstance, Notification, $state, invoiceData, promotionalPrice) {
+    .controller('UpgradeModalFormCtrl', ['$scope', 'CheckoutService', 'products', '$uibModalInstance', 'Notification', '$state', 'InvoicesService', 'promotionalPrice',
+        function ($scope, CheckoutService, products, $uibModalInstance, Notification, $state, InvoicesService, promotionalPrice) {
             var vm = this;
 
             $scope.userData = {};
@@ -11,7 +11,7 @@ angular.module('app.upgrade-modal-form', [])
             };
 
             vm.setUserData = function () {
-                var invoice = invoiceData || {};
+                var invoice = InvoicesService.getInvoices().length > 0 ? InvoicesService.getInvoices()[0] : {};
 
                 $scope.userData.email = invoice.email;
                 $scope.userData.username = invoice.username;
@@ -30,8 +30,8 @@ angular.module('app.upgrade-modal-form', [])
             vm.setAddress = function () {
                 $scope.addresses = [
                     {
-                        address: invoiceData.billing_address,
-                        address_id: invoiceData.billing_address_id
+                        address: InvoicesService.getInvoices().length > 0 ? InvoicesService.getInvoices()[0].billing_address : '',
+                        address_id: InvoicesService.getInvoices().length > 0 ? InvoicesService.getInvoices()[0].billing_address_id : null
                     }
                 ];
                 if ($scope.addresses.length > 0) {
@@ -42,8 +42,8 @@ angular.module('app.upgrade-modal-form', [])
             vm.setCreditCards = function () {
                 $scope.cards = [
                     {
-                        last_four: '**** **** **** ' + invoiceData.card_last_four,
-                        cc_id: invoiceData.card_id
+                        last_four: '**** **** **** ' + (InvoicesService.getInvoices().length > 0 ? InvoicesService.getInvoices()[0].card_last_four : '****'),
+                        cc_id: InvoicesService.getInvoices().length > 0 ? InvoicesService.getInvoices()[0].card_id: null
                     }
                 ];
 
@@ -61,8 +61,8 @@ angular.module('app.upgrade-modal-form', [])
                     $scope.formData.billing_address_id = $scope.address.address_id;
                     $scope.formData.card_id = $scope.card.cc_id;
 
-                    if (angular.isDefined(invoiceData.user_id)) {
-                        CheckoutService.upgrade($scope.formData, invoiceData.user_id)
+                    if (InvoicesService.getInvoices().length > 0  && angular.isDefined(InvoicesService.getInvoices()[0].user_id)) {
+                        CheckoutService.upgrade($scope.formData, InvoicesService.getInvoices()[0].user_id)
                             .then(vm.success, vm.error);
                     }
 
@@ -73,6 +73,7 @@ angular.module('app.upgrade-modal-form', [])
             };
 
             vm.success = function (res) {
+                InvoicesService.setInvoice(res.data);
                 $uibModalInstance.close(res);
             };
 

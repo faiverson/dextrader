@@ -2,7 +2,7 @@ angular.module('app.upsell', ['ui.router', 'app.upgrade-modal-form'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('upsell', {
-                url: '/upsell/:invoice',
+                url: '/upsell',
                 templateUrl: 'modules/upsell/upsell.tpl.html',
                 controller: 'UpsellCtrl',
                 data: {
@@ -14,26 +14,20 @@ angular.module('app.upsell', ['ui.router', 'app.upgrade-modal-form'])
     .controller('UpsellCtrl', ['$scope', '$stateParams', '$state', 'InvoicesService', '$uibModal', 'Notification', 'SpecialOffersService',
         function ($scope, $stateParams, $state, InvoicesService, $uibModal, Notification, SpecialOffersService) {
             var vm = this;
-            $scope.invoice = $stateParams.invoice;
             $scope.products = [2]; //IB PRO
-
-            vm.loadInvoice = function (id) {
-                $scope.invoice_details = InvoicesService.getInvoice(id);
-            };
+            $scope.funnel_id = 1;
 
             vm.getSpecialOffer = function () {
-                SpecialOffersService.query($scope.invoice_details.funnel_id, $scope.products, true)
+                SpecialOffersService.query($scope.funnel_id, $scope.products, true, 'upsell')
                     .then(function (res) {
+                        console.log(res);
                         $scope.specialOffers = res;
                     });
 
             };
 
             vm.init = function () {
-                if (angular.isDefined($stateParams.invoice)) {
-                    vm.loadInvoice($stateParams.invoice);
-                    vm.getSpecialOffer();
-                }
+                vm.getSpecialOffer();
             };
 
             vm.init();
@@ -42,12 +36,11 @@ angular.module('app.upsell', ['ui.router', 'app.upgrade-modal-form'])
                 if (angular.isDefined(vm.upgradeModalForm)) {
                     vm.upgradeModalForm.dismiss('close');
                 }
-                $state.go('thankyou', {invoice: $stateParams.invoice});
+                $state.go('thankyou');
             };
 
             $scope.timerChange = function (remainSeconds) {
-                $scope.invoice_details.upsell_timer_seconds = remainSeconds;
-                InvoicesService.setInvoice($stateParams.invoice, $scope.invoice_details);
+            //    $scope.invoice_details.countdown_upsell = remainSeconds;
             };
 
             $scope.openUpgradeForm = function () {
@@ -77,7 +70,7 @@ angular.module('app.upsell', ['ui.router', 'app.upgrade-modal-form'])
 
                 vm.upgradeModalForm.result.then(function (email) {
                     Notification.success('Upgrade complete successfully!');
-                    $state.go('thankyou', {invoice: $stateParams.invoice});
+                    $state.go('thankyou');
                 }, function () {
                     //$log.info('Modal dismissed at: ' + new Date());
                 });

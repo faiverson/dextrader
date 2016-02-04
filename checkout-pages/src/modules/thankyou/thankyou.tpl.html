@@ -45,19 +45,13 @@
                         data-ng-click="login()"
                         type="submit">Continue to the Back Office</button>
             </form>
-            <!--<label for="form-login-email">E-mail</label>-->
-            <!--<input type="text" id="form-login-email" value="tdesersdesign@tdesers.com">-->
-            <!--<label for="form-login-password">Password</label>-->
-            <!--<input type="text" id="form-login-password" value="74Gtg837HAb">-->
-
-            <!--<a href="#" class="submitbutton bg-orange">Continue to the Back Office</a>-->
         </div>
         <h3>Billed To</h3>
 
         <div id="billed-to">
-            <h3 class="size17 bold">{{invoice.first_name}} {{invoice.last_name}}</h3>
-            {{invoice.billing_address}},
-            {{invoice.billing_zip}}
+            <h3 class="size17 bold">{{invoices[0].first_name}} {{invoices[0].last_name}}</h3>
+            {{invoices[0].billing_address}},
+            {{invoices[0].billing_zip}}
         </div>
         <div id="billing-data" class="bg-gray">
             <div class="clearfix">
@@ -103,13 +97,15 @@
                     PRICE
                 </div>
             </div>
-            <div class="clearfix" data-ng-repeat="prd in invoice.products">
-                <div class="left">
+            <div class="clearfix" data-ng-repeat="invoice in invoices">
+                <div data-ng-repeat="prd in invoice.products">
+                    <div class="left">
                     <span class="bold">{{prd.product_display_name}}</span> – {{prd.product_amount | currency:'$'}} today and the re-bills for {{prd.product_amount | currency:'$'}} every
                     30 days until you decide to cancel
                 </div>
-                <div class="right">
+                    <div class="right">
                     {{prd.product_amount | currency:'$'}}
+                </div>
                 </div>
             </div>
             <div id="checkout-total" class="clearfix">
@@ -117,7 +113,7 @@
                     Total
                 </div>
                 <div class="right">
-                    {{invoice.amount | currency:'$'}}
+                    {{totalInvoices(invoices) | currency:'$'}}
                 </div>
             </div>
             <p>

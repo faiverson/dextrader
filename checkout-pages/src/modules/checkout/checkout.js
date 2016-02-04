@@ -120,6 +120,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 $scope.showAgreementWarning = angular.isUndefined($scope.formData.terms);
 
                 if ($scope.formCheckout.$valid) {
+                    $scope.working = true;
                     $scope.formData.data = vm.getUserBrowserData();
 
                     if (angular.isDefined($stateParams.user) && $stateParams.user.length > 0) {
@@ -256,18 +257,17 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             };
 
             vm.success = function (res) {
-                var internalId = moment().unix();
                 var invoice_details = res.data;
-                invoice_details.upsell_timer_seconds = 240;
-                invoice_details.downsell_timer_seconds = 240;
+                $scope.working = false;
+                InvoicesService.setInvoice(invoice_details);
 
-                InvoicesService.setInvoice(internalId, invoice_details);
-
-                $state.go('upsell', {invoice: internalId});
+                $state.go('upsell');
                 Notification.success('Congratulations!!! Account has been created!');
             };
 
             vm.error = function (err) {
+                $scope.working = false;
+
                 if (err.data && angular.isDefined(err.data.error)) {
                     if (angular.isArray(err.data.error)) {
                         angular.forEach(err.data.error, function (e) {
@@ -280,7 +280,6 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 } else {
                     Notification.error('Ups! something went wrong! please try again!');
                 }
-
             };
 
             vm.getUserBrowserData = function () {
