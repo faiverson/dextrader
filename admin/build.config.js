@@ -50,7 +50,9 @@ module.exports = {
                 'vendor/angular-animate/angular-animate.js',
                 'vendor/angular-ui-mask/dist/mask.js',
                 'vendor/angular-ui-bootstrap-datetimepicker/datetimepicker.js',
-                'vendor/angular-youtube-mb/dist/angular-youtube-embed.min.js'
+                'vendor/angular-youtube-mb/dist/angular-youtube-embed.min.js',
+                'vendor/angular-socket-io/socket.js',
+                'vendor/angular-audio/app/angular.audio.js'
             ],
             output: 'vendor.js'
         },
@@ -92,6 +94,10 @@ module.exports = {
         svg: {
             input: 'src/assets/**/*.svg',
             output: '../public_html/admin/assets/'
+        },
+        sounds: {
+            input: ['src/assets/sounds/**/*.{mp3,ogg}'],
+            output: '../public_html/admin/assets/sounds/'
         }
     },
     docs: {
@@ -123,6 +129,10 @@ module.exports = {
         {
             match: 'DASHBOARD_URL',
             replacement: process.env.DASHBOARD_URL + '/'
+        },
+        {
+            match: 'SOCKET_HOST',
+            replacement: process.env.SOCKET_HOST
         }
     ]
 };

@@ -13,20 +13,15 @@ redis.psubscribe('signal.*', function(err, count) {
 	console.log("subscribed to signal channel");
 });
 
-//app.get('/', function(req, res) {
-//	res.send('hello world');
-//});
+redis.on('pmessage', function(pattern, channel, message) {
+	console.log(channel);
+	io.emit(channel, message);
+});
 
 io.on('connection', function (socket) {
 	console.log("Client connected");
-	redis.on('pmessage', function(pattern, channel, message) {
-		console.log(channel);
-		socket.emit(channel, message);
-	});
+});
 
-	socket.on('disconnect', function() {
-		console.log("Client disconnect");
-		//redis.quit();
-	});
-
+io.on('disconnect', function() {
+	console.log("Client disconnect");
 });

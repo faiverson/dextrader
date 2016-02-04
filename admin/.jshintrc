@@ -24,6 +24,7 @@
 		"console": true,
 		"angular": true,
 		"process": true,
-		"moment": true
+		"moment": true,
+		"io": true
 	}
 }

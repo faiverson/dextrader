@@ -1,4 +1,4 @@
-angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
+angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask', 'app.socket-services', 'ngAudio'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('live_signals', {
@@ -65,9 +65,9 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
             };
 
             $scope.products = [
-                { id: 1, name: 'IB' },
-                { id: 3, name: 'NA' },
-                { id: 4, name: 'FX' }
+                {id: 1, name: 'IB'},
+                {id: 3, name: 'NA'},
+                {id: 4, name: 'FX'}
             ];
 
             $scope.product = $scope.products[0];
@@ -100,11 +100,11 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
 
             vm.error = function (err) {
                 if (err.data && angular.isDefined(err.data.error)) {
-                    for(var er in err.data.error){
+                    for (var er in err.data.error) {
                         var arr = err.data.error[er];
 
                         if (angular.isArray(arr)) {
-                            for(var a=0; a<arr.length; a++){
+                            for (var a = 0; a < arr.length; a++) {
                                 Notification.error(arr[a]);
                             }
                         } else {
@@ -144,92 +144,111 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask'])
             vm.init();
         }])
 
-    .controller('LiveSignalsListCtrl', ['$scope', 'LiveSignalsService', 'Notification', 'modalService', function ($scope, LiveSignalsService, Notification, modalService) {
-        var vm = this;
+    .controller('LiveSignalsListCtrl', ['$scope', 'LiveSignalsService', 'Notification', 'modalService', 'DexTraderSocket', 'ngAudio',
+        function ($scope, LiveSignalsService, Notification, modalService, DexTraderSocket, ngAudio) {
+            var vm = this;
 
-        $scope.pagination = {
-            totalItems: 20,
-            currentPage: 1,
-            itemsPerPage: 10,
-            pageChange: function () {
+            $scope.sound = ngAudio.load("/assets/sounds/step-alert.mp3");
+
+            $scope.pagination = {
+                totalItems: 20,
+                currentPage: 1,
+                itemsPerPage: 10,
+                pageChange: function () {
+                    vm.getLiveSignals();
+                }
+            };
+
+            $scope.filters = {
+                products: [
+                    {id: 1, name: 'IB'},
+                    {id: 3, name: 'NA'},
+                    {id: 4, name: 'FX'}
+                ],
+                apply: function () {
+                    vm.getLiveSignals();
+                }
+            };
+
+            $scope.sortBy = {
+                column: 1,
+                dir: 'asc',
+                sort: function (col) {
+                    if (col === this.column) {
+                        this.dir = this.dir === 'asc' ? 'desc' : 'asc';
+                    } else {
+                        this.column = col;
+                        this.dir = 'asc';
+                    }
+
+                    vm.getLiveSignals();
+                }
+            };
+
+            $scope.openDeleteConfirm = function (id) {
+                var modalOptions = {
+                    closeButtonText: 'Cancel',
+                    actionButtonText: 'Delete Signal',
+                    headerText: 'Delete Signal?',
+                    bodyText: 'Are you sure you want to delete this Signal?'
+                };
+
+                modalService.showModal({}, modalOptions).then(function (result) {
+                    LiveSignalsService.destroy(id).then(vm.successDelete, vm.errorDelete);
+                });
+            };
+
+            DexTraderSocket.on("signal.add", function (data) {
+                $scope.sound.play();
+                Notification.success('New signal added!');
                 vm.getLiveSignals();
-            }
-        };
+            });
 
-        $scope.filters = {
-            products: [
-                { id: 1, name: 'IB' },
-                { id: 3, name: 'NA' },
-                { id: 4, name: 'FX' }
-            ],
-            apply: function () {
+            DexTraderSocket.on("signal.update", function (data) {
+                $scope.sound.play();
+                Notification.warning('Signal Updated!');
                 vm.getLiveSignals();
-            }
-        };
+            });
 
-        $scope.sortBy = {
-            column: 1,
-            dir: 'asc',
-            sort: function (col) {
-                if (col === this.column) {
-                    this.dir = this.dir === 'asc' ? 'desc' : 'asc';
-                } else {
-                    this.column = col;
-                    this.dir = 'asc';
+            $scope.$on("$destroy", function () {
+                DexTraderSocket.removeAllListeners();
+            });
+
+            vm.successDelete = function (res) {
+                vm.getLiveSignals();
+                Notification.success('Live Signal was removed successfully!');
+            };
+
+            vm.errorDelete = function (err) {
+                Notification.error('Ups! there was an error trying to remove this Live Signal!');
+            };
+
+            vm.getLiveSignals = function () {
+
+                var params = {
+                    offset: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
+                    limitt: $scope.pagination.itemsPerPage,
+                    sortBy: $scope.sortBy.column,
+                    sortDir: $scope.sortBy.dir
+                };
+
+                function success(res) {
+                    $scope.pagination.totalItems = res.data.total;
+                    $scope.signals = res.data.signals;
                 }
 
+                function error(err) {
+                    Notification.error('Ups! there was an error trying to load providers!');
+                }
+
+                LiveSignalsService.query($scope.filters.product.name.toLowerCase(), params)
+                    .then(success, error);
+            };
+
+            vm.init = function () {
+                $scope.filters.product = $scope.filters.products[0];
                 vm.getLiveSignals();
-            }
-        };
-
-        $scope.openDeleteConfirm = function (id) {
-            var modalOptions = {
-                closeButtonText: 'Cancel',
-                actionButtonText: 'Delete Signal',
-                headerText: 'Delete Signal?',
-                bodyText: 'Are you sure you want to delete this Signal?'
             };
 
-            modalService.showModal({}, modalOptions).then(function (result) {
-                LiveSignalsService.destroy(id).then(vm.successDelete, vm.errorDelete);
-            });
-        };
-
-        vm.successDelete = function (res) {
-            vm.getLiveSignals();
-            Notification.success('Live Signal was removed successfully!');
-        };
-
-        vm.errorDelete = function (err) {
-            Notification.error('Ups! there was an error trying to remove this Live Signal!');
-        };
-
-        vm.getLiveSignals = function () {
-
-            var params = {
-                offset: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
-                limitt: $scope.pagination.itemsPerPage,
-                sortBy: $scope.sortBy.column,
-                sortDir: $scope.sortBy.dir
-            };
-
-            function success(res) {
-                $scope.pagination.totalItems = res.data.total;
-                $scope.signals = res.data.signals;
-            }
-
-            function error(err) {
-                Notification.error('Ups! there was an error trying to load providers!');
-            }
-
-            LiveSignalsService.query($scope.filters.product.name.toLowerCase(), params)
-                .then(success, error);
-        };
-
-        vm.init = function () {
-            $scope.filters.product = $scope.filters.products[0];
-            vm.getLiveSignals();
-        };
-
-        vm.init();
-    }]);
+            vm.init();
+        }]);

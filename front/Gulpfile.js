@@ -51,7 +51,7 @@ gulp.task('test', function () {
 gulp.task('build', function (callback) {
     runSequence('clean:dist',
         'jshint',
-        ['js:vendor', 'js:templates', 'css', 'fonts', 'images', 'svg'],
+        ['js:vendor', 'js:templates', 'css', 'fonts', 'sounds', 'images', 'svg'],
         'js:files',
         'html',
         callback);
@@ -60,7 +60,7 @@ gulp.task('build', function (callback) {
 gulp.task('production', function (callback) {
     runSequence(['clean:dist'],
         'jshint',
-        ['js:vendor', 'js:templates', 'css', 'fonts', 'images', 'svg'],
+        ['js:vendor', 'js:templates', 'css', 'fonts', 'sounds', 'images', 'svg'],
         'js:files',
         'compile:js',
         'compile:clean',
@@ -218,6 +218,12 @@ gulp.task('svg', function () {
 gulp.task('fonts', function () {
     return gulp.src(config.assets.fonts.input)
         .pipe(gulp.dest(config.assets.fonts.output));
+});
+
+// Copy sound files into output folder
+gulp.task('sounds', function() {
+    return gulp.src(config.assets.sounds.input)
+        .pipe(gulp.dest(config.assets.sounds.output));
 });
 
 // Copy image files into output folder
@@ -417,6 +423,17 @@ gulp.task('watch', function () {
         })
         .on('unlink', function (file) {
             runSequence('fonts', 'refresh');
+        });
+
+    watch(config.assets.sounds.input)
+        .on('change', function (file) {
+            runSequence('sounds', 'refresh');
+        })
+        .on('add', function (file) {
+            runSequence('sounds', 'refresh');
+        })
+        .on('unlink', function (file) {
+            runSequence('sounds', 'refresh');
         });
 
     watch(['src/**/*.less', 'src/**/*.css'])

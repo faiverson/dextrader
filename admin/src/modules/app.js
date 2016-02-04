@@ -22,7 +22,8 @@ angular.module('app', [
         'app.user-profile',
         'app.testimonials',
         'app.live-signals',
-        'app.trainings'
+        'app.trainings',
+        'app.socket-services'
     ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {

@@ -52,7 +52,8 @@ module.exports = {
                 'vendor/angular-ui-mask/dist/mask.js',
                 'vendor/angular-loading-bar/build/loading-bar.js',
                 'vendor/angular-ui-bootstrap-datetimepicker/datetimepicker.js',
-                'vendor/angular-socket-io/socket.js'
+                'vendor/angular-socket-io/socket.js',
+                'vendor/angular-audio/app/angular.audio.js'
             ],
             output: 'vendor.js'
         },
@@ -95,6 +96,10 @@ module.exports = {
         svg: {
             input: 'src/assets/**/*.svg',
             output: '../public_html/front/assets/'
+        },
+        sounds: {
+            input: ['src/assets/sounds/**/*.{mp3,ogg}'],
+            output: '../public_html/front/assets/sounds/'
         }
     },
     docs: {

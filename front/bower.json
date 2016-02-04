@@ -20,7 +20,8 @@
     "angular-file-saver": "~1.0.2",
     "angular-loading-bar": "~0.8.0",
     "angular-ui-bootstrap-datetimepicker": "~0.14.4",
-    "angular-socket-io": "~0.7.0"
+    "angular-socket-io": "~0.7.0",
+    "angular-audio": "^1.7.1"
   },
   "devDependencies": {
     "angular-cookies": "~1.4.7",

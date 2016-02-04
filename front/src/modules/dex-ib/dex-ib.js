@@ -1,4 +1,4 @@
-angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-form', 'app.sign-up-modal-form', 'app.socket-services'])
+angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-form', 'app.sign-up-modal-form', 'app.socket-services', 'ngAudio'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('dex_ib', {
@@ -93,9 +93,7 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
     .controller('DexIBCtrl', ['$scope', '$state', 'AuthService', function ($scope, $state, AuthService) {
         $scope.isLoggedIn = AuthService.isLoggedIn;
 
-        if (AuthService.isLoggedIn()) {
-            $state.go('dex_ib.certification_training');
-        } else {
+        if (!AuthService.isLoggedIn()) {
             $state.go('dex_ib.upgrade');
         }
 
@@ -225,8 +223,9 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
         };
     }])
 
-    .controller('LiveSignalsCtrl', ['$scope', 'LiveSignalsService', 'DexTraderSocket', function ($scope, LiveSignalsService, DexTraderSocket) {
+    .controller('LiveSignalsCtrl', ['$scope', 'LiveSignalsService', 'DexTraderSocket', 'ngAudio', 'Notification', function ($scope, LiveSignalsService, DexTraderSocket, ngAudio, Notification) {
         var vm = this;
+        $scope.sound = ngAudio.load("/front/assets/sounds/step-alert.mp3");
 
         $scope.pagination = {
             totalItems: 20,
@@ -302,11 +301,19 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
             }
         });
 
+        $scope.$on("$destroy", function(){
+            DexTraderSocket.removeAllListeners();
+        });
+
         DexTraderSocket.on("signal.add", function (data) {
+            $scope.sound.play();
+            Notification.success('New signal added!');
             vm.getLiveSignals();
         });
 
         DexTraderSocket.on("signal.update", function (data) {
+            $scope.sound.play();
+            Notification.warning('Signal Updated!');
             vm.getLiveSignals();
         });
 
