@@ -158,7 +158,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
     }])
 
-    .factory('httpRequestInterceptor', ['localStorageService', function (localStorageService) {
+    .factory('httpRequestInterceptor', ['localStorageService', '$q', function (localStorageService, $q) {
         return {
             request: function ($config) {
                 var header;
@@ -168,6 +168,15 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                     $config.headers.Authorization = header;
                 }
                 return $config;
+            },
+            'responseError': function(rejection) {
+                // do something on error
+                if(rejection.data.error === "token_expired"){
+                    localStorageService.clearAll();
+                    window.location.href = '/login';
+                }
+
+                return $q.reject(rejection);
             }
         };
     }])
