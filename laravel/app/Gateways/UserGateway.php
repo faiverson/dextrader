@@ -64,6 +64,11 @@ class UserGateway extends AbstractGateway
         return $this->repository->addRole($user_id, $role_id);
     }
 
+	public function deatachRole($user_id, $role_id)
+	{
+		return $this->repository->detachRole($user_id, $role_id);
+	}
+
     public function actives($columns = array('*'), $limit = null, $offset = null, $order_by = null)
     {
         return $this->repository->actives($columns, $limit, $offset, $order_by);

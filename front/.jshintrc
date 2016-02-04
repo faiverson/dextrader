@@ -26,6 +26,7 @@
     "process": true,
     "moment": true,
     "zEmbed": true,
-    "zE": true
+    "zE": true,
+    "io": true
   }
 }

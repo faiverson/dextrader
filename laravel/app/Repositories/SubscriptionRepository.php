@@ -27,6 +27,14 @@ class SubscriptionRepository extends AbstractRepository implements SubscriptionR
 		return $query->get($columns);
 	}
 
+	public function findProductByUser($product_id, $user_id) {
+		$query = $this->model->with('card')->with('product')->with('address')
+			->where('product_id', $product_id)
+			->where('user_id', $user_id);
+
+		return $query->first();
+	}
+
 	public function isOwner($user_id, $subscription_id) {
 		return $this->model->where('status', 'active')->where('user_id', $user_id)->where('subscription_id', $subscription_id)->count();
 	}

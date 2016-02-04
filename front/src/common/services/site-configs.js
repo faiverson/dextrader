@@ -6,7 +6,8 @@ angular.module('app.site-configs', [])
 		SITE_URL: '@@SITE_URL',
 		SITE_NAME: '@@SITE_NAME',
 		EWALLET_LOGIN: '@@EWALLET_LOGIN',
-		SECURE_URL: '@@SECURE_URL'
+		SECURE_URL: '@@SECURE_URL',
+		SOCKET_HOST: '@@SOCKET_HOST'
 	};
 
 	return {

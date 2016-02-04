@@ -1,4 +1,4 @@
-angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.shared-helpers'])
+angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.shared-helpers', 'btford.socket-io'])
 
     .factory('AuthService', ['$http', '$q', '$site-configs', 'localStorageService', 'jwtHelper', '$objects', '$filter', '$rootScope', function ($http, $q, $configs, localStorageService, jwtHelper, $objects, $filter, $rootScope) {
 

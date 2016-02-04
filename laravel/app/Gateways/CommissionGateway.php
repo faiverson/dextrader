@@ -53,6 +53,28 @@ class CommissionGateway extends AbstractGateway {
 		}
 	}
 
+	public function refund(array $data)
+	{
+		if(array_key_exists('invoice_id', $data)) {
+			$comms = $this->repository->findByInvoice($data['invoice_id']);
+			$now = new DateTime('now');
+			foreach($comms as $c) {
+				$this->repository->update([
+					'refund_dt' => $now->format('Y-m-d H:i:s'),
+					'refund_by' => $data['admin_id'],
+					'status' => 'refund',
+					'type' => 'refund'
+				], $c->id);
+
+				$this->totalGateway->add([
+					'user_id' => $c->to_user_id,
+					'pending' => $c->amount * (-1),
+					'holdback' => $c->holdback * (-1)
+				]);
+			}
+		}
+	}
+
 	/**
 	 *
 	 * Check if there is a parent and apply a comms

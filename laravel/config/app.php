@@ -245,5 +245,4 @@ return [
         'Hit' => App\Models\Hit::class,
         'Tag' => App\Models\Tag::class,
     ],
-
 ];

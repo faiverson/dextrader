@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Events\AddSignalEvent;
+use App\Events\UpdateSignalEvent;
 use App\Gateways\LiveSignalGateway;
 use Illuminate\Http\Request;
 use Config;
 use Event;
-use DateTime;
 use Log;
 
 class LiveSignalsController extends Controller
@@ -68,14 +68,12 @@ class LiveSignalsController extends Controller
 
 	public function store($data, $type)
 	{
-//		Event::fire(new AddSignalEvent($data));
-//		return response()->ok();
 		$response = $this->gateway->add($data, $type);
 		if(!$response) {
 			Log::info('Error on add a signal', $data);
 			return response()->error($this->gateway->errors());
 		}
-//		Event::fire(new AddSignalEvent($response->toArray()));
+		Event::fire(new AddSignalEvent($response->toArray()));
 		return response()->ok($response);
 	}
 
@@ -112,6 +110,7 @@ class LiveSignalsController extends Controller
 			Log::info('The signal is not in database: ', $data);
 			return response()->error('The signal is not in database');
 		}
+
 		return $this->update($signal->id, $data['type_product'], $data);
 	}
 
@@ -135,7 +134,8 @@ class LiveSignalsController extends Controller
 			Log::info('The signal update in database: ', $data);
 			return response()->error($this->gateway->errors());
 		}
-		return response()->ok($response);
+		Event::fire(new UpdateSignalEvent($data));
+		return response()->ok();
 	}
 
 	public function destroy(Request $request)
