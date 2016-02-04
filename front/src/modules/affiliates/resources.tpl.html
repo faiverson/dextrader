@@ -3,7 +3,13 @@
         <h2>Affiliate Resources</h2>
 
         <div id="video" class="aff-resource-preview">
-            <h2 class="aff-resource-type">Short Emails </h2>
+            <h2 class="aff-resource-type">{{selectedResource.name}}</h2>
+
+            <youtube-video video-id="selectedResource.video_id"
+                           data-ng-if="selectedResource.video_id"
+                           player-width="'598px'"
+                           player-height="'350px'"
+                           player-vars="playerVars"></youtube-video>
 
             <uib-accordion close-others="oneAtATime" class="custom-accordion">
                 <uib-accordion-group data-ng-repeat="item in selectedResource.items" is-open="item.isDefault">

@@ -36,33 +36,23 @@ class TrainingsSeeder extends Seeder
 	public function addCertification()
 	{
 		Training::create([
-			'title' => 'Belgrano',
-			'time' => '04:32',
-			'video_id' => 'i5-6i6medlI',
-			'filename' => 'i5-6i6medlI.mp4',
+			'title' => 'Welcome To Dex IB',
+			'time' => '00:01:54',
+			'video_id' => 'Tgm7ZpwuVfA',
+			'filename' => 'Tgm7ZpwuVfA.mp4',
 			'description' => 'Music video by Pirates (C) 2009 Kempes',
 			'type' => 'certification',
-			'unlock_at' => 50
+			'unlock_at' => 90
 		]);
 
 		Training::create([
-			'title' => 'Pirates',
-			'time' => '03:32',
-			'video_id' => '9A1GlYP3Dyk',
-			'filename' => '9A1GlYP3Dyk.mp4',
+			'title' => 'Risk and Money Management',
+			'time' => '00:18:26',
+			'video_id' => 'aKUGMvc_KNo',
+			'filename' => 'aKUGMvc_KNo.mp4',
 			'description' => 'Music video by Pirates (C) 2012 Kempes',
 			'type' => 'certification',
-			'unlock_at' => 23
-		]);
-
-		Training::create([
-			'title' => 'Light blues',
-			'time' => '02:32',
-			'video_id' => 'Dy-rOiBS_T4',
-			'filename' => 'Dy-rOiBS_T4.mp4',
-			'description' => 'Music video by Pirates (C) 2009 Kempes',
-			'type' => 'certification',
-			'unlock_at' => 120
+			'unlock_at' => 1020
 		]);
 	}
 
@@ -86,49 +76,49 @@ class TrainingsSeeder extends Seeder
 		]);
 		Training::create([
 			'title' => 'Emailing Leads',
-			'time' => '18:22',
-			'video_id' => 'ubvV498pyIM',
-			'filename' => 'ubvV498pyIM.mp4',
+			'time' => '00:02:24',
+			'video_id' => 'CEwp3klqfc8',
+			'filename' => 'CEwp3klqfc8.mp4',
 			'description' => 'Emailing Leads',
 			'type' => 'affiliates'
 		]);
 		Training::create([
 			'title' => 'Facebook Events',
-			'time' => '03:20',
-			'video_id' => 'Qq-I4orlEhE',
-			'filename' => 'Qq-I4orlEhE.mp4',
+			'time' => '00:06:07',
+			'video_id' => '7D_4xe65RgI',
+			'filename' => '7D_4xe65RgI.mp4',
 			'description' => 'Facebook Events',
 			'type' => 'affiliates'
 		]);
 		Training::create([
 			'title' => 'Twitter Crowdfinder',
-			'time' => '01:13',
-			'video_id' => 'Qq-I4orlEhE',
-			'filename' => 'Qq-I4orlEhE.mp4',
+			'time' => '00:05:05',
+			'video_id' => 'p87mxQN0xe4',
+			'filename' => 'p87mxQN0xe4.mp4',
 			'description' => 'Twitter Crowdfinder',
 			'type' => 'affiliates'
 		]);
 		Training::create([
 			'title' => 'Creating Videos',
-			'time' => '12:33',
-			'video_id' => 'Qq-I4orlEhE',
-			'filename' => 'Qq-I4orlEhE.mp4',
+			'time' => '00:02:04',
+			'video_id' => 'OnoleN8QD0M',
+			'filename' => 'OnoleN8QD0M.mp4',
 			'description' => 'Creating Videos',
 			'type' => 'affiliates'
 		]);
 		Training::create([
 			'title' => 'Posting Banners',
-			'time' => '02:33',
-			'video_id' => 'Qq-I4orlEhE',
-			'filename' => 'Qq-I4orlEhE.mp4',
+			'time' => '00:02:38',
+			'video_id' => 'c3tcPE_K1vc',
+			'filename' => 'c3tcPE_K1vc.mp4',
 			'description' => 'Posting Banners',
 			'type' => 'affiliates'
 		]);
 		Training::create([
 			'title' => 'Referring Affiliates',
-			'time' => '05:53',
-			'video_id' => 'Qq-I4orlEhE',
-			'filename' => 'Qq-I4orlEhE.mp4',
+			'time' => '00:02:06',
+			'video_id' => 'wBeXpSp5wC0',
+			'filename' => 'wBeXpSp5wC0.mp4',
 			'description' => 'Referring Affiliates',
 			'type' => 'affiliates'
 		]);

@@ -95,6 +95,8 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
 
         if (!AuthService.isLoggedIn()) {
             $state.go('dex_ib.upgrade');
+        } else if ($state.current.name === 'dex_ib') {
+            $state.go('dex_ib.certification_training');
         }
 
     }])
@@ -301,7 +303,7 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
             }
         });
 
-        $scope.$on("$destroy", function(){
+        $scope.$on("$destroy", function () {
             DexTraderSocket.removeAllListeners();
         });
 
@@ -348,7 +350,7 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
         vm.init();
     }])
 
-    .controller('DexScoreCtrl', ['$scope', 'ProvidersService', 'Notification', function ($scope, ProvidersService, Notification) {
+    .controller('DexScoreCtrl', ['$scope', 'ProvidersService', 'Notification', '$uibModal', function ($scope, ProvidersService, Notification, $uibModal) {
         var vm = this;
 
         $scope.pagination = {
@@ -373,6 +375,25 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
 
                 vm.getProvider();
             }
+        };
+
+        $scope.openProviderReview = function (provider) {
+            var modalInstance = $uibModal.open({
+                templateUrl: 'provider-review.tpl.html',
+                controller: ['$scope', 'provider', '$uibModalInstance', function ($scope, provider, $uibModalInstance) {
+                    $scope.provider = provider;
+
+                    $scope.close = function () {
+                        $uibModalInstance.dismiss('dismiss');
+                    };
+                }],
+                size: 'lg',
+                resolve: {
+                    provider: function () {
+                        return provider;
+                    }
+                }
+            });
         };
 
         vm.getProvider = function () {
@@ -497,10 +518,10 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
                 controller: 'SignUpModalFormCtrl',
                 size: 'md',
                 resolve: {
-                    enroller: function(){
-                        return  $stateParams.user;
+                    enroller: function () {
+                        return $stateParams.user;
                     },
-                    tag: function(){
+                    tag: function () {
                         return $stateParams.tag;
                     }
                 }

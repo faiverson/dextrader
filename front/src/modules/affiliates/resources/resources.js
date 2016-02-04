@@ -6,20 +6,35 @@ angular.module('app.affiliates-resources', [])
                 "id": "aff-res-fbw",
                 "items": [
                     {
-                        "title": "Short Email #1:",
-                        "subtitle": "I really, really like you",
+                        "title": "",
+                        "subtitle": "Make Money Trading Binary Options, Without Risking All Your Money",
                         "templateUrl": "modules/affiliates/resources/fb-wall-posts/short-email-1.tpl.html",
                         "isDefault": true
                     },
                     {
-                        "title": "Short Email #2:",
-                        "subtitle": "TRUTH",
+                        "title": "",
+                        "subtitle": "Is it a biopsy or a binary?",
                         "templateUrl": "modules/affiliates/resources/fb-wall-posts/short-email-2.tpl.html"
                     },
                     {
-                        "title": "Short Email #3:",
-                        "subtitle": "If you’re already RICH… don’t open this email",
+                        "title": "",
+                        "subtitle": "URGENT: Do not ignore… This is better than a financial psychic!",
                         "templateUrl": "modules/affiliates/resources/fb-wall-posts/short-email-3.tpl.html"
+                    },
+                    {
+                        "title": "",
+                        "subtitle": "How long does it take you to earn $100 at your job?",
+                        "templateUrl": "modules/affiliates/resources/fb-wall-posts/short-email-4.tpl.html"
+                    },
+                    {
+                        "title": "",
+                        "subtitle": "Seize this cut throat price RIGHT NOW or risk massive regret",
+                        "templateUrl": "modules/affiliates/resources/fb-wall-posts/short-email-5.tpl.html"
+                    },
+                    {
+                        "title": "",
+                        "subtitle": "Do you want to MAKE money or EARN money?",
+                        "templateUrl": "modules/affiliates/resources/fb-wall-posts/short-email-6.tpl.html"
                     }
                 ]
             },
@@ -28,86 +43,92 @@ angular.module('app.affiliates-resources', [])
                 "id": "aff-res-fbm",
                 "items": [
                     {
-                        "title": "Short Email #1:",
-                        "subtitle": "I really, really like you",
+                        "title": "",
+                        "subtitle": "If you’re close and can get straight to the point:",
                         "templateUrl": "modules/affiliates/resources/fb-private-messages/short-email-1.tpl.html",
                         "isDefault": true
                     },
                     {
-                        "title": "Short Email #2:",
-                        "subtitle": "TRUTH",
+                        "title": "",
+                        "subtitle": "If you’re not very close but still want to connect.",
                         "templateUrl": "modules/affiliates/resources/fb-private-messages/short-email-2.tpl.html"
-                    },
-                    {
-                        "title": "Short Email #3:",
-                        "subtitle": "If you’re already RICH… don’t open this email",
-                        "templateUrl": "modules/affiliates/resources/fb-private-messages/short-email-3.tpl.html"
                     }
                 ]
             },
             {
-                "name": "Long Emails",
-                "id": "aff-res-lem",
-                "items": [
-                    {
-                        "title": "Short Email #1:",
-                        "subtitle": "I really, really like you",
-                        "templateUrl": "modules/affiliates/resources/long-emails/short-email-1.tpl.html",
-                        "isDefault": true
-                    },
-                    {
-                        "title": "Short Email #2:",
-                        "subtitle": "TRUTH",
-                        "templateUrl": "modules/affiliates/resources/long-emails/short-email-2.tpl.html"
-                    },
-                    {
-                        "title": "Short Email #3:",
-                        "subtitle": "If you’re already RICH… don’t open this email",
-                        "templateUrl": "modules/affiliates/resources/long-emails/short-email-3.tpl.html"
-                    }
-                ]
-            },
-            {
-                "name": "Short Emails",
+                "name": "Promo Emails",
                 "id": "aff-res-sem",
                 "items": [
                     {
-                        "title": "Short Email #1:",
-                        "subtitle": "I really, really like you",
-                        "templateUrl": "modules/affiliates/resources/short-emails/short-email-1.tpl.html",
+                        "title": "Email #1:",
+                        "subtitle": "",
+                        "templateUrl": "modules/affiliates/resources/promo-emails/promo-email-1.tpl.html",
                         "isDefault": true
                     },
                     {
-                        "title": "Short Email #2:",
-                        "subtitle": "TRUTH",
-                        "templateUrl": "modules/affiliates/resources/short-emails/short-email-2.tpl.html"
+                        "title": "Email #2:",
+                        "subtitle": "",
+                        "templateUrl": "modules/affiliates/resources/promo-emails/promo-email-2.tpl.html",
+                        "isDefault": true
                     },
                     {
-                        "title": "Short Email #3:",
-                        "subtitle": "If you’re already RICH… don’t open this email",
-                        "templateUrl": "modules/affiliates/resources/short-emails/short-email-3.tpl.html"
+                        "title": "Email #3:",
+                        "subtitle": "",
+                        "templateUrl": "modules/affiliates/resources/promo-emails/promo-email-3.tpl.html",
+                        "isDefault": true
+                    },
+                    {
+                        "title": "Email #4:",
+                        "subtitle": "",
+                        "templateUrl": "modules/affiliates/resources/promo-emails/promo-email-4.tpl.html",
+                        "isDefault": true
+                    },
+                    {
+                        "title": "Email #5:",
+                        "subtitle": "",
+                        "templateUrl": "modules/affiliates/resources/promo-emails/promo-email-5.tpl.html",
+                        "isDefault": true
+                    },
+                    {
+                        "title": "Email #6:",
+                        "subtitle": "",
+                        "templateUrl": "modules/affiliates/resources/promo-emails/promo-email-6.tpl.html",
+                        "isDefault": true
+                    },
+                    {
+                        "title": "Email #7:",
+                        "subtitle": "",
+                        "templateUrl": "modules/affiliates/resources/promo-emails/promo-email-7.tpl.html",
+                        "isDefault": true
                     }
                 ]
             },
             {
-                "name": "Banners",
-                "id": "aff-res-ban",
+                "name": "Facebook Events",
+                "id": "aff-res-fbw",
                 "items": [
                     {
-                        "title": "Short Email #1:",
-                        "subtitle": "I really, really like you",
-                        "templateUrl": "modules/affiliates/resources/banners/short-email-1.tpl.html",
+                        "title": "",
+                        "subtitle": "Facebook Event Invite Scripts",
+                        "templateUrl": "modules/affiliates/resources/fb-events/fb-event-1.tpl.html",
                         "isDefault": true
-                    },
+                    }
+                ]
+            },
+            {
+                "name": "Banner Advertising",
+                "id": "aff-res-ban",
+                "items": []
+            },
+            {
+                "name": "Affiliate Emails",
+                "id": "aff-res-sem",
+                "items": [
                     {
-                        "title": "Short Email #2:",
-                        "subtitle": "TRUTH",
-                        "templateUrl": "modules/affiliates/resources/banners/short-email-2.tpl.html"
-                    },
-                    {
-                        "title": "Short Email #3:",
-                        "subtitle": "If you’re already RICH… don’t open this email",
-                        "templateUrl": "modules/affiliates/resources/banners/short-email-3.tpl.html"
+                        "title": "",
+                        "subtitle": "Email #1",
+                        "templateUrl": "modules/affiliates/resources/referring-affiliates/email-1.tpl.html",
+                        "isDefault": true
                     }
                 ]
             }

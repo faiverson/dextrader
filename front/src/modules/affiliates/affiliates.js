@@ -93,6 +93,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                             window.location.href = $configs.EWALLET_LOGIN;
                         } else {
                             Notification.success('Account has created successfully!');
+                            window.location.href = $configs.EWALLET_LOGIN;
                         }
                     },
                     function (err) {

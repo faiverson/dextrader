@@ -1,5 +1,5 @@
 <section id="content" class="dex-score">
-    <h2 class="spaced">Trading Signals Providers</h2>
+    <h2 class="spaced">Trading Brokers</h2>
 
     <table class="base-table table-dexscore">
         <thead>
@@ -62,3 +62,14 @@
     </div>
     <div class="spacer-big"></div>
 </section>
+<script type="text/ng-template" id="provider-review.tpl.html">
+    <div class="modal-header">
+        <h3 class="modal-title">{{provider.name}}</h3>
+    </div>
+    <div class="modal-body">
+        <p>{{provider.review}}</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="close()">Close</button>
+    </div>
+</script>
