@@ -459,6 +459,8 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
 
         $scope.orderNowLink = '/ib';
 
+        $scope.video_id = '';
+
         vm.getTestimonials = function () {
 
             function success(res) {

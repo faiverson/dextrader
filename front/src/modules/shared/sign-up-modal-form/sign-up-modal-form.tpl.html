@@ -11,41 +11,6 @@
                 <h3 id="co-f1">Account Details</h3>
 
                 <div>
-
-                    <div class="form-group has-feedback" data-show-errors>
-                        <label for="email">Email</label>
-                        <input type="email"
-                               name="email"
-                               autocomplete="address-level4"
-                               class="form-control"
-                               id="email"
-                               required
-                               data-ng-model="userData.email">
-                    </div>
-
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="form-group has-feedback" data-show-errors>
-                                <label for="email">Username</label>
-                                <input type="text"
-                                       name="username"
-                                       class="form-control"
-                                       id="username"
-                                       data-ng-model="userData.username">
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="form-group has-feedback" data-show-errors>
-                                <label for="password">Password</label>
-                                <input type="password"
-                                       name="password"
-                                       class="form-control"
-                                       id="password"
-                                       data-ng-model="userData.password">
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="row">
                         <div class="col-xs-6">
                             <div class="form-group has-feedback" data-show-errors>
@@ -72,6 +37,30 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group has-feedback" data-show-errors>
+                                <label for="email">Email</label>
+                                <input type="email"
+                                       name="email"
+                                       autocomplete="address-level4"
+                                       class="form-control"
+                                       id="email"
+                                       required
+                                       data-ng-model="userData.email">
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group has-feedback" data-show-errors>
+                                <label for="password">Password</label>
+                                <input type="password"
+                                       name="password"
+                                       class="form-control"
+                                       id="password"
+                                       data-ng-model="userData.password">
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group has-feedback" data-show-errors>
                         <label for="phone">Mobile Phone</label>
                         <input type="text"
@@ -83,18 +72,6 @@
                                data-ng-model="userData.phone">
                     </div>
                 </div>
-
-            </div>
-            <div class="form-group has-feedback">
-                <input type="checkbox"
-                       name="terms"
-                       id="terms"
-                       data-ng-model="userData.terms"
-                       required>
-                <label for="terms" uib-tooltip="Check terms!" tooltip-is-open="showAgreementWarning"
-                       tooltip-class="warning">
-                    I agree to the payment terms as stated above
-                </label>
             </div>
         </div>
     </form>

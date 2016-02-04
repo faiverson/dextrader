@@ -14,6 +14,10 @@ angular.module('app.sign-up-modal-form', [])
 
             };
 
+            $scope.close = function () {
+                $uibModalInstance.dismiss('close');
+            };
+
             $scope.closeAndNew = function () {
                 $uibModalInstance.dismiss('close');
                 $state.go('user.billing');
@@ -21,9 +25,10 @@ angular.module('app.sign-up-modal-form', [])
 
             $scope.send = function () {
                 var proms = [];
-                $scope.showAgreementWarning = angular.isUndefined($scope.userData.terms);
 
                 if ($scope.formCheckout.$valid) {
+
+                    $scope.userData.username = $scope.userData.email.split('@')[0];
 
                     UserService.signUp($scope.userData)
                         .then(vm.success, vm.error);

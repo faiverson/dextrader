@@ -18,18 +18,18 @@ class MarketingLinksSeeder extends Seeder
 		]);
 
 		MarketingLink::create([
-			'title' => 'IB sales',
+			'title' => 'Dex IB Sales Page',
 			'campaign_id' => $fc->id,
-			'description' => 'IB sale page',
+			'description' => 'This is where you send someone who is interested in learning about the DEX IB product.',
 			'image' => '/front/assets/images/ib-sales.png',
 			'link' => 'http://dextrader.com/ib',
 			'products' => '1'
 		]);
 
 		MarketingLink::create([
-			'title' => 'IB checkout',
+			'title' => 'Dex IB Checkout Page',
 			'campaign_id' => $fc->id,
-			'description' => 'IB checkout page',
+			'description' => 'This is where you send someone who is interested in purchasing the DEX IB product.',
 			'image' => '/front/assets/images/ib-checkout.png',
 			'link' => 'https://secure.dextrader.com/ib',
 			'products' => '1,2,3,4',
