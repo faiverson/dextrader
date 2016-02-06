@@ -9,13 +9,13 @@ Route::group(['namespace' => 'Auth', 'prefix' => 'api'], function () {
 });
 
 
-Route::get('/testing', function() {
-	$invoice = \App\Models\Subscription::find(8);
-	Event::fire(new \App\Events\RefundEvent([
-		'invoice_id' => 4,
-		'admin_id' => 4
-	]));
-});
+//Route::get('/testing', function() {
+//	$invoice = \App\Models\Subscription::find(8);
+//	Event::fire(new \App\Events\RefundEvent([
+//		'invoice_id' => 4,
+//		'admin_id' => 4
+//	]));
+//});
 //Route::get('/testing', function() {
 //	$redis = \Illuminate\Support\Facades\Redis::connection();
 //	$redis->set("fafa", "jojo!");
