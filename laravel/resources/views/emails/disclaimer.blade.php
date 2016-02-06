@@ -1,0 +1,5 @@
+<p>DISCLAIMER: We're excited to send you this email, however please keep in mind that it is automatically generated and is subject to final commission accounting prior to payout. This email is not a guarantee of commission or earnings and any/all commissions are only made final when loaded onto your chosen payment method (e-wallet)</p>
+<p>IMPORTANT MESSAGE: We are dedicated to customer support, and solving your problems. If you experience any technical issues with our system, compensation plan, have a billing question. Please submit a ticket at - https://ourcityinvestments.zendesk.com/ or email - support@dextrader.com</p>
+<p>Our staff knows to solve billing issues first, because your information and account is always safe and secure at Dex Trader - we're dedicated to your success. Thank you.</p>
+<p>Dex Trader, PO Box 3, Landing, NJ 07850</p>
+<p>To unsubscribe from future emails, <a href="{{ Config::get('app.url') . '/profile/settings' }}">click here</a></p>

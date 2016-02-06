@@ -27,6 +27,6 @@ class SubscriptionCommissionListener
      */
     public function handle(SubscriptionRenewedEvent $event)
     {
-		$this->gateway->add($event->data);
+		$this->gateway->add($event->data->toArray());
     }
 }

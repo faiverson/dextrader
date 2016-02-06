@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Events\Event;
+use App\Models\Invoice;
 use App\Models\Subscription;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -16,9 +17,9 @@ class SubscriptionRenewedEvent extends Event
 	 *
 	 * @return void
 	 */
-	public function __construct(array $data)
+	public function __construct(Invoice $invoice)
 	{
-		$this->data = $data;
+		$this->data = $invoice;
 	}
 
 	/**

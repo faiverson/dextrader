@@ -27,6 +27,9 @@ return [
     */
 
     'url' => env('URL', 'http://localhost:8000'),
+
+	'api' => env('API_URL', 'http://localhost:8000/api'),
+
     // the admin section
     'admin' => env('ADMIN_URL', 'http://localhost:8005'),
 

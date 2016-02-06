@@ -6,6 +6,7 @@ use App\Events\SubscriptionCancelEvent;
 use App\Gateways\UserGateway;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Libraries\getResponse\GetResponse;
 
 class GetResponseInactiveListener
 {
@@ -34,7 +35,7 @@ class GetResponseInactiveListener
 		$campaign_id = key($this->campaign);
 		// at this point we consider the contact was created
 		// and we need to move the account to the inactive list
-		if($contact->{key($contact)}->campaign != $campaign_id) {
+		if(key($contact) != null && $contact->{key($contact)}->campaign != $campaign_id) {
 			Log::info('Contact moved to dextrader_inactive ', (array) $contact);
 			$this->gr->moveContactToCampaign(key($contact), $campaign_id);
 		}

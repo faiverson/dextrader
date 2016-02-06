@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Sofa\Eloquence\Eloquence; // base trait
 use Sofa\Eloquence\Mutable;
+use Sofa\Eloquence\Mappable;
 use App\Models\InvoiceDetail;
 
 class Invoice extends Model
 {
-	use Eloquence, Mutable;
+	use Eloquence, Mutable, Mappable;
 
 	/**
 	 * The database table used by the model.
@@ -20,11 +21,12 @@ class Invoice extends Model
 
 	protected $dates = ['created_at', 'updated_at'];
 
-	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
+	protected $maps = [
+		'invoice_id' => 'id',
+	];
+
+	protected $appends = array('invoice_id');
+
 	protected $fillable = [
 		'user_id',
 		'first_name',
@@ -57,6 +59,11 @@ class Invoice extends Model
 		'info',
 		'ip_address'
 	];
+
+	public function getInvoiceIdAttribute()
+	{
+		return $this->attributes['invoice_id'];
+	}
 
 	public function getAmountAttribute()
 	{

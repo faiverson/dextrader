@@ -2,9 +2,11 @@
 
 namespace App\Listeners;
 
+use App\Repositories\CommissionRepository;
+use App\Repositories\InvoiceDetailRepository;
+use App\Repositories\ProductRepository;
 use Illuminate\Container\Container as App;
 use App\Gateways\UserGateway;
-use App\Models\Transaction;
 use Snowfire\Beautymail\Beautymail;
 use Config;
 use Illuminate\Queue\InteractsWithQueue;
@@ -13,6 +15,12 @@ use App\Repositories\TransactionRepository;
 
 class EmailEventListener //implements ShouldQueue
 {
+	protected $app;
+	protected $mailer;
+	protected $from;
+	protected $admin;
+	protected $userGateway;
+
 	public function __construct(App $app, Beautymail $bm, UserGateway $userGateway)
 	{
 		$this->app = $app;
@@ -27,74 +35,150 @@ class EmailEventListener //implements ShouldQueue
 		$tr = new TransactionRepository($this->app);
 		$transaction_id = $event->data['orderid'];
 		$transaction = $tr->findWith($transaction_id);
-//		$transaction->email = 'fa.iverson@gmail.com';
 		$this->mailer->send('emails.purchase', ['purchase' => $transaction], function ($message) use ($transaction) {
 			$message
 				->from($this->from)
 				->to($transaction->email)
-				->subject('Yey! Your purchase has been approved!');
+				->subject('Your (product) payment receipt');
 		});
     }
 
 	public function onCommissions($event)
 	{
-		$from = $this->userGateway->find($event->commission->from_user_id);
-		$to = $this->userGateway->find($event->commission->to_user_id);
-		$params = ['from' => $from, 'to' => $to];
-//		$to->email = 'fa.iverson@gmail.com';
-		$this->mailer->send('emails.commission', $params, function ($message) use ($to) {
+		$comm = $event->commission;
+		if($comm->type == 'parent') {
+			$this->onCommissionsParent($event);
+		}
+		else {
+			$invoice_detail_repo = new InvoiceDetailRepository($this->app);
+			$from = $this->userGateway->find($comm->from_user_id);
+			$to = $this->userGateway->find($comm->to_user_id);
+
+			// lets get the products name
+			$invoice_detail = $invoice_detail_repo->findBy('invoice_id', $comm->invoice_id);
+			if($invoice_detail->count() > 0) {
+				$products = array_column($invoice_detail->toArray(), 'product_display_name');
+				$products = implode(' - ', $products);
+			}
+
+			$params = ['from' => $from, 'to' => $to, 'commission' => $comm, 'products' => $products];
+			$this->mailer->send('emails.commission', $params, function ($message) use ($to, $comm) {
+				$message
+					->from($this->from)
+					->to($to->email)
+					->subject('You Just Earned A $' . $comm->amount .' Commission!');
+			});
+		}
+	}
+
+	public function onCommissionsParent($event)
+	{
+		$comm = $event->commission;
+		$commission_repo = new CommissionRepository($this->app);
+		$invoice_detail_repo = new InvoiceDetailRepository($this->app);
+		$commission = $commission_repo->findUserCommisionByInvoice($comm->invoice_id);
+		$from = $this->userGateway->find($commission->from_user_id);
+		$intermediate = $this->userGateway->find($comm->from_user_id);
+		$to = $this->userGateway->find($comm->to_user_id);
+
+		// lets get the products name
+		$invoice_detail = $invoice_detail_repo->findBy('invoice_id', $comm->invoice_id);
+		if($invoice_detail->count() > 0) {
+			$products = array_column($invoice_detail->toArray(), 'product_display_name');
+			$products = implode(' - ', $products);
+		}
+
+		$params = ['from' => $from, 'to' => $to, 'commission' => $comm, 'intermediate' => $intermediate, 'products' => $products];
+		$this->mailer->send('emails.commission', $params, function ($message) use ($to, $comm, $intermediate) {
 			$message
 				->from($this->from)
 				->to($to->email)
-				->subject('Yey! You have a new commission!');
+				->subject($intermediate->fullname . ' just helped you earn $' . $comm->amount .' Commission!');
 		});
 	}
 
 	public function onSubscriptionCancel($event)
 	{
+		$product_repo = new ProductRepository($this->app);
+		$product = $product_repo->find($event->subscription->product_id);
 		$user = $this->userGateway->find($event->subscription->user_id);
-//		$user->email = 'fa.iverson@gmail.com';
-		$this->mailer->send('emails.subscription-cancel', ['user' => $user, 'subscription' => $event->subscription], function ($message) use ($user) {
+		$params = [
+			'user' => $user,
+			'product' => $product
+		];
+		$this->mailer->send('emails.subscription-cancel', $params, function ($message) use ($user, $product) {
 			$message
 				->from($this->from)
 				->to($user->email)
-				->subject('Your subscription has been canceled!');
+				->subject('Your ' . $product->display_name . ' has been cancelled!');
 		});
 	}
 
 	public function onSubscriptionFailed($event)
 	{
+		$product_repo = new ProductRepository($this->app);
+		$product = $product_repo->find($event->subscription->product_id);
 		$user = $this->userGateway->find($event->subscription->user_id);
-//		$user->email = 'fa.iverson@gmail.com';
-		$this->mailer->send('emails.subscription-fail', ['user' => $user, 'subscription' => $event->subscription], function ($message) use ($user) {
+		$params = [
+			'user' => $user,
+			'product' => $product
+		];
+
+		$this->mailer->send('emails.subscription-fail', $params, function ($message) use ($user) {
 			$message
 				->from($this->from)
 				->to($user->email)
-				->subject('Your credit card charge failed!');
+				->subject('URGENT, your payment has failed ' . $user->fullname . '!');
 		});
 	}
 
 	public function onSubscriptionRenewed($event)
 	{
-		$user = $this->userGateway->find($event->data['user_id']);
-//		$user->email = 'fa.iverson@gmail.com';
-		$this->mailer->send('emails.subscription-renewed', ['user' => $user], function ($message) use ($user) {
+		$invoice = $event->data;
+		$user = $this->userGateway->find($invoice->user_id);
+		$invoice_detail_repo = new InvoiceDetailRepository($this->app);
+		$invoice_detail = $invoice_detail_repo->findBy('invoice_id', $invoice->id);
+		if($invoice_detail->count() > 0) {
+			$products = array_column($invoice_detail->toArray(), 'product_display_name');
+			$products = implode(' - ', $products);
+		}
+		$params = [
+			'user' => $user,
+			'invoice' => $invoice,
+			'invoice_detail' => $invoice_detail
+		];
+
+		$this->mailer->send('emails.subscription-renewed', $params, function ($message) use ($user, $products) {
 			$message
 				->from($this->from)
 				->to($user->email)
-				->subject('Your subscription has been renewed!');
+				->subject('Your ' . $products .' monthly payment receipt');
 		});
 	}
 
 	public function onTransactionRefund($event)
 	{
-		$user = $this->userGateway->find($event->data['user_id']);
-//		$user->email = 'fa.iverson@gmail.com';
-		$this->mailer->send('emails.refund', ['user' => $user], function ($message) use ($user) {
+		$data = $event->data;
+		$amount = $data['amount'];
+		$invoice_detail_repo = new InvoiceDetailRepository($this->app);
+		$invoice_detail = $invoice_detail_repo->findBy('invoice_id', $data['invoice_id']);
+		if($invoice_detail->count() > 0) {
+			$products = array_column($invoice_detail->toArray(), 'product_display_name');
+			$products = implode(' - ', $products);
+		}
+
+		$user = $this->userGateway->find($data['user_id']);
+		$params = [
+			'user' => $user,
+			'products' => $products,
+			'amount' => $amount
+		];
+
+		$this->mailer->send('emails.refund', $params, function ($message) use ($user, $products, $amount) {
 			$message
 				->from($this->from)
 				->to($user->email)
-				->subject('Your purchase has been refunded!');
+				->subject('Your $' . $amount . ' ' . $products . ' payment has been refunded!');
 		});
 	}
 

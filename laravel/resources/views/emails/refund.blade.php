@@ -5,11 +5,15 @@
         'level' => 'h1',
     ])
 	@include('beautymail::templates.sunny.contentStart', ['color' => '#0000FF'])
-	<p> Hi {{ $user->fullname }},<br/>
+	<p> Hi {{ $user->fullname }},<br/><br/>
 
-		It is a shame you want remove your subscription. <br />
-		Anyway, your purchase has been refunded! <br>
-		Thanks!
-	</p>
+		By your request, we have refunded your ${{ $amount }}<br/>
+		{{ $products }} payment according to our 30 day<br/>
+		refund policy. Sorry to see you go, good luck!<br/><br/>
+
+		Sincerely,<br>
+		Maxx Fairo
+	</p><br>
+	@include('emails.disclaimer')
 	@include('beautymail::templates.sunny.contentEnd')
 @stop

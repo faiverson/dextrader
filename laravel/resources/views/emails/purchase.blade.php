@@ -6,66 +6,24 @@
         'level' => 'h1',
     ])
 	@include('beautymail::templates.sunny.contentStart', ['color' => '#0000FF'])
-	<h3>Hello {{$purchase->first_name}} {{$purchase->last_name}},</h3>
-	<p> These is the information regarding to your purchase: <br/>
-		<table>
-			<tr>
-				<td>Billing address:</td>
-				<td>{{$purchase->billing_address}}</td>
-			</tr>
-			<tr>
-				<td>Billing country:</td>
-				<td>{{$purchase->billing_country}}</td>
-			</tr>
-			<tr>
-				<td>Billing state:</td>
-				<td>{{$purchase->billing_state}}</td>
-			</tr>
-			<tr>
-				<td>Billing city:</td>
-				<td>{{$purchase->billing_city}}</td>
-			</tr>
-		<tr>
-			<td>Billing zip code:</td>
-			<td>{{$purchase->billing_zip}}</td>
-		</tr>
-			<tr>
-				<td>Billing phone:</td>
-				<td>{{$purchase->billing_phone}}</td>
-			</tr>
-			<tr>
-				<td>Card holder:</td>
-				<td>{{$purchase->card_name}}</td>
-			</tr>
-			<tr>
-				<td>Card number:</td>
-				<td>XXXX-XXXX-XXXX-{{$purchase->card_last_four}}</td>
-			</tr>
-			<tr>
-				@if (count($purchase->detail) === 1)
-					<td>Product:</td>
-					<td>{{$purchase->detail[0]['product_display_name']}}</td>
-				@else
-					<td>Products:</td>
-					<td>
-						<table>
-							@foreach ($purchase->detail as $detail)
-								<tr>
-									<td>Product:</td>
-									<td>{{$detail['product_display_name']}}</td>
-								</tr>
-							@endforeach
-						</table>
-					</td>
-				@endif
+	<h3>Hi {{$purchase->first_name}} {{$purchase->last_name}},</h3>
+	<p>Thanks for your recent (product) payment</p>
+	<p>These is the information regarding to your purchase: <br/>
+		To access your product, please login at the link<br/>
+		below using your email and password.<br/>
 
-				<td>{{$purchase->product_name}}</td>
-			</tr>
-			<tr>
-				<td>Amount:</td>
-				<td>{{$purchase->amount}}</td>
-			</tr>
-		</table>
-	</p>
+		You can login in <a href="{{ Config::get('app.url') . '/login' }}">{{ Config::get('app.url') . '/login' }}</a><br/><br/>
+
+		This message will serve as your receipt.<br/>
+		@foreach ($purchase->detail as $detail)
+		Product: {{ $detail['product_display_name'] }}<br/>
+		@endforeach
+		Price: ${{$purchase->amount}} USD<br/>
+		Payment Date: {{$purchase->created_at}}<br/><br/>
+
+		Sincerely,<br>
+		Maxx Fairo
+	</p><br>
+	@include('emails.disclaimer')
 	@include('beautymail::templates.sunny.contentEnd')
 @stop

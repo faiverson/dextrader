@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-use App\Models\IBSignal;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use DateTime;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,6 +18,10 @@ class AppServiceProvider extends ServiceProvider
 //		Item::created(function ($item) {
 //			Event::fire(new ItemCreated($item));
 //		});
+		Blade::directive('dates', function($expression) {
+			$output = "<?php echo (new DateTime{$expression})->format('l jS F Y'); ?>";
+			return $output;
+		});
     }
 
     /**
