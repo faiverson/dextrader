@@ -36,7 +36,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 },
                 resolve: {
                     product: function () {
-                        return {id: 3, name: 'na', funnel_id: 4};
+                        return {id: 3, name: 'na', funnel_id: 2};
                     }
                 }
             })
@@ -49,7 +49,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 },
                 resolve: {
                     product: function () {
-                        return {id: 4, name: 'fx', funnel_id: 5};
+                        return {id: 4, name: 'fx', funnel_id: 2};
                     }
                 }
             })
@@ -62,7 +62,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 },
                 resolve: {
                     product: function () {
-                        return {id: 5, name: 'academy', funnel_id: 6};
+                        return {id: 5, name: 'academy', funnel_id: 2};
                     }
                 }
             });
@@ -291,6 +291,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 SpecialOffersService.query($scope.formData.funnel_id, $scope.formData.products, checkForOffers)
                     .then(function (res) {
                         $scope.products = res;
+                        console.log(res);
                     });
 
             };

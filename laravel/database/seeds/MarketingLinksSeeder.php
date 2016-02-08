@@ -32,7 +32,7 @@ class MarketingLinksSeeder extends Seeder
 			'description' => 'This is where you send someone who is interested in purchasing the DEX IB product.',
 			'image' => '/front/assets/images/ib-checkout.png',
 			'link' => 'https://secure.dextrader.com/ib',
-			'products' => '1,2,3,4',
+			'products' => '1,2,3,4,5',
 		]);
 
 //		MarketingLink::create([

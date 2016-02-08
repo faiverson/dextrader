@@ -28,7 +28,7 @@ class MarketingLinkGateway extends AbstractGateway {
 	public function getProducts($funnel_id)
 	{
 		$mk = $this->repository->find($funnel_id);
-		if(isset ($mk['products'])){
+		if(isset($mk['products'])){
 			$products = explode(',', $mk->products);
 			return $this->productGateway->findIn($products);
 		}
