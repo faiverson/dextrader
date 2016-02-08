@@ -286,6 +286,12 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 		return $query->where('invoice_id', $invoice_id)->get();
 	}
 
+	public function findUserCommisionByInvoice($invoice_id)
+	{
+		$query =  $this->model;
+		return $query->where('invoice_id', $invoice_id)->where('type', 'enroller')->first();
+	}
+
 	/**
 	 * We calculate when is the following date
 	 * where we make the payments

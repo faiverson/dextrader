@@ -218,6 +218,14 @@ class TransactionGateway extends AbstractGateway {
 	{
 		DB::beginTransaction();
 		try {
+
+			$data = array_filter($data, function($val) {
+				if(is_string($val)) {
+					return trim($val) != '';
+				}
+				return $val != null;
+			});
+
 			if( ! $this->createValidator->with($data)->passes() )
 			{
 				$this->errors = $this->createValidator->errors();
@@ -414,15 +422,9 @@ class TransactionGateway extends AbstractGateway {
 					$this->errors = $this->invoice->errors();
 					return false;
 				}
-
-				Event::fire(new SubscriptionRenewedEvent([
-					'subscription_id' => $data['subscription_id'],
-					'user_id' => $data['user_id'],
-					'enroller_id' => $data['enroller_id'],
-					'invoice_id' => $invoice->id,
-					'amount' => $data['amount']
-				]));
 			}
+
+			Event::fire(new SubscriptionRenewedEvent($invoice));
 		}
 		catch(\Exception $e) {
 			DB::rollback();
@@ -572,6 +574,7 @@ class TransactionGateway extends AbstractGateway {
 				'transactionid' => $ts['transactionid'],
 				'orderid' => $ts['orderid']
 			];
+
 			$gateway = $this->gateway($ts, 'refund');
 
 			// save the response in the transaction no mather what

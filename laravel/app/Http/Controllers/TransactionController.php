@@ -117,7 +117,7 @@ class TransactionController extends Controller
 			return response()->error('Could not create a token', $e->getStatusCode());
 		}
 
-		return response()->ok(compact('token'));
+		return response()->ok(array_merge($response, compact('token')));
 	}
 
 	public function refund(Request $request)

@@ -5,17 +5,24 @@
         'level' => 'h1',
     ])
 	@include('beautymail::templates.sunny.contentStart', ['color' => '#0000FF'])
-	<p> Congrats {{ $to->fullname }}!<br/>
-
-		{{ $from->fullname }} just gave you a commission...<br>
-		Seriously, you just earned a commission from <br>
-		{{ $from->first_name }} ...without doing anything at all! <br><br>
-		Here's their info if you want to welcome them. <br><br>
-		Email: {{ $from->email }} <br>
-		@if ($from->phone != '')
-			Phone: {{ $from->phone }} <br><br>
+	<p> Congrats {{ $to->fullname }}!<br/><br/>
+		@if(!empty($intermediate))
+			{{ $intermediate->fullname }} just helped you earn ${{ $commission->amount }} commission by<br>
+		@else
+		You just earned a ${{ $commission->amount }} commission by<br>
 		@endif
-		Have a great day! <br>
+		selling {{ $products }} to {{ $from->fullname }}<br>
+		{{ $from->fullname }} just gave you a commission...</p>
+
+	<p>Here's their info if you want to contact them. <br><br>
+		Email: {{ $from->email }}
+		@if ($from->phone != '')
+			Phone: {{ $from->phone }}
+		@endif <br><br>
+		Keep up the good work!<br><br>
+		Sincerely,<br>
+		Maxx Fairo
 	</p>
+		@include('emails.disclaimer')
 	@include('beautymail::templates.sunny.contentEnd')
 @stop

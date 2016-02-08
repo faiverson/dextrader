@@ -27,6 +27,6 @@ class CheckoutFailedEvent extends Event
      */
     public function broadcastOn()
     {
-        return [];
+        return ['purchase.failed'];
     }
 }
