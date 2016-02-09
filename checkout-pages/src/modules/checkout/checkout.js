@@ -10,7 +10,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 },
                 resolve: {
                     product: function () {
-                        return {id: 1, name: 'ib', funnel_id: 1};
+                        return {id: 1, name: 'ib', funnel_id: 1, showRecurrentPayment: true};
                     }
                 }
             })
@@ -36,7 +36,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 },
                 resolve: {
                     product: function () {
-                        return {id: 3, name: 'na', funnel_id: 2};
+                        return {id: 3, name: 'na', funnel_id: 2, showRecurrentPayment: true};
                     }
                 }
             })
@@ -49,7 +49,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 },
                 resolve: {
                     product: function () {
-                        return {id: 4, name: 'fx', funnel_id: 2};
+                        return {id: 4, name: 'fx', funnel_id: 2, showRecurrentPayment: true};
                     }
                 }
             })
@@ -62,7 +62,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 },
                 resolve: {
                     product: function () {
-                        return {id: 5, name: 'academy', funnel_id: 2};
+                        return {id: 5, name: 'academy', funnel_id: 2, showRecurrentPayment: false};
                     }
                 }
             });
