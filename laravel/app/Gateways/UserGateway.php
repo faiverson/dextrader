@@ -51,7 +51,17 @@ class UserGateway extends AbstractGateway
             unset($data['full_name']);
         }
 
-        return $this->update($data, $id);
+		$response = $this->update($data, $id);
+		if($response) {
+			if (array_key_exists('roles', $data) && count($data['roles']) > 0) {
+				$user = $this->repository->find($id);
+				$roles = array_column($user->roles->toArray(), 'role_id');
+				$this->repository->detachRoles($id, $roles);
+				$this->repository->addRoles($id, json_decode($data['roles']));
+			}
+		}
+
+        return $response;
     }
 
     public function getIdByUsername($username)

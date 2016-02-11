@@ -36,7 +36,7 @@ class User extends Model implements AuthenticatableContract,
 	protected $getterMutators = [
 		'first_name' => 'strtolower|ucwords',
 		'last_name' => 'strtolower|ucwords',
-		'username' => 'strtolower|ucwords',
+		'username' => 'strtolower',
 		'fullname' => 'strtolower|ucwords',
 		'email' => 'strtolower'
 	];

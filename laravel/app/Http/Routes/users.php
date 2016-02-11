@@ -16,6 +16,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 			Route::post('/users/loginAs/{id}', 'AuthController@loginAs')->where('id', '[0-9]+');
 		});
 
+		Route::post('/users', 'UsersController@store');
 		Route::get('/users/{id}', 'UsersController@show')->where('id', '[0-9]+');
 		Route::put('/users/{id}', 'UsersController@update')->where('id', '[0-9]+');
 		Route::delete('/users/{id}', 'UsersController@destroy')->where('id', '[0-9]+');

@@ -50,6 +50,16 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 		return $user != null ? $user->id : null;
 	}
 
+	public function addRoles($user_id, $roles)
+	{
+		return $this->model->find($user_id)->attachRoles($roles);
+	}
+
+	public function detachRoles($user_id, $roles)
+	{
+		return $this->model->find($user_id)->detachRoles($roles);
+	}
+
 	public function addRole($user_id, $role_id)
 	{
 		return $this->model->find($user_id)->attachRole($role_id);

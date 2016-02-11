@@ -84,7 +84,7 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
                             return role.selected;
                         })
                         .map(function (role) {
-                            return {id: role.id};
+                            return role.role_id;
                         });
 
                     if ($scope.user.password === '******') {
