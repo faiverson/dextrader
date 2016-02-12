@@ -334,7 +334,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
-        function destroy(id) {
+        function destroy(product, id) {
             var deferred = $q.defer(),
                 endpoint = service;
 
@@ -342,7 +342,11 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 deferred.reject('ID field is required!');
             }
 
-            endpoint += '/' + id;
+			if (angular.isUndefined(product)) {
+				deferred.reject('Product field is required!');
+			}
+
+            endpoint += product + '/' + id;
 
             function success(res) {
                 deferred.resolve(res.data);

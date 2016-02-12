@@ -185,7 +185,7 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask', 'app
                 }
             };
 
-            $scope.openDeleteConfirm = function (id) {
+            $scope.openDeleteConfirm = function (product, id) {
                 var modalOptions = {
                     closeButtonText: 'Cancel',
                     actionButtonText: 'Delete Signal',
@@ -194,7 +194,7 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask', 'app
                 };
 
                 modalService.showModal({}, modalOptions).then(function (result) {
-                    LiveSignalsService.destroy(id).then(vm.successDelete, vm.errorDelete);
+                    LiveSignalsService.destroy(product, id).then(vm.successDelete, vm.errorDelete);
                 });
             };
 

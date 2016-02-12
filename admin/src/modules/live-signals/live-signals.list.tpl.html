@@ -11,7 +11,6 @@
                 <select class="form-control" id="filterProducts"
                         data-ng-change="filters.apply()"
                         data-ng-model="filters.product" data-ng-options="prd.name for prd in filters.products">
-                    <option value="">Show All Products</option>
                 </select>
             </div>
         </div>
@@ -52,7 +51,7 @@
                     <ul class="dropdown-menu">
                         <li><a ui-sref="live_signals.edit({id:signal.id, prd: filters.product.name.toLowerCase() })">Edit</a>
                         </li>
-                        <li><a href="#" data-ng-click="openDeleteConfirm(signal.id)">Remove</a></li>
+                        <li><a href="#" data-ng-click="openDeleteConfirm(filters.product.name.toLowerCase(), signal.id)">Remove</a></li>
                     </ul>
                 </div>
             </td>
