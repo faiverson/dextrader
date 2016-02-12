@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Gateways\UserGateway;
 use App\Models\UserSettings;
-use Datatables;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Libraries\eWallet\eWallet;
+use Config;
 
 class UsersController extends Controller
 {
@@ -16,6 +16,7 @@ class UsersController extends Controller
 	public function __construct(UserGateway $gateway)
 	{
 		$this->gateway = $gateway;
+		$this->limit = Config::get('dextrader.limit');
 	}
 
     public function show(Request $request)
@@ -34,14 +35,17 @@ class UsersController extends Controller
 
 	public function index(Request $request)
 	{
-		$draw = $request->input('draw');
-		$start = $request->input('start') ? $request->input('start') : 0;
-		$length = $request->input('length') ? $request->input('length') : 10;
-		$order = $request->input('order');
-
-//		$list = $this->user->all(null, 30, 0, ['first_name' => 'asc', 'last_name' => 'desc']);
-		$query = $this->gateway->actives(null, $length, $start, $order);
-		return Datatables::of($query)->make(true);
+		$select = ['id', 'username', 'first_name', 'last_name', 'email'];
+		$limit = $request->input('limit') ? $request->input('limit') : $this->limit;
+		$offset = $request->input('offset') ? $request->input('offset') : 0;
+		$order_by = $request->input('order') ? $request->input('order') : ['id' => 'desc'];
+		$filters = $request->input('filter') ? $request->input('filter') : [];
+		$users = $this->gateway->actives($select, $limit, $offset, $order_by, $filters);
+		$total = $this->gateway->totalActives($filters);
+		return response()->ok([
+			'users' => $users,
+			'total' => $total
+		]);
 	}
 
     /**

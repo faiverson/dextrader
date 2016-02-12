@@ -13,25 +13,30 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 		return User::class;
 	}
 
-	public function actives($columns = array('*'), $limit = null, $offset = null, $order_by = null) {
-		$user = $this->model->with('roles')->where('active', 1);
-		$sortColumns = ['id', 'username', 'last_name', 'email'];
-
+	public function actives($columns = array('*'), $limit = null, $offset = null, $order_by = null, $filters = null) {
+		$query = $this->model->with('roles')->where('active', 1);
 		if($limit != null) {
-			$user = $user->take($limit);
+			$query = $query->take($limit);
 		}
 
 		if($offset != null) {
-			$user = $user->skip($offset);
+			$query = $query->skip($offset);
 		}
 
 		if($order_by != null) {
 			foreach($order_by as $column => $dir) {
-				$user = $user->orderBy($sortColumns[$column], $column['dir']);
+				$query = $query->orderBy($column, $dir);
 			}
 		}
 
-		return $user->get($columns);
+		$query = $this->filters($query, $filters);
+		return $query->get($columns);
+	}
+
+	public function total($filters = null) {
+		$query = $this->model->where('active', 1);
+		$query = $this->filters($query, $filters);
+		return $query->count();
 	}
 
 	public function findById($id, $column = 'id', $columns = array('*')) {
@@ -68,5 +73,34 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 	public function detachRole($user_id, $role_id)
 	{
 		return $this->model->find($user_id)->detachRole($role_id);
+	}
+
+	protected function filters($query, $where)
+	{
+		if(array_key_exists('from', $where) && $where['from'] != null) {
+			$from = new DateTime($where['from']);
+			$query = $query->whereDate('created_at', '>=', $from);
+		}
+
+		if(array_key_exists('to', $where) && $where['to'] != null) {
+			$from = new DateTime($where['to']);
+			$query = $query->whereDate('created_at', '<=', $from);
+		}
+
+		if(array_key_exists('first_name', $where) && $where['first_name'] != null) {
+			$query = $query->where('first_name', 'like', $where['first_name'] . '%');
+		}
+
+		if(array_key_exists('last_name', $where) && $where['last_name'] != null) {
+			$query = $query->where('last_name', 'like', $where['last_name'] . '%');
+		}
+
+		if(array_key_exists('fullname', $where) && $where['fullname'] != null) {
+			$name = explode(' ', $where['fullname']);
+			$query = $query->where('first_name', 'like', $name[0] . '%')
+				->where('last_name', 'like', $name[1]  . '%');
+		}
+
+		return $query;
 	}
 }
