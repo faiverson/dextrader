@@ -106,7 +106,7 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
             vm.init();
         }])
 
-    .controller('ProvidersListCtrl', ['$scope', 'ProvidersService', 'Notification', function ($scope, ProvidersService, Notification) {
+    .controller('ProvidersListCtrl', ['$scope', 'ProvidersService', 'Notification', 'modalService', function ($scope, ProvidersService, Notification, modalService) {
         var vm = this;
 
         $scope.pagination = {
@@ -132,6 +132,28 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
                 vm.getProvider();
             }
         };
+
+		$scope.openDeleteConfirm = function (id) {
+			var modalOptions = {
+				closeButtonText: 'Cancel',
+				actionButtonText: 'Delete Broker',
+				headerText: 'Delete Broker?',
+				bodyText: 'Are you sure you want to delete this broker?'
+			};
+
+			modalService.showModal({}, modalOptions).then(function (result) {
+				ProvidersService.destroy(id).then(vm.successDelete, vm.errorDelete);
+			});
+		};
+
+		vm.successDelete = function (res) {
+			vm.getProvider();
+			Notification.success('Broker was removed successfully!');
+		};
+
+		vm.errorDelete = function (err) {
+			Notification.error('Ups! there was an error trying to remove this broker!');
+		};
 
         vm.getProvider = function () {
 
