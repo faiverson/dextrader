@@ -94,7 +94,12 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask', 'app
             };
 
             vm.success = function (res) {
-                Notification.success('Signal created successfully!');
+				if($state.current.name !== "live_signals.edit") {
+					Notification.success('Signal created successfully!');
+				}
+				else {
+					Notification.success('Signal changed successfully!');
+				}
                 $state.go('live_signals.list');
             };
 
