@@ -3,6 +3,7 @@ namespace App\Libraries\getResponse;
 
 use anlutro\cURL\Laravel\cURL;
 use Config;
+use Log;
 /**
  * GetResponsePHP is a PHP5 implementation of the GetResponse API
  * @internal  This wrapper is incomplete and subject to change.
@@ -24,7 +25,9 @@ class GetResponse
 	 * http://www.getresponse.com/my_api_key.html
 	 * @var string
 	 */
-	public $apiKey = 'PASS_API_KEY_WHEN_INSTANTIATING_CLASS';
+	public $apiKey;
+
+	public $consumerKey;
 
 	/**
 	 * GetResponse API URL
@@ -58,12 +61,15 @@ class GetResponse
 	public function __construct()
 	{
 		if ( !extension_loaded('curl') ) {
-			trigger_error('GetResponsePHP requires PHP cURL', E_USER_ERROR);
+			Log:info('GetResponsePHP requires PHP cURL');
 		}
+
 		if ( is_null(Config::get('getresponse.key')) ) {
-			trigger_error('API key must be supplied', E_USER_ERROR);
+			Log::info('GetResponse: API key must be supplied');
 		}
+
 		$this->apiKey = Config::get('getresponse.key');
+		$this->consumerKey = Config::get('getresponse.consumer');
 		$this->errorsOn = Config::get('app.debug');
 	}
 
@@ -584,6 +590,10 @@ class GetResponse
 				$c[] = array('name' => $key, 'content' => $val);
 			}
 			$params['customs'] = $c;
+		}
+
+		if ( $this->consumerKey ) {
+			$params['consumer_key'] = $this->consumerKey;
 		}
 //	dd($params);
 		$request = $this->prepRequest('add_contact', $params);

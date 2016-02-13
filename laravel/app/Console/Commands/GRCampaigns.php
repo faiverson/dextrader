@@ -99,10 +99,10 @@ class GRCampaigns extends Command
 
 	public function addContact()
 	{
-		$user = User::find(1)->toArray();
+		$user = User::find(32)->toArray();
 		$fields = ['user_id', 'first_name', 'last_name', 'username', 'full_name', 'phone', 'enroller_id'];
 
-		$campaign = $this->gr->getCampaignByName('dextrader_buyers');
+		$campaign = $this->gr->getCampaignByName('dextrader_leads');
 //		dd($campaign);
 		$contact = $this->gr->getContactsByEmail($user['email']);
 //		dd($contact->{key($contact)}->campaign);

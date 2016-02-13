@@ -1,5 +1,6 @@
 <?php
 
 return [
-    'key' => env('GR_KEY', '713965d9cb79ea8d002cac6871090bd4')
+    'key' => env('GR_KEY', '9dbbf11366980b44d4451b45025cadbe'),
+	'consumer' => env('GR_CONSUMER', 'TEI889'),
 ];
