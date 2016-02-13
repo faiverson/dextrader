@@ -56,7 +56,7 @@ class Token {
 			return false;
 		}
 		$payload = JWTAuth::getPayload($token);
-		return $payload['sub'];
+		return $payload;
 	}
 
 	public static function refresh($request)

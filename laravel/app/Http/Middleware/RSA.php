@@ -24,8 +24,9 @@ class RSA
 	 */
 	public function handle($request, \Closure $next, $perm)
 	{
-		$pageId = Token::getPage($request);
-		if(empty($pageId)) {
+		$payload = Token::getPage($request);
+		$pageId = $payload['sub'];
+		if(empty($pageId) || $payload['iss'] !== 'page') {
 			return response()->error('Unauthorized', 401);
 		}
 

@@ -47,7 +47,6 @@ class HitsController extends Controller
 		} else {
 			return response()->error('User not found');
 		}
-
 	}
 
     /**

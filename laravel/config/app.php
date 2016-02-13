@@ -26,12 +26,12 @@ return [
     |
     */
 
-    'url' => env('URL', 'http://localhost:8000'),
+    'url' => env('URL', 'http://www.dextrader.com'),
 
-	'api' => env('API_URL', 'http://localhost:8000/api'),
+	'api' => env('API_URL', 'http://api.dextrader'),
 
     // the admin section
-    'admin' => env('ADMIN_URL', 'http://localhost:8005'),
+    'admin' => env('ADMIN_URL', 'http://abo.dextrader.com'),
 
     /*
     |--------------------------------------------------------------------------
