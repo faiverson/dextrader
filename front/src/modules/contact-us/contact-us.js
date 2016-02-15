@@ -4,9 +4,18 @@ angular.module('app.contact-us', [])
             .state('contact_us', {
                 url: '/contact-us',
                 templateUrl: 'modules/contact-us/contact-us.tpl.html',
+				controller: 'ContactUsCtrl',
                 data: {
                     pageTitle: 'Contact Us',
                     isPublic: true
                 }
             });
-    });
+    })
+
+	.controller('ContactUsCtrl', ['$scope', 'ChatService', function ($scope, ChatService) {
+
+		$scope.loadChat = function () {
+			ChatService.show();
+		};
+
+	}]);
