@@ -36,7 +36,8 @@ angular.module('app.ui-services', [])
                 angular.extend(tempModalOptions, modalOptions, customModalOptions);
 
                 if (!tempModalDefaults.controller) {
-                    tempModalDefaults.controller = function ($scope, $uibModalInstance) {
+
+                    var ModalInstanceCtrl = ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance, items) {
                         $scope.modalOptions = tempModalOptions;
                         $scope.modalOptions.ok = function (result) {
                             $uibModalInstance.close(result);
@@ -44,7 +45,9 @@ angular.module('app.ui-services', [])
                         $scope.modalOptions.close = function (result) {
                             $uibModalInstance.dismiss('cancel');
                         };
-                    };
+                    }];
+
+                    tempModalDefaults.controller = ModalInstanceCtrl;
                 }
 
                 return $uibModal.open(tempModalDefaults).result;
