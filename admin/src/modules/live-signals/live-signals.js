@@ -94,12 +94,12 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask', 'app
             };
 
             vm.success = function (res) {
-				if($state.current.name !== "live_signals.edit") {
-					Notification.success('Signal created successfully!');
-				}
-				else {
-					Notification.success('Signal changed successfully!');
-				}
+                if ($state.current.name !== "live_signals.edit") {
+                    Notification.success('Signal created successfully!');
+                }
+                else {
+                    Notification.success('Signal changed successfully!');
+                }
                 $state.go('live_signals.list');
             };
 
@@ -150,7 +150,7 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask', 'app
         }])
 
     .controller('LiveSignalsListCtrl', ['$scope', 'LiveSignalsService', 'Notification', 'modalService', 'DexTraderSocket', 'ngAudio',
-		function ($scope, LiveSignalsService, Notification, modalService, DexTraderSocket, ngAudio) {
+        function ($scope, LiveSignalsService, Notification, modalService, DexTraderSocket, ngAudio) {
             var vm = this;
 
             $scope.sound = ngAudio.load("/assets/sounds/step-alert.mp3");
@@ -195,12 +195,16 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask', 'app
                     closeButtonText: 'Cancel',
                     actionButtonText: 'Delete Signal',
                     headerText: 'Delete Signal?',
-                    bodyText: 'Are you sure you want to delete this Signal?'
+                    bodyText: 'Are you sure you want to delete this Signal?',
+                    controller: ['$scope', function ($scope) {
+
+                    }]
                 };
 
-                modalService.showModal({}, modalOptions).then(function (result) {
-                    LiveSignalsService.destroy(product, id).then(vm.successDelete, vm.errorDelete);
-                });
+                modalService.showModal({}, modalOptions)
+                    .then(function (result) {
+                        LiveSignalsService.destroy(product, id).then(vm.successDelete, vm.errorDelete);
+                    });
             };
 
             DexTraderSocket.on("signal.add", function (data) {
