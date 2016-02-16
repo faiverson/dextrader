@@ -1,4 +1,4 @@
-## Boilerplate for the Fucking Real Creators
+## Boilerplate for the Real Creators
 This is a point to start from scratch new projects but with a solid baseline.
 
 ## Installation
