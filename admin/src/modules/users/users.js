@@ -27,49 +27,159 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
             });
     })
 
-    .controller('UsersCtrl', ['$scope', 'UserService', 'DTOptionsBuilder', 'DTColumnBuilder', 'localStorageService', '$compile', '$site-configs',
-        function ($scope, UserService, DTOptionsBuilder, DTColumnBuilder, localStorageService, $compile, $config) {
+    .controller('UsersCtrl', ['$scope', 'UserService', 'modalService', 'Notification',
+        function ($scope, UserService, modalService, Notification) {
+			var vm = this;
 
-            function actionsHtml(data, type, full, meta) {
-                return '<button class="btn btn-primary" ui-sref="user_profile({ id:' + data.user_id + '})">' +
-                    'View <i class="fa fa-edit"></i>' +
-                    '</button>&nbsp;' +
-                    '<button class="btn btn-warning" ui-sref="users-edit({ id:' + data.user_id + '})">' +
-                    'Edit <i class="fa fa-edit"></i>' +
-                    '</button>&nbsp;' +
-                    '<button class="btn btn-danger" ng-click="showCase.delete(showCase.persons[' + data.user_id + '])" )"="">' +
-                    'Delete <i class="fa fa-trash-o"></i>' +
-                    '</button>';
-            }
+			$scope.pagination = {
+				totalItems: 20,
+				currentPage: 1,
+				itemsPerPage: 10,
+				pageChange: function () {
+					vm.getUsers();
+				}
+			};
 
-            function createdRow(row, data, dataIndex) {
-                // Recompiling so we can bind Angular directive to the DT
-                $compile(angular.element(row).contents())($scope);
-            }
+			$scope.sortBy = {
+				order_by: {},
+				sort: function (col) {
+					if (this.order_by.hasOwnProperty(col)) {
+						if(this.order_by[col] === 'asc') {
+							this.order_by[col] = 'desc';
+						}
+						else if(this.order_by[col] === 'desc') {
+							delete this.order_by[col];
+						}
+					} else {
+						this.order_by[col] = 'asc';
+					}
 
-            $scope.dtOptions = DTOptionsBuilder.newOptions()
-                .withOption('ajax', {
-                    headers: {'Authorization': 'Bearer ' + localStorageService.get('token')},
-                    url: $config.API_BASE_URL + 'users',
-                    type: 'GET'
-                })
-                .withDataProp('data')
-                .withOption('processing', true)
-                .withOption('serverSide', true)
-                .withBootstrap()
-                .withPaginationType('full_numbers')
-                .withOption('createdRow', createdRow);
+					vm.getUsers();
+				}
+			};
 
-            $scope.dtColumns = [
-                DTColumnBuilder.newColumn('user_id').withTitle('ID'),
-                DTColumnBuilder.newColumn('username').withTitle('Username'),
-                DTColumnBuilder.newColumn('full_name').withTitle('Name'),
-                DTColumnBuilder.newColumn('email').withTitle('Email'),
-                DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable()
-                    .renderWith(actionsHtml)
-            ];
+			$scope.filters = {
+				from: null,
+				to: null,
+				first_name: null,
+				last_name: null,
+				email: null,
+				apply: function () {
 
-        }])
+					if (angular.isDefined(this.from) && this.from !== null) {
+						this.toApply.from = moment(this.from).format('YYYY-MM-DD');
+					}
+
+					if (angular.isDefined(this.to) && this.to !== null) {
+						this.toApply.to = moment(this.to).format('YYYY-MM-DD');
+					}
+
+					if (angular.isDefined(this.first_name) && this.first_name !== null && this.first_name.length >= 3) {
+						this.toApply.first_name = this.first_name;
+					}
+
+					if (angular.isDefined(this.last_name) && this.last_name !== null && this.last_name.length >= 3) {
+						this.toApply.last_name = this.last_name;
+					}
+
+					if (angular.isDefined(this.email) && this.email !== null && this.email.length >= 3) {
+						this.toApply.email = this.email;
+					}
+
+					vm.getUsers();
+				},
+				toApply: {}
+			};
+
+			$scope.$watch('filters.from', function (nv, ov) {
+				if (angular.isDefined(nv) && nv !== ov) {
+					$scope.filters.apply();
+				}
+			});
+
+			$scope.$watch('filters.to', function (nv, ov) {
+				if (angular.isDefined(nv) && nv !== ov) {
+					$scope.filters.apply();
+				}
+			});
+
+			$scope.$watch('filters.first_name', function (nv, ov) {
+				if (angular.isDefined(nv) && nv !== ov) {
+					$scope.filters.apply();
+				}
+			});
+
+			$scope.$watch('filters.last_name', function (nv, ov) {
+				if (angular.isDefined(nv) && nv !== ov) {
+					$scope.filters.apply();
+				}
+			});
+
+			$scope.$watch('filters.email', function (nv, ov) {
+				if (angular.isDefined(nv) && nv !== ov) {
+					$scope.filters.apply();
+				}
+			});
+
+			$scope.openDeleteConfirm = function (id) {
+				var modalOptions = {
+					closeButtonText: 'Cancel',
+					actionButtonText: 'Delete User',
+					headerText: 'Delete User?',
+					bodyText: 'Are you sure you want to delete this User?'
+				};
+
+				modalService.showModal({}, modalOptions).then(function (result) {
+					UserService.destroy(id).then(vm.successDelete, vm.errorDelete);
+				});
+			};
+
+			$scope.loginAsUser = function (id) {
+				UserService.loginAsUser(id).then(function(response) {
+					//window.location.href = '/';
+				},
+				function (err) {
+					Notification.error('Ups! there was an error trying to login as this user!');
+				});
+			};
+
+			vm.successDelete = function (res) {
+				vm.getUsers();
+				Notification.success('User was removed successfully!');
+			};
+
+			vm.errorDelete = function (err) {
+				Notification.error('Ups! there was an error trying to remove this user!');
+			};
+
+			vm.getUsers = function () {
+
+				var params = {
+						offset: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
+						limit: $scope.pagination.itemsPerPage,
+						order: $scope.sortBy.order_by,
+						filter: $scope.filters.toApply
+					};
+
+				function success(res) {
+					$scope.pagination.totalItems = res.data.totalItems;
+					$scope.users = res.data.users;
+				}
+
+				function error(err) {
+					Notification.error('Ups! there was an error trying to load users!');
+				}
+
+				UserService.getUsers(params)
+					.then(success, error);
+			};
+
+			vm.init = function () {
+				vm.getUsers();
+			};
+
+			vm.init();
+		}])
 
     .controller('UsersFormCtrl', ['$scope', '$q', '$state', '$stateParams', '$filter', 'UserService', 'UserRolesService',
         function ($scope, $q, $state, $stateParams, $filter, UserService, UserRolesService) {

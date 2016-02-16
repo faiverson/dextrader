@@ -388,12 +388,16 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
     }])
 
-    .factory('UserService', ['$http', '$q', '$site-configs', function ($http, $q, $configs) {
+    .factory('UserService', ['$http', '$q', '$site-configs', '$objects', function ($http, $q, $configs, $objects) {
         var service = $configs.API_BASE_URL + 'users';
 
-        function getUsers() {
+        function getUsers(params) {
             var deferred = $q.defer(),
                 endpoint = service;
+
+			if (angular.isDefined(params)) {
+				endpoint += '?' + $objects.setParameters(params);
+			}
 
             function success(res) {
                 deferred.resolve(res.data);
@@ -473,7 +477,26 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             getUsers: getUsers,
             saveUser: save,
             getUser: getUser,
-            loginAsUser: loginAsUser
+            loginAsUser: loginAsUser,
+			destroy: function( id ) {
+				var deferred = $q.defer(),
+					endpoint = service;
+				if ( angular.isUndefined( id ) ) {
+					deferred.reject( 'ID field is required!' );
+				}
+
+				endpoint += '/' + id;
+
+				function success( res ) {
+					deferred.resolve( res.data );
+				}
+
+				function error( res ) {
+					deferred.reject( res );
+				}
+				$http.delete( endpoint ).then( success, error );
+				return deferred.promise;
+			}
         };
     }])
 

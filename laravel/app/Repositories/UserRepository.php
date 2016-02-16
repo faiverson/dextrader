@@ -4,6 +4,7 @@ namespace App\Repositories;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\Abstracts\Repository as AbstractRepository;
 use User;
+use DateTime;
 
 class UserRepository extends AbstractRepository implements UserRepositoryInterface
 {

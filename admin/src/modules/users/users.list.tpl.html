@@ -4,57 +4,62 @@
         	<button class="btn btn-sm btn-primary pull-right" ui-sref="users-new">NEW USER</button>
 		</h1>
 		<div id="users-picker"id="livesignal-picker" class="row filters">
-			<div class="col-md-4">
-				<div class="col-md-3">
-					<datetimepicker ng-model="filters.from"
+			<form name="soonForm" novalidate="novalidate">
+				<div class="col-md-2">
+					<label for="from">From</label>
+					<datetimepicker id="from"
+									ng-model="filters.from"
 									placeholder="From"
 									date-format="dd-MMM-yyyy"
+									hidden-time="true"
 									data-ng-change="filters.apply()"
-									show-meridian="showMeridian">
+									readonly-time="true">
 					</datetimepicker>
 				</div>
-				<div class="col-md-3">
-					<datetimepicker ng-model="filters.to"
+				<div class="col-md-2">
+					<label for="to">To date</label>
+					<datetimepicker id="to"
+									ng-model="filters.to"
 									placeholder="To"
 									data-ng-change="filters.apply()"
-									date-format="dd-MMM-yyyy"
-									show-meridian="showMeridian">
+									hidden-time="true"
+									date-format="dd-MMM-yyyy">
 					</datetimepicker>
 				</div>
-			</div>
-			<div class="col-md-2">
-				<label for="">First name</label>
-				<input name="first_name" ng-model="filters.first_name" class="form-control" ng-model="filters.first_name" data-ng-change="filters.apply()" placeholder="John" />
-			</div>
-			<div class="col-md-2">
-				<label for="">Last name</label>
-				<input name="last_name" ng-model="filters.last_name" class="form-control" ng-model="filters.last_name" data-ng-change="filters.apply()" placeholder="Doe" />
-			</div>
-			<div class="col-md-2">
-				<label for="">Email</label>
-				<input name="email" ng-model="filters.email" class="form-control" ng-model="filters.email" data-ng-change="filters.apply()" placeholder="john@dextrader.com" />
-			</div>
+				<div class="col-md-2">
+					<label for="first_name">First name</label>
+					<input id="first_name" name="first_name" ng-model="filters.first_name" class="form-control" ng-model="filters.first_name" data-ng-change="filters.apply()" placeholder="John" />
+				</div>
+				<div class="col-md-2">
+					<label for="last_name">Last name</label>
+					<input id="last_name" name="last_name" ng-model="filters.last_name" class="form-control" ng-model="filters.last_name" data-ng-change="filters.apply()" placeholder="Doe" />
+				</div>
+				<div class="col-md-2">
+					<label for="email">Email</label>
+					<input id="email" name="email" ng-model="filters.email" class="form-control" ng-model="filters.email" data-ng-change="filters.apply()" placeholder="john@dextrader.com" />
+				</div>
+			</form>
 		</div>
         <div class="row">
-			<table class="table uses-table">
+			<table class="table table-striped table-hover table-condensed users-table">
 				<thead>
 				<tr>
-					<th sortable="id"
-						current-dir="sortBy.column[user_id]"
-						data-ng-click="sortBy.sort('user_id')">#</th>
-					<th sortable="created_at"
+					<th sorting="id"
+						current-dir="sortBy.column[id]"
+						data-ng-click="sortBy.sort('id')">#</th>
+					<th sorting="created_at"
 						current-dir="sortBy.column[created_at]"
 						data-ng-click="sortBy.sort('created_at')">Since</th>
-					<th sortable="first_name"
+					<th sorting="first_name"
 						current-dir="sortBy.column[first_name]"
 						data-ng-click="sortBy.sort('first_name')">First Name</th>
-					<th sortable="last_name"
+					<th sorting="last_name"
 						current-dir="sortBy.column[last_name]"
 						data-ng-click="sortBy.sort('last_name')">Last Name</th>
-					<th sortable="email"
+					<th sorting="email"
 						current-dir="sortBy.column[email]"
 						data-ng-click="sortBy.sort('email')">Email</th>
-					<th sortable="username"
+					<th sorting="username"
 						current-dir="sortBy.column[username]"
 						data-ng-click="sortBy.sort('username')">Username</th>
 					<th>Actions</th>
@@ -75,12 +80,12 @@
 							class="blue"></td>
 						<td>
 							<div class="btn-group">
-								<a href="#" class="btn btn-primary" data-ng-click="loginAsUser(user.user_id)">
+								<a href="#" class="btn btn-xs btn-info" data-ng-click="loginAsUser(user.user_id)">
 									Login&nbsp;&nbsp;<i class="fa fa-user"></i></a>&nbsp;
-								<button class="btn btn-primary" ui-sref="user_profile({ id: user.user_id})">
+								<button class="btn btn-xs btn-primary" ui-sref="user_profile({ id: user.user_id})">
 									View&nbsp;&nbsp;<i class="fa fa-eye"></i></button>&nbsp;
 								<button type="button"
-										class="btn btn-default dropdown-toggle"
+										class="btn btn-xs btn-default dropdown-toggle"
 										data-toggle="dropdown"
 										aria-haspopup="true" aria-expanded="false">
 									Actions <span class="caret"></span>
