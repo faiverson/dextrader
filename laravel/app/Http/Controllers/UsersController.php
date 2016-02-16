@@ -35,7 +35,7 @@ class UsersController extends Controller
 
 	public function index(Request $request)
 	{
-		$select = ['id', 'username', 'first_name', 'last_name', 'email'];
+		$select = ['id', 'username', 'first_name', 'last_name', 'email', 'created_at'];
 		$limit = $request->input('limit') ? $request->input('limit') : $this->limit;
 		$offset = $request->input('offset') ? $request->input('offset') : 0;
 		$order_by = $request->input('order') ? $request->input('order') : ['id' => 'desc'];

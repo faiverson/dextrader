@@ -150,7 +150,7 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask', 'app
         }])
 
     .controller('LiveSignalsListCtrl', ['$scope', 'LiveSignalsService', 'Notification', 'modalService', 'DexTraderSocket', 'ngAudio',
-        function ($scope, LiveSignalsService, Notification, modalService, DexTraderSocket, ngAudio) {
+		function ($scope, LiveSignalsService, Notification, modalService, DexTraderSocket, ngAudio) {
             var vm = this;
 
             $scope.sound = ngAudio.load("/assets/sounds/step-alert.mp3");

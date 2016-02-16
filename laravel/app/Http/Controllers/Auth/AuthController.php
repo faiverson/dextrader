@@ -69,12 +69,12 @@ class AuthController extends Controller
 				$u = DB::table('users')
 					->select('id', 'password')
 					->where('active', 1)
-					->where(function($q) use ($email, $username)
-					{
+					->where(function($q) use ($email, $username) {
 						$q->where('email', $email)
 							->orWhere('username', $username);
 					})
 					->first();
+
 				if(empty($u)) {
 					return response()->error('Invalid Credentials', 401);
 				}

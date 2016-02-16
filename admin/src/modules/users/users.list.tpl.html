@@ -1,10 +1,119 @@
 <div class="home">
     <div class="container">
         <h1>System Users
-        <button class="btn btn-sm btn-primary pull-right" ui-sref="users-new">NEW USER</button></h1>
+        	<button class="btn btn-sm btn-primary pull-right" ui-sref="users-new">NEW USER</button>
+		</h1>
+		<div id="users-picker"id="livesignal-picker" class="row filters">
+			<div class="col-md-4">
+				<div class="col-md-3">
+					<datetimepicker ng-model="filters.from"
+									placeholder="From"
+									date-format="dd-MMM-yyyy"
+									data-ng-change="filters.apply()"
+									show-meridian="showMeridian">
+					</datetimepicker>
+				</div>
+				<div class="col-md-3">
+					<datetimepicker ng-model="filters.to"
+									placeholder="To"
+									data-ng-change="filters.apply()"
+									date-format="dd-MMM-yyyy"
+									show-meridian="showMeridian">
+					</datetimepicker>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<label for="">First name</label>
+				<input name="first_name" ng-model="filters.first_name" class="form-control" ng-model="filters.first_name" data-ng-change="filters.apply()" placeholder="John" />
+			</div>
+			<div class="col-md-2">
+				<label for="">Last name</label>
+				<input name="last_name" ng-model="filters.last_name" class="form-control" ng-model="filters.last_name" data-ng-change="filters.apply()" placeholder="Doe" />
+			</div>
+			<div class="col-md-2">
+				<label for="">Email</label>
+				<input name="email" ng-model="filters.email" class="form-control" ng-model="filters.email" data-ng-change="filters.apply()" placeholder="john@dextrader.com" />
+			</div>
+		</div>
         <div class="row">
-            <table class="table" datatable="" dt-options="dtOptions" dt-columns="dtColumns">
-            </table>
+			<table class="table uses-table">
+				<thead>
+				<tr>
+					<th sortable="id"
+						current-dir="sortBy.column[user_id]"
+						data-ng-click="sortBy.sort('user_id')">#</th>
+					<th sortable="created_at"
+						current-dir="sortBy.column[created_at]"
+						data-ng-click="sortBy.sort('created_at')">Since</th>
+					<th sortable="first_name"
+						current-dir="sortBy.column[first_name]"
+						data-ng-click="sortBy.sort('first_name')">First Name</th>
+					<th sortable="last_name"
+						current-dir="sortBy.column[last_name]"
+						data-ng-click="sortBy.sort('last_name')">Last Name</th>
+					<th sortable="email"
+						current-dir="sortBy.column[email]"
+						data-ng-click="sortBy.sort('email')">Email</th>
+					<th sortable="username"
+						current-dir="sortBy.column[username]"
+						data-ng-click="sortBy.sort('username')">Username</th>
+					<th>Actions</th>
+				</tr>
+				</thead>
+				<tbody>
+					<tr data-ng-repeat="user in users">
+						<td data-ng-bind="::user.user_id"></td>
+						<td data-ng-bind="::user.created_at | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'YYYY-MM-DD'"
+							class="green"></td>
+						<td data-ng-bind="::user.first_name"
+							class="blue"></td>
+						<td data-ng-bind="::user.last_name"
+							class="blue"></td>
+						<td data-ng-bind="::user.email"
+							class="blue"></td>
+						<td data-ng-bind="::user.username"
+							class="blue"></td>
+						<td>
+							<div class="btn-group">
+								<a href="#" class="btn btn-primary" data-ng-click="loginAsUser(user.user_id)">
+									Login&nbsp;&nbsp;<i class="fa fa-user"></i></a>&nbsp;
+								<button class="btn btn-primary" ui-sref="user_profile({ id: user.user_id})">
+									View&nbsp;&nbsp;<i class="fa fa-eye"></i></button>&nbsp;
+								<button type="button"
+										class="btn btn-default dropdown-toggle"
+										data-toggle="dropdown"
+										aria-haspopup="true" aria-expanded="false">
+									Actions <span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li><a ui-sref="user.edit({id:user.user_id})">Edit</a></li>
+									<li><a href="#" data-ng-click="openDeleteConfirm(user.user_id)">Remove</a></li>
+								</ul>
+							</div>
+						</td>
+					</tr>
+					<tr data-ng-if="users.length === 0">
+						<td colspan="10" class="text-center">--- No Users Were Found ---</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="table-nav row">
+				<div class="col-md-8">
+					<uib-pagination direction-links="false"
+									total-items="pagination.totalItems"
+									ng-model="pagination.currentPage"
+									ng-change="pagination.pageChange()"
+									items-per-page="pagination.itemsPerPage"
+									max-size="6"
+									num-pages="smallnumPages"></uib-pagination>
+				</div>
+				<div class="col-md-4">
+					<uib-pager total-items="pagination.totalItems"
+							   items-per-page="pagination.itemsPerPage"
+							   ng-change="pagination.pageChange()"
+							   ng-model="pagination.currentPage"></uib-pager>
+				</div>
+			</div>
         </div>
     </div>
 </div>
