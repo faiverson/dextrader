@@ -40,7 +40,7 @@ class UserGateway extends AbstractGateway
 
 		$user = $this->create($data);
 		if($user) {
-			if (array_key_exists('roles', $data) && count($data['roles']) > 0) {
+			if (array_key_exists('roles', $data) && strlen($data['roles']) > 0) {
 				$user = $this->repository->find($user->id);
 				$roles = array_column($user->roles->toArray(), 'role_id');
 				$this->repository->detachRoles($user->id, $roles);
@@ -62,7 +62,7 @@ class UserGateway extends AbstractGateway
 
 		$response = $this->update($data, $id);
 		if($response) {
-			if (array_key_exists('roles', $data) && count($data['roles']) > 0) {
+			if (array_key_exists('roles', $data) && strlen($data['roles']) > 0) {
 				$user = $this->repository->find($id);
 				$roles = array_column($user->roles->toArray(), 'role_id');
 				$this->repository->detachRoles($id, $roles);

@@ -49,6 +49,11 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
 				last_name: null,
 				email: null,
 				apply: function () {
+					this.toApply.from = null;
+					this.toApply.to = null;
+					this.toApply.first_name = null;
+					this.toApply.last_name = null;
+					this.toApply.email = null;
 
 					if (angular.isDefined(this.from) && this.from !== null) {
 						this.toApply.from = moment(this.from).format('YYYY-MM-DD');
@@ -76,9 +81,7 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
 			};
 
 			$scope.$watch('filters.from', function (nv, ov) {
-				if (angular.isDefined(nv) && nv !== ov) {
-					$scope.filters.apply();
-				}
+				$scope.filters.apply();
 			});
 
 			$scope.$watch('filters.to', function (nv, ov) {
