@@ -41,7 +41,32 @@ angular.module('app.shared-directives', [])
             }
         };
     }])
-    
+	.directive('sorting', [function () {
+		return {
+			restrict: 'A',
+			scope: {
+				currentDir: '='
+			},
+			link: function ($scope, $elem, $attrs) {
+				$elem.addClass('sortable');
+				$scope.$watchCollection('[currentDir]', function () {
+					$elem.removeClass('sortable-asc');
+					$elem.removeClass('sortable-desc');
+
+					if ($scope.currentDir === 'asc') {
+						$elem.addClass('sortable-asc');
+					} else if ($scope.currentDir === 'desc') {
+						$elem.removeClass('sortable-asc');
+						$elem.addClass('sortable-desc');
+					}
+					else {
+						$elem.removeClass('sortable-asc');
+						$elem.removeClass('sortable-desc');
+					}
+				});
+			}
+		};
+	}])
     .directive('sortable', [function () {
         return {
             restrict: 'A',

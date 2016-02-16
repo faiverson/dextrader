@@ -27,73 +27,159 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
             });
     })
 
-    .controller('UsersCtrl', ['$scope', 'UserService', 'localStorageService', '$site-configs',
-        function ($scope, UserService, localStorageService, $config) {
-            var vm = this;
-            $scope.pagination = {
-                totalItems: 0,
-                currentPage: 1,
-                itemsPerPage: 10,
-                pageChanged: function () {
-                    vm.getUsers();
-                }
-            };
+    .controller('UsersCtrl', ['$scope', 'UserService', 'modalService', 'Notification',
+        function ($scope, UserService, modalService, Notification) {
+			var vm = this;
 
-            $scope.filters = {
-                params: {},
-                reset: function(){
-                    this.params = {};
-                    delete this.name;
-                    delete this.email;
-                },
-                apply: function () {
+			$scope.pagination = {
+				totalItems: 20,
+				currentPage: 1,
+				itemsPerPage: 10,
+				pageChange: function () {
+					vm.getUsers();
+				}
+			};
 
-                    this.params = {};
+			$scope.sortBy = {
+				order_by: {},
+				sort: function (col) {
+					if (this.order_by.hasOwnProperty(col)) {
+						if(this.order_by[col] === 'asc') {
+							this.order_by[col] = 'desc';
+						}
+						else if(this.order_by[col] === 'desc') {
+							delete this.order_by[col];
+						}
+					} else {
+						this.order_by[col] = 'asc';
+					}
 
-                    if(angular.isDefined(this.name)){
-                        this.params.first_name = this.name;
-                    }
+					vm.getUsers();
+				}
+			};
 
-                    if(angular.isDefined(this.email)){
-                        this.params.email = this.email;
-                    }
+			$scope.filters = {
+				from: null,
+				to: null,
+				first_name: null,
+				last_name: null,
+				email: null,
+				apply: function () {
 
-                    vm.getUsers();
+					if (angular.isDefined(this.from) && this.from !== null) {
+						this.toApply.from = moment(this.from).format('YYYY-MM-DD');
+					}
 
-                }
-            };
+					if (angular.isDefined(this.to) && this.to !== null) {
+						this.toApply.to = moment(this.to).format('YYYY-MM-DD');
+					}
 
-            vm.getUsers = function () {
-                var params = {
-                    start: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
-                    length: $scope.pagination.itemsPerPage,
-                    filter: $scope.filters.params
-                };
+					if (angular.isDefined(this.first_name) && this.first_name !== null && this.first_name.length >= 3) {
+						this.toApply.first_name = this.first_name;
+					}
 
-                function success(res) {
-                    $scope.pagination.totalItems = res.data.total;
-                    $scope.users = res.data.users;
-                }
+					if (angular.isDefined(this.last_name) && this.last_name !== null && this.last_name.length >= 3) {
+						this.toApply.last_name = this.last_name;
+					}
 
-                function error(err) {
+					if (angular.isDefined(this.email) && this.email !== null && this.email.length >= 3) {
+						this.toApply.email = this.email;
+					}
 
-                }
+					vm.getUsers();
+				},
+				toApply: {}
+			};
 
-                UserService.query(params)
-                    .then(success, error);
-            };
+			$scope.$watch('filters.from', function (nv, ov) {
+				if (angular.isDefined(nv) && nv !== ov) {
+					$scope.filters.apply();
+				}
+			});
 
-            $scope.remove = function (id) {
+			$scope.$watch('filters.to', function (nv, ov) {
+				if (angular.isDefined(nv) && nv !== ov) {
+					$scope.filters.apply();
+				}
+			});
 
-            };
+			$scope.$watch('filters.first_name', function (nv, ov) {
+				if (angular.isDefined(nv) && nv !== ov) {
+					$scope.filters.apply();
+				}
+			});
 
-            vm.init = function () {
-                vm.getUsers();
-            };
+			$scope.$watch('filters.last_name', function (nv, ov) {
+				if (angular.isDefined(nv) && nv !== ov) {
+					$scope.filters.apply();
+				}
+			});
 
-            vm.init();
+			$scope.$watch('filters.email', function (nv, ov) {
+				if (angular.isDefined(nv) && nv !== ov) {
+					$scope.filters.apply();
+				}
+			});
 
-        }])
+			$scope.openDeleteConfirm = function (id) {
+				var modalOptions = {
+					closeButtonText: 'Cancel',
+					actionButtonText: 'Delete User',
+					headerText: 'Delete User?',
+					bodyText: 'Are you sure you want to delete this User?'
+				};
+
+				modalService.showModal({}, modalOptions).then(function (result) {
+					UserService.destroy(id).then(vm.successDelete, vm.errorDelete);
+				});
+			};
+
+			$scope.loginAsUser = function (id) {
+				UserService.loginAsUser(id).then(function(response) {
+					//window.location.href = '/';
+				},
+				function (err) {
+					Notification.error('Ups! there was an error trying to login as this user!');
+				});
+			};
+
+			vm.successDelete = function (res) {
+				vm.getUsers();
+				Notification.success('User was removed successfully!');
+			};
+
+			vm.errorDelete = function (err) {
+				Notification.error('Ups! there was an error trying to remove this user!');
+			};
+
+			vm.getUsers = function () {
+
+				var params = {
+						offset: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
+						limit: $scope.pagination.itemsPerPage,
+						order: $scope.sortBy.order_by,
+						filter: $scope.filters.toApply
+					};
+
+				function success(res) {
+					$scope.pagination.totalItems = res.data.totalItems;
+					$scope.users = res.data.users;
+				}
+
+				function error(err) {
+					Notification.error('Ups! there was an error trying to load users!');
+				}
+
+				UserService.getUsers(params)
+					.then(success, error);
+			};
+
+			vm.init = function () {
+				vm.getUsers();
+			};
+
+			vm.init();
+		}])
 
     .controller('UsersFormCtrl', ['$scope', '$q', '$state', '$stateParams', '$filter', 'UserService', 'UserRolesService',
         function ($scope, $q, $state, $stateParams, $filter, UserService, UserRolesService) {

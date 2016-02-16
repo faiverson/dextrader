@@ -4,6 +4,7 @@ namespace App\Repositories;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\Abstracts\Repository as AbstractRepository;
 use User;
+use DateTime;
 
 class UserRepository extends AbstractRepository implements UserRepositoryInterface
 {
@@ -93,6 +94,14 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 
 		if(array_key_exists('last_name', $where) && $where['last_name'] != null) {
 			$query = $query->where('last_name', 'like', $where['last_name'] . '%');
+		}
+
+		if(array_key_exists('email', $where) && $where['email'] != null) {
+			$query = $query->where('email', 'like', $where['email'] . '%');
+		}
+
+		if(array_key_exists('username', $where) && $where['username'] != null) {
+			$query = $query->where('username', 'like', $where['username'] . '%');
 		}
 
 		if(array_key_exists('fullname', $where) && $where['fullname'] != null) {

@@ -392,9 +392,13 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
     .factory('UserService', ['$http', '$q', '$site-configs', '$objects', function ($http, $q, $configs, $objects) {
         var service = $configs.API_BASE_URL + 'users';
 
-        function getUsers() {
+        function getUsers(params) {
             var deferred = $q.defer(),
                 endpoint = service;
+
+			if (angular.isDefined(params)) {
+				endpoint += '?' + $objects.setParameters(params);
+			}
 
             function success(res) {
                 deferred.resolve(res.data);
@@ -471,22 +475,23 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
-        function query(params) {
-            var endpoint = service,
-                deferred = $q.defer();
-
-            endpoint += '?' + $objects.serializeUrl(params);
-
-            function success(res) {
-                deferred.resolve(res.data);
+        function destroy( id ) {
+            var deferred = $q.defer(),
+                endpoint = service;
+            if ( angular.isUndefined( id ) ) {
+                deferred.reject( 'ID field is required!' );
             }
 
-            function error(err) {
-                deferred.reject(err);
+            endpoint += '/' + id;
+
+            function success( res ) {
+                deferred.resolve( res.data );
             }
 
-            $http.get(endpoint).then(success, error);
-
+            function error( res ) {
+                deferred.reject( res );
+            }
+            $http.delete( endpoint ).then( success, error );
             return deferred.promise;
         }
 
@@ -495,7 +500,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             saveUser: save,
             getUser: getUser,
             loginAsUser: loginAsUser,
-            query: query
+			destroy: destroy
         };
     }])
 
