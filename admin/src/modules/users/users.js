@@ -197,6 +197,8 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
                             return role.role_id;
                         });
 
+					$scope.user.roles = JSON.stringify($scope.user.roles);
+
                     if ($scope.user.password === '******') {
                         delete $scope.user.password;
                     }
