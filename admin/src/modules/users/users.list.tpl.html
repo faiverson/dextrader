@@ -44,24 +44,12 @@
 			<table class="table table-striped table-hover table-condensed users-table">
 				<thead>
 				<tr>
-					<th sorting="id"
-						current-dir="sortBy.column[id]"
-						data-ng-click="sortBy.sort('id')">#</th>
-					<th sorting="created_at"
-						current-dir="sortBy.column[created_at]"
-						data-ng-click="sortBy.sort('created_at')">Since</th>
-					<th sorting="first_name"
-						current-dir="sortBy.column[first_name]"
-						data-ng-click="sortBy.sort('first_name')">First Name</th>
-					<th sorting="last_name"
-						current-dir="sortBy.column[last_name]"
-						data-ng-click="sortBy.sort('last_name')">Last Name</th>
-					<th sorting="email"
-						current-dir="sortBy.column[email]"
-						data-ng-click="sortBy.sort('email')">Email</th>
-					<th sorting="username"
-						current-dir="sortBy.column[username]"
-						data-ng-click="sortBy.sort('username')">Username</th>
+					<th sort-column="id" on-sort="getUsers()" sort-data="sortBy">#</th>
+					<th sort-column="created_at" on-sort="getUsers()" sort-data="sortBy">Since</th>
+					<th sort-column="first_name" on-sort="getUsers()" sort-data="sortBy">First Name</th>
+					<th sort-column="last_name" on-sort="getUsers()" sort-data="sortBy">Last Name</th>
+					<th sort-column="email" on-sort="getUsers()" sort-data="sortBy">Email</th>
+					<th sort-column="username" on-sort="getUsers()" sort-data="sortBy">Username</th>
 					<th class="text-right">Actions</th>
 				</tr>
 				</thead>

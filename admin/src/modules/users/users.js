@@ -36,27 +36,11 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
 				currentPage: 1,
 				itemsPerPage: 10,
 				pageChange: function () {
-					vm.getUsers();
+					$scope.getUsers();
 				}
 			};
 
-			$scope.sortBy = {
-				order_by: {},
-				sort: function (col) {
-					if (this.order_by.hasOwnProperty(col)) {
-						if(this.order_by[col] === 'asc') {
-							this.order_by[col] = 'desc';
-						}
-						else if(this.order_by[col] === 'desc') {
-							delete this.order_by[col];
-						}
-					} else {
-						this.order_by[col] = 'asc';
-					}
-
-					vm.getUsers();
-				}
-			};
+			$scope.sortBy = {};
 
 			$scope.filters = {
 				from: null,
@@ -86,7 +70,7 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
 						this.toApply.email = this.email;
 					}
 
-					vm.getUsers();
+					$scope.getUsers();
 				},
 				toApply: {}
 			};
@@ -143,23 +127,14 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
 				});
 			};
 
-			vm.successDelete = function (res) {
-				vm.getUsers();
-				Notification.success('User was removed successfully!');
-			};
-
-			vm.errorDelete = function (err) {
-				Notification.error('Ups! there was an error trying to remove this user!');
-			};
-
-			vm.getUsers = function () {
+			$scope.getUsers = function () {
 
 				var params = {
-						offset: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
-						limit: $scope.pagination.itemsPerPage,
-						order: $scope.sortBy.order_by,
-						filter: $scope.filters.toApply
-					};
+					offset: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
+					limit: $scope.pagination.itemsPerPage,
+					order: $scope.sortBy,
+					filter: $scope.filters.toApply
+				};
 
 				function success(res) {
 					$scope.pagination.totalItems = res.data.totalItems;
@@ -171,11 +146,20 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
 				}
 
 				UserService.getUsers(params)
-					.then(success, error);
+						.then(success, error);
+			};
+
+			vm.successDelete = function (res) {
+				$scope.getUsers();
+				Notification.success('User was removed successfully!');
+			};
+
+			vm.errorDelete = function (err) {
+				Notification.error('Ups! there was an error trying to remove this user!');
 			};
 
 			vm.init = function () {
-				vm.getUsers();
+				$scope.getUsers();
 			};
 
 			vm.init();

@@ -25,6 +25,36 @@ footer {
   display: none !important;
 }
 
+th.clickable {
+  cursor: pointer;
+  position: relative;
+
+  &.sort-asc::after{
+    content: '';
+    background-image: url('/assets/images/sort-up-down.png');
+    width: 12px;
+    height: 6px;
+    position: absolute;
+    top: 10px;
+    right: 8px;
+    background-size: 74%;
+    background-repeat: no-repeat;
+  }
+
+  &.sort-desc::after{
+    content: '';
+    background-image: url('/assets/images/sort-up-down.png');
+    width: 12px;
+    height: 6px;
+    position: absolute;
+    top: 13px;
+    right: 8px;
+    background-size: 74%;
+    background-repeat: no-repeat;
+    background-position-y: -5px;
+  }
+}
+
 @font-face {
   font-family: 'Glyphicons Halflings';
   src: url('/assets/fonts/glyphicons-halflings-regular.eot');
