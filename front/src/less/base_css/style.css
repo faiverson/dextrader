@@ -1428,7 +1428,9 @@ table td.link {
     -moz-flex: 1;
     margin: 0 5px;
 }
-
+.table-signals{
+	margin: 0 auto;
+}
 .table-signals td,
 .table-signals th {
     text-align: center
@@ -1820,7 +1822,7 @@ table td.link {
 }
 
 #sp-key-features #sp-kf {
-    padding-bottom: 40px
+    padding-bottom: 90px;
 }
 
 #sp-key-features #sp-kf > div {
