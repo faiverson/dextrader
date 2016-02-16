@@ -174,9 +174,9 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 }
                 return $config;
             },
-            'responseError': function(rejection) {
+            'responseError': function (rejection) {
                 // do something on error
-                if(rejection.status === 401 && rejection.data.error === "token_expired"){
+                if (rejection.status === 401 && rejection.data.error === "token_expired") {
                     localStorageService.clearAll();
                     window.location.href = '/login';
                 }
@@ -259,25 +259,26 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             query: query,
             save: save,
             getOne: getOne,
-			destroy: function( id ) {
-				var deferred = $q.defer(),
-					endpoint = service;
-				if ( angular.isUndefined( id ) ) {
-					deferred.reject( 'ID field is required!' );
-				}
+            destroy: function (id) {
+                var deferred = $q.defer(),
+                    endpoint = service;
+                if (angular.isUndefined(id)) {
+                    deferred.reject('ID field is required!');
+                }
 
-				endpoint += '/' + id;
+                endpoint += '/' + id;
 
-				function success( res ) {
-					deferred.resolve( res.data );
-				}
+                function success(res) {
+                    deferred.resolve(res.data);
+                }
 
-				function error( res ) {
-					deferred.reject( res );
-				}
-				$http.delete( endpoint ).then( success, error );
-				return deferred.promise;
-			}
+                function error(res) {
+                    deferred.reject(res);
+                }
+
+                $http.delete(endpoint).then(success, error);
+                return deferred.promise;
+            }
         };
     }])
 
@@ -361,9 +362,9 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 deferred.reject('ID field is required!');
             }
 
-			if (angular.isUndefined(product)) {
-				deferred.reject('Product field is required!');
-			}
+            if (angular.isUndefined(product)) {
+                deferred.reject('Product field is required!');
+            }
 
             endpoint += product + '/' + id;
 
@@ -388,7 +389,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
     }])
 
-    .factory('UserService', ['$http', '$q', '$site-configs', function ($http, $q, $configs) {
+    .factory('UserService', ['$http', '$q', '$site-configs', '$objects', function ($http, $q, $configs, $objects) {
         var service = $configs.API_BASE_URL + 'users';
 
         function getUsers() {
@@ -419,7 +420,8 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 deferred.reject(res);
             }
 
-			if (angular.isDefined(data.user_id)) {
+            if (angular.isDefined(data.user_id)) {
+                endpoint += '/' + data.user_id;
                 $http.put(endpoint, data).then(success, error);
             } else {
                 $http.post(endpoint, data).then(success, error);
@@ -469,11 +471,31 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
+        function query(params) {
+            var endpoint = service,
+                deferred = $q.defer();
+
+            endpoint += '?' + $objects.serializeUrl(params);
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
         return {
             getUsers: getUsers,
             saveUser: save,
             getUser: getUser,
-            loginAsUser: loginAsUser
+            loginAsUser: loginAsUser,
+            query: query
         };
     }])
 

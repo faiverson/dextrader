@@ -27,47 +27,71 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
             });
     })
 
-    .controller('UsersCtrl', ['$scope', 'UserService', 'DTOptionsBuilder', 'DTColumnBuilder', 'localStorageService', '$compile', '$site-configs',
-        function ($scope, UserService, DTOptionsBuilder, DTColumnBuilder, localStorageService, $compile, $config) {
+    .controller('UsersCtrl', ['$scope', 'UserService', 'localStorageService', '$site-configs',
+        function ($scope, UserService, localStorageService, $config) {
+            var vm = this;
+            $scope.pagination = {
+                totalItems: 0,
+                currentPage: 1,
+                itemsPerPage: 10,
+                pageChanged: function () {
+                    vm.getUsers();
+                }
+            };
 
-            function actionsHtml(data, type, full, meta) {
-                return '<button class="btn btn-primary" ui-sref="user_profile({ id:' + data.user_id + '})">' +
-                    'View <i class="fa fa-edit"></i>' +
-                    '</button>&nbsp;' +
-                    '<button class="btn btn-warning" ui-sref="users-edit({ id:' + data.user_id + '})">' +
-                    'Edit <i class="fa fa-edit"></i>' +
-                    '</button>&nbsp;' +
-                    '<button class="btn btn-danger" ng-click="showCase.delete(showCase.persons[' + data.user_id + '])" )"="">' +
-                    'Delete <i class="fa fa-trash-o"></i>' +
-                    '</button>';
-            }
+            $scope.filters = {
+                params: {},
+                reset: function(){
+                    this.params = {};
+                    delete this.name;
+                    delete this.email;
+                },
+                apply: function () {
 
-            function createdRow(row, data, dataIndex) {
-                // Recompiling so we can bind Angular directive to the DT
-                $compile(angular.element(row).contents())($scope);
-            }
+                    this.params = {};
 
-            $scope.dtOptions = DTOptionsBuilder.newOptions()
-                .withOption('ajax', {
-                    headers: {'Authorization': 'Bearer ' + localStorageService.get('token')},
-                    url: $config.API_BASE_URL + 'users',
-                    type: 'GET'
-                })
-                .withDataProp('data')
-                .withOption('processing', true)
-                .withOption('serverSide', true)
-                .withBootstrap()
-                .withPaginationType('full_numbers')
-                .withOption('createdRow', createdRow);
+                    if(angular.isDefined(this.name)){
+                        this.params.first_name = this.name;
+                    }
 
-            $scope.dtColumns = [
-                DTColumnBuilder.newColumn('user_id').withTitle('ID'),
-                DTColumnBuilder.newColumn('username').withTitle('Username'),
-                DTColumnBuilder.newColumn('full_name').withTitle('Name'),
-                DTColumnBuilder.newColumn('email').withTitle('Email'),
-                DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable()
-                    .renderWith(actionsHtml)
-            ];
+                    if(angular.isDefined(this.email)){
+                        this.params.email = this.email;
+                    }
+
+                    vm.getUsers();
+
+                }
+            };
+
+            vm.getUsers = function () {
+                var params = {
+                    start: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
+                    length: $scope.pagination.itemsPerPage,
+                    filter: $scope.filters.params
+                };
+
+                function success(res) {
+                    $scope.pagination.totalItems = res.data.total;
+                    $scope.users = res.data.users;
+                }
+
+                function error(err) {
+
+                }
+
+                UserService.query(params)
+                    .then(success, error);
+            };
+
+            $scope.remove = function (id) {
+
+            };
+
+            vm.init = function () {
+                vm.getUsers();
+            };
+
+            vm.init();
 
         }])
 
@@ -147,9 +171,9 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
 
             vm.setUser = function () {
                 $scope.user.password = '******';
-                if(angular.isArray($scope.user.roles)){
+                if (angular.isArray($scope.user.roles)) {
                     angular.forEach($scope.roles, function (role) {
-                        role.selected = ($filter('filter')($scope.user.roles, {id: role.id}, true)).length > 0;
+                        role.selected = ($filter('filter')($scope.user.roles, {role_id: role.role_id}, true)).length > 0;
 
                     });
                 }
