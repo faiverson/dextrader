@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CheckoutFailedEvent;
 use App\Gateways\TransactionGateway;
 use Illuminate\Http\Request;
 use Config;
@@ -64,6 +65,7 @@ class TransactionController extends Controller
 			Event::fire(new CheckoutEvent($response));
 		} else {
 			$this->transaction->addLead($response);
+			Event::fire(new CheckoutFailedEvent($response));
 			Log::info('Merchant', $response);
 			if(!array_key_exists('responsetext', $response)) {
 				$response['responsetext'] = 'There is a problem with the Merchant. Please contact support to solve the problem!';

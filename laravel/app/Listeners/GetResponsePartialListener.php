@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\CheckoutFailedEvent;
+use App\Libraries\getResponse\GetResponse;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Log;

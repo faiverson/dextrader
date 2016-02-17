@@ -15,10 +15,10 @@ class CheckoutFailedEvent extends Event
      *
      * @return void
      */
-    public function __construct()
-    {
-        //
-    }
+	public function __construct(array $data)
+	{
+		$this->data = $data;
+	}
 
     /**
      * Get the channels the event should be broadcast on.

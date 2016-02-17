@@ -154,7 +154,7 @@ class TransactionGateway extends AbstractGateway {
 				$amount = 0;
 				foreach ($offers as $offer) {
 					$amount += $offer->amount;
-					$data['offers'][]  = $offer->toArray();
+					$data['offers'][$offer->product_id] = $offer->toArray();
 				}
 			} else {
 				unset($data['offer_id']);
@@ -233,14 +233,6 @@ class TransactionGateway extends AbstractGateway {
 	{
 		DB::beginTransaction();
 		try {
-
-			$data = array_filter($data, function($val) {
-				if(is_string($val)) {
-					return trim($val) !== '';
-				}
-				return $val !== null;
-			});
-
 			if( ! $this->createValidator->with($data)->passes() )
 			{
 				$this->errors = $this->createValidator->errors();
@@ -251,8 +243,8 @@ class TransactionGateway extends AbstractGateway {
 			if($transaction) {
 				foreach($data['products'] as $product) {
 					$product['transaction_id'] = $transaction->id;
-					if(array_key_exists('offer_id', $data)) {
-						$product['product_amount'] = $data['amount'];
+					if(array_key_exists('offers', $data)) {
+						$product['product_amount'] = $data['offers'][$product['product_id']]['amount'];
 					}
 					$detail = $this->detail->create($product);
 					if(!$detail) {
@@ -367,8 +359,8 @@ class TransactionGateway extends AbstractGateway {
 				}
 
 				// set the offer price in the invoice detail
-				if(array_key_exists('offer_id', $data)) {
-					$product['product_amount'] = $data['amount'];
+				if(array_key_exists('offers', $data)) {
+					$product['product_amount'] = $data['offers'][$product['product_id']]['amount'];
 				}
 
 				$invoice_detail = $this->invoice->addDetail(array_merge($product, [

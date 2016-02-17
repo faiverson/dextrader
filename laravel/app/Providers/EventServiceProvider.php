@@ -20,8 +20,6 @@ class EventServiceProvider extends ServiceProvider
 		'App\Events\CheckoutFailedEvent' => [
 			'App\Listeners\GetResponsePartialListener'
 		],
-		'App\Events\CommissionEvent' => [
-		],
 		'App\Events\SubscriptionCancelEvent' => [
 			'App\Listeners\GetResponseInactiveListener'
 		],
@@ -30,13 +28,12 @@ class EventServiceProvider extends ServiceProvider
 		'App\Events\SubscriptionRenewedEvent' => [
 			'App\Listeners\SubscriptionCommissionListener'
 		],
-		'App\Events\AddSignalEvent' => [
-		],
-		'App\Events\UpdateSignalEvent' => [
-		],
 		'App\Events\RefundEvent' => [
 			'App\Listeners\RefundCommissionListener',
 		],
+		'App\Events\AddSignalEvent' => [],
+		'App\Events\UpdateSignalEvent' => [],
+		'App\Events\CommissionEvent' => [],
     ];
 
 	protected $subscribe = [
