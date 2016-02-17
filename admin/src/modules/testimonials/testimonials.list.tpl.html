@@ -7,16 +7,8 @@
     <table class="table">
         <thead>
         <tr>
-            <th sortable="1"
-                current-sort="sortBy.column"
-                current-dir="sortBy.dir"
-                data-ng-click="sortBy.sort(1)">Image
-            </th>
-            <th sortable="2"
-                current-sort="sortBy.column"
-                current-dir="sortBy.dir"
-                data-ng-click="sortBy.sort(2)">Author
-            </th>
+            <th>Image</th>
+            <th sort-column="author" on-sort="getTestimonials()" sort-data="sortBy">Author</th>
             <th>Text</th>
             <th>Actions</th>
         </tr>
@@ -39,7 +31,7 @@
                         Actions <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a ui-sref="testimonia.edit({id:testimonial.id})">Edit</a></li>
+                        <li><a ui-sref="testimonials.edit({id:testimonial.id})">Edit</a></li>
                         <li><a href="#">Remove</a></li>
                     </ul>
                 </div>

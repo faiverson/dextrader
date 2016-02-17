@@ -113,24 +113,11 @@ angular.module('app.testimonials', ['ui.router', 'ngFileUpload'])
             currentPage: 1,
             itemsPerPage: 10,
             pageChange: function () {
-                vm.getTestimonials();
+                $scope.getTestimonials();
             }
         };
 
-        $scope.sortBy = {
-            column: 1,
-            dir: 'asc',
-            sort: function (col) {
-                if (col === this.column) {
-                    this.dir = this.dir === 'asc' ? 'desc' : 'asc';
-                } else {
-                    this.column = col;
-                    this.dir = 'asc';
-                }
-
-                vm.getTestimonials();
-            }
-        };
+        $scope.sortBy = {};
 
         $scope.open = function (testimonial) {
 
@@ -152,7 +139,7 @@ angular.module('app.testimonials', ['ui.router', 'ngFileUpload'])
             });
         };
 
-        vm.getTestimonials = function () {
+        $scope.getTestimonials = function () {
 
             var params = {
                 start: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
@@ -175,7 +162,7 @@ angular.module('app.testimonials', ['ui.router', 'ngFileUpload'])
         };
 
         vm.init = function () {
-            vm.getTestimonials();
+            $scope.getTestimonials();
         };
 
         vm.init();
