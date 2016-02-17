@@ -25,6 +25,6 @@ class LeadGateway extends AbstractGateway {
 
 	public function findByEmail($email)
 	{
-		$this->repository->findByEmail($email);
+		return $this->repository->findByEmail($email);
 	}
 }

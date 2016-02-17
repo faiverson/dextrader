@@ -186,10 +186,21 @@ class TransactionGateway extends AbstractGateway {
 			$this->errors = $this->errors();
 			return false;
 		}
-
 		// connect to the gateway merchant
 		$data['orderid'] = $transaction->id;
-		$gateway = $this->gateway($data);
+
+
+		if($amount > 0) {
+			$gateway = $this->gateway($data);
+		}
+		else {
+			// when there is a free offer
+			$gateway['responsetext'] = 'success';
+			$gateway['response'] = 1;
+			$gateway['response_code'] = 10;
+		}
+
+
 
 		// save the response in the transaction
 		$response = $this->set($gateway, $transaction->id);
@@ -227,7 +238,6 @@ class TransactionGateway extends AbstractGateway {
 
 			$data = array_filter($data, function($val) {
 				if(is_string($val)) {
-					var_dump($val);
 					return trim($val) !== '';
 				}
 				return $val !== null;
