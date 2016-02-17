@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Repositories\CommissionRepository;
 use App\Repositories\InvoiceDetailRepository;
 use App\Repositories\ProductRepository;
+use App\Repositories\TransactionDetailRepository;
 use Illuminate\Container\Container as App;
 use App\Gateways\UserGateway;
 use Snowfire\Beautymail\Beautymail;
@@ -35,11 +36,19 @@ class EmailEventListener //implements ShouldQueue
 		$tr = new TransactionRepository($this->app);
 		$transaction_id = $event->data['orderid'];
 		$transaction = $tr->findWith($transaction_id);
-		$this->mailer->send('emails.purchase', ['purchase' => $transaction], function ($message) use ($transaction) {
+		$trans_detail_repo = new TransactionDetailRepository($this->app);
+		// lets get the products name
+		$transaction_detail = $trans_detail_repo->findBy('transaction_id', $transaction_id);
+		if($transaction_detail->count() > 0) {
+			$products = array_column($transaction_detail->toArray(), 'product_display_name');
+			$products = implode(' - ', $products);
+		}
+
+		$this->mailer->send('emails.purchase', ['purchase' => $transaction, 'products' => $products], function ($message) use ($transaction, $products) {
 			$message
 				->from($this->from)
 				->to($transaction->email)
-				->subject('Your (product) payment receipt');
+				->subject('Your ' . $products .' payment receipt');
 		});
     }
 

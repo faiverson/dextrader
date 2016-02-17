@@ -582,7 +582,7 @@ class GetResponse
 		];
 
 		if (!empty($ip) && $this->isValidIp($ip) ) {
-			array_push($params, ['ip' => $ip]);
+			$params['ip'] = $ip;
 		}
 
 		if ( !empty($customs) ) {
@@ -595,7 +595,7 @@ class GetResponse
 		if ( $this->consumerKey ) {
 			$params['consumer_key'] = $this->consumerKey;
 		}
-//	dd($params);cd
+
 		$request = $this->prepRequest('add_contact', $params);
 		$response = $this->execute($request);
 
@@ -611,15 +611,10 @@ class GetResponse
 	 */
 	private function isValidIp($ip)
 	{
-
 		if ( filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) ) {
-			if ( substr_count($ip, '.') == 4 ) {
-				return true;
-			}
+			return true;
 		} else if ( filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) ) {
-			if ( substr_count($ip, ':') == 7 ) {
-				return true;
-			}
+			return true;
 		}
 
 		return false;

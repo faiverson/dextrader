@@ -47,8 +47,8 @@ class Commission extends Model
 
 	public function setAmountAttribute($value)
 	{
-		$this->attributes['amount'] = $value;
-		$this->attributes['holdback'] = $value * Config::get('dextrader.holdback');
+		$this->attributes['amount'] = number_format($value, 2, '.', '');
+		$this->attributes['holdback'] = number_format($value * Config::get('dextrader.holdback'), 2, '.', '');
 	}
 
 	public function from()
@@ -72,5 +72,14 @@ class Commission extends Model
 		return $this->hasOne(User::class, 'id', 'to_user_id')->where('users.active', 1)->select(['user_id', 'first_name', 'last_name', 'username', 'email']);
 	}
 
+	public function getAmountAttribute()
+	{
+		return number_format($this->attributes['amount'], 2, '.', ',');
+	}
+
+	public function getHoldbackAttribute()
+	{
+		return number_format($this->attributes['holdback'], 2, '.', ',');
+	}
 
 }

@@ -27,4 +27,9 @@ class SpecialOfferGateway extends AbstractGateway {
 	{
 		return $this->repository->findByFunnel($page);
 	}
+
+	public function findIn($ids)
+	{
+		return $this->repository->findIn($ids);
+	}
 }

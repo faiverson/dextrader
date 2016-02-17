@@ -137,6 +137,9 @@ class TransactionGateway extends AbstractGateway {
 				$data['enroller_id'] = $enroller_id;
 			}
 		}
+		else {
+			$data['enroller_id'] = $user->enroller_id;
+		}
 
 		if(array_key_exists('tag', $data) && array_key_exists('enroller_id', $data) ) {
 			$tag = $this->tag->getIdByTag($data['enroller_id'], $data['tag']);
@@ -146,9 +149,12 @@ class TransactionGateway extends AbstractGateway {
 		}
 
 		if(array_key_exists('offer_id', $data)) {
-			$offer = $this->offer->find($data['offer_id']);
-			if($offer) {
-				$amount = $offer->amount;
+			$offers = $this->offer->findIn($data['offer_id']);
+			if($offers) {
+				$amount = 0;
+				foreach ($offers as $offer) {
+					$amount += $offer->amount;
+				}
 			} else {
 				unset($data['offer_id']);
 			}
@@ -221,9 +227,10 @@ class TransactionGateway extends AbstractGateway {
 
 			$data = array_filter($data, function($val) {
 				if(is_string($val)) {
-					return trim($val) != '';
+					var_dump($val);
+					return trim($val) !== '';
 				}
-				return $val != null;
+				return $val !== null;
 			});
 
 			if( ! $this->createValidator->with($data)->passes() )

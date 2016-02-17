@@ -7,7 +7,7 @@
     ])
 	@include('beautymail::templates.sunny.contentStart', ['color' => '#0000FF'])
 	<h3>Hi {{$purchase->first_name}} {{$purchase->last_name}},</h3>
-	<p>Thanks for your recent (product) payment</p>
+	<p>Thanks for your recent {{$products}} payment</p>
 	<p>These is the information regarding to your purchase: <br/>
 		To access your product, please login at the link<br/>
 		below using your email and password.<br/>
