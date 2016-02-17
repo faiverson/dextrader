@@ -154,6 +154,7 @@ class TransactionGateway extends AbstractGateway {
 				$amount = 0;
 				foreach ($offers as $offer) {
 					$amount += $offer->amount;
+					$data['offers'][]  = $offer->toArray();
 				}
 			} else {
 				unset($data['offer_id']);
@@ -188,8 +189,7 @@ class TransactionGateway extends AbstractGateway {
 		}
 		// connect to the gateway merchant
 		$data['orderid'] = $transaction->id;
-
-
+		$data['order_date'] = $transaction->created_at;
 		if($amount > 0) {
 			$gateway = $this->gateway($data);
 		}
@@ -199,8 +199,6 @@ class TransactionGateway extends AbstractGateway {
 			$gateway['response'] = 1;
 			$gateway['response_code'] = 10;
 		}
-
-
 
 		// save the response in the transaction
 		$response = $this->set($gateway, $transaction->id);
