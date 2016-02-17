@@ -66,6 +66,8 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 permissions = permissions.concat(role.permissions);
             });
 
+            console.log(permissions);
+
             return permissions;
         }
 
@@ -169,9 +171,9 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 }
                 return $config;
             },
-            'responseError': function(rejection) {
+            'responseError': function (rejection) {
                 // do something on error
-                if(rejection.data.error === "token_expired"){
+                if (rejection.data.error === "token_expired") {
                     localStorageService.clearAll();
                     window.location.href = '/login';
                 }
@@ -815,7 +817,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         var service = $configs.API_BASE_URL + 'users/' + AuthService.getLoggedInUser().user_id;
 
         function getPaymentTotals() {
-            var endpoint = service+ '/balance',
+            var endpoint = service + '/balance',
                 deferred = $q.defer();
 
             function success(res) {
@@ -985,7 +987,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
     }])
 
-    .factory('CheckoutService', ['$q', '$site-configs', '$http', function ($q, $config, $http) {
+    .factory('CheckoutService', ['$rootScope', '$q', '$site-configs', 'localStorageService', '$http', function ($rootScope, $q, $config, localStorageService, $http) {
         var service = $config.API_BASE_URL + 'checkout';
 
         function send(data, user_id) {
@@ -993,6 +995,13 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 deferred = $q.defer();
 
             function success(res) {
+
+                if (angular.isDefined(res.data.data) && angular.isDefined(res.data.data.token)) {
+                    // Set the token into local storage
+                    localStorageService.set('token', res.data.data.token);
+                    $rootScope.$broadcast("user-has-change");
+                }
+
                 deferred.resolve(res.data);
             }
 
