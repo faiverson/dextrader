@@ -137,7 +137,7 @@ class TransactionGateway extends AbstractGateway {
 				$data['enroller_id'] = $enroller_id;
 			}
 		}
-		else {
+		elseif($user->enroller_id > 0) {
 			$data['enroller_id'] = $user->enroller_id;
 		}
 
@@ -532,6 +532,7 @@ class TransactionGateway extends AbstractGateway {
 
 		// connect to the gateway merchant
 		$data['orderid'] = $transaction->id;
+		$data['order_date'] = $transaction->created_at;
 		$gateway = $this->gateway($data);
 
 		// save the response in the transaction
