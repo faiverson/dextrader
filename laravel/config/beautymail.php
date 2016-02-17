@@ -12,7 +12,7 @@ return [
         'unsubscribe' => null,
         'address'     => null,
         'logo'        => [
-            'path'   => '%PUBLIC%/front/assets/images/logo.png',
+            'path'   => env('URL') . '/front/assets/images/logo.png',
             'width'  => '148',
             'height' => '34',
         ],

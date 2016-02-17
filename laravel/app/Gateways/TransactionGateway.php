@@ -137,6 +137,9 @@ class TransactionGateway extends AbstractGateway {
 				$data['enroller_id'] = $enroller_id;
 			}
 		}
+		else {
+			$data['enroller_id'] = $user->enroller_id;
+		}
 
 		if(array_key_exists('tag', $data) && array_key_exists('enroller_id', $data) ) {
 			$tag = $this->tag->getIdByTag($data['enroller_id'], $data['tag']);
@@ -146,9 +149,12 @@ class TransactionGateway extends AbstractGateway {
 		}
 
 		if(array_key_exists('offer_id', $data)) {
-			$offer = $this->offer->find($data['offer_id']);
-			if($offer) {
-				$amount = $offer->amount;
+			$offers = $this->offer->findIn($data['offer_id']);
+			if($offers) {
+				$amount = 0;
+				foreach ($offers as $offer) {
+					$amount += $offer->amount;
+				}
 			} else {
 				unset($data['offer_id']);
 			}
@@ -180,10 +186,21 @@ class TransactionGateway extends AbstractGateway {
 			$this->errors = $this->errors();
 			return false;
 		}
-
 		// connect to the gateway merchant
 		$data['orderid'] = $transaction->id;
-		$gateway = $this->gateway($data);
+
+
+		if($amount > 0) {
+			$gateway = $this->gateway($data);
+		}
+		else {
+			// when there is a free offer
+			$gateway['responsetext'] = 'success';
+			$gateway['response'] = 1;
+			$gateway['response_code'] = 10;
+		}
+
+
 
 		// save the response in the transaction
 		$response = $this->set($gateway, $transaction->id);
@@ -221,9 +238,9 @@ class TransactionGateway extends AbstractGateway {
 
 			$data = array_filter($data, function($val) {
 				if(is_string($val)) {
-					return trim($val) != '';
+					return trim($val) !== '';
 				}
-				return $val != null;
+				return $val !== null;
 			});
 
 			if( ! $this->createValidator->with($data)->passes() )

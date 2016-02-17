@@ -51,7 +51,7 @@ class GetResponseBuyersListener
 		];
 		$campaign_id = key($this->campaign);
 		$contact = $this->gr->getContactsByEmail($data['email']);
-		$name = $data['first_name'] . " " . $data['first_name'];
+		$name = $data['first_name'] . " " . $data['last_name'];
 		if(key($contact) == null) {
 			$customs = [];
 			foreach ($data as $attribute => $value) {

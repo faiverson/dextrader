@@ -47,6 +47,7 @@ class TransactionController extends Controller
 
 		// to simplify UI
 		$fields['products'] = is_string($fields['products']) ? explode(',', $fields['products']) : $fields['products'];
+		$fields['offer_id'] = is_string($fields['offer_id']) ? explode(',', $fields['offer_id']) : $fields['offer_id'];
 
 		$response = $this->transaction->add($fields);
 		if(!$response) {
@@ -101,13 +102,13 @@ class TransactionController extends Controller
 			}
 			$response = array_merge($response, $purchase);
 			Event::fire(new CheckoutEvent($response));
-		} else {
+		}
+		else {
 			Log::info('Merchant', $response);
 			if(!array_key_exists('responsetext', $response)) {
 				$response['responsetext'] = 'There is a problem with the Merchant. Please contact support to solve the problem!';
 			}
 			return response()->error($response['responsetext']);
-
 		}
 
 		try {

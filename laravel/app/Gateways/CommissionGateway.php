@@ -33,7 +33,7 @@ class CommissionGateway extends AbstractGateway {
 
 	public function add(array $data)
 	{
-		if(array_key_exists('enroller_id', $data)) {
+		if(array_key_exists('enroller_id', $data) && $data['amount'] > 0) {
 			$enroller = $this->user->find($data['enroller_id']);
 			$comm = $this->repository->create([
 				'from_user_id' => $data['user_id'],
@@ -86,7 +86,7 @@ class CommissionGateway extends AbstractGateway {
 	public function parent(array $data)
 	{
 		$parent = $this->user->find($data['enroller_id']);
-		if($parent->enroller_id > 0) {
+		if($parent->enroller_id > 0 && $data['amount'] > 0) {
 			$comm = $this->repository->create([
 				'from_user_id' => $parent->user_id,
 				'to_user_id' => $parent->enroller_id,

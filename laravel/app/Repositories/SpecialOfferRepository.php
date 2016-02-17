@@ -17,4 +17,9 @@ class SpecialOfferRepository extends AbstractRepository implements SpecialOfferR
 		return $this->model->where('funnel_id', $funnel_id)->get();
 	}
 
+	public function findIn($ids)
+	{
+		return $this->model->whereIn('id', $ids)->get();
+	}
+
 }
