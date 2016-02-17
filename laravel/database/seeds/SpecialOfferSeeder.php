@@ -82,6 +82,26 @@ class SpecialOfferSeeder extends Seeder
 				'countdown' => (60 * 60 * 2) // 2 hs
 		]);
 
+		$mk = MarketingLink::where('link','http://dextrader.com/ib')->first();
+		$prod = Product::where('name', 'IB')->first();
+		SpecialOffer::create([
+				'funnel_id' => $mk->id,
+				'product_id' => $prod->id,
+				'amount' => 0,
+				'type' => 'free-30-days',
+				'countdown' => (60 * 60 * 2) // 2 hs
+		]);
+
+		$mk = MarketingLink::where('link','http://dextrader.com/ib')->first();
+		$prod = Product::where('name', 'PRO')->first();
+		SpecialOffer::create([
+				'funnel_id' => $mk->id,
+				'product_id' => $prod->id,
+				'amount' => 0,
+				'type' => 'free-30-days',
+				'countdown' => (60 * 60 * 2) // 2 hs
+		]);
+
 		Training::reguard();
 		$this->command->info("Specials offers finished");
     }

@@ -297,7 +297,13 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 $scope.working = false;
                 InvoicesService.setInvoice(invoice_details);
 
-                $state.go('upsell');
+                //forcing the user to go to thankyou page for IB and IB PRO for free
+                if(product.id.length > 1){
+                    $state.go('thankyou');
+                }else{
+                    $state.go('upsell');
+                }
+
                 Notification.success('Congratulations!!! Account has been created!');
             };
 
