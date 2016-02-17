@@ -27,7 +27,7 @@ class TrainingUpdateValidator extends AbstractValidator {
 	public function custom()
 	{
 		$this->factory->extend('VideoId', function($attribute, $value, $parameters, $validator) {
-			$is = Training::where('video_id', $value)->where('id', '!=', $this->data['id'])->count();
+			$is = Training::where('video_id', $value)->where('id', '!=', $this->data['id'])->where('type', '=', $this->data['type'])->count();
 			return $is > 0 ? false : true;
 		});
 	}

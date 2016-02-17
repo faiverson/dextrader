@@ -53,8 +53,8 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
                 controller: 'DexIBProCtrl',
                 data: {
                     pageTitle: 'Dex IB - Pro',
-                    permission: 'product.ib.dex_score',
-                    redirectTo: 'dex_ib.dex_score'
+                    permission: 'product.ib.pro',
+                    redirectTo: 'dex_ib.dex_ib_pro_upgrade'
                 }
             })
             .state('dex_ib.dex_ib_pro_upgrade', {
@@ -429,7 +429,7 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
 
     }])
 
-    .controller('DexIBProUpgradeCtrl', ['$scope', '$uibModal', 'Notification', function ($scope, $uibModal, Notification) {
+    .controller('DexIBProUpgradeCtrl', ['$scope', '$uibModal', 'Notification', '$state', function ($scope, $uibModal, Notification, $state) {
         $scope.videoId = 'lYKRPzOi1zI';
 
         $scope.openOrderNowForm = function (cc_id) {
@@ -447,6 +447,7 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
 
             modalInstance.result.then(function (email) {
                 Notification.success('Upgrade complete successfully!');
+                $state.go('dex_ib.dex_ib_pro');
             }, function () {
                 //$log.info('Modal dismissed at: ' + new Date());
             });

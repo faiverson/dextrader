@@ -46,7 +46,8 @@ angular.module('app.thankyou', ['ui.router'])
 
             vm.loadInvoice = function () {
                 $scope.invoices = InvoicesService.getInvoices();
-                console.log($scope.invoices);
+
+                $scope.order_date = moment().format('MM-DD-YYYY');
             };
 
             vm.init = function () {
