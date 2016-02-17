@@ -105,7 +105,7 @@ angular.module('app.testimonials', ['ui.router', 'ngFileUpload'])
             vm.init();
         }])
 
-    .controller('TestimonialsListCtrl', ['$scope', 'TestimonialsService', 'Notification', '$uibModal', function ($scope, TestimonialsService, Notification, $uibModal) {
+    .controller('TestimonialsListCtrl', ['$scope', 'TestimonialsService', 'Notification', '$uibModal', 'modalService', function ($scope, TestimonialsService, Notification, $uibModal, modalService) {
         var vm = this;
 
         $scope.pagination = {
@@ -115,6 +115,29 @@ angular.module('app.testimonials', ['ui.router', 'ngFileUpload'])
             pageChange: function () {
                 $scope.getTestimonials();
             }
+        };
+
+        $scope.openDeleteConfirm = function (id) {
+            var modalOptions = {
+                closeButtonText: 'Cancel',
+                actionButtonText: 'Delete Testimonial?',
+                headerText: 'Delete Signal?',
+                bodyText: 'Are you sure you want to delete this Testimonial?'
+            };
+
+            modalService.showModal({}, modalOptions)
+                .then(function (result) {
+                    TestimonialsService.destroy(id).then(vm.successDelete, vm.errorDelete);
+                });
+        };
+
+        vm.successDelete = function (res) {
+            $scope.getTestimonials();
+            Notification.success('Testimonial was removed successfully!');
+        };
+
+        vm.errorDelete = function (err) {
+            Notification.error('Ups! there was an error trying to remove this Testimonial!');
         };
 
         $scope.sortBy = {};

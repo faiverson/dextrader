@@ -11,8 +11,8 @@ angular.module('app.thankyou', ['ui.router'])
             });
     })
 
-    .controller('ThankyouCtrl', ['$scope', 'AuthService', 'Notification', '$site-configs', 'InvoicesService', '$stateParams',
-        function ($scope, AuthService, Notification, $configs, InvoicesService, $stateParams) {
+    .controller('ThankyouCtrl', ['$scope', 'AuthService', 'Notification', '$site-configs', 'InvoicesService', '$stateParams', '$filter',
+        function ($scope, AuthService, Notification, $configs, InvoicesService, $stateParams, $filter) {
             var vm = this;
 
             $scope.login = function () {
@@ -36,6 +36,26 @@ angular.module('app.thankyou', ['ui.router'])
                 return total;
             };
 
+            $scope.getProductPrice = function (invoice, prd_id) {
+                var amount = 0;
+
+                if (angular.isDefined(invoice.offers) && invoice.offers.length > 0) {
+                    var offer = $filter('filter')(invoice.offers, {product_id: prd_id}, true);
+
+                    if (offer.length > 0) {
+                        amount = offer[0].amount;
+                    }
+                }else{
+                    var product = $filter('filter')(invoice.products, {product_id: prd_id}, true);
+
+                    if (product.length > 0) {
+                        amount = product[0].product_amount;
+                    }
+                }
+
+                return amount;
+            };
+
             vm.successLogin = function (res) {
                 window.location.href = $configs.DASHBOARD_URL + "/doLogin?token=" + res.data.token;
             };
@@ -46,7 +66,7 @@ angular.module('app.thankyou', ['ui.router'])
 
             vm.loadInvoice = function () {
                 $scope.invoices = InvoicesService.getInvoices();
-
+                console.log($scope.invoices);
                 $scope.order_date = moment().format('MM-DD-YYYY');
             };
 

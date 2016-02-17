@@ -570,10 +570,34 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
+        function destroy(id) {
+            var deferred = $q.defer(),
+                endpoint = service;
+
+            if (angular.isUndefined(id)) {
+                deferred.reject('ID field is required!');
+            }
+
+            endpoint += '/' + id;
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            $http.delete(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
         return {
             query: query,
             save: save,
-            getOne: getOne
+            getOne: getOne,
+            destroy: destroy
         };
 
     }])
@@ -644,10 +668,34 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
+        function destroy(id) {
+            var deferred = $q.defer(),
+                endpoint = service;
+
+            if (angular.isUndefined(id)) {
+                deferred.reject('ID field is required!');
+            }
+
+            endpoint += '/' + id;
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(res) {
+                deferred.reject(res);
+            }
+
+            $http.delete(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
         return {
             query: query,
             save: save,
-            getOne: getOne
+            getOne: getOne,
+            destroy: destroy
         };
 
     }])

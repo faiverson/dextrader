@@ -100,11 +100,11 @@
             <div class="clearfix" data-ng-repeat="invoice in invoices">
                 <div data-ng-repeat="prd in invoice.products">
                     <div class="left">
-                    <span class="bold">{{prd.product_display_name}}</span> – {{prd.product_amount | currency:'$'}} today and the re-bills for {{prd.product_amount | currency:'$'}} every
+                    <span class="bold">{{prd.product_display_name}}</span> – {{getProductPrice(invoice, prd.product_id) | currency:'$'}} today and the re-bills for {{prd.product_amount | currency:'$'}} every
                     30 days until you decide to cancel
                 </div>
                     <div class="right">
-                    {{prd.product_amount | currency:'$'}}
+                    {{getProductPrice(invoice, prd.product_id) | currency:'$'}}
                 </div>
                 </div>
             </div>
