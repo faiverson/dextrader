@@ -270,9 +270,11 @@
         </div>
         <div id="checkout-info" class="content-right">
             <div style="background: #f6f1eb">
-                <h3>{{productsData[product.id].name}}</h3>
-
-                <p>{{productsData[product.id].description}}</p>
+                <div data-ng-repeat="prd in product.id">
+                    <h3>{{productsData[prd].name}}</h3>
+                    <p>{{productsData[prd].description}}</p>
+                    <hr>
+                </div>
 
                 <div class="form-wrapper">
                     <select name="currency">
@@ -300,12 +302,20 @@
             <div class="checkout-prices" data-ng-if="product.showRecurrentPayment">
                 <h3>Future Payments</h3>
 
-                <div id="checkout-price-monthly" class="clearfix">
+                <div id="checkout-price-monthly" class="clearfix" data-ng-repeat="prd in products">
                     <div class="left">
-                        Monthly Payment of
+                        Monthly Payment of {{prd.product.display_name}}
                     </div>
                     <div class="right">
-                        {{(products[0].product && products[0].product.amount || products[0].amount) | currency: '$'}}
+                        {{(prd.product && prd.product.amount || prd.amount) | currency: '$'}}
+                    </div>
+                </div>
+                <div id="checkout-price-monthly" class="clearfix" data-ng-if="products.length > 0">
+                    <div class="left">
+                        Total:
+                    </div>
+                    <div class="right">
+                        {{ total() | currency: '$'}}
                     </div>
                 </div>
                 <p>

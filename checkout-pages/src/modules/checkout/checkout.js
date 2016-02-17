@@ -10,7 +10,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 },
                 resolve: {
                     product: function () {
-                        return {id: 1, name: 'ib', funnel_id: 1, showRecurrentPayment: true};
+                        return {id: [1], name: 'ib', funnel_id: 1, showRecurrentPayment: true};
                     }
                 }
             })
@@ -23,7 +23,20 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 },
                 resolve: {
                     product: function () {
-                        return {id: 1, name: 'ib', funnel_id: 1};
+                        return {id: [1], name: 'ib', funnel_id: 1, type: 'downsell'};
+                    }
+                }
+            })
+            .state('ckfreeib', {
+                url: '/ib/free?user&tag',
+                templateUrl: 'modules/checkout/checkout.tpl.html',
+                controller: 'CheckoutCtrl',
+                data: {
+                    pageTitle: 'Checkout Page'
+                },
+                resolve: {
+                    product: function () {
+                        return {id: [1, 2], name: 'ib', funnel_id: 1, showRecurrentPayment: true, type: 'free-30-days'};
                     }
                 }
             })
@@ -36,7 +49,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 },
                 resolve: {
                     product: function () {
-                        return {id: 3, name: 'na', funnel_id: 2, showRecurrentPayment: true};
+                        return {id: [3], name: 'na', funnel_id: 2, showRecurrentPayment: true};
                     }
                 }
             })
@@ -49,7 +62,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 },
                 resolve: {
                     product: function () {
-                        return {id: 4, name: 'fx', funnel_id: 2, showRecurrentPayment: true};
+                        return {id: [4], name: 'fx', funnel_id: 2, showRecurrentPayment: true};
                     }
                 }
             })
@@ -62,7 +75,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 },
                 resolve: {
                     product: function () {
-                        return {id: 5, name: 'academy', funnel_id: 2, showRecurrentPayment: false};
+                        return {id: [5], name: 'academy', funnel_id: 2, showRecurrentPayment: false};
                     }
                 }
             });
@@ -76,7 +89,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             $scope.product = product;
             $scope.formData = {
                 billing_address2: "",
-                products: [product.id],
+                products: product.id,
                 funnel_id: product.funnel_id
             };
 
@@ -117,6 +130,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
 
             $scope.send = function () {
                 var proms = [];
+                var offers_id = [];
                 $scope.showAgreementWarning = angular.isUndefined($scope.formData.terms);
 
                 if ($scope.formCheckout.$valid) {
@@ -133,6 +147,19 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
 
                     if (angular.isUndefined($scope.userData.username)) {
                         $scope.userData.username = $scope.formData.email;
+                    }
+
+
+                    if($scope.products.length > 0){
+                        angular.forEach($scope.products, function (prd) {
+                            if(angular.isDefined(prd.offer_id)){
+                                offers_id.push(prd.offer_id);
+                            }
+                        });
+
+                        if(offers_id.length > 0){
+                            $scope.formData.offer_id = offers_id;
+                        }
                     }
 
                     if (angular.isDefined($scope.formData.user_id)) {
@@ -221,6 +248,15 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 }
             };
 
+            $scope.total = function () {
+                var sum = 0;
+                angular.forEach($scope.products, function (prd) {
+                    sum += parseFloat(angular.isDefined(prd.product) ? prd.product.amount : prd.amount, 2);
+                });
+
+                return sum;
+            };
+
             vm.getTestimonials = function () {
 
                 function success(res) {
@@ -287,8 +323,8 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             };
 
             vm.getSpecialOffer = function () {
-                var checkForOffers = $state.includes('ckdownsell');
-                SpecialOffersService.query($scope.formData.funnel_id, $scope.formData.products, checkForOffers)
+                var checkForOffers = $state.includes('ckdownsell') || $state.includes('ckfreeib');
+                SpecialOffersService.query($scope.formData.funnel_id, $scope.formData.products, checkForOffers, product.type)
                     .then(function (res) {
                         $scope.products = res;
                         console.log(res);
