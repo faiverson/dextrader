@@ -139,6 +139,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
 
                     if (angular.isDefined($stateParams.user) && $stateParams.user.length > 0) {
                         $scope.formData.enroller = $stateParams.user;
+                        $scope.userData.enroller = $stateParams.user;
                     }
 
                     if (angular.isDefined($stateParams.tag)) {

@@ -112,7 +112,7 @@ angular.module('app.trainings', ['ui.router', 'youtube-embed'])
             vm.init();
         }])
 
-    .controller('TrainingsListCtrl', ['$scope', 'TrainingsService', 'Notification', '$uibModal', function ($scope, TrainingsService, Notification, $uibModal) {
+    .controller('TrainingsListCtrl', ['$scope', 'TrainingsService', 'Notification', 'modalService', function ($scope, TrainingsService, Notification, modalService) {
         var vm = this;
 
         $scope.pagination = {
@@ -165,6 +165,29 @@ angular.module('app.trainings', ['ui.router', 'youtube-embed'])
 
             TrainingsService.query(params, $scope.type)
                 .then(success, error);
+        };
+
+        $scope.openDeleteConfirm = function (id) {
+            var modalOptions = {
+                closeButtonText: 'Cancel',
+                actionButtonText: 'Delete Training?',
+                headerText: 'Delete Signal?',
+                bodyText: 'Are you sure you want to delete this Training?'
+            };
+
+            modalService.showModal({}, modalOptions)
+                .then(function (result) {
+                    TrainingsService.destroy(id).then(vm.successDelete, vm.errorDelete);
+                });
+        };
+
+        vm.successDelete = function (res) {
+            $scope.getTrainings();
+            Notification.success('Training was removed successfully!');
+        };
+
+        vm.errorDelete = function (err) {
+            Notification.error('Ups! there was an error trying to remove this Training!');
         };
 
         vm.init = function () {

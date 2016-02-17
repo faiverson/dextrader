@@ -32,7 +32,7 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li><a ui-sref="testimonials.edit({id:testimonial.id})">Edit</a></li>
-                        <li><a href="#">Remove</a></li>
+                        <li><a href="#" data-ng-click="openDeleteConfirm(testimonial.id)">Remove</a></li>
                     </ul>
                 </div>
             </td>

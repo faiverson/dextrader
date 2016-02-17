@@ -74,4 +74,14 @@ class TestimonialsController extends Controller
         }
         return response()->ok();
     }
+
+    public function destroy(Request $request)
+    {
+        $id = $request->id;
+        $response = $this->gateway->destroy($id);
+        if(!$response) {
+            return response()->error($this->gateway->errors());
+        }
+        return response()->ok($response);
+    }
 }

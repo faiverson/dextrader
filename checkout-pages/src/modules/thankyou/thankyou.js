@@ -11,8 +11,8 @@ angular.module('app.thankyou', ['ui.router'])
             });
     })
 
-    .controller('ThankyouCtrl', ['$scope', 'AuthService', 'Notification', '$site-configs', 'InvoicesService', '$stateParams',
-        function ($scope, AuthService, Notification, $configs, InvoicesService, $stateParams) {
+    .controller('ThankyouCtrl', ['$scope', 'AuthService', 'Notification', '$site-configs', 'InvoicesService', '$stateParams', '$filter',
+        function ($scope, AuthService, Notification, $configs, InvoicesService, $stateParams, $filter) {
             var vm = this;
 
             $scope.login = function () {
@@ -34,6 +34,26 @@ angular.module('app.thankyou', ['ui.router'])
                 });
 
                 return total;
+            };
+
+            $scope.getProductPrice = function (invoice, prd_id) {
+                var amount = 0;
+
+                if (angular.isDefined(invoice.offers) && invoice.offers.length > 0) {
+                    var offer = $filter('filter')(invoice.offers, {product_id: prd_id}, true);
+
+                    if (offer.length > 0) {
+                        amount = offer[0].amount;
+                    }
+                }else{
+                    var product = $filter('filter')(invoice.products, {product_id: prd_id}, true);
+
+                    if (product.length > 0) {
+                        amount = product[0].product_amount;
+                    }
+                }
+
+                return amount;
             };
 
             vm.successLogin = function (res) {
