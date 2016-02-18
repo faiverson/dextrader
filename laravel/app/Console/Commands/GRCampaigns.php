@@ -44,7 +44,7 @@ class GRCampaigns extends Command
      */
     public function handle()
     {
-//		$this->addAdminCampaigns();
+//		$this->addAdminCampaign();
 		$this->addContact();
 	}
 
@@ -89,7 +89,10 @@ class GRCampaigns extends Command
 		foreach ( $campaign as $camp ) {
 			if(!in_array($camp['name'], $existCampaign)) {
 				$c = $this->gr->createCampaign($camp['name'], $camp['description'], $from_field_id, $from_field_id);
-				if (!$c->CAMPAIGN_ID) {
+				if ($c->code <= 0) {
+					$this->info($c->message);
+				}
+				else if (!$c->CAMPAIGN_ID) {
 					$this->info('The campaign has not been created. Please try again later or contact with support system.');
 				}
 				$this->info('Create Campaign: ' . $camp['name']);

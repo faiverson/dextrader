@@ -91,14 +91,14 @@ class RoleSeeder extends Seeder
 
         Role::create([
             'name' => 'owner',
-			'display_name' => 'Application God',
+			'display_name' => 'Owner',
 			'description' => 'This role can do everything',
         ])->attachPermissions(array($uAdd, $uUpdate, $uDelete, $uView, $uLogin, $uProfile, $ib,
 			$training, $pro, $na, $fx, $signal, $trainings));
 
         Role::create([
 			'name' => 'admin',
-			'display_name' => 'Aministrator',
+			'display_name' => 'Administrator',
 			'description' => 'This role is an admin'
         ])->attachPermissions(array($uAdd, $uUpdate, $uDelete, $uView, $uLogin, $uProfile, $ib,
 			$training, $pro, $na, $fx, $signal, $trainings));
@@ -111,15 +111,9 @@ class RoleSeeder extends Seeder
 
         Role::create([
 			'name' => 'user',
-			'display_name' => 'User',
-			'description' => ''
+			'display_name' => 'Affiliate',
+			'description' => 'Affiliate user'
         ]);
-
-		Role::create([
-			'name' => 'coach',
-			'display_name' => 'Coach',
-			'description' => ''
-		]);
 
 		Role::create([
 			'name' => 'lead',

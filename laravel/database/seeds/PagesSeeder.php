@@ -21,7 +21,7 @@ class PagesSeeder extends Seeder
 				'site' => 'secure.dextrader.com',
 				'domain' => 'sales',
 				'password' => 'sAles_dexTr4d3r',
-				'access' => 'checkout'
+				'access' => 'checkout,adduser,hits'
 			]);
 
 			Page::create([

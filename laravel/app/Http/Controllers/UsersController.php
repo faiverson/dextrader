@@ -91,7 +91,7 @@ class UsersController extends Controller
      */
     public function destroy(Request $request)
     {
-		$id = $request->user()->id;
+		$id = $request->id;
 		$this->gateway->destroy($id);
         return response()->ok();
     }

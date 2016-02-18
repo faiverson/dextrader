@@ -233,6 +233,14 @@ class TransactionGateway extends AbstractGateway {
 	{
 		DB::beginTransaction();
 		try {
+			// remove null values for the creator
+			$data = array_filter($data, function($val) {
+				if(is_string($val)) {
+					return trim($val) !== '';
+				}
+				return $val !== null;
+			});
+
 			if( ! $this->createValidator->with($data)->passes() )
 			{
 				$this->errors = $this->createValidator->errors();
