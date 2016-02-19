@@ -48,6 +48,11 @@ class LiveSignalGateway extends AbstractGateway {
 
 	public function add($data, $type)
 	{
+		if(!$this->exceptions($data, $type)) {
+			$this->errors = ['Signal not allowed in our system'];
+			return false;
+		}
+
 		if( ! $this->createValidator->with($data)->passes() )
 		{
 			$this->errors = $this->createValidator->errors();
@@ -76,5 +81,13 @@ class LiveSignalGateway extends AbstractGateway {
 	public function destroyByType($signal_id, $type)
 	{
 		return $this->repository[$type]->destroy($signal_id);
+	}
+
+	protected function exceptions($data, $type)
+	{
+		if($type === 'ib' && $data['trade_type'] == 'M5') {
+			return false;
+		}
+		return true;
 	}
 }

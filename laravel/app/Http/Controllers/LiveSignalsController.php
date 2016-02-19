@@ -62,6 +62,7 @@ class LiveSignalsController extends Controller
 
 	public function store_signal(Request $request)
 	{
+		dd($request);
 		$product = $request->product;
 		return $this->store($request->all(), $product);
 	}
