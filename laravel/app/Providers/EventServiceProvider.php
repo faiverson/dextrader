@@ -3,7 +3,11 @@
 namespace App\Providers;
 
 use App\Events\NewHitEvent;
+use App\Events\NewLeadEvent;
+use App\Events\NewPurchaseEvent;
 use App\Models\Hit;
+use App\Models\Lead;
+use App\Models\Purchase;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
@@ -55,12 +59,16 @@ class EventServiceProvider extends ServiceProvider
 	{
 		parent::boot($events);
 
-//		Lead::created(function ($item) {
-//			Event::fire(new NewLeadEvent($item));
-//		});
+		Lead::created(function ($item) {
+			Event::fire(new NewLeadEvent($item));
+		});
 
 		Hit::created(function ($item) {
 			Event::fire(new NewHitEvent($item));
+		});
+
+		Purchase::created(function ($item) {
+			Event::fire(new NewPurchaseEvent($item));
 		});
 
 	}

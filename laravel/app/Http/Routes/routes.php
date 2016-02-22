@@ -35,8 +35,3 @@ Route::group(['namespace' => 'Auth', 'prefix' => 'api'], function () {
 //	print $query.'<br>';
 //	var_dump($request->path());
 //});
-
-Route::get('/testing', function() {
-	$hit = \App\Models\Hit::find(86);
-	Event::fire(new \App\Events\NewHitEvent($hit));
-});

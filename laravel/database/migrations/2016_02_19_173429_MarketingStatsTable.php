@@ -34,10 +34,11 @@ class MarketingStatsTable extends Migration
 			$table->bigInteger('unique_hits')->default(0);
 			$table->bigInteger('leads')->default(0);
 			$table->bigInteger('ib')->default(0);
+			$table->bigInteger('pro')->default(0);
 			$table->bigInteger('na')->default(0);
 			$table->bigInteger('fx')->default(0);
 			$table->bigInteger('academy')->default(0);
-			$table->bigInteger('income')->default(0);
+			$table->decimal('income', 10, 2)->default(0);
 			$table->timestamps();
 		});
     }

@@ -25,8 +25,8 @@ class HitsSeeder extends Seeder
 		foreach(range(1, $total_batch) as $batch) {
 			$this->command->info("Starting batch " . $batch . " of " . $total_batch);
 			try {
-//				$user = $users[mt_rand(0, $users->count() - 1)];
-				$user = \App\Models\User::where('id', 63);
+				$user = $users[mt_rand(0, $users->count() - 1)];
+//				$user = \App\Models\User::where('id', 63);
 				$tags = Tag::where('user_id', $user->id);
 				if($tags->count() <= 0) {
 					$tag = Tag::create([

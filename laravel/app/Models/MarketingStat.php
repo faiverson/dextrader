@@ -30,6 +30,7 @@ class MarketingStat extends Model
 		'hits',
 		'unique_hits',
 		'ib',
+		'pro',
 		'na',
 		'fx',
 		'academy',

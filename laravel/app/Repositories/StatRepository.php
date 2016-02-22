@@ -7,7 +7,6 @@ use App\Models\MarketingStat;
 
 class StatRepository extends AbstractRepository implements StatRepositoryInterface
 {
-	// This is where the "magic" comes from:
 	public function model()
 	{
 		return MarketingStat::class;
