@@ -20,7 +20,7 @@ class Hit extends Model
      *
      * @var array
      */
-	protected $fillable = ['ip_address', 'enroller_id', 'enroller', 'funnel_id', 'product_id', 'tag', 'tag_id', 'info'];
+	protected $fillable = ['ip_address', 'enroller_id', 'enroller', 'funnel_id', 'product_id', 'tag', 'tag_id', 'info', 'created_at'];
 
     /**
      * The attributes excluded from the model's JSON form.

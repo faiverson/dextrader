@@ -112,4 +112,6 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 
 		return $query;
 	}
+
+
 }

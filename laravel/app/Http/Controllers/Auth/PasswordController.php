@@ -54,7 +54,7 @@ class PasswordController extends Controller
 					\Request::getSchemeAndHttpHost(),
 					Config::get('beautymail.view.logo')
 			);
-			
+
 			$view->with([
 				'logo'   => $logo,
 			]);
@@ -112,5 +112,16 @@ class PasswordController extends Controller
 		}
 
 		return response()->error('Error: ' . $response);
+	}
+
+	/**
+	 * @param $user
+	 * @param $password
+	 */
+	protected function resetPassword($user, $password)
+	{
+		// the model will encrypt the pwd
+		$user->password = $password;
+		$user->save();
 	}
 }

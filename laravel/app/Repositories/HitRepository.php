@@ -13,4 +13,13 @@ class HitRepository extends AbstractRepository implements HitRepositoryInterface
 		return Hit::class;
 	}
 
+	public function findMore($user_id, $funnel_id, $tag_id, $ip_address)
+	{
+		return $this->model->where('enroller_id', $user_id)
+			->where('funnel_id', $funnel_id)
+			->where('tag_id', $tag_id)
+			->where('ip_address', $ip_address)
+			->get();
+	}
+
 }

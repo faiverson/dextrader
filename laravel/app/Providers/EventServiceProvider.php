@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Events\NewHitEvent;
+use App\Models\Hit;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -31,6 +34,7 @@ class EventServiceProvider extends ServiceProvider
 		'App\Events\RefundEvent' => [
 			'App\Listeners\RefundCommissionListener',
 		],
+
 		'App\Events\AddSignalEvent' => [],
 		'App\Events\UpdateSignalEvent' => [],
 		'App\Events\CommissionEvent' => [],
@@ -38,6 +42,7 @@ class EventServiceProvider extends ServiceProvider
 
 	protected $subscribe = [
 		'App\Listeners\EmailEventListener',
+		'App\Listeners\MarketingStatsListener',
 	];
 
     /**
@@ -46,10 +51,17 @@ class EventServiceProvider extends ServiceProvider
      * @param  \Illuminate\Contracts\Events\Dispatcher  $events
      * @return void
      */
-    public function boot(DispatcherContract $events)
-    {
-        parent::boot($events);
+	public function boot(DispatcherContract $events)
+	{
+		parent::boot($events);
 
-        //
-    }
+//		Lead::created(function ($item) {
+//			Event::fire(new NewLeadEvent($item));
+//		});
+
+		Hit::created(function ($item) {
+			Event::fire(new NewHitEvent($item));
+		});
+
+	}
 }
