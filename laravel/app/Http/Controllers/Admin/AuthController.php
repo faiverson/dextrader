@@ -83,14 +83,14 @@ class AuthController extends Controller
                     return response()->error('Invalid Credentials', 401);
                 }
 
-                if (!Hash::check($password, $u->password)) {
-                    return response()->error('Wrong Password', 401);
-                }
-
                 $user = User::with('roles.permissions')->find($u->id);
                 if (!$user->hasRole(['owner', 'admin', 'editor'])) {
                     return response()->error('Not Allowed', 401);
                 }
+
+				if (!Hash::check($password, $u->password)) {
+					return response()->error('Wrong Password', 401);
+				}
 
                 $token = Token::add($u->id, '+1 day', 'admin');
                 if ($token) {

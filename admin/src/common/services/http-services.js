@@ -3,7 +3,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
     .factory('AuthService', ['$http', '$q', '$site-configs', 'localStorageService', 'jwtHelper', '$objects', '$filter', '$rootScope', function ($http, $q, $configs, localStorageService, jwtHelper, $objects, $filter, $rootScope) {
 
         function login(username, password) {
-            var endpoint = $configs.API_BASE_URL + 'login';
+            var endpoint = $configs.API_BASE_URL + 'abo/login';
             var deferred = $q.defer();
 
             function success(res) {

@@ -30,24 +30,20 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
             };
 
             $scope.login = function () {
-
                 if ($scope.form.loginForm.$valid) {
                     AuthService.login(vm.username, vm.password)
                         .then(vm.successLogin, vm.errorLogin);
                 }
-
             };
 
             vm.successLogin = function () {
                 var user = AuthService.getLoggedInUser();
-
                 Notification.success('Welcome ' + user.full_name);
-
                 $state.go('users');
             };
 
-            vm.errorLogin = function () {
-                //message
+            vm.errorLogin = function (response) {
+				Notification.error(response.error);
             };
 
         }]);
