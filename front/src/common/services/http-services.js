@@ -813,6 +813,35 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
     }])
 
+    .factory('DownlineService', ['$http', '$q', '$site-configs', 'AuthService', '$objects', function ($http, $q, $configs, AuthService, $objects) {
+        var service = $configs.API_BASE_URL + 'users/' + AuthService.getLoggedInUser().user_id + '/downline';
+
+        function query(params) {
+            var endpoint = service,
+                deferred = $q.defer();
+
+            if (angular.isObject(params)) {
+                endpoint += '?' + $objects.serializeUrl(params);
+            }
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
+        return {
+            query: query
+        };
+    }])
+
     .factory('PaymentService', ['$http', '$q', '$site-configs', 'AuthService', '$objects', function ($http, $q, $configs, AuthService, $objects) {
         var service = $configs.API_BASE_URL + 'users/' + AuthService.getLoggedInUser().user_id;
 
