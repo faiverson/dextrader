@@ -57,6 +57,14 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                     pageTitle: 'Affiliates - Commissions'
                 }
             })
+            .state('affiliates.downline', {
+                url: '/downline',
+                templateUrl: 'modules/affiliates/downline.tpl.html',
+                controller: 'DownlineCtrl',
+                data: {
+                    pageTitle: 'Affiliates - Downline'
+                }
+            })
             .state('affiliates.payments', {
                 url: '/payments',
                 templateUrl: 'modules/affiliates/payments.tpl.html',
@@ -468,4 +476,88 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
         };
 
         vm.init();
+    }])
+
+    .controller('DownlineCtrl', ['$scope', 'DownlineService', 'Notification', 'AuthService', function ($scope, DownlineService, Notification, AuthService) {
+
+        var vm = this;
+
+        $scope.pagination = {
+            totalItems: 20,
+            currentPage: 1,
+            itemsPerPage: 10,
+            pageChange: function () {
+                vm.getDownlines();
+            }
+        };
+
+        $scope.user = AuthService.getLoggedInUser();
+
+        $scope.sortBy = {
+            column: 'created_at',
+            dir: 'desc',
+            sort: function (col) {
+                if (col === this.column) {
+                    this.dir = this.dir === 'asc' ? 'desc' : 'asc';
+                } else {
+                    this.column = col;
+                    this.dir = 'asc';
+                }
+
+                vm.getDownlines();
+            }
+        };
+
+        $scope.filters = {
+            from: {
+                format: 'dd MMM yyyy'
+            },
+            to: {
+                format: 'dd MMM yyyy'
+            },
+            apply: function () {
+                if(angular.isDefined(this.from.value)){
+                    this.toApply.from = moment(this.from.value).format('YYYY-MM-DD');
+                }
+
+                if(angular.isDefined(this.to.value)){
+                    this.toApply.to = moment(this.to.value).format('YYYY-MM-DD');
+                }
+
+                vm.getDownlines();
+            },
+            toApply: {}
+        };
+
+        vm.getDownlines = function () {
+            var order = [];
+            order[$scope.sortBy.column] = $scope.sortBy.dir;
+
+            var params = {
+                offset: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
+                limit: $scope.pagination.itemsPerPage,
+                order: order,
+                filter: $scope.filters.toApply
+            };
+
+            function success(res) {
+                console.log(res);
+                $scope.pagination.totalItems = res.data.total;
+                $scope.users = res.data.users;
+            }
+
+            function error(res) {
+                Notification.error('Oops! there was an error trying to load downline!');
+            }
+
+            DownlineService.query(params)
+                .then(success, error);
+        };
+
+        vm.init = function () {
+            vm.getDownlines();
+        };
+
+        vm.init();
+
     }]);
