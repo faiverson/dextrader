@@ -487,7 +487,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
             currentPage: 1,
             itemsPerPage: 10,
             pageChange: function () {
-                vm.getCommissions();
+                vm.getDownlines();
             }
         };
 
