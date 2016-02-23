@@ -98,6 +98,16 @@ class UserGateway extends AbstractGateway
 		return $this->repository->total($filters);
 	}
 
+	public function getUserBySponsor($enroller_id, $columns = array('*'), $limit = null, $offset = null, $order_by = null, $filters = null)
+	{
+		return $this->repository->getUserBySponsor($enroller_id, $columns, $limit, $offset, $order_by, $filters);
+	}
+
+	public function getTotalUserBySponsor($enroller_id, $filters = null)
+	{
+		return $this->repository->getTotalUserBySponsor($enroller_id, $filters);
+	}
+
 	public function revoke($user_id, $role_id)
 	{
 		return $this->repository->detachRole($user_id, $role_id);

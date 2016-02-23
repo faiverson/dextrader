@@ -8,7 +8,6 @@ use DateTime;
 
 class UserRepository extends AbstractRepository implements UserRepositoryInterface
 {
-	// This is where the "magic" comes from:
 	public function model()
 	{
 		return User::class;
@@ -36,6 +35,32 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 
 	public function total($filters = null) {
 		$query = $this->model->where('active', 1);
+		$query = $this->filters($query, $filters);
+		return $query->count();
+	}
+
+	public function getUserBySponsor($enroller_id, $columns = array('*'), $limit = null, $offset = null, $order_by = null, $filters = null) {
+		$query = $this->model->with('roles')->where('active', 1)->where('enroller_id', $enroller_id);
+		if($limit != null) {
+			$query = $query->take($limit);
+		}
+
+		if($offset != null) {
+			$query = $query->skip($offset);
+		}
+
+		if($order_by != null) {
+			foreach($order_by as $column => $dir) {
+				$query = $query->orderBy($column, $dir);
+			}
+		}
+
+		$query = $this->filters($query, $filters);
+		return $query->get($columns);
+	}
+
+	public function getTotalUserBySponsor($enroller_id, $filters = null) {
+		$query = $this->model->where('active', 1)->where('enroller_id', $enroller_id);
 		$query = $this->filters($query, $filters);
 		return $query->count();
 	}
@@ -112,6 +137,5 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 
 		return $query;
 	}
-
 
 }

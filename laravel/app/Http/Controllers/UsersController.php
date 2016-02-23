@@ -48,6 +48,22 @@ class UsersController extends Controller
 		]);
 	}
 
+	public function downline(Request $request)
+	{
+		$id = $request->id;
+		$select = ['id', 'username', 'first_name', 'last_name', 'phone',  'email', 'created_at'];
+		$limit = $request->input('limit') ? $request->input('limit') : $this->limit;
+		$offset = $request->input('offset') ? $request->input('offset') : 0;
+		$order_by = $request->input('order') ? $request->input('order') : ['id' => 'desc'];
+		$filters = $request->input('filter') ? $request->input('filter') : [];
+		$users = $this->gateway->getUserBySponsor($id, $select, $limit, $offset, $order_by, $filters);
+		$total = $this->gateway->getTotalUserBySponsor($id, $filters);
+		return response()->ok([
+			'users' => $users,
+			'total' => $total
+		]);
+	}
+
     /**
      * Store a newly created resource in storage.
      *
