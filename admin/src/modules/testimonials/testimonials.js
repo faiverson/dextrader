@@ -72,8 +72,18 @@ angular.module('app.testimonials', ['ui.router', 'ngFileUpload'])
                     $state.go('testimonials.list');
                 }
 
-                function error(err) {
-                    Notification.error("Oops! there was an error trying to save the provider!");
+                function error(response) {
+					var txt = '';
+					response = response.data;
+					if(angular.isArray(response.error)) {
+						angular.forEach(response.error, function(item) {
+							txt += item + '<br>';
+						});
+					}
+					else {
+						txt += response.error;
+					}
+					Notification.error("Oops! " + txt);
                 }
 
                 TestimonialsService.save($scope.testimonial)

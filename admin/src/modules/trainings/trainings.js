@@ -105,9 +105,19 @@ angular.module('app.trainings', ['ui.router', 'youtube-embed'])
                 $state.go('trainings.list');
             };
 
-            vm.error = function (err) {
-                Notification.error("Oops! there was an error trying to save the provider!");
-            };
+            vm.error = function (response) {
+				var txt = '';
+				response = response.data;
+				if(angular.isArray(response.error)) {
+					angular.forEach(response.error, function(item) {
+						txt += item + '<br>';
+					});
+				}
+				else {
+					txt += response.error;
+				}
+				Notification.error("Oops! " + txt);
+			};
 
             vm.init();
         }])
