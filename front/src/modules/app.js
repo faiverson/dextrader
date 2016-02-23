@@ -32,7 +32,7 @@ angular.module('app', [
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {
 
-        $urlRouterProvider.otherwise('login');
+        $urlRouterProvider.otherwise('/ib');
         showErrorsConfigProvider.showSuccess(true);
         $httpProvider.interceptors.push('httpRequestInterceptor');
         NotificationProvider.setOptions({

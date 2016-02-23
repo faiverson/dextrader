@@ -154,7 +154,6 @@ return [
 
         App\Providers\RepositoryServiceProvider::class,
 
-        yajra\Datatables\DatatablesServiceProvider::class,
         Snowfire\Beautymail\BeautymailServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
