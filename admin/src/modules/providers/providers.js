@@ -58,7 +58,7 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
                                 $scope.provider.image =  resp.data.data.filename;
                                 $scope.save();
                             }, function (resp) {
-                                Notification.error('Ups! something went wrong trying to save the image!');
+                                Notification.error('Oops! something went wrong trying to save the image!');
                             });
                     } else {
                         $scope.save();
@@ -74,7 +74,7 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
                 }
 
                 function error(err) {
-                    Notification.error("Ups! there was an error trying to save the provider!");
+                    Notification.error("Oops! there was an error trying to save the provider!");
                 }
 
                 ProvidersService.save($scope.provider)
@@ -152,7 +152,7 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
 		};
 
 		vm.errorDelete = function (err) {
-			Notification.error('Ups! there was an error trying to remove this broker!');
+			Notification.error('Oops! there was an error trying to remove this broker!');
 		};
 
         vm.getProvider = function () {
@@ -170,7 +170,7 @@ angular.module('app.providers', ['ui.router', 'ngFileUpload'])
             }
 
             function error(err) {
-                Notification.error('Ups! there was an error trying to load providers!');
+                Notification.error('Oops! there was an error trying to load providers!');
             }
 
             ProvidersService.query(params)

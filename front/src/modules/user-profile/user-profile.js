@@ -63,7 +63,7 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
         };
 
         vm.errorSaveUser = function error(err) {
-            Notification.error("Ups! something went wrong, try again!");
+            Notification.error("Oops! something went wrong, try again!");
         };
 
         vm.getUser = function () {
@@ -206,7 +206,7 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
                 }
 
                 function error(err) {
-                    Notification.error('Ups! there was an error trying to load credit cards');
+                    Notification.error('Oops! there was an error trying to load credit cards');
                 }
 
                 CreditCardService.query()
@@ -220,7 +220,7 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
                 }
 
                 function error(err) {
-                    Notification.error('Ups! there was an error trying to load billing addresses');
+                    Notification.error('Oops! there was an error trying to load billing addresses');
                 }
 
                 BillingAddressService.query()
@@ -262,7 +262,7 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
             };
 
             vm.getCardError = function (err) {
-                Notification.error('Ups! there was an error trying to load the card info!');
+                Notification.error('Oops! there was an error trying to load the card info!');
             };
 
             vm.feelExpMonth = function () {
@@ -348,7 +348,7 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
             };
 
             vm.getAddressError = function (err) {
-                Notification.error('Ups! there was an error trying to load the address info!');
+                Notification.error('Oops! there was an error trying to load the address info!');
             };
 
             vm.saveSuccess = function (res) {
@@ -403,7 +403,7 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
             };
 
             vm.getAddressError = function (err) {
-                Notification.error('Ups! there was an error trying to load the billing addresses!');
+                Notification.error('Oops! there was an error trying to load the billing addresses!');
             };
 
             vm.getCardsSuccess = function (res) {
@@ -419,7 +419,7 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
             };
 
             vm.getCardsError = function (err) {
-                Notification.error('Ups! there was an error trying to load the credit cards!');
+                Notification.error('Oops! there was an error trying to load the credit cards!');
             };
 
             vm.saveSuccess = function (res) {

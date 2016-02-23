@@ -128,7 +128,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
         };
 
         vm.error = function (err) {
-            Notification.error('Ups! Something went wrong, try again...');
+            Notification.error('Oops! Something went wrong, try again...');
         };
 
         vm.init = function () {
@@ -238,7 +238,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
         };
 
         $scope.copyError = function () {
-            Notification.success('Ups! something went wrong! select the text and copy manually');
+            Notification.success('Oops! something went wrong! select the text and copy manually');
         };
 
         vm.init = function () {
@@ -307,7 +307,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
             },
             toApply: {}
         };
-        
+
         $scope.calculateRetail = function (products) {
             var amount = 0;
 
@@ -326,7 +326,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
             }
 
             function error(res) {
-                Notification.error('Ups! there was an error trying to load commission totals!');
+                Notification.error('Oops! there was an error trying to load commission totals!');
             }
 
             CommissionService.getCommissionTotals()
@@ -350,7 +350,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
             }
 
             function error(res) {
-                Notification.error('Ups! there was an error trying to load commissions!');
+                Notification.error('Oops! there was an error trying to load commissions!');
             }
 
             CommissionService.getCommissions(params)
@@ -431,7 +431,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
             }
 
             function error(res) {
-                Notification.error('Ups! there was an error trying to load payment totals!');
+                Notification.error('Oops! there was an error trying to load payment totals!');
             }
 
             PaymentService.getPaymentTotals()
@@ -455,7 +455,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
             }
 
             function error(res) {
-                Notification.error('Ups! there was an error trying to load payments!');
+                Notification.error('Oops! there was an error trying to load payments!');
             }
 
             PaymentService.getPayments(params)

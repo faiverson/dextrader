@@ -38,7 +38,7 @@ angular.module('app.upgrade-modal-form', [])
             };
 
             vm.getAddressError = function (err) {
-                Notification.error('Ups! there was an error trying to load the billing addresses!');
+                Notification.error('Oops! there was an error trying to load the billing addresses!');
             };
 
             vm.getCardsSuccess = function (res) {
@@ -55,7 +55,7 @@ angular.module('app.upgrade-modal-form', [])
             };
 
             vm.getCardsError = function (err) {
-                Notification.error('Ups! there was an error trying to load the credit cards!');
+                Notification.error('Oops! there was an error trying to load the credit cards!');
             };
 
             $scope.closeAndNew = function () {
@@ -98,7 +98,7 @@ angular.module('app.upgrade-modal-form', [])
                     }
 
                 } else {
-                    Notification.error('Ups! something went wrong! please try again!');
+                    Notification.error('Oops! something went wrong! please try again!');
                 }
 
             };

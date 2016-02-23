@@ -117,7 +117,7 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask', 'app
                         }
                     }
                 } else {
-                    Notification.error("Ups! there was an error trying to save the signal!");
+                    Notification.error("Oops! there was an error trying to save the signal!");
                 }
             };
 
@@ -247,7 +247,7 @@ angular.module('app.live-signals', ['ui.router', 'ngFileUpload', 'ui.mask', 'app
                 }
 
                 function error(err) {
-                    Notification.error('Ups! there was an error trying to load providers!');
+                    Notification.error('Oops! there was an error trying to load providers!');
                 }
 
                 LiveSignalsService.query($scope.filters.product.name.toLowerCase(), params)

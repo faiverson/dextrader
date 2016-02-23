@@ -335,7 +335,7 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
             }
 
             function error(err) {
-                Notification.error('Ups! there was an error trying to load signals!');
+                Notification.error('Oops! there was an error trying to load signals!');
             }
 
             LiveSignalsService.query($scope.filters.product.name.toLowerCase(), params)
@@ -411,7 +411,7 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
             }
 
             function error(err) {
-                Notification.error('Ups! there was an error trying to load providers!');
+                Notification.error('Oops! there was an error trying to load providers!');
             }
 
             ProvidersService.query(params)

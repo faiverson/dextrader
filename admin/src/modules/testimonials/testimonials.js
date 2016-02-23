@@ -57,7 +57,7 @@ angular.module('app.testimonials', ['ui.router', 'ngFileUpload'])
                                 $scope.testimonial.image =  resp.data.data.filename;
                                 $scope.save();
                             }, function (resp) {
-                                Notification.error('Ups! something went wrong trying to save the image!');
+                                Notification.error('Oops! something went wrong trying to save the image!');
                             });
                     } else {
                         $scope.save();
@@ -73,7 +73,7 @@ angular.module('app.testimonials', ['ui.router', 'ngFileUpload'])
                 }
 
                 function error(err) {
-                    Notification.error("Ups! there was an error trying to save the provider!");
+                    Notification.error("Oops! there was an error trying to save the provider!");
                 }
 
                 TestimonialsService.save($scope.testimonial)
@@ -137,7 +137,7 @@ angular.module('app.testimonials', ['ui.router', 'ngFileUpload'])
         };
 
         vm.errorDelete = function (err) {
-            Notification.error('Ups! there was an error trying to remove this Testimonial!');
+            Notification.error('Oops! there was an error trying to remove this Testimonial!');
         };
 
         $scope.sortBy = {};
@@ -177,7 +177,7 @@ angular.module('app.testimonials', ['ui.router', 'ngFileUpload'])
             }
 
             function error(err) {
-                Notification.error('Ups! there was an error trying to load providers!');
+                Notification.error('Oops! there was an error trying to load providers!');
             }
 
             TestimonialsService.query(params)

@@ -126,7 +126,7 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
 					//window.location.href = '/';
 				},
 				function (err) {
-					Notification.error('Ups! there was an error trying to login as this user!');
+					Notification.error('Oops! there was an error trying to login as this user!');
 				});
 			};
 
@@ -145,7 +145,7 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
 				}
 
 				function error(err) {
-					Notification.error('Ups! there was an error trying to load users!');
+					Notification.error('Oops! there was an error trying to load users!');
 				}
 
 				UserService.getUsers(params)
@@ -158,7 +158,7 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
 			};
 
 			vm.errorDelete = function (err) {
-				Notification.error('Ups! there was an error trying to remove this user!');
+				Notification.error('Oops! there was an error trying to remove this user!');
 			};
 
 			vm.init = function () {

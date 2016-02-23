@@ -106,7 +106,7 @@ angular.module('app.trainings', ['ui.router', 'youtube-embed'])
             };
 
             vm.error = function (err) {
-                Notification.error("Ups! there was an error trying to save the provider!");
+                Notification.error("Oops! there was an error trying to save the provider!");
             };
 
             vm.init();
@@ -160,7 +160,7 @@ angular.module('app.trainings', ['ui.router', 'youtube-embed'])
             }
 
             function error(err) {
-                Notification.error('Ups! there was an error trying to load providers!');
+                Notification.error('Oops! there was an error trying to load providers!');
             }
 
             TrainingsService.query(params, $scope.type)
@@ -187,7 +187,7 @@ angular.module('app.trainings', ['ui.router', 'youtube-embed'])
         };
 
         vm.errorDelete = function (err) {
-            Notification.error('Ups! there was an error trying to remove this Training!');
+            Notification.error('Oops! there was an error trying to remove this Training!');
         };
 
         vm.init = function () {

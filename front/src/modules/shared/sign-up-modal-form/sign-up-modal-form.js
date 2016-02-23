@@ -54,7 +54,7 @@ angular.module('app.sign-up-modal-form', [])
                     }
 
                 } else {
-                    Notification.error('Ups! something went wrong! please try again!');
+                    Notification.error('Oops! something went wrong! please try again!');
                 }
 
             };

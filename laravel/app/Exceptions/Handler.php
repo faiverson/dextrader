@@ -58,7 +58,7 @@ class Handler extends ExceptionHandler
 //			return response()->error('Ups! There was a problem in database. Please contact support immediately!');
 //		}
 		else if ($e instanceof NotFoundHttpException) {
-			return response()->error('Ups! The URL provided was not found!', $e->getStatusCode());
+			return response()->error('Oops! The URL provided was not found!', $e->getStatusCode());
 		}
 //		else if ($this->isHttpException($e))
 //		{
