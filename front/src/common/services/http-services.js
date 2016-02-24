@@ -1116,6 +1116,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             login().then(function (token) {
                 $http({
                     method: "POST",
+                    withCredentials: false,
                     url: endpoint,
                     data: data,
                     headers: {'Authorization': 'Bearer ' + token}
