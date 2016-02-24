@@ -27,5 +27,8 @@
     "angular-cookies": "~1.4.7",
     "angular-local-storage": "~0.2.3",
     "angular-jwt": "~0.0.6"
+  },
+  "resolutions": {
+    "angular": ">=1.4.0"
   }
 }

@@ -122,7 +122,7 @@ abstract class Repository implements RepositoryInterface {
 	protected function setAttributtes(array $data)
 	{
 		$data = array_map(function($value) {
-			return is_array($value) ? $value : trim($value);
+			return is_array($value) || is_object($value) ? $value : trim($value);
 		}, $data);
 
 		$data = array_filter($data, function($value) {

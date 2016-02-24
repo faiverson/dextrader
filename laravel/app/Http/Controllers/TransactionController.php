@@ -93,6 +93,9 @@ class TransactionController extends Controller
 
 		// to simplify UI
 		$fields['products'] = is_string($fields['products']) ? explode(',', $fields['products']) : $fields['products'];
+		if(array_key_exists('offer_id', $fields)) {
+			$fields['offer_id'] = is_string($fields['offer_id']) ? explode(',', $fields['offer_id']) : $fields['offer_id'];
+		}
 		$response = $this->transaction->upgrade($fields);
 		if(!$response) {
 			return response()->error($this->transaction->errors());
