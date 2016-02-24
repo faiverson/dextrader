@@ -27,8 +27,8 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
             });
     })
 
-    .controller('UsersCtrl', ['$scope', 'UserService', 'modalService', 'Notification',
-        function ($scope, UserService, modalService, Notification) {
+    .controller('UsersCtrl', ['$scope', '$site-configs', 'UserService', 'modalService', 'Notification',
+        function ($scope, $configs, UserService, modalService, Notification) {
 			var vm = this;
 
 			$scope.pagination = {
@@ -123,7 +123,7 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
 
 			$scope.loginAsUser = function (id) {
 				UserService.loginAsUser(id).then(function(response) {
-					//window.location.href = '/';
+						window.open($configs.DASHBOARD_URL + "/doLogin?token=" + response.data.token);
 				},
 				function (err) {
 					Notification.error('Oops! there was an error trying to login as this user!');
@@ -168,8 +168,8 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
 			vm.init();
 		}])
 
-    .controller('UsersFormCtrl', ['$scope', '$q', '$state', '$stateParams', '$filter', 'UserService', 'UserRolesService',
-        function ($scope, $q, $state, $stateParams, $filter, UserService, UserRolesService) {
+    .controller('UsersFormCtrl', ['$scope', '$q', '$state', '$stateParams', '$filter', 'UserService', 'UserRolesService', 'Notification',
+        function ($scope, $q, $state, $stateParams, $filter, UserService, UserRolesService, Notification) {
 
             var vm = this;
 
@@ -203,8 +203,18 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
                 $state.go('users');
             };
 
-            vm.errorUserSave = function (err) {
-                console.log('error', err);
+            vm.errorUserSave = function (response) {
+				var txt = '';
+				response = response.data;
+				if(angular.isArray(response.error)) {
+					angular.forEach(response.error, function(item) {
+						txt += item + '<br>';
+					});
+				}
+				else {
+					txt += response.error;
+				}
+				Notification.error("Oops! " + txt);
             };
 
             vm.getUserRoles = function () {

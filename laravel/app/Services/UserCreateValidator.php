@@ -16,7 +16,7 @@ class UserCreateValidator extends AbstractValidator {
 		// http://stackoverflow.com/questions/12018245/regular-expression-to-validate-username
 		'username' => ['required', 'unique:users', 'regex:/^(?=.{4,30}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/'],
 		'phone' => 'sometimes|required|digits_between:8,30',
-		'password' => ['required', 'regex:/^(?=.{8,30}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/'],
+		'password' => ['required', 'regex:/^[^ ]{8,30}$/'],
 		'ip_address' => 'sometimes|ip',
 		'enroller_id' => 'sometimes|exists:users,id'
 	);

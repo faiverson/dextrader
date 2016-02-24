@@ -66,8 +66,6 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 permissions = permissions.concat(role.permissions);
             });
 
-            console.log(permissions);
-
             return permissions;
         }
 

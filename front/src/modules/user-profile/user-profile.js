@@ -62,8 +62,18 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
             Notification.success("User settings changed successfully!");
         };
 
-        vm.errorSaveUser = function error(err) {
-            Notification.error("Oops! something went wrong, try again!");
+        vm.errorSaveUser = function error(response) {
+			var txt = '';
+			response = response.data;
+			if(angular.isArray(response.error)) {
+				angular.forEach(response.error, function(item) {
+					txt += item + '<br>';
+				});
+			}
+			else {
+				txt += response.error;
+			}
+			Notification.error("Oops! " + txt);
         };
 
         vm.getUser = function () {

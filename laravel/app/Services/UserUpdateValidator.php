@@ -17,7 +17,7 @@ class UserUpdateValidator extends AbstractValidator {
 		'last_name' => 'sometimes|required',
 		'email' => 'sometimes|required|email|MyEmail',
 		'phone' => 'sometimes|required|digits_between:8,30',
-		'password' => ['sometimes', 'regex:/^(?=.{8,30}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/'],
+		'password' => ['sometimes'],
 		'ip_address' => 'sometimes|ip',
 	);
 
