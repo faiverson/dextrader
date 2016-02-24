@@ -102,15 +102,14 @@ angular.module('app.shared-directives', [])
                 sortData: '='
             },
             link: function ($scope, $elem, $attrs) {
-                var vm = this;
 
                 $elem.addClass('clickable');
 
                 $elem.bind('click', function () {
-                    vm.sort($attrs.sortColumn, $elem);
+                    $scope.sort($attrs.sortColumn, $elem);
                 });
 
-                vm.sort = function (col, elem) {
+                $scope.sort = function (col, elem) {
 
                     elem.removeClass('sort-desc');
                     elem.removeClass('sort-asc');
