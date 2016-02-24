@@ -1,6 +1,7 @@
 <?php
 namespace App\Gateways;
 
+use App\Events\SubscriptionCancelEvent;
 use App\Models\Subscription;
 use App\Models\Transaction;
 use App\Repositories\TransactionRepository;
@@ -653,6 +654,7 @@ class TransactionGateway extends AbstractGateway {
 				$sub = $this->subscription->findProductByUser($detail->product_id, $transaction->user_id);
 				$sub->status = 'cancel';
 				$sub->save();
+				Event::fire(new SubscriptionCancelEvent($sub));
 
 				$invoice_detail = $this->invoice->addDetail(array_merge($detail->toArray(), [
 					'subscription_id' => $sub->id,
@@ -666,10 +668,6 @@ class TransactionGateway extends AbstractGateway {
 				$product = $this->product->find($detail->product_id);
 				$role_id = $this->user->getRoleByName($product->roles);
 				$this->user->deatachRole($transaction->user_id, $role_id);
-				$subs = $this->subscription->findByUser($transaction->user_id);
-				if($subs->count() <= 0) {
-					$this->user->update(['active' => 0], $transaction->user_id);
-				}
 			}
 		}
 		catch(\Exception $e) {

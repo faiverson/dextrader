@@ -7,6 +7,7 @@ use App\Gateways\UserGateway;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Libraries\getResponse\GetResponse;
+use Log;
 
 class GetResponseInactiveListener
 {
