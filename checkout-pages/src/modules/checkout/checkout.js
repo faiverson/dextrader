@@ -23,7 +23,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                 },
                 resolve: {
                     product: function () {
-                        return {id: [1], name: 'ib', funnel_id: 1, type: 'downsell'};
+                        return {id: [1], name: 'ib', funnel_id: 1, showRecurrentPayment: true, type: 'downsell'};
                     }
                 }
             })
@@ -277,9 +277,9 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
 
             vm.sendHit = function () {
                 var data = {
-                    funnel_id: 1,
+                    funnel_id: product.funnel_id,
                     info: vm.getUserBrowserData(),
-                    product_id: 1
+                    product_id: product.id
                 };
 
                 if (angular.isDefined($stateParams.user) && $stateParams.user.length > 0) {

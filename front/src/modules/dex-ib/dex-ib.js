@@ -1,4 +1,4 @@
-angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-form', 'app.sign-up-modal-form', 'app.socket-services', 'ngAudio'])
+angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-form', 'app.sign-up-modal-form', 'app.socket-services', 'ngAudio', 'app.shared-helpers'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('dex_ib', {
@@ -455,87 +455,179 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
 
     }])
 
-    .controller('DexIBSalesCtrl', ['$scope', 'TestimonialsService', '$stateParams', '$objects', function ($scope, TestimonialsService, $stateParams, $objects) {
-        var vm = this;
+    .controller('DexIBSalesCtrl', ['$scope', 'TestimonialsService', '$stateParams', '$objects', '$uibModal', 'os-info', 'HitsService',
+        function ($scope, TestimonialsService, $stateParams, $objects, $uibModal, osInfo, HitsService) {
+            var vm = this;
+            $scope.popUpOpen = false;
+            $scope.video_id = 'W5ZxDkY_j_0';
 
-        $scope.orderNowLink = '/ib';
+            $scope.playerVars = {
+                controls: 0,
+                autoplay: 1,
+                showinfo: 0
+            };
 
-        $scope.video_id = '';
+            $scope.orderNowLink = '/ib';
+            $scope.orderNowDownsellLink = '/downsell/ib';
 
-        vm.getTestimonials = function () {
+            $scope.openOffer = function () {
 
-            function success(res) {
+                if (!$scope.popUpOpen) {
+                    $scope.popUpOpen = true;
+                    $scope.ytPlayer.stopVideo();
 
-                if (res.data.length > 1) {
-                    var half_length = Math.ceil(res.data.length / 2);
-                    var leftSide = res.data.splice(0, half_length);
-                    var rightSide = res.data;
+                    var modalInstance = $uibModal.open({
+                        templateUrl: 'dex-ib.sales.downsell.html',
+                        resolve: {
+                            link: function () {
+                                return $scope.orderNowDownsellLink;
+                            }
+                        },
+                        controller: ['$scope', 'link', function ($scope, link) {
+                            $scope.link = link;
+                        }]
+                    });
 
-                    $scope.testimonialsLeft = leftSide;
-                    $scope.testimonialsRight = rightSide;
-                } else {
-                    $scope.testimonialsLeft = res.data;
+                    modalInstance.result.then(function () {
+                        $scope.ytPlayer.playVideo();
+                        $scope.popUpOpen = false;
+                    }, function () {
+                        $scope.ytPlayer.playVideo();
+                        $scope.popUpOpen = false;
+                    });
+                }
+            };
+
+            vm.sendHit = function () {
+                var data = {
+                    funnel_id: 1,
+                    info: vm.getUserBrowserData(),
+                    product_id: 1
+                };
+
+                if (angular.isDefined($stateParams.user) && $stateParams.user.length > 0) {
+                    data.enroller = $stateParams.user;
                 }
 
-            }
+                if (angular.isDefined($stateParams.tag)) {
+                    data.tag = $stateParams.tag;
+                }
 
-            function error(err) {
-                console.log(err);
-            }
+                HitsService.send(data, $scope.token);
+            };
 
-            TestimonialsService.query()
-                .then(success, error);
-        };
+            vm.getUserBrowserData = function () {
+                return osInfo.getOS();
+            };
 
-        vm.init = function () {
-            vm.getTestimonials();
-            var params = {};
+            vm.getTestimonials = function () {
 
-            if (angular.isDefined($stateParams.user)) {
-                params.user = $stateParams.user;
-            }
+                function success(res) {
 
-            if (angular.isDefined($stateParams.tag)) {
-                params.tag = $stateParams.tag;
-            }
+                    if (res.data.length > 1) {
+                        var half_length = Math.ceil(res.data.length / 2);
+                        var leftSide = res.data.splice(0, half_length);
+                        var rightSide = res.data;
 
-            $scope.orderNowLink += '?' + $objects.toUrlString(params);
-        };
-
-        vm.init();
-    }])
-
-    .controller('DexIBAffiliatesCtrl', ['$scope', '$state', '$stateParams', '$uibModal', 'Notification', function ($scope, $state, $stateParams, $uibModal, Notification) {
-        $scope.videoId = 'Aj-yHxSYQKc';
-
-        $scope.playerVars = {
-            controls: 0,
-            autoplay: 1,
-            showinfo: 0
-        };
-
-        $scope.openOrderNowForm = function () {
-
-            var modalInstance = $uibModal.open({
-                templateUrl: 'modules/shared/sign-up-modal-form/sign-up-modal-form.tpl.html',
-                controller: 'SignUpModalFormCtrl',
-                size: 'md',
-                resolve: {
-                    enroller: function () {
-                        return $stateParams.user;
-                    },
-                    tag: function () {
-                        return $stateParams.tag;
+                        $scope.testimonialsLeft = leftSide;
+                        $scope.testimonialsRight = rightSide;
+                    } else {
+                        $scope.testimonialsLeft = res.data;
                     }
+
                 }
-            });
 
-            modalInstance.result.then(function (email) {
-                Notification.success('Welcomo to Dextrader.com!');
-                $state.go('login');
-            }, function () {
-                //$log.info('Modal dismissed at: ' + new Date());
-            });
-        };
+                function error(err) {
+                    console.log(err);
+                }
 
-    }]);
+                TestimonialsService.query()
+                    .then(success, error);
+            };
+
+            vm.init = function () {
+                vm.getTestimonials();
+                vm.sendHit();
+                var params = {};
+
+                if (angular.isDefined($stateParams.user)) {
+                    params.user = $stateParams.user;
+                }
+
+                if (angular.isDefined($stateParams.tag)) {
+                    params.tag = $stateParams.tag;
+                }
+
+                $scope.orderNowLink += '?' + $objects.toUrlString(params);
+                $scope.orderNowDownsellLink += '?' + $objects.toUrlString(params);
+            };
+
+            vm.init();
+        }])
+
+    .controller('DexIBAffiliatesCtrl', ['$scope', '$state', '$stateParams', '$uibModal', 'Notification', 'os-info', 'HitsService',
+        function ($scope, $state, $stateParams, $uibModal, Notification, osInfo, HitsService) {
+            var vm = this;
+
+            $scope.videoId = 'Aj-yHxSYQKc';
+
+            $scope.playerVars = {
+                controls: 0,
+                autoplay: 1,
+                showinfo: 0
+            };
+
+            $scope.openOrderNowForm = function () {
+
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'modules/shared/sign-up-modal-form/sign-up-modal-form.tpl.html',
+                    controller: 'SignUpModalFormCtrl',
+                    size: 'md',
+                    resolve: {
+                        enroller: function () {
+                            return $stateParams.user;
+                        },
+                        tag: function () {
+                            return $stateParams.tag;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (email) {
+                    Notification.success('Welcomo to Dextrader.com!');
+                    $state.go('login');
+                }, function () {
+                    //$log.info('Modal dismissed at: ' + new Date());
+                });
+            };
+
+            vm.sendHit = function () {
+                var data = {
+                    funnel_id: 1,
+                    info: vm.getUserBrowserData(),
+                    product_id: 1
+                };
+
+                if (angular.isDefined($stateParams.user) && $stateParams.user.length > 0) {
+                    data.enroller = $stateParams.user;
+                }
+
+                if (angular.isDefined($stateParams.tag)) {
+                    data.tag = $stateParams.tag;
+                }
+
+                HitsService.send(data);
+            };
+
+            vm.getUserBrowserData = function () {
+                return osInfo.getOS();
+            };
+
+            vm.init = function () {
+                vm.sendHit();
+                var params = {};
+            };
+
+            vm.init();
+
+        }]);

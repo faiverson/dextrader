@@ -137,4 +137,21 @@ angular.module('app.shared-directives', [])
                 });
             }
         };
+    }])
+    .directive('beforeExit', ['$document', function ($document) {
+        return {
+            restrict: 'E',
+            scope: {
+                onExit: '&'
+            },
+            link: function ($scope, $elem, $attrs) {
+                $document.mousemove(function (e) {
+                    if ((e.pageY - window.pageYOffset) <= 3) {
+                        if (angular.isFunction($scope.onExit)) {
+                            $scope.onExit();
+                        }
+                    }
+                });
+            }
+        };
     }]);

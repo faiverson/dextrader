@@ -39,11 +39,18 @@ angular.module('app.thankyou', ['ui.router'])
             $scope.getProductPrice = function (invoice, prd_id) {
                 var amount = 0;
 
-                if (angular.isDefined(invoice.offers) && invoice.offers.length > 0) {
-                    var offer = $filter('filter')(invoice.offers, {product_id: prd_id}, true);
+                if (angular.isDefined(invoice.offers)) {
+                    var offer;
 
-                    if (offer.length > 0) {
-                        amount = offer[0].amount;
+                    if(angular.isObject(invoice.offers)){
+                        amount = invoice.offers[1].amount;
+                    }else {
+
+                        offer = $filter('filter')(invoice.offers, {product_id: prd_id}, true);
+
+                        if (offer.length > 0) {
+                            amount = offer[0].amount;
+                        }
                     }
                 }else{
                     var product = $filter('filter')(invoice.products, {product_id: prd_id}, true);

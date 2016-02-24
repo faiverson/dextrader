@@ -1,4 +1,5 @@
 <section id="sp-home" class="sp-section">
+    <before-exit on-exit="openOffer()"></before-exit>
     <div class="sp-content">
         <header class="no-bg">
             <div id="header-content">
@@ -43,9 +44,11 @@
             <h1 class="white align-center">Do You Want To Become A Successful Binary Options Trader, Without The Risk Of Losing All Your Money?</h1>
 
             <div id="sp-home-video">
-                <iframe id="video-player" type="text/html"
-                        src="//www.youtube.com/embed/W5ZxDkY_j_0?autoplay=1&amp;controls=0&amp;showinfo=0"
-                        frameborder="0"></iframe>
+                <youtube-video video-id="video_id"
+                               player-width="'748px'"
+                               player-height="'421px'"
+                               player="ytPlayer"
+                               player-vars="playerVars"></youtube-video>
             </div>
             <a ng-chref="{{orderNowLink}}" class="button bg-orange submitbutton">Get Started Now</a>
         </div>
@@ -370,3 +373,17 @@
                 href="mailto:admin@dextrader.com">admin@dextrader.com</a></div>
     </div>
 </section>
+
+<script type="text/ng-template" id="dex-ib.sales.downsell.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Wait, Checkout Now For Only $27!</h3>
+    </div>
+    <div class="modal-body">
+        <iframe id="video-player-downsell" type="text/html" height="421" width="100%"
+                src="//www.youtube.com/embed/kblawCxuVog?autoplay=1&amp;controls=0&amp;showinfo=0"
+                frameborder="0"></iframe>
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-block bg-orange submitbutton" ng-chref="{{link}}">Checkout Now For Only $27!</a>
+    </div>
+</script>
