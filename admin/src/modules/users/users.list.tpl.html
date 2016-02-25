@@ -12,7 +12,6 @@
 									placeholder="From"
 									date-format="dd-MMM-yyyy"
 									hidden-time="true"
-									data-ng-change="filters.apply()"
 									readonly-time="true">
 					</datetimepicker>
 				</div>
@@ -28,15 +27,15 @@
 				</div>
 				<div class="col-md-2">
 					<label for="first_name">First name</label>
-					<input id="first_name" name="first_name" ng-model="filters.first_name" class="form-control" ng-model="filters.first_name" data-ng-change="filters.apply()" placeholder="John" />
+					<input id="first_name" name="first_name" ng-model="filters.first_name" class="form-control" ng-model="filters.first_name" placeholder="John" />
 				</div>
 				<div class="col-md-2">
 					<label for="last_name">Last name</label>
-					<input id="last_name" name="last_name" ng-model="filters.last_name" class="form-control" ng-model="filters.last_name" data-ng-change="filters.apply()" placeholder="Doe" />
+					<input id="last_name" name="last_name" ng-model="filters.last_name" class="form-control" ng-model="filters.last_name" placeholder="Doe" />
 				</div>
 				<div class="col-md-2">
 					<label for="email">Email</label>
-					<input id="email" name="email" ng-model="filters.email" class="form-control" ng-model="filters.email" data-ng-change="filters.apply()" placeholder="john@dextrader.com" />
+					<input id="email" name="email" ng-model="filters.email" class="form-control" ng-model="filters.email" placeholder="john@dextrader.com" />
 				</div>
 			</form>
 		</div>
