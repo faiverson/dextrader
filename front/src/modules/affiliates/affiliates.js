@@ -72,6 +72,14 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 data: {
                     pageTitle: 'Affiliates - Payments'
                 }
+            })
+            .state('affiliates.marketing_stats', {
+                url: '/stats',
+                templateUrl: 'modules/affiliates/marketing.stats.tpl.html',
+                controller: 'MarketingStatsCtrl',
+                data: {
+                    pageTitle: 'Affiliates - Stats'
+                }
             });
     })
 
@@ -560,4 +568,86 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
 
         vm.init();
 
+    }])
+
+    .controller('MarketingStatsCtrl', ['$scope', 'MarketingStatsService', 'Notification', 'MarketingLinksService', function ($scope, MarketingStatsService, Notification, MarketingLinksService) {
+        var vm = this;
+
+        $scope.pagination = {
+            totalItems: 20,
+            currentPage: 1,
+            itemsPerPage: 10,
+            pageChange: function () {
+                $scope.getStats();
+            }
+        };
+
+        $scope.sortBy = {};
+
+        $scope.filters = {
+            from: {
+                format: 'dd MMM yyyy'
+            },
+            to: {
+                format: 'dd MMM yyyy'
+            },
+            selectedFunnel: undefined,
+            apply: function () {
+
+                delete this.toApply.from;
+                delete this.toApply.to;
+                delete this.toApply.funnel;
+
+                if(angular.isDefined(this.from.value)){
+                    this.toApply.from = moment(this.from.value).format('YYYY-MM-DD');
+                }
+
+                if(angular.isDefined(this.to.value)){
+                    this.toApply.to = moment(this.to.value).format('YYYY-MM-DD');
+                }
+
+                if(this.selectedFunnel && angular.isDefined(this.selectedFunnel)){
+                    this.toApply.funnel = this.selectedFunnel.funnel_id;
+                }
+
+                $scope.getStats();
+            },
+            toApply: {}
+        };
+
+        $scope.getStats = function () {
+
+            var params = {
+                offset: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
+                limit: $scope.pagination.itemsPerPage,
+                order: $scope.sortBy,
+                filter: $scope.filters.toApply
+            };
+
+            function success(res) {
+                $scope.pagination.totalItems = res.data.total;
+                $scope.stats = res.data.stats;
+            }
+
+            function error(res) {
+                Notification.error('Oops! there was an error trying to load stats!');
+            }
+
+            MarketingStatsService.queryStats(params)
+                .then(success, error);
+        };
+
+        vm.getMarketingLinks = function () {
+            MarketingLinksService.query()
+                .then(function(res){
+                    $scope.filters.funnels = res.data;
+                }, vm.error);
+        };
+
+        vm.init = function () {
+            $scope.getStats();
+            vm.getMarketingLinks();
+        };
+
+        vm.init();
     }]);

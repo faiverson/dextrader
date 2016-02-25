@@ -124,6 +124,48 @@ angular.module('app.shared-directives', [])
             }
         };
     }])
+    .directive('sortColumn', [function () {
+        return {
+            restrict: 'A',
+            scope: {
+                onSort: '&',
+                sortData: '='
+            },
+            link: function ($scope, $elem, $attrs) {
+
+                $elem.addClass('clickable');
+
+                $elem.bind('click', function () {
+                    $scope.sort($attrs.sortColumn, $elem);
+                });
+
+                $scope.sort = function (col, elem) {
+
+                    elem.removeClass('sort-desc');
+                    elem.removeClass('sort-asc');
+
+                    if ($scope.sortData.hasOwnProperty(col)) {
+                        if ($scope.sortData[col] === 'asc') {
+                            $scope.sortData[col] = 'desc';
+                        }
+                        else if ($scope.sortData[col] === 'desc') {
+                            delete $scope.sortData[col];
+                        }
+                    } else {
+                        $scope.sortData[col] = 'asc';
+                    }
+
+                    if (angular.isDefined($scope.sortData[col])) {
+                        elem.addClass('sort-' + $scope.sortData[col]);
+                    }
+
+                    if (angular.isFunction($scope.onSort)) {
+                        $scope.onSort();
+                    }
+                };
+            }
+        };
+    }])
     .directive('ngChref', ['$site-configs', function ($configs) {
         return {
             priority: 99,

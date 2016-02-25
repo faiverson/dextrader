@@ -325,7 +325,7 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
             };
 
             $scope.save = function () {
-                $scope.$broadcast('show-errors-check-validity');
+                //$scope.$broadcast('show-errors-check-validity');
 
                 if ($scope.ccForm.$valid) {
                     $scope.card.month = $scope.exp_month.id;

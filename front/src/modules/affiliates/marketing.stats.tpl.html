@@ -1,0 +1,88 @@
+<section id="content" class="marketing-stats">
+    <h2 class="spaced">Affiliate Commissions</h2>
+
+    <div id="commission-picker" class="filters">
+        <div class="row">
+            <div class="col-md-2">
+                <span class="title">Show From</span>
+            </div>
+            <div class="col-md-3">
+                <input type="text"
+                       data-ng-change="filters.apply()"
+                       placeholder="From"
+                       data-ng-focus="filters.from.opened = true"
+                       class="form-control"
+                       uib-datepicker-popup="{{filters.from.format}}"
+                       ng-model="filters.from.value"
+                       is-open="filters.from.opened"
+                       max-date="filters.to.value"
+                       close-text="Close"/>
+            </div>
+            <div class="col-md-3">
+                <input type="text"
+                       class="form-control"
+                       data-ng-change="filters.apply()"
+                       data-ng-focus="filters.to.opened = true"
+                       placeholder="To"
+                       uib-datepicker-popup="{{filters.to.format}}"
+                       ng-model="filters.to.value"
+                       is-open="filters.to.opened"
+                       min-date="filters.from.value"
+                       close-text="Close"/>
+            </div>
+            <div class="col-md-4">
+                <select style="width: 100%"
+                        data-ng-model="filters.selectedFunnel"
+                        data-ng-options="funnel.title for funnel in filters.funnels"
+                        data-ng-change="filters.apply()">
+                    <option value="">Show All Results</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <table class="base-table table-commissions">
+        <thead>
+        <tr>
+            <th sort-column="funnel_id" on-sort="getStats()" sort-data="sortBy">Funnel</th>
+            <th sort-column="hits" on-sort="getStats()" sort-data="sortBy">Hits</th>
+            <th sort-column="unique_hits" on-sort="getStats()" sort-data="sortBy">Unique Hits</th>
+            <th sort-column="leads" on-sort="getStats()" sort-data="sortBy">Leads</th>
+            <th sort-column="ib" on-sort="getStats()" sort-data="sortBy">IB</th>
+            <th sort-column="pro" on-sort="getStats()" sort-data="sortBy">IB PRO</th>
+            <th sort-column="income" on-sort="getStats()" sort-data="sortBy">Income</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="item in stats">
+            <td data-ng-bind="item.funnel"></td>
+            <td data-ng-bind="item.hits"></td>
+            <td data-ng-bind="item.unique_hits"></td>
+            <td data-ng-bind="item.leads"></td>
+            <td data-ng-bind="item.ib"></td>
+            <td data-ng-bind="item.pro"></td>
+            <td data-ng-bind="item.income | currency: '$'"></td>
+        </tr>
+
+        <tr data-ng-if="commissions.length == 0">
+            <td class="text-center" colspan="9"> --- No commissions were found --- </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="table-nav row">
+        <div class="col-md-8">
+            <uib-pagination direction-links="false"
+                            total-items="pagination.totalItems"
+                            ng-model="pagination.currentPage"
+                            ng-change="pagination.pageChange()"
+                            items-per-page="pagination.itemsPerPage"
+                            num-pages="smallnumPages"></uib-pagination>
+        </div>
+
+        <div class="col-md-4">
+            <uib-pager total-items="pagination.totalItems"
+                       items-per-page="pagination.itemsPerPage"
+                       ng-change="pagination.pageChange()"
+                       ng-model="pagination.currentPage"></uib-pager>
+        </div>
+    </div>
+</section>

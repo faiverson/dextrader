@@ -47,3 +47,30 @@
 #sp-testim {
 	margin-bottom: 90px;
 }
+
+th.clickable {
+  cursor: pointer;
+  position: relative;
+
+  &.sort-asc::after{
+    content: '';
+    background-image: url('/front/assets/images/ico-up.png');
+    width: 12px;
+    height: 6px;
+    position: absolute;
+    top: 22px;
+    right: 8px;
+    background-repeat: no-repeat;
+  }
+
+  &.sort-desc::after{
+    content: '';
+    background-image: url('/front/assets/images/ico-down.png');
+    width: 12px;
+    height: 6px;
+    position: absolute;
+    top: 22px;
+    right: 8px;
+    background-repeat: no-repeat;
+  }
+}

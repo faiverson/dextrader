@@ -1131,4 +1131,32 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             send: send
         };
 
+    }])
+
+    .factory('MarketingStatsService', ['$http', '$q', '$site-configs', 'AuthService', '$objects', function ($http, $q, $configs, AuthService, $objects) {
+        var service = $configs.API_BASE_URL + 'stats/' + AuthService.getLoggedInUser().user_id;
+
+        function queryStats(params) {
+            var endpoint = service + '/marketing',
+                deferred = $q.defer();
+
+            endpoint += '?' + $objects.serializeUrl(params);
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+
+        }
+
+        return {
+            queryStats: queryStats
+        };
     }]);
