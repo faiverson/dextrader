@@ -99,6 +99,16 @@ class Transaction extends Model
 		$this->attributes['info'] = json_encode($value);
 	}
 
+	public function getCardExpMonthAttribute()
+	{
+		return $this->attributes['card_exp_month'] < 10 ? '0' . $this->attributes['card_exp_month'] : (string) $this->attributes['card_exp_month'];
+	}
+
+	public function getCardExpYearAttribute()
+	{
+		return $this->attributes['card_exp_year'] < 10 ? '0' . $this->attributes['card_exp_year'] : (string) $this->attributes['card_exp_year'];
+	}
+
 	public function getInfoAttribute()
 	{
 		return json_decode($this->attributes['info']);

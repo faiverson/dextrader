@@ -80,10 +80,6 @@ angular.module('app.shared-directives', [])
             restrict: 'A',
             link: function ($scope, $elem, $attrs) {
 
-                $scope.$on("user-has-change", function (nv, ov) {
-                    evaluatePerm();
-                });
-
                 function evaluatePerm() {
                     if (angular.isDefined($attrs.userCan)) {
                         if (!AuthService.userHasPermission($attrs.userCan)) {
@@ -93,6 +89,10 @@ angular.module('app.shared-directives', [])
                         }
                     }
                 }
+
+				$scope.$on("user-has-change", function (nv, ov) {
+					evaluatePerm();
+				});
 
                 evaluatePerm();
             }

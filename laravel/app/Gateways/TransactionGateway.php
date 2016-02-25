@@ -1,6 +1,7 @@
 <?php
 namespace App\Gateways;
 
+use App\Events\SubscriptionCancelEvent;
 use App\Models\Subscription;
 use App\Models\Transaction;
 use App\Repositories\TransactionRepository;
@@ -241,8 +242,7 @@ class TransactionGateway extends AbstractGateway {
 				return $val !== null;
 			});
 
-			if( ! $this->createValidator->with($data)->passes() )
-			{
+			if( ! $this->createValidator->with($data)->passes() ) {
 				$this->errors = $this->createValidator->errors();
 				return false;
 			}
@@ -497,8 +497,24 @@ class TransactionGateway extends AbstractGateway {
 		// add geo location
 		$data['info'] = array_merge($this->setInfo($data), ['type' => 'upgrade']);
 
+		if(array_key_exists('offer_id', $data)) {
+			$offers = $this->offer->findIn($data['offer_id']);
+			if($offers) {
+				$amount = 0;
+				foreach ($offers as $offer) {
+					$amount += $offer->amount;
+					$data['offers'][$offer->product_id] = $offer->toArray();
+				}
+			} else {
+				unset($data['offer_id']);
+			}
+		}
+		else {
+			unset($data['offer_id']);
+			$amount = $this->product->total($products);
+		}
+
 		// prepare the information
-		$amount = $this->product->total($products);
 		$data = array_merge($data, [
 			'first_name' => $user->first_name,
 			'last_name' => $user->last_name,
@@ -533,7 +549,16 @@ class TransactionGateway extends AbstractGateway {
 		// connect to the gateway merchant
 		$data['orderid'] = $transaction->id;
 		$data['order_date'] = $transaction->created_at;
-		$gateway = $this->gateway($data);
+
+		if($amount > 0) {
+			$gateway = $this->gateway($data);
+		}
+		else {
+			// when there is a free offer
+			$gateway['responsetext'] = 'success';
+			$gateway['response'] = 1;
+			$gateway['response_code'] = 11; //upgrade code amount 0
+		}
 
 		// save the response in the transaction
 		$response = $this->set($gateway, $transaction->id);
@@ -629,6 +654,7 @@ class TransactionGateway extends AbstractGateway {
 				$sub = $this->subscription->findProductByUser($detail->product_id, $transaction->user_id);
 				$sub->status = 'cancel';
 				$sub->save();
+				Event::fire(new SubscriptionCancelEvent($sub));
 
 				$invoice_detail = $this->invoice->addDetail(array_merge($detail->toArray(), [
 					'subscription_id' => $sub->id,
@@ -642,10 +668,6 @@ class TransactionGateway extends AbstractGateway {
 				$product = $this->product->find($detail->product_id);
 				$role_id = $this->user->getRoleByName($product->roles);
 				$this->user->deatachRole($transaction->user_id, $role_id);
-				$subs = $this->subscription->findByUser($transaction->user_id);
-				if($subs->count() <= 0) {
-					$this->user->update(['active' => 0], $transaction->user_id);
-				}
 			}
 		}
 		catch(\Exception $e) {

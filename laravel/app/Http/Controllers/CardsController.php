@@ -86,7 +86,7 @@ class CardsController extends Controller
 		$cc->name = $request->input('name');
 		$cc->exp_month = $request->input('month');
 		$cc->exp_year = $request->input('year');
-		$cc->number = Encrypt::encrypt($number);
+		$cc->number = $number;
 		$cc->first_six = substr($number, 0, 6);
 		$cc->last_four = substr($number, -4);
 		$cc->network = $type ? $type : $card['type'];

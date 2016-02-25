@@ -1072,6 +1072,35 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         var service = $config.API_BASE_URL + 'hits';
         var loginService = $config.API_BASE_URL + 'pages';
 
+		function login() {
+			var endpoint = loginService,
+				deferred = $q.defer(),
+				data = {'domain': 'sales', 'password': 'sAles_dexTr4d3r'};
+
+			function success(res) {
+				if (res.data.success) {
+					deferred.resolve(res.data.data.token);
+				} else {
+					deferred.reject(res);
+				}
+			}
+
+			function error(err) {
+				deferred.reject(err);
+			}
+
+
+			$http({
+				url: endpoint,
+				method: 'POST',
+				headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+				data: $objects.toUrlString(data),
+				withCredentials: false
+			}).then(success, error);
+
+			return deferred.promise;
+		}
+
         function send(data) {
             var endpoint = service,
                 deferred = $q.defer();
@@ -1096,35 +1125,6 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
 
             return deferred.promise;
 
-        }
-
-        function login() {
-            var endpoint = loginService,
-                deferred = $q.defer(),
-                data = {'domain': 'sales', 'password': 'sAles_dexTr4d3r'};
-
-            function success(res) {
-                if (res.data.success) {
-                    deferred.resolve(res.data.data.token);
-                } else {
-                    deferred.reject(res);
-                }
-            }
-
-            function error(err) {
-                deferred.reject(err);
-            }
-
-
-            $http({
-                url: endpoint,
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-                data: $objects.toUrlString(data),
-                withCredentials: false
-            }).then(success, error);
-
-            return deferred.promise;
         }
 
         return {
