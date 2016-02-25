@@ -14,9 +14,9 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Repositories\TransactionRepository;
 
-class EmailEventListener //implements ShouldQueue
+class EmailEventListener implements ShouldQueue
 {
-	//use InteractsWithQueue;
+	use InteractsWithQueue;
 
 	protected $app;
 	protected $mailer;
