@@ -11,6 +11,8 @@ class NewPurchaseEvent extends Event
 {
 	use SerializesModels;
 
+	public $purchase;
+
 	/**
 	 * Create a new event instance.
 	 *

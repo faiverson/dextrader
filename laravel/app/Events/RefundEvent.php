@@ -11,6 +11,8 @@ class RefundEvent extends Event
 {
     use SerializesModels;
 
+	public $data;
+
     /**
      * Create a new event instance.
      *

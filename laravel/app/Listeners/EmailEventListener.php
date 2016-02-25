@@ -8,7 +8,7 @@ use App\Repositories\ProductRepository;
 use App\Repositories\TransactionDetailRepository;
 use Illuminate\Container\Container as App;
 use App\Gateways\UserGateway;
-use Snowfire\Beautymail\Beautymail;
+use Illuminate\Mail\Mailer;
 use Config;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,16 +16,18 @@ use App\Repositories\TransactionRepository;
 
 class EmailEventListener //implements ShouldQueue
 {
+	//use InteractsWithQueue;
+
 	protected $app;
 	protected $mailer;
 	protected $from;
 	protected $admin;
 	protected $userGateway;
 
-	public function __construct(App $app, Beautymail $bm, UserGateway $userGateway)
+	public function __construct(App $app, Mailer $mailer, UserGateway $userGateway)
 	{
 		$this->app = $app;
-		$this->mailer = $bm;
+		$this->mailer = $mailer;
 		$this->from = Config::get('dextrader.from');
 		$this->admin = Config::get('dextrader.admin');
 		$this->userGateway = $userGateway;
@@ -37,6 +39,7 @@ class EmailEventListener //implements ShouldQueue
 		$transaction_id = $event->data['orderid'];
 		$transaction = $tr->findWith($transaction_id);
 		$trans_detail_repo = new TransactionDetailRepository($this->app);
+
 		// lets get the products name
 		$transaction_detail = $trans_detail_repo->findBy('transaction_id', $transaction_id);
 		if($transaction_detail->count() > 0) {
@@ -46,8 +49,8 @@ class EmailEventListener //implements ShouldQueue
 
 		$this->mailer->send('emails.purchase', ['purchase' => $transaction, 'products' => $products], function ($message) use ($transaction, $products) {
 			$message
-				->from($this->from)
-				->to($transaction->email)
+				->from($this->admin, $this->from)
+				->to($transaction->email, $transaction->first_name . ' '.$transaction->last_name)
 				->subject('Your ' . $products .' payment receipt');
 		});
     }
@@ -73,8 +76,8 @@ class EmailEventListener //implements ShouldQueue
 			$params = ['from' => $from, 'to' => $to, 'commission' => $comm, 'products' => $products];
 			$this->mailer->send('emails.commission', $params, function ($message) use ($to, $comm) {
 				$message
-					->from($this->from)
-					->to($to->email)
+					->from($this->admin, $this->from)
+					->to($to->email, $to->fullname)
 					->subject('You Just Earned A $' . $comm->amount .' Commission!');
 			});
 		}
@@ -100,8 +103,8 @@ class EmailEventListener //implements ShouldQueue
 		$params = ['from' => $from, 'to' => $to, 'commission' => $comm, 'intermediate' => $intermediate, 'products' => $products];
 		$this->mailer->send('emails.commission', $params, function ($message) use ($to, $comm, $intermediate) {
 			$message
-				->from($this->from)
-				->to($to->email)
+				->from($this->admin, $this->from)
+				->to($to->email, $to->fullname)
 				->subject($intermediate->fullname . ' just helped you earn $' . $comm->amount .' Commission!');
 		});
 	}
@@ -117,8 +120,8 @@ class EmailEventListener //implements ShouldQueue
 		];
 		$this->mailer->send('emails.subscription-cancel', $params, function ($message) use ($user, $product) {
 			$message
-				->from($this->from)
-				->to($user->email)
+				->from($this->admin, $this->from)
+				->to($user->email, $user->fullname)
 				->subject('Your ' . $product->display_name . ' has been cancelled!');
 		});
 	}
@@ -135,8 +138,8 @@ class EmailEventListener //implements ShouldQueue
 
 		$this->mailer->send('emails.subscription-fail', $params, function ($message) use ($user) {
 			$message
-				->from($this->from)
-				->to($user->email)
+				->from($this->admin, $this->from)
+				->to($user->email, $user->fullname)
 				->subject('URGENT, your payment has failed ' . $user->fullname . '!');
 		});
 	}
@@ -159,8 +162,8 @@ class EmailEventListener //implements ShouldQueue
 
 		$this->mailer->send('emails.subscription-renewed', $params, function ($message) use ($user, $products) {
 			$message
-				->from($this->from)
-				->to($user->email)
+				->from($this->admin, $this->from)
+				->to($user->email, $user->fullname)
 				->subject('Your ' . $products .' monthly payment receipt');
 		});
 	}
@@ -185,8 +188,8 @@ class EmailEventListener //implements ShouldQueue
 
 		$this->mailer->send('emails.refund', $params, function ($message) use ($user, $products, $amount) {
 			$message
-				->from($this->from)
-				->to($user->email)
+				->from($this->admin, $this->from)
+				->to($user->email, $user->fullname)
 				->subject('Your $' . $amount . ' ' . $products . ' payment has been refunded!');
 		});
 	}

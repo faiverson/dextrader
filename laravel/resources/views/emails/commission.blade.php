@@ -1,10 +1,6 @@
-@extends('beautymail::templates.sunny')
+@extends('emails.layout')
 @section('content')
-	@include ('beautymail::templates.sunny.heading' , [
-        'heading' => 'Dex Trader',
-        'level' => 'h1',
-    ])
-	@include('beautymail::templates.sunny.contentStart', ['color' => '#0000FF'])
+	@include('emails.contentStart')
 	<p> Congrats {{ $to->fullname }}!<br/><br/>
 		@if(!empty($intermediate))
 			{{ $intermediate->fullname }} just helped you earn ${{ $commission->amount }} commission by<br>
@@ -23,6 +19,6 @@
 		Sincerely,<br>
 		Maxx Fairo
 	</p>
-		@include('emails.disclaimer')
-	@include('beautymail::templates.sunny.contentEnd')
+	@include('emails.disclaimer')
+	@include('emails.contentEnd')
 @stop

@@ -7,8 +7,9 @@ use App\Gateways\CommissionGateway;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class RefundCommissionListener
+class RefundCommissionListener implements ShouldQueue
 {
+	use InteractsWithQueue;
 	/**
 	 * Create the event listener.
 	 *

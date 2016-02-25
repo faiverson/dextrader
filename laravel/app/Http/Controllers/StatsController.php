@@ -33,6 +33,7 @@ class StatsController extends Controller
 		$filters = $request->input('filter') ? $request->input('filter') : [];
 		$stats = $this->gateway->getMarketingStats($id, $limit, $offset, $order_by, $filters);
 		$total = $this->gateway->getTotalMarketingStats($id, $filters);
+
 		return response()->ok([
 			'stats' => $stats,
 			'total' => $total

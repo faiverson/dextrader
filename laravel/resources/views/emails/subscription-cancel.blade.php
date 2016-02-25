@@ -1,10 +1,6 @@
-@extends('beautymail::templates.sunny')
+@extends('emails.layout')
 @section('content')
-	@include ('beautymail::templates.sunny.heading' , [
-        'heading' => 'Dex Trader',
-        'level' => 'h1',
-    ])
-	@include('beautymail::templates.sunny.contentStart', ['color' => '#0000FF'])
+	@include('emails.contentStart')
 	<p> Hi {{ $user->fullname }},<br/><br/>
 
 		Your {{ $product->display_name }} was just cancelled by your own request or<br/>
@@ -21,5 +17,5 @@
 		Maxx Fairo
 	</p><br>
 	@include('emails.disclaimer')
-	@include('beautymail::templates.sunny.contentEnd')
+	@include('emails.contentEnd')
 @stop

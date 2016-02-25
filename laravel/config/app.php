@@ -154,7 +154,7 @@ return [
 
         App\Providers\RepositoryServiceProvider::class,
 
-        Snowfire\Beautymail\BeautymailServiceProvider::class,
+		Snowfire\Beautymail\BeautymailServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
         Torann\GeoIP\GeoIPServiceProvider::class,
@@ -210,8 +210,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        'Datatables' => yajra\Datatables\Datatables::class,
-        'Beautymail' => Snowfire\Beautymail\Beautymail::class,
+		'Beautymail' => Snowfire\Beautymail\Beautymail::class,
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
         'Entrust' => Zizaco\Entrust\EntrustFacade::class,

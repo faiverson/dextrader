@@ -48,11 +48,18 @@ class SubscriptionGateway extends AbstractGateway
 		return $this->repository->isOwner($user_id, $subscription_id);
 	}
 
+	public function findSubscriptionsByUserProduct($user_id, $product_id)
+	{
+		return $this->repository->findSubscriptionsByUserProduct($user_id, $product_id);
+	}
+
 	public function getBillings($from = 'today')
 	{
 		$day = new DateTime($from);
 		return $this->repository->getSubForBilling($day);
 	}
+
+
 
 	public function setDataForTransaction(Subscription $subscription)
 	{

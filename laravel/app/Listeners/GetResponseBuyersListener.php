@@ -8,8 +8,9 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Log;
 
-class GetResponseBuyersListener
+class GetResponseBuyersListener implements ShouldQueue
 {
+	use InteractsWithQueue;
     /**
      * Create the event listener.
      *

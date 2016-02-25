@@ -3,24 +3,24 @@
 namespace App\Events;
 
 use App\Events\Event;
-use App\Models\Transaction;
+use App\Models\Subscription;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class CheckoutEvent extends Event
+class SubscriptionReactiveEvent extends Event
 {
     use SerializesModels;
 
-	public $data;
+	public $subscription;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(array $data)
+    public function __construct(Subscription $subscription)
     {
-		$this->data = $data;
+		$this->subscription = $subscription;
     }
 
     /**
@@ -30,6 +30,6 @@ class CheckoutEvent extends Event
      */
     public function broadcastOn()
     {
-        return ['purchase.new'];
+        return ['subscription.reactive'];
     }
 }

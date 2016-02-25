@@ -7,8 +7,9 @@ use App\Gateways\CommissionGateway;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class CheckoutCommissionListener
+class CheckoutCommissionListener implements ShouldQueue
 {
+	use InteractsWithQueue;
     /**
      * Create the event listener.
      *

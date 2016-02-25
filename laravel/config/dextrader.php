@@ -6,10 +6,10 @@ return [
 	'limit' => 30,
 
 	// global email for sender
-	'from' => 'system@dextrader.com',
+	'from' => 'Maxx Fairo',
 
 	// admin email
-	'admin' => 'fa.iverson@gmail.com',
+	'admin' => 'system@dextrader.com',
 
 	//  commissions' porcentage
 	'comms' => .40,
@@ -23,5 +23,20 @@ return [
 
 	// encrypting numbers like CC
 	'salt' => env('ENCRYPT_SALT', "CXRhW%r:m1rpq.a4'c{(-/98Q[Z^8i"),
+
+	'unsubscribe' => env('URL') . '/unsubscribe',
+
+	'base_url' => env('URL'),
+
+	'email' => [
+		'sender'  => 'Dex Trader',
+		'logo'        => [
+			'path'   => env('URL') . '/front/assets/images/logo.png',
+			'width'  => '148',
+			'height' => '34',
+		]
+	],
+
+	'cors' => env('API_CORS', 'dextrader.com')
 ];
 

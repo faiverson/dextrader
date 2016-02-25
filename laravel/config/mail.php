@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'info@dextrader.com', 'name' => 'Dex Trader'],
+    'from' => ['address' => 'sytem@dextrader.com', 'name' => 'Dex Trader'],
 
     /*
     |--------------------------------------------------------------------------

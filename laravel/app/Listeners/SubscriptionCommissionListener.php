@@ -7,8 +7,9 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Gateways\CommissionGateway;
 
-class SubscriptionCommissionListener
+class SubscriptionCommissionListener implements ShouldQueue
 {
+	use InteractsWithQueue;
     /**
      * Create the event listener.
      *

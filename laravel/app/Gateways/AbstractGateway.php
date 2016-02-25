@@ -61,6 +61,7 @@ abstract class AbstractGateway {
 		if( ! $this->updateValidator->with($data)->passes() )
 		{
 			$this->errors = $this->updateValidator->errors();
+			dd($this->updateValidator->errors());	
 			return false;
 		}
 

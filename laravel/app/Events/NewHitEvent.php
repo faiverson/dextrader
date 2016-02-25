@@ -11,6 +11,8 @@ class NewHitEvent extends Event
 {
 	use SerializesModels;
 
+	public $hit;
+
 	/**
 	 * Create a new event instance.
 	 *

@@ -652,7 +652,7 @@ class TransactionGateway extends AbstractGateway {
 
 			foreach($transaction->detail as $detail) {
 				$sub = $this->subscription->findProductByUser($detail->product_id, $transaction->user_id);
-				$sub->status = 'cancel';
+				$sub->status = 'admin_cancel'; // admin because the refund is only do it by an admin
 				$sub->save();
 				Event::fire(new SubscriptionCancelEvent($sub));
 

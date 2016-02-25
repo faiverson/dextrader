@@ -11,6 +11,8 @@ class NewLeadEvent extends Event
 {
 	use SerializesModels;
 
+	public $lead;
+
 	/**
 	 * Create a new event instance.
 	 *

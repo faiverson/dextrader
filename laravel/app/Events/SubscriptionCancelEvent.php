@@ -11,6 +11,8 @@ class SubscriptionCancelEvent extends Event
 {
     use SerializesModels;
 
+	public $subscription;
+
     /**
      * Create a new event instance.
      *

@@ -1,11 +1,6 @@
-@extends('beautymail::templates.sunny')
-
+@extends('emails.layout')
 @section('content')
-	@include ('beautymail::templates.sunny.heading' , [
-        'heading' => 'Dex Trader',
-        'level' => 'h1',
-    ])
-	@include('beautymail::templates.sunny.contentStart', ['color' => '#0000FF'])
+	@include('emails.contentStart')
 	<p> There is a new live signal in the system<br/></p>
-	@include('beautymail::templates.sunny.contentEnd')
+	@include('emails.contentEnd')
 @stop

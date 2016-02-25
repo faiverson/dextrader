@@ -30,7 +30,8 @@ class EventServiceProvider extends ServiceProvider
 		'App\Events\SubscriptionCancelEvent' => [
 			'App\Listeners\GetResponseInactiveListener'
 		],
-		'App\Events\SubscriptionFailEvent' => [
+		'App\Events\SubscriptionReactiveEvent' => [
+			'App\Listeners\GetResponseReactiveListener'
 		],
 		'App\Events\SubscriptionRenewedEvent' => [
 			'App\Listeners\SubscriptionCommissionListener'
@@ -42,6 +43,8 @@ class EventServiceProvider extends ServiceProvider
 		'App\Events\AddSignalEvent' => [],
 		'App\Events\UpdateSignalEvent' => [],
 		'App\Events\CommissionEvent' => [],
+		'App\Events\SubscriptionFailEvent' => [],
+
     ];
 
 	protected $subscribe = [

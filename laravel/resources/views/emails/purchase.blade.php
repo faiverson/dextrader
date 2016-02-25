@@ -1,11 +1,6 @@
-@extends('beautymail::templates.sunny')
-
+@extends('emails.layout')
 @section('content')
-	@include ('beautymail::templates.sunny.heading' , [
-        'heading' => 'Dex Trader',
-        'level' => 'h1',
-    ])
-	@include('beautymail::templates.sunny.contentStart', ['color' => '#0000FF'])
+	@include('emails.contentStart', ['color' => '#0000FF'])
 	<h3>Hi {{$purchase->first_name}} {{$purchase->last_name}},</h3>
 	<p>Thanks for your recent {{$products}} payment</p>
 	<p>These is the information regarding to your purchase: <br/>
@@ -25,5 +20,5 @@
 		Maxx Fairo
 	</p><br>
 	@include('emails.disclaimer')
-	@include('beautymail::templates.sunny.contentEnd')
+	@include('emails.contentEnd')
 @stop

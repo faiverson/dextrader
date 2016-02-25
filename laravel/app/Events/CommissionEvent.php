@@ -11,6 +11,8 @@ class CommissionEvent extends Event
 {
     use SerializesModels;
 
+	public $commission;
+
     /**
      * Create a new event instance.
      *
