@@ -27,8 +27,8 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
             });
     })
 
-    .controller('UsersCtrl', ['$scope', '$site-configs', 'UserService', 'modalService', 'Notification',
-        function ($scope, $configs, UserService, modalService, Notification) {
+    .controller('UsersCtrl', ['$scope', '$site-configs', 'UserService', 'modalService', 'Notification', '$timeout',
+        function ($scope, $configs, UserService, modalService, Notification, $timeout) {
 			var vm = this;
 
 			$scope.pagination = {
@@ -92,19 +92,32 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
 
 			$scope.$watch('filters.first_name', function (nv, ov) {
 				if (angular.isDefined(nv) && nv !== ov) {
-					$scope.filters.apply();
+					$timeout.cancel(vm.first_name_tm);
+
+					vm.first_name_tm = $timeout(function () {
+						$scope.filters.apply();
+					}, 600);
+
 				}
 			});
 
 			$scope.$watch('filters.last_name', function (nv, ov) {
 				if (angular.isDefined(nv) && nv !== ov) {
-					$scope.filters.apply();
+					$timeout.cancel(vm.last_name_tm);
+
+					vm.last_name_tm = $timeout(function () {
+						$scope.filters.apply();
+					}, 600);
 				}
 			});
 
 			$scope.$watch('filters.email', function (nv, ov) {
 				if (angular.isDefined(nv) && nv !== ov) {
-					$scope.filters.apply();
+					$timeout.cancel(vm.email_tm);
+
+					vm.email_tm = $timeout(function () {
+						$scope.filters.apply();
+					}, 600);
 				}
 			});
 
