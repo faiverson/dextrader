@@ -267,6 +267,53 @@
                             </tbody>
                         </table>
                     </uib-tab>
+                    <uib-tab heading="Stats" select="stats.loadUserStats(user.user_id)">
+                        <table class="table table-payments">
+                            <thead>
+                            <tr>
+                                <th sort-column="funnel_id" on-sort="stats.loadUserStats(user.user_id)" sort-data="stats.sortBy">Funnel</th>
+                                <th sort-column="hits" on-sort="stats.loadUserStats(user.user_id)"sort-data="stats.sortBy">Hits</th>
+                                <th sort-column="unique_hits" on-sort="stats.loadUserStats(user.user_id)" sort-data="stats.sortBy">Unique Hits</th>
+                                <th sort-column="leads" on-sort="stats.loadUserStats(user.user_id)" sort-data="stats.sortBy">Leads</th>
+                                <th sort-column="ib" on-sort="stats.loadUserStats(user.user_id)" sort-data="stats.sortBy">IB</th>
+                                <th sort-column="pro" on-sort="stats.loadUserStats(user.user_id)" sort-data="stats.sortBy">IB PRO</th>
+                                <th sort-column="income" on-sort="stats.loadUserStats(user.user_id)" sort-data="stats.sortBy">Income</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="item in stats.data">
+                                <td data-ng-bind="item.funnel"></td>
+                                <td data-ng-bind="item.hits"></td>
+                                <td data-ng-bind="item.unique_hits"></td>
+                                <td data-ng-bind="item.leads"></td>
+                                <td data-ng-bind="item.ib"></td>
+                                <td data-ng-bind="item.pro"></td>
+                                <td data-ng-bind="item.income | currency: '$'"></td>
+                            </tr>
+
+                            <tr data-ng-if="commissions.length == 0">
+                                <td class="text-center" colspan="7"> --- No Stats were found --- </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="table-nav row">
+                            <div class="col-md-8">
+                                <uib-pagination direction-links="false"
+                                                total-items="stats.pagination.totalItems"
+                                                ng-model="stats.pagination.currentPage"
+                                                ng-change="stats.pagination.pageChange()"
+                                                items-per-page="stats.pagination.itemsPerPage"
+                                                num-pages="smallnumPages"></uib-pagination>
+                            </div>
+
+                            <div class="col-md-4">
+                                <uib-pager total-items="stats.pagination.totalItems"
+                                           items-per-page="stats.pagination.itemsPerPage"
+                                           ng-change="stats.pagination.pageChange()"
+                                           ng-model="stats.pagination.currentPage"></uib-pager>
+                            </div>
+                        </div>
+                    </uib-tab>
                 </uib-tabset>
             </div>
         </div>

@@ -10,8 +10,12 @@ angular.module('app.user-profile', [])
                 }
             });
     })
-    .controller('UserProfileController', ['$scope', '$site-configs', '$state', '$stateParams', 'UserService', 'BillingAddressService', 'CreditCardService', 'Notification', 'InvoiceService', 'SubscriptionService', 'CommissionService', 'PaymentService',
-        function ($scope, $configs, $state, $stateParams, UserService, BillingAddressService, CreditCardService, Notification, InvoiceService, SubscriptionService, CommissionService, PaymentService) {
+    .controller('UserProfileController', ['$scope', '$site-configs', '$state', '$stateParams', 'UserService',
+        'BillingAddressService', 'CreditCardService', 'Notification', 'InvoiceService', 'SubscriptionService',
+        'CommissionService', 'PaymentService', 'MarketingStatsService',
+        function ($scope, $configs, $state, $stateParams, UserService, BillingAddressService, CreditCardService,
+                  Notification, InvoiceService, SubscriptionService, CommissionService, PaymentService,
+                  MarketingStatsService) {
             var vm = this;
 
             vm.loadUser = function (id) {
@@ -175,6 +179,52 @@ angular.module('app.user-profile', [])
                     function success(res) {
                         $scope.payments.pagination.totalItems = res.data.total;
                         $scope.payments.data = res.data.payments;
+                    }
+
+                    function error(err) {
+                        Notification.error(err.data.error);
+                    }
+
+                    prom.then(success, error);
+
+                    return prom;
+                }
+            };
+
+            $scope.stats = {
+                filters: {
+                    from: {
+                        format: 'dd MMM yyyy'
+                    },
+                    to: {
+                        format: 'dd MMM yyyy'
+                    },
+                    apply: function () {
+                        $scope.stats.loadUserStats($scope.user.user_id);
+                    }
+                },
+                sortBy: {},
+                pagination: {
+                    totalItems: 20,
+                    currentPage: 1,
+                    itemsPerPage: 10,
+                    pageChange: function () {
+                        $scope.stats.loadUserStats($scope.user.user_id);
+                    }
+                },
+                loadUserStats: function (user_id) {
+
+                    var params = {
+                        offset: (this.pagination.currentPage - 1) * this.pagination.itemsPerPage,
+                        limit: this.pagination.itemsPerPage,
+                        order: this.sortBy
+                    };
+
+                    var prom = MarketingStatsService.queryStats(params, user_id);
+
+                    function success(res) {
+                        $scope.stats.pagination.totalItems = res.data.total;
+                        $scope.stats.data = res.data.stats;
                     }
 
                     function error(err) {
