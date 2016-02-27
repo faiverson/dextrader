@@ -87,8 +87,7 @@ abstract class AbstractValidator implements ValidableInterface {
 			$this->after($validator);
 		});
 
-		if( $this->validator->fails() )
-		{
+		if( $this->validator->fails() ) {
 			$this->errors = $this->validator->messages();
 			return false;
 		}

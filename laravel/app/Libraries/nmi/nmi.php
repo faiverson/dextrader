@@ -4,7 +4,6 @@ namespace App\Libraries\NMI;
 use anlutro\cURL\Laravel\cURL;
 use Log;
 use Config;
-use App\Models\Purchase;
 
 class NMI {
 
@@ -55,6 +54,7 @@ class NMI {
 			'phone' => array_key_exists('billing_phone', $data) ? $data['billing_phone'] : '',
 			'type' => $type
 		];
+		Log::notice('Transactions gateway', $order);
 		$values = array_map("urlencode", array_values($order));
 		$this->data = array_combine(array_keys($order) , $values);
 		return $this->send();
@@ -101,7 +101,7 @@ class NMI {
 		$response = null;
 		$curl = cURL::post(self::URL, $this->data);
 		$this->response = $curl->body;
-		Log::info('Purchase ' . $curl->body);
+		Log::notice('Purchase gateway info: ' . $curl->body);
 		parse_str($curl->body, $response);
 		return $response;
 	}
