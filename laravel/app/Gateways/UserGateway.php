@@ -50,14 +50,16 @@ class UserGateway extends AbstractGateway
 		return $user;
     }
 
-    public function edit(array $data, $id)
+    public function edit(array $data, $id, $user)
     {
-        if (array_key_exists('username', $data)) {
-            unset($data['username']);
-        }
+		if(!$user->can('user.update')) {
+			if (array_key_exists('username', $data)) {
+				unset($data['username']);
+			}
 
-		if (array_key_exists('enroller_id', $data)) {
-			unset($data['enroller_id']);
+			if (array_key_exists('enroller_id', $data)) {
+				unset($data['enroller_id']);
+			}
 		}
 
         if (array_key_exists('full_name', $data)) {

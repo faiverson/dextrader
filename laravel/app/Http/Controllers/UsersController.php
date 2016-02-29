@@ -35,11 +35,13 @@ class UsersController extends Controller
 
 	public function index(Request $request)
 	{
+		$user_id = $request->user()->id;
 		$select = ['id', 'username', 'first_name', 'last_name', 'email', 'created_at'];
 		$limit = $request->input('limit') ? $request->input('limit') : $this->limit;
 		$offset = $request->input('offset') ? $request->input('offset') : 0;
 		$order_by = $request->input('order') ? $request->input('order') : ['id' => 'desc'];
 		$filters = $request->input('filter') ? $request->input('filter') : [];
+		$filters['user_id'] = $user_id;
 		$users = $this->gateway->actives($select, $limit, $offset, $order_by, $filters);
 		$total = $this->gateway->totalActives($filters);
 		return response()->ok([
@@ -92,7 +94,8 @@ class UsersController extends Controller
 		$id = $request->id;
 		$fields = $request->all();
 		$fields['ip_address'] = $request->ip();
-		$user = $this->gateway->edit($fields, $id);
+		$fields['admin'] = $request->ip();
+		$user = $this->gateway->edit($fields, $id, $request->user());
 		if(!$user) {
 			return response()->error($this->gateway->errors()->all());
 		}

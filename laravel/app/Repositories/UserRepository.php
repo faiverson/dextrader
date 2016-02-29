@@ -135,6 +135,10 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 				->where('last_name', 'like', $name[1]  . '%');
 		}
 
+		if(array_key_exists('user_id', $where) && $where['user_id'] != null) {
+			$query = $query->where('user_id', '!=', $where['user_id'] . '%');
+		}
+
 		return $query;
 	}
 
