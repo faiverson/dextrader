@@ -77,6 +77,31 @@
                 </div>
                 <div class="col-md-6">
                     <div class="panel panel-default">
+                        <div class="panel-heading">Sponsor Information</div>
+                        <div class="panel-body">
+                            <div class="form-group" data-show-errors>
+                                <label for="enroller">Sponsor</label>
+                                <input type="text"
+                                       name="enroller"
+                                       class="form-control"
+                                       id="enroller"
+                                       ng-model="enroller"
+                                       placeholder="Start typing the Sponsor"
+                                       uib-typeahead="enroller.full_name for enroller in getEnroller($viewValue)"
+                                       typeahead-loading="loadingLocations"
+                                       typeahead-no-results="noResults"
+                                       typeahead-wait-ms="600"
+                                       typeahead-editable="false"
+                                       typeahead-on-select="onSelectEnroller($item, $model, $label, $event)"
+                                       class="form-control">
+                                <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                                <div ng-show="noResults">
+                                    <i class="glyphicon glyphicon-remove"></i> No Results Found
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
                         <div class="panel-heading">Auth Information</div>
                         <div class="panel-body">
                             <div class="form-group" data-show-errors>

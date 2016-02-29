@@ -29,157 +29,157 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
 
     .controller('UsersCtrl', ['$scope', '$site-configs', 'UserService', 'modalService', 'Notification', '$timeout',
         function ($scope, $configs, UserService, modalService, Notification, $timeout) {
-			var vm = this;
+            var vm = this;
 
-			$scope.pagination = {
-				totalItems: 20,
-				currentPage: 1,
-				itemsPerPage: 10,
-				pageChange: function () {
-					$scope.getUsers();
-				}
-			};
+            $scope.pagination = {
+                totalItems: 20,
+                currentPage: 1,
+                itemsPerPage: 10,
+                pageChange: function () {
+                    $scope.getUsers();
+                }
+            };
 
-			$scope.sortBy = {};
+            $scope.sortBy = {};
 
-			$scope.filters = {
-				from: null,
-				to: null,
-				first_name: null,
-				last_name: null,
-				email: null,
-				apply: function () {
-					this.toApply.from = null;
-					this.toApply.to = null;
-					this.toApply.first_name = null;
-					this.toApply.last_name = null;
-					this.toApply.email = null;
+            $scope.filters = {
+                from: null,
+                to: null,
+                first_name: null,
+                last_name: null,
+                email: null,
+                apply: function () {
+                    this.toApply.from = null;
+                    this.toApply.to = null;
+                    this.toApply.first_name = null;
+                    this.toApply.last_name = null;
+                    this.toApply.email = null;
 
-					if (angular.isDefined(this.from) && this.from !== null) {
-						this.toApply.from = moment(this.from).format('YYYY-MM-DD');
-					}
+                    if (angular.isDefined(this.from) && this.from !== null) {
+                        this.toApply.from = moment(this.from).format('YYYY-MM-DD');
+                    }
 
-					if (angular.isDefined(this.to) && this.to !== null) {
-						this.toApply.to = moment(this.to).format('YYYY-MM-DD');
-					}
+                    if (angular.isDefined(this.to) && this.to !== null) {
+                        this.toApply.to = moment(this.to).format('YYYY-MM-DD');
+                    }
 
-					if (angular.isDefined(this.first_name) && this.first_name !== null && this.first_name.length >= 3) {
-						this.toApply.first_name = this.first_name;
-					}
+                    if (angular.isDefined(this.first_name) && this.first_name !== null && this.first_name.length >= 3) {
+                        this.toApply.first_name = this.first_name;
+                    }
 
-					if (angular.isDefined(this.last_name) && this.last_name !== null && this.last_name.length >= 3) {
-						this.toApply.last_name = this.last_name;
-					}
+                    if (angular.isDefined(this.last_name) && this.last_name !== null && this.last_name.length >= 3) {
+                        this.toApply.last_name = this.last_name;
+                    }
 
-					if (angular.isDefined(this.email) && this.email !== null && this.email.length >= 3) {
-						this.toApply.email = this.email;
-					}
+                    if (angular.isDefined(this.email) && this.email !== null && this.email.length >= 3) {
+                        this.toApply.email = this.email;
+                    }
 
-					$scope.getUsers();
-				},
-				toApply: {}
-			};
+                    $scope.getUsers();
+                },
+                toApply: {}
+            };
 
-			$scope.$watch('filters.from', function (nv, ov) {
-				$scope.filters.apply();
-			});
+            $scope.$watch('filters.from', function (nv, ov) {
+                $scope.filters.apply();
+            });
 
-			$scope.$watch('filters.to', function (nv, ov) {
-				if (angular.isDefined(nv) && nv !== ov) {
-					$scope.filters.apply();
-				}
-			});
+            $scope.$watch('filters.to', function (nv, ov) {
+                if (angular.isDefined(nv) && nv !== ov) {
+                    $scope.filters.apply();
+                }
+            });
 
-			$scope.$watch('filters.first_name', function (nv, ov) {
-				if (angular.isDefined(nv) && nv !== ov) {
-					$timeout.cancel(vm.first_name_tm);
+            $scope.$watch('filters.first_name', function (nv, ov) {
+                if (angular.isDefined(nv) && nv !== ov) {
+                    $timeout.cancel(vm.first_name_tm);
 
-					vm.first_name_tm = $timeout(function () {
-						$scope.filters.apply();
-					}, 600);
+                    vm.first_name_tm = $timeout(function () {
+                        $scope.filters.apply();
+                    }, 600);
 
-				}
-			});
+                }
+            });
 
-			$scope.$watch('filters.last_name', function (nv, ov) {
-				if (angular.isDefined(nv) && nv !== ov) {
-					$timeout.cancel(vm.last_name_tm);
+            $scope.$watch('filters.last_name', function (nv, ov) {
+                if (angular.isDefined(nv) && nv !== ov) {
+                    $timeout.cancel(vm.last_name_tm);
 
-					vm.last_name_tm = $timeout(function () {
-						$scope.filters.apply();
-					}, 600);
-				}
-			});
+                    vm.last_name_tm = $timeout(function () {
+                        $scope.filters.apply();
+                    }, 600);
+                }
+            });
 
-			$scope.$watch('filters.email', function (nv, ov) {
-				if (angular.isDefined(nv) && nv !== ov) {
-					$timeout.cancel(vm.email_tm);
+            $scope.$watch('filters.email', function (nv, ov) {
+                if (angular.isDefined(nv) && nv !== ov) {
+                    $timeout.cancel(vm.email_tm);
 
-					vm.email_tm = $timeout(function () {
-						$scope.filters.apply();
-					}, 600);
-				}
-			});
+                    vm.email_tm = $timeout(function () {
+                        $scope.filters.apply();
+                    }, 600);
+                }
+            });
 
-			$scope.openDeleteConfirm = function (id) {
-				var modalOptions = {
-					closeButtonText: 'Cancel',
-					actionButtonText: 'Delete User',
-					headerText: 'Delete User?',
-					bodyText: 'Are you sure you want to delete this User?'
-				};
+            $scope.openDeleteConfirm = function (id) {
+                var modalOptions = {
+                    closeButtonText: 'Cancel',
+                    actionButtonText: 'Delete User',
+                    headerText: 'Delete User?',
+                    bodyText: 'Are you sure you want to delete this User?'
+                };
 
-				modalService.showModal({}, modalOptions).then(function (result) {
-					UserService.destroy(id).then(vm.successDelete, vm.errorDelete);
-				});
-			};
+                modalService.showModal({}, modalOptions).then(function (result) {
+                    UserService.destroy(id).then(vm.successDelete, vm.errorDelete);
+                });
+            };
 
-			$scope.loginAsUser = function (id) {
-				UserService.loginAsUser(id).then(function(response) {
-						window.open($configs.DASHBOARD_URL + "/doLogin?token=" + response.data.token);
-				},
-				function (err) {
-					Notification.error('Oops! there was an error trying to login as this user!');
-				});
-			};
+            $scope.loginAsUser = function (id) {
+                UserService.loginAsUser(id).then(function (response) {
+                        window.open($configs.DASHBOARD_URL + "/doLogin?token=" + response.data.token);
+                    },
+                    function (err) {
+                        Notification.error('Oops! there was an error trying to login as this user!');
+                    });
+            };
 
-			$scope.getUsers = function () {
+            $scope.getUsers = function () {
 
-				var params = {
-					offset: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
-					limit: $scope.pagination.itemsPerPage,
-					order: $scope.sortBy,
-					filter: $scope.filters.toApply
-				};
+                var params = {
+                    offset: ($scope.pagination.currentPage - 1) * $scope.pagination.itemsPerPage,
+                    limit: $scope.pagination.itemsPerPage,
+                    order: $scope.sortBy,
+                    filter: $scope.filters.toApply
+                };
 
-				function success(res) {
-					$scope.pagination.totalItems = res.data.totalItems;
-					$scope.users = res.data.users;
-				}
+                function success(res) {
+                    $scope.pagination.totalItems = res.data.totalItems;
+                    $scope.users = res.data.users;
+                }
 
-				function error(err) {
-					Notification.error('Oops! there was an error trying to load users!');
-				}
+                function error(err) {
+                    Notification.error('Oops! there was an error trying to load users!');
+                }
 
-				UserService.getUsers(params)
-						.then(success, error);
-			};
+                UserService.getUsers(params)
+                    .then(success, error);
+            };
 
-			vm.successDelete = function (res) {
-				$scope.getUsers();
-				Notification.success('User was removed successfully!');
-			};
+            vm.successDelete = function (res) {
+                $scope.getUsers();
+                Notification.success('User was removed successfully!');
+            };
 
-			vm.errorDelete = function (err) {
-				Notification.error('Oops! there was an error trying to remove this user!');
-			};
+            vm.errorDelete = function (err) {
+                Notification.error('Oops! there was an error trying to remove this user!');
+            };
 
-			vm.init = function () {
-				$scope.getUsers();
-			};
+            vm.init = function () {
+                $scope.getUsers();
+            };
 
-			vm.init();
-		}])
+            vm.init();
+        }])
 
     .controller('UsersFormCtrl', ['$scope', '$q', '$state', '$stateParams', '$filter', 'UserService', 'UserRolesService', 'Notification',
         function ($scope, $q, $state, $stateParams, $filter, UserService, UserRolesService, Notification) {
@@ -197,7 +197,7 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
                             return role.role_id;
                         });
 
-					$scope.user.roles = JSON.stringify($scope.user.roles);
+                    $scope.user.roles = JSON.stringify($scope.user.roles);
 
                     if ($scope.user.password === '******') {
                         delete $scope.user.password;
@@ -217,17 +217,17 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
             };
 
             vm.errorUserSave = function (response) {
-				var txt = '';
-				response = response.data;
-				if(angular.isArray(response.error)) {
-					angular.forEach(response.error, function(item) {
-						txt += item + '<br>';
-					});
-				}
-				else {
-					txt += response.error;
-				}
-				Notification.error("Oops! " + txt);
+                var txt = '';
+                response = response.data;
+                if (angular.isArray(response.error)) {
+                    angular.forEach(response.error, function (item) {
+                        txt += item + '<br>';
+                    });
+                }
+                else {
+                    txt += response.error;
+                }
+                Notification.error("Oops! " + txt);
             };
 
             vm.getUserRoles = function () {
@@ -248,6 +248,10 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
 
             vm.successLoadUser = function (res) {
                 $scope.user = res.data;
+
+                if(angular.isDefined(res.data.enroller)){
+                    $scope.enroller = res.data.enroller.full_name;
+                }
             };
 
             vm.errorLoadUser = function (res) {
@@ -280,6 +284,17 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
 
             $scope.toggleRole = function (role) {
                 role.selected = !role.selected;
+            };
+
+            $scope.getEnroller = function (q) {
+                return UserService.getUsers({filter: {first_name: q}})
+                    .then(function (res) {
+                        return res.data.users;
+                    });
+            };
+
+            $scope.onSelectEnroller = function ($item, $model, $label, $event) {
+                $scope.user.enroller_id = $item.user_id;
             };
 
             vm.init();

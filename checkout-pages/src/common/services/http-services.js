@@ -539,4 +539,35 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             queryCities: queryCities
         };
 
+    }])
+
+    .factory('UserSettings', ['localStorageService', function (localStorageService) {
+
+        function getUserEnroller() {
+            var enroller = localStorageService.get('enroller');
+            var exp_enroller = localStorageService.get('exp_enroller');
+
+            if (enroller && exp_enroller) {
+                if (moment().isAfter(moment(exp_enroller, 'YYYY-MM-DD'))) {
+                    localStorageService.remove('enroller');
+                    localStorageService.remove('exp_enroller');
+                } else {
+                    return enroller;
+                }
+            }
+
+            return;
+        }
+
+        function setEnroller(enroller) {
+            var exp_enroller = moment().add(14, 'days').format('YYYY-MM-DD');
+
+            localStorageService.set('enroller', enroller);
+            localStorageService.set('exp_enroller', exp_enroller);
+        }
+
+        return {
+            setEnroller: setEnroller,
+            userEnroller: getUserEnroller
+        };
     }]);
