@@ -55,11 +55,6 @@ class User extends Model implements AuthenticatableContract,
 
 	protected $appends = array('full_name', 'user_id');
 
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
     protected $hidden = ['id', 'password', 'remember_token', 'active', 'updated_at', 'deleted_at'];
 
 	public function setPhoneAttribute($value)
@@ -107,9 +102,9 @@ class User extends Model implements AuthenticatableContract,
 		$this->attributes['email'] = strtolower($value);
 	}
 
-//	public function settings()
-//	{
-//		return $this->hasMany(Settings::class, 'users_settings', 'id', 'user_id');
-//	}
+	public function enroller()
+	{
+		return $this->hasOne(User::class, 'id', 'enroller_id');
+	}
 
 }

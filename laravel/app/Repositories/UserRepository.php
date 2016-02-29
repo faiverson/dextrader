@@ -66,7 +66,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 	}
 
 	public function findById($id, $column = 'id', $columns = array('*')) {
-		$user = $this->model->with('roles')->where('active', 1)->where($column, $id);
+		$user = $this->model->with('enroller')->with('roles')->where('active', 1)->where($column, $id);
 		return $user->select($columns)->first();
 	}
 
