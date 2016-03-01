@@ -28,7 +28,8 @@ class EventServiceProvider extends ServiceProvider
 			'App\Listeners\GetResponsePartialListener'
 		],
 		'App\Events\SubscriptionCancelEvent' => [
-			'App\Listeners\GetResponseInactiveListener'
+//			'App\Listeners\GetResponseInactiveListener',
+			'App\Listeners\SubscriptionCancelListener'
 		],
 		'App\Events\SubscriptionReactiveEvent' => [
 			'App\Listeners\GetResponseReactiveListener'
@@ -36,6 +37,7 @@ class EventServiceProvider extends ServiceProvider
 		'App\Events\SubscriptionRenewedEvent' => [
 			'App\Listeners\SubscriptionCommissionListener'
 		],
+
 		'App\Events\RefundEvent' => [
 			'App\Listeners\RefundCommissionListener',
 		],

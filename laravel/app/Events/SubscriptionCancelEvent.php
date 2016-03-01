@@ -13,21 +13,11 @@ class SubscriptionCancelEvent extends Event
 
 	public $subscription;
 
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
     public function __construct(Subscription $subscription)
     {
 		$this->subscription = $subscription;
     }
 
-    /**
-     * Get the channels the event should be broadcast on.
-     *
-     * @return array
-     */
     public function broadcastOn()
     {
         return ['subscription.cancel'];

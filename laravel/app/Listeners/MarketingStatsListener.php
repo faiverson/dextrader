@@ -63,7 +63,8 @@ class MarketingStatsListener implements ShouldQueue
 		if($stat) {
 			$stat->leads += 1;
 			$stat->save();
-		} else {
+		}
+		else {
 			$funnel_repo = new MarketingLinkRepository($this->app);
 			$tag_repo = new TagRepository($this->app);
 			$funnel = $funnel_repo->find($lead->funnel_id);
