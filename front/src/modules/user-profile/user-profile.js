@@ -17,14 +17,6 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
                     pageTitle: 'User Settings'
                 }
             })
-            .state('user.support', {
-                url: '/settings',
-                templateUrl: 'modules/user-profile/user.profile.settings.tpl.html',
-                controller: 'UserProfileSettingsCtrl',
-                data: {
-                    pageTitle: 'User Settings'
-                }
-            })
             .state('user.billing', {
                 url: '/billing',
                 templateUrl: 'modules/user-profile/user.profile.billing.tpl.html',
@@ -35,8 +27,10 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
             });
     })
 
-    .controller('UserProfileCtrl', ['$scope', function ($scope) {
-
+    .controller('UserProfileCtrl', ['$scope', 'ChatService', function ($scope, ChatService) {
+        $scope.loadChat = function () {
+            ChatService.show();
+        };
     }])
 
     .controller('UserProfileSettingsCtrl', ['$scope', 'UserService', 'AuthService', 'Notification', function ($scope, UserService, AuthService, Notification) {

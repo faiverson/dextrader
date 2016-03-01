@@ -455,8 +455,8 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
 
     }])
 
-    .controller('DexIBSalesCtrl', ['$scope', 'TestimonialsService', '$stateParams', '$objects', '$uibModal', 'os-info', 'HitsService',
-        function ($scope, TestimonialsService, $stateParams, $objects, $uibModal, osInfo, HitsService) {
+    .controller('DexIBSalesCtrl', ['$scope', 'TestimonialsService', '$stateParams', '$objects', '$uibModal', 'os-info', 'HitsService', 'UserSettings', '$state',
+        function ($scope, TestimonialsService, $stateParams, $objects, $uibModal, osInfo, HitsService, UserSettings, $state) {
             var vm = this;
             $scope.popUpOpen = false;
             $scope.video_id = 'W5ZxDkY_j_0';
@@ -550,6 +550,12 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
                 vm.sendHit();
                 var params = {};
 
+                if (angular.isUndefined($state.params.user) && !angular.isUndefined(UserSettings.userEnroller())) {
+                    $state.go('dex_ib_sales', {user: UserSettings.userEnroller()});
+                } else if (!angular.isUndefined($state.params.user)) {
+                    UserSettings.setEnroller($state.params.user);
+                }
+
                 if (angular.isDefined($stateParams.user)) {
                     params.user = $stateParams.user;
                 }
@@ -565,8 +571,8 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
             vm.init();
         }])
 
-    .controller('DexIBAffiliatesCtrl', ['$scope', '$state', '$stateParams', '$uibModal', 'Notification', 'os-info', 'HitsService',
-        function ($scope, $state, $stateParams, $uibModal, Notification, osInfo, HitsService) {
+    .controller('DexIBAffiliatesCtrl', ['$scope', '$state', '$stateParams', '$uibModal', 'Notification', 'os-info', 'HitsService', 'UserSettings',
+        function ($scope, $state, $stateParams, $uibModal, Notification, osInfo, HitsService, UserSettings) {
             var vm = this;
 
             $scope.videoId = 'Aj-yHxSYQKc';
@@ -624,6 +630,12 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
             };
 
             vm.init = function () {
+                if (angular.isUndefined($state.params.user) && !angular.isUndefined(UserSettings.userEnroller())) {
+                    $state.go('dex_ib_affiliates_sales', {user: UserSettings.userEnroller()});
+                } else if (!angular.isUndefined($state.params.user)) {
+                    UserSettings.setEnroller($state.params.user);
+                }
+
                 vm.sendHit();
                 var params = {};
             };

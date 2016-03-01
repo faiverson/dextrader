@@ -1072,34 +1072,34 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         var service = $config.API_BASE_URL + 'hits';
         var loginService = $config.API_BASE_URL + 'pages';
 
-		function login() {
-			var endpoint = loginService,
-				deferred = $q.defer(),
-				data = {'domain': 'sales', 'password': 'sAles_dexTr4d3r'};
+        function login() {
+            var endpoint = loginService,
+                deferred = $q.defer(),
+                data = {'domain': 'sales', 'password': 'sAles_dexTr4d3r'};
 
-			function success(res) {
-				if (res.data.success) {
-					deferred.resolve(res.data.data.token);
-				} else {
-					deferred.reject(res);
-				}
-			}
+            function success(res) {
+                if (res.data.success) {
+                    deferred.resolve(res.data.data.token);
+                } else {
+                    deferred.reject(res);
+                }
+            }
 
-			function error(err) {
-				deferred.reject(err);
-			}
+            function error(err) {
+                deferred.reject(err);
+            }
 
 
-			$http({
-				url: endpoint,
-				method: 'POST',
-				headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-				data: $objects.toUrlString(data),
-				withCredentials: false
-			}).then(success, error);
+            $http({
+                url: endpoint,
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+                data: $objects.toUrlString(data),
+                withCredentials: false
+            }).then(success, error);
 
-			return deferred.promise;
-		}
+            return deferred.promise;
+        }
 
         function send(data) {
             var endpoint = service,
@@ -1158,5 +1158,36 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
 
         return {
             queryStats: queryStats
+        };
+    }])
+
+    .factory('UserSettings', ['localStorageService', function (localStorageService) {
+
+        function getUserEnroller() {
+            var enroller = localStorageService.get('enroller');
+            var exp_enroller = localStorageService.get('exp_enroller');
+
+            if (enroller && exp_enroller) {
+                if (moment().isAfter(moment(exp_enroller, 'YYYY-MM-DD'))) {
+                    localStorageService.remove('enroller');
+                    localStorageService.remove('exp_enroller');
+                } else {
+                    return enroller;
+                }
+            }
+
+            return;
+        }
+
+        function setEnroller(enroller) {
+            var exp_enroller = moment().add(14, 'days').format('YYYY-MM-DD');
+
+            localStorageService.set('enroller', enroller);
+            localStorageService.set('exp_enroller', exp_enroller);
+        }
+
+        return {
+            setEnroller: setEnroller,
+            userEnroller: getUserEnroller
         };
     }]);

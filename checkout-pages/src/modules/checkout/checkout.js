@@ -82,8 +82,8 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
 
     })
 
-    .controller('CheckoutCtrl', ['$scope', 'CheckoutService', 'UserService', 'CountriesService', '$q', 'os-info', '$stateParams', 'Notification', 'HitsService', 'TestimonialsService', '$state', 'InvoicesService', 'SpecialOffersService', 'product',
-        function ($scope, CheckoutService, UserService, CountriesService, $q, osInfo, $stateParams, Notification, HitsService, TestimonialsService, $state, InvoicesService, SpecialOffersService, product) {
+    .controller('CheckoutCtrl', ['$scope', 'CheckoutService', 'UserService', 'CountriesService', '$q', 'os-info', '$stateParams', 'Notification', 'HitsService', 'TestimonialsService', '$state', 'InvoicesService', 'SpecialOffersService', 'product', 'UserSettings',
+        function ($scope, CheckoutService, UserService, CountriesService, $q, osInfo, $stateParams, Notification, HitsService, TestimonialsService, $state, InvoicesService, SpecialOffersService, product, UserSettings) {
             var vm = this;
 
             $scope.product = product;
@@ -341,6 +341,13 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
 
             vm.init = function () {
                 $scope.nextPaymentDate = moment().add(3, 'd').format('MM/DD/YYYY');
+
+                if (angular.isUndefined($state.params.user) && !angular.isUndefined(UserSettings.userEnroller())) {
+                    $state.go($state.$current.name, {user: UserSettings.userEnroller()});
+                } else if (!angular.isUndefined($state.params.user)) {
+                    UserSettings.setEnroller($state.params.user);
+                }
+
 
                 vm.feelExpMonth();
                 vm.feelExpYear();
