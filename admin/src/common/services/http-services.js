@@ -1139,6 +1139,53 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
     }])
 
+    .factory('TransactionService', ['$http', '$q', '$site-configs', 'AuthService', '$objects', function ($http, $q, $configs, AuthService, $objects) {
+        var service = $configs.API_BASE_URL + 'users/';
+
+        function query(user_id, params) {
+            var endpoint = service + user_id + '/transactions',
+                deferred = $q.defer();
+
+            endpoint += '?' + $objects.serializeUrl(params);
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.get(endpoint).then(success, error);
+
+            return deferred.promise;
+
+        }
+
+        function refund(id){
+            var endpoint = $configs.API_BASE_URL + 'transactions/' + id + '/refund',
+                deferred = $q.defer();
+
+            function success(res) {
+                deferred.resolve(res.data);
+            }
+
+            function error(err) {
+                deferred.reject(err);
+            }
+
+            $http.post(endpoint).then(success, error);
+
+            return deferred.promise;
+        }
+
+
+        return {
+            query: query,
+            refund: refund
+        };
+    }])
+
     .factory('MarketingStatsService', ['$http', '$q', '$site-configs', 'AuthService', '$objects', function ($http, $q, $configs, AuthService, $objects) {
         var service = $configs.API_BASE_URL + 'stats/';
 

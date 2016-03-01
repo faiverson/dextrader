@@ -12,10 +12,10 @@ angular.module('app.user-profile', [])
     })
     .controller('UserProfileController', ['$scope', '$site-configs', '$state', '$stateParams', 'UserService',
         'BillingAddressService', 'CreditCardService', 'Notification', 'InvoiceService', 'SubscriptionService',
-        'CommissionService', 'PaymentService', 'MarketingStatsService',
+        'CommissionService', 'PaymentService', 'MarketingStatsService', 'TransactionService', '$uibModal', 'modalService',
         function ($scope, $configs, $state, $stateParams, UserService, BillingAddressService, CreditCardService,
                   Notification, InvoiceService, SubscriptionService, CommissionService, PaymentService,
-                  MarketingStatsService) {
+                  MarketingStatsService, TransactionService, $uibModal, modalService) {
             var vm = this;
 
             vm.loadUser = function (id) {
@@ -191,6 +191,52 @@ angular.module('app.user-profile', [])
                 }
             };
 
+            $scope.transactions = {
+                filters: {
+                    from: {
+                        format: 'dd MMM yyyy'
+                    },
+                    to: {
+                        format: 'dd MMM yyyy'
+                    },
+                    apply: function () {
+                        //TODO call api
+                    }
+                },
+                sortBy: {},
+                pagination: {
+                    totalItems: 20,
+                    currentPage: 1,
+                    itemsPerPage: 10,
+                    pageChange: function () {
+                        this.loadUserTransactions($scope.user.user_id);
+                    }
+                },
+                loadUserTransactions: function (user_id) {
+
+                    var params = {
+                        offset: (this.pagination.currentPage - 1) * this.pagination.itemsPerPage,
+                        limit: this.pagination.itemsPerPage,
+                        order: this.sortBy
+                    };
+
+                    var prom = TransactionService.query(user_id, params);
+
+                    function success(res) {
+                        $scope.transactions.pagination.totalItems = res.data.total;
+                        $scope.transactions.data = res.data.transactions;
+                    }
+
+                    function error(err) {
+                        Notification.error(err.data.error);
+                    }
+
+                    prom.then(success, error);
+
+                    return prom;
+                }
+            };
+
             $scope.stats = {
                 filters: {
                     from: {
@@ -290,9 +336,60 @@ angular.module('app.user-profile', [])
 
             $scope.loginAsUser = function (user) {
                 UserService.loginAsUser(user.user_id)
-                    .then(function(res){
+                    .then(function (res) {
                         window.open($configs.DASHBOARD_URL + "/doLogin?token=" + res.data.token);
                     });
+            };
+
+            vm.refund = function (transaction) {
+                TransactionService.refund(transaction.id)
+                    .then(function (res) {
+                        transaction.type = 'refund';
+                        Notification.success('Transaction refunded successfully!');
+                    }, function (err) {
+                        Notification.error('Oops, there was an error trying to refund the transaction!');
+                    });
+            };
+
+            $scope.openRefundConfirm = function (transaction) {
+                var modalOptions = {
+                    closeButtonText: 'Cancel',
+                    actionButtonText: 'Refund!',
+                    headerText: 'Are you sure?',
+                    bodyText: 'Are you sure you want to refund this Transaction?'
+                };
+
+                modalService.showModal({}, modalOptions).then(function (result) {
+                    vm.refund(transaction);
+                });
+            };
+
+            $scope.open = function (transaction) {
+
+                var tmpTransaction = angular.copy(transaction);
+                var nonShowProps = ['info', 'avsresponse', 'cvvresponse', 'refunded', 'response', 'response_code', 'responsetext'];
+                angular.forEach(nonShowProps, function (propToRemove) {
+                    if (angular.isDefined(tmpTransaction[propToRemove])) {
+                        delete tmpTransaction[propToRemove];
+                    }
+                });
+
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'transactionDetails.html',
+                    controller: ['$scope', 'properties', '$uibModalInstance', function ($scope, properties, $uibModalInstance) {
+                        $scope.properties = properties;
+
+                        $scope.close = function () {
+                            $uibModalInstance.dismiss('cancel');
+                        };
+                    }],
+                    size: 'lg',
+                    resolve: {
+                        properties: function () {
+                            return tmpTransaction;
+                        }
+                    }
+                });
             };
 
             vm.init = function () {
