@@ -31,7 +31,7 @@ class ProductGateway extends AbstractGateway {
 		foreach($products as $product) {
 			$total += $this->repository->getPrice($product);
 		}
-		return $total;
+		return number_format($total, 2, '.', ',');
 	}
 
 	public function getPrice(Product $product)

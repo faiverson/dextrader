@@ -129,7 +129,7 @@ class UserGateway extends AbstractGateway
 
     public function findById($id, $column = 'id', $columns = array('*'))
     {
-        return $this->repository->findById($id, $column = 'id', $columns = array('*'));
+        return $this->repository->findById($id, $column, $columns);
     }
 
 }

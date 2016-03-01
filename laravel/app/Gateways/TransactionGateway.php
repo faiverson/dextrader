@@ -184,7 +184,7 @@ class TransactionGateway extends AbstractGateway {
 			'products' => $this->setDetail($products),
 			'card_last_four' => $this->card->getLast($data['number']),
 			'card_first_six' => $this->card->getFirst($data['number']),
-			'amount' => $amount
+			'amount' => number_format($amount, 2, '.', ',')
 		]);
 
 		$transaction = $this->create($data);
@@ -561,7 +561,7 @@ class TransactionGateway extends AbstractGateway {
 			'billing_country' => $billing_address->country,
 			'billing_zip' => $billing_address->zip,
 			'billing_phone' => $billing_address->phone,
-			'amount' => $amount
+			'amount' => dd(number_format($amount, 2, '.', ','))
 		]);
 
 		$transaction = $this->create($data);
