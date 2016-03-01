@@ -31,8 +31,23 @@ class TransactionController extends Controller
 		$id = $request->id;
 		$limit = $request->input('limit') ? $request->input('limit') : $this->limit;
 		$offset = $request->input('offset') ? $request->input('offset') : 0;
-		$response = $this->transaction->findBy('user_id', $id, null, $limit, $offset);
+		$response = $this->transaction->findBy('id', $id, null, $limit, $offset);
 		return response()->ok($response);
+	}
+
+	public function by_user(Request $request)
+	{
+		$id = $request->id;
+		$limit = $request->input('limit') ? $request->input('limit') : $this->limit;
+		$offset = $request->input('offset') ? $request->input('offset') : 0;
+		$order_by = $request->input('order') ? $request->input('order') : ['id' => 'desc'];
+		$filters = $request->input('filter') ? $request->input('filter') : [];
+		$transactions = $this->transaction->showUserTransactions($id, $limit, $offset, $order_by, $filters);
+		$total = $this->transaction->showTotalUserTransactions($id, $filters);
+		return response()->ok([
+			'transactions' => $transactions,
+			'total' => $total
+		]);
 	}
 
 	/**

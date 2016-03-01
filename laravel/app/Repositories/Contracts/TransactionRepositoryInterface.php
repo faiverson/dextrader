@@ -7,4 +7,7 @@ use App\Repositories\Contracts\RepositoryInterface;
  */
 interface TransactionRepositoryInterface extends RepositoryInterface {
 	public function findWith($id);
+	public function refund($id);
+	public function showUserTransactions($id, $limit, $offset, $order_by, $filters);
+	public function showTotalUserTransactions($id, $filters);
 }

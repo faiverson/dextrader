@@ -292,6 +292,16 @@ class TransactionGateway extends AbstractGateway {
 		return $this->update($data, $id);
 	}
 
+	public function showUserTransactions($id, $limit, $offset, $order_by, $filters)
+	{
+		return $this->repository->showUserTransactions($id, $limit, $offset, $order_by, $filters);
+	}
+
+	public function showTotalUserTransactions($id, $filters)
+	{
+		return $this->repository->showTotalUserTransactions($id, $filters);
+	}
+
 	public function purchase(array $data)
 	{
 		DB::beginTransaction();
