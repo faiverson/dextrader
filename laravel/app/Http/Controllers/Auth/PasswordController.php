@@ -11,6 +11,7 @@ use Illuminate\Mail\Message;
 use Validator;
 use Token;
 use Auth;
+use User;
 
 class PasswordController extends Controller
 {
@@ -49,15 +50,6 @@ class PasswordController extends Controller
 		$this->validate($request, ['email' => 'required|email']);
 
 		view()->composer('emails.password', function($view) {
-			$logo = str_replace(
-					'%PUBLIC%',
-					\Request::getSchemeAndHttpHost(),
-					Config::get('beautymail.view.logo')
-			);
-
-			$view->with([
-				'logo'   => $logo,
-			]);
 		});
 
 		$response = Password::sendResetLink($request->only('email'), function (Message $message) {
@@ -107,7 +99,12 @@ class PasswordController extends Controller
 		}
 
 		if($response == Password::PASSWORD_RESET) {
-			$token = Token::add(Auth::user()->id);
+			$user = User::where('email', $credentials['email'])->first();
+			if(!$user) {
+				return response()->error('Email is not valid');
+			}
+
+			$token = Token::add($user->id);
 			return response()->ok(compact('token'));
 		}
 
