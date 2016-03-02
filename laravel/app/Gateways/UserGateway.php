@@ -75,7 +75,8 @@ class UserGateway extends AbstractGateway
 				$user = $this->repository->find($id);
 				$roles = array_column($user->roles->toArray(), 'role_id');
 				$this->repository->detachRoles($id, $roles);
-				$this->repository->addRoles($id, json_decode($data['roles']));
+				$new_roles = is_array($data['roles']) ? $data['roles'] : json_decode($data['roles']);
+				$this->repository->addRoles($id, $new_roles);
 			}
 		}
 
