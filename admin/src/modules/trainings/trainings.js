@@ -48,11 +48,16 @@ angular.module('app.trainings', ['ui.router', 'youtube-embed'])
 
             $scope.playerVars = {};
 
+			$scope.selectedType = 0;
+			$scope.selectedOrder= 0;
+
             $scope.save = function () {
                 $scope.$broadcast('show-errors-check-validity');
 
                 if ($scope.trainingForm.$valid) {
 
+                    $scope.training.type = $scope.selectedType;
+                    $scope.training.list_order = $scope.selectedOrder;
                     $scope.training.time = moment($scope.video_time).format('HH:mm:ss');
                     $scope.training.unlock_at = (parseInt(moment($scope.unlock_at).format('HH')) * 60 *60) + (parseInt(moment($scope.unlock_at).format('mm')) *60) + parseInt(moment($scope.unlock_at).format('ss'));
 
@@ -84,56 +89,58 @@ angular.module('app.trainings', ['ui.router', 'youtube-embed'])
             vm.getTrainingForEdit = function (id) {
                 TrainingsService.getOne(id)
                     .then(function (res) {
-						var type,
-							video_time;
-						$scope.training = res.data.training;
+						var video_time;
+						$scope.training = res.data;
 						$scope.total = res.data.total;
 						video_time = moment($scope.training.time, 'HH:mm:ss');
-						type = $scope.training.type;
+						$scope.selectedType = $scope.training.type;
+						$scope.selectedOrder = $scope.training.list_order;
 						$scope.video_time = moment().hour(video_time.format('HH')).minutes(video_time.format('mm')).seconds(video_time.format('ss'));
                         $scope.unlock_at = moment().hour(0).minutes(0).seconds(0).add($scope.training.unlock_at, 'seconds');
-						vm.updateOrders(type);
                     });
             };
 
-			vm.updateOrders = function (type) {
-				var i;
-
-				$scope.order = [{
-					value: $scope.total[type],
-					display: $scope.total[type]
-				}];
-
-				for(i = ($scope.total[type] - 1); i > 0; i--) {
-					$scope.order.push({
-						value: i,
-						display: i
-					});
-				}
-			};
-
             vm.init = function () {
-
-
 				TrainingsService.query({}, 'orders')
 					.then(function (response) {
 						var total = response.data;
-						$scope.training.type = {};
+						$scope.types = [];
 						angular.forEach(total, function(total, key) {
 							var i,
 								array = [];
 
+							if (!angular.isDefined($stateParams.id)) {
+								total += 1;
+							}
+
 							for(i = total; i > 0; i--) {
 								array.push(i);
 							}
-							$scope.training.type[key] = array;
+							$scope.types.push({
+								id: key.toLowerCase(),
+								name: key,
+								order_list: array
+							});
 						});
+
+						$scope.selectedType = $scope.types[0].id;
+						$scope.selectedOrder = $scope.types[0].order_list[0];
 					});
+
+
 
                 if (angular.isDefined($stateParams.id)) {
                     vm.getTrainingForEdit($stateParams.id);
                 }
             };
+
+			$scope.changeType = function() {
+				angular.forEach($scope.types, function(item, key) {
+					if(item.id === $scope.selectedType) {
+						$scope.selectedOrder = item.order_list[0];
+					}
+				});
+			};
 
             vm.success = function (res) {
                 Notification.success('Training created successfully!');

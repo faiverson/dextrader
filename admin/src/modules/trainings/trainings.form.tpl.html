@@ -26,24 +26,24 @@
                                     <select name="type"
                                             class="form-control"
                                             id="type"
-                                            data-ng-model="order_list"
-                                            placeholder="Title"
-											ng-options="types for (types, order_list) in training.type"
-                                            required>
+                                            data-ng-model="selectedType"
+                                            data-ng-change="changeType();"
+											ng-options="type.id as type.name for type in types">
                                     </select>
                                 </div>
                             </div>
 							<div class="col-md-6">
 								<div class="form-group" data-show-errors>
 									<label for="type">Order List</label>
-									<select name="type"
+									<select name="order"
 											class="form-control"
-											id="order_list"
-											ng-disabled="!order_list"
-											data-ng-model="training.list_order"
-											ng-options="order for order in order_list">
+											id="order"
+											data-ng-model="selectedOrder"
+											ng-options="order for order in ((types | filter:{'id':selectedType})[0].order_list)">
 
 									</select>
+									<div>type: {{selectedType}}</div>
+									<div>order: {{selectedOrder}}</div>
 								</div>
 							</div>
                         </div>

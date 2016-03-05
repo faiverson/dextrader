@@ -29,8 +29,8 @@ class TrainingsController extends Controller
 		$affiliates = $this->gateway->findTotalByType('affiliates');
 
 		return response()->ok([
-			'Certification' => $certification,
 			'Affiliates' => $affiliates,
+			'Certification' => $certification,
 			'Pro' => $pro
 		]);
 	}
