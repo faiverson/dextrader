@@ -85,10 +85,9 @@ class TransactionController extends Controller
 			Event::fire(new CheckoutFailedEvent($response));
 			Log::info('Merchant', $response);
 			if(!array_key_exists('responsetext', $response)) {
-				$response['responsetext'] = 'There is a problem with the Merchant. Please contact support to solve the problem!';
+				$response['gateway_message'] = 'There is a problem with the Merchant. Please contact support to solve the problem!';
 			}
-			return response()->error($response['responsetext']);
-
+			return response()->error($response['gateway_message']);
 		}
 
 		return response()->ok($response);

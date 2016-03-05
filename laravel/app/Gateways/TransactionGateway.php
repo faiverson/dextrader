@@ -274,6 +274,9 @@ class TransactionGateway extends AbstractGateway {
 			elseif ($e instanceof TransactionDetailException) {
 				$type = 'TransactionDetailException';
 			}
+			else {
+				$type = 'Exception';
+			}
 			Log::error($type . ': ', ['error' => (array) $this->errors, 'data' => $data]);
 			return false;
 		}
