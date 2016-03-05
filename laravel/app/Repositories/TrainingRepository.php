@@ -19,7 +19,7 @@ class TrainingRepository extends AbstractRepository implements TrainingRepositor
 	{
 		return DB::table('trainings as t')
 			->select([
-				't.id',
+				't.id AS training_id',
 				't.video_id',
 				't.title',
 				't.description',
