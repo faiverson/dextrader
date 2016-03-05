@@ -40,12 +40,12 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 		$query = $this->model
 			->select([
 				DB::raw('GROUP_CONCAT(id SEPARATOR ",") AS ids'),
-				DB::raw('GROUP_CONCAT(CASE WHEN payout_dt IS NULL THEN id END SEPARATOR \',\') AS comms_ids'),
-				DB::raw('GROUP_CONCAT(CASE WHEN holdback_dt IS NULL THEN id END SEPARATOR \',\') AS holdbacks_ids'),
+				DB::raw('GROUP_CONCAT(CASE WHEN payout_dt IS NULL AND refund_dt IS NULL AND status = \'pending\' THEN id END SEPARATOR \',\') AS comms_ids'),
+				DB::raw('GROUP_CONCAT(CASE WHEN holdback_dt IS NULL AND holdback_paid = 0 AND status IN(\'ready\', \'paid\') THEN id END SEPARATOR \',\') AS holdbacks_ids'),
 				DB::raw('to_user_id AS user_id'),
-				DB::raw('SUM( CASE WHEN holdback_dt IS NULL THEN (amount - holdback) ELSE holdback END ) AS total'),
-				DB::raw('SUM( CASE WHEN holdback_dt IS NULL THEN (amount - holdback) ELSE 0 END ) AS total_comms'),
-				DB::raw('SUM( CASE WHEN holdback_dt IS NOT NULL THEN holdback ELSE 0 END ) AS total_holdbacks')
+				DB::raw('SUM( CASE WHEN payout_dt IS NULL  THEN (amount - holdback) ELSE holdback END ) AS total'),
+				DB::raw('SUM( CASE WHEN payout_dt IS NULL THEN (amount - holdback) ELSE 0 END ) AS total_comms'),
+				DB::raw('SUM( CASE WHEN payout_dt IS NOT NULL AND refund_dt IS NULL THEN holdback ELSE 0 END ) AS total_holdbacks')
 			])
 			->where(function ($q) use ($from) {
 				$q->where('status', 'pending')
@@ -57,6 +57,7 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 				$q->whereIn('status', ['ready', 'paid'])
 					->where('holdback_paid', 0)
 					->WhereNull('holdback_dt')
+					->WhereNull('refund_dt')
 					->whereDate('created_at', '<=', $holdback_dt);
 			})
 			->groupBy('to_user_id')
@@ -78,7 +79,7 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 				DB::raw('SUM( CASE WHEN holdback_dt IS NULL THEN (amount - holdback) ELSE holdback END ) AS total')
 			])
 			->where(function ($q) use ($date) {
-				$q->where(DB::raw('DATE(payout_dt)'), $date->format('Y-m-d'))
+				$q->whereDate('payout_dt', '=', $date->format('Y-m-d'))
 					->where('status', 'ready')
 					->whereNull('refund_dt');
 			})

@@ -79,4 +79,9 @@ class TrainingRepository extends AbstractRepository implements TrainingRepositor
 		]);
 	}
 
+	public function findTotalByType($type)
+	{
+		return $this->model->where('type', $type)->count();
+	}
+
 }

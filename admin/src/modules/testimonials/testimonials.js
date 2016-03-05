@@ -68,7 +68,7 @@ angular.module('app.testimonials', ['ui.router', 'ngFileUpload'])
             $scope.save = function () {
 
                 function success(res) {
-                    Notification.success('Provider created successfully!');
+                    Notification.success('Testimonial created successfully!');
                     $state.go('testimonials.list');
                 }
 

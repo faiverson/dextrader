@@ -84,24 +84,59 @@ angular.module('app.trainings', ['ui.router', 'youtube-embed'])
             vm.getTrainingForEdit = function (id) {
                 TrainingsService.getOne(id)
                     .then(function (res) {
-                        $scope.training = res.data;
-
-                        var video_time = moment($scope.training.time, 'HH:mm:ss');
-
-                        $scope.video_time = moment().hour(video_time.format('HH')).minutes(video_time.format('mm')).seconds(video_time.format('ss'));
-
+						var type,
+							video_time;
+						$scope.training = res.data.training;
+						$scope.total = res.data.total;
+						video_time = moment($scope.training.time, 'HH:mm:ss');
+						type = $scope.training.type;
+						$scope.video_time = moment().hour(video_time.format('HH')).minutes(video_time.format('mm')).seconds(video_time.format('ss'));
                         $scope.unlock_at = moment().hour(0).minutes(0).seconds(0).add($scope.training.unlock_at, 'seconds');
+						vm.updateOrders(type);
                     });
             };
 
+			vm.updateOrders = function (type) {
+				var i;
+
+				$scope.order = [{
+					value: $scope.total[type],
+					display: $scope.total[type]
+				}];
+
+				for(i = ($scope.total[type] - 1); i > 0; i--) {
+					$scope.order.push({
+						value: i,
+						display: i
+					});
+				}
+			};
+
             vm.init = function () {
+
+
+				TrainingsService.query({}, 'orders')
+					.then(function (response) {
+						var total = response.data;
+						$scope.training.type = {};
+						angular.forEach(total, function(total, key) {
+							var i,
+								array = [];
+
+							for(i = total; i > 0; i--) {
+								array.push(i);
+							}
+							$scope.training.type[key] = array;
+						});
+					});
+
                 if (angular.isDefined($stateParams.id)) {
                     vm.getTrainingForEdit($stateParams.id);
                 }
             };
 
             vm.success = function (res) {
-                Notification.success('Provider created successfully!');
+                Notification.success('Training created successfully!');
                 $state.go('trainings.list');
             };
 

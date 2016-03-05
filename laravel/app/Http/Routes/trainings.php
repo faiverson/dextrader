@@ -1,5 +1,6 @@
 <?php
 Route::group(['middleware' => 'jwt.auth'], function () {
+	Route::get('/training/orders', 'TrainingsController@list_orders');
 	Route::get('/training/affiliates', 'TrainingsController@affiliates');
 	Route::get('/training/affiliates/download/{training_id}', 'TrainingsController@download')->where('training_id', '[0-9]+');
 
