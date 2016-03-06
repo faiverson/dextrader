@@ -43,7 +43,8 @@ module.exports = {
                 'vendor/angular-moment/angular-moment.js',
                 'vendor/moment/min/moment.min.js',
                 'vendor/angular-ui-mask/dist/mask.js',
-                'vendor/angular-loading-bar/build/loading-bar.js'
+                'vendor/angular-loading-bar/build/loading-bar.js',
+                'vendor/xtform/xtForm.js'
             ],
             output: 'vendor.js'
         },

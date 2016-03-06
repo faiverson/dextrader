@@ -354,7 +354,7 @@ class TransactionGateway extends AbstractGateway {
 				'transaction_id' => $data['orderid']
 			]));
 			if(!$invoice) {
-				throw new InvoiceException(['invoice' => $this->invoice->errors()]);
+				throw new InvoiceException($this->invoice->errors());
 			}
 
 			$set = $this->set([
@@ -362,7 +362,7 @@ class TransactionGateway extends AbstractGateway {
 				'billing_address_id' => $billing->id
 			], $data['orderid']);
 			if(!$set) {
-				throw new \Exception(['Transaction update fails']);
+				throw new \Exception('Transaction update fails');
 			}
 
 			$now = new DateTime('now');

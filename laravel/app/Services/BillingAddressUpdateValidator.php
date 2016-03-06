@@ -15,7 +15,7 @@ class BillingAddressUpdateValidator extends AbstractValidator {
 		'state' => 'sometimes|required',
 		'country' => 'sometimes|required',
 		'zip' => 'sometimes|required',
-		'phone' => 'sometimes|required|digits_between:8,30',
+		'phone' => 'sometimes|required|between:8,30',
 	);
 
 }

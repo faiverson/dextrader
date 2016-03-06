@@ -13,11 +13,15 @@
     "angular-moment": "~0.10.3",
     "moment": "~2.10.6",
     "angular-ui-mask": "~1.6.5",
-    "angular-loading-bar": "~0.8.0"
+    "angular-loading-bar": "~0.8.0",
+    "xtform": "~1.0.1"
   },
   "devDependencies": {
     "angular-cookies": "~1.4.7",
     "angular-local-storage": "~0.2.3",
     "angular-jwt": "~0.0.6"
+  },
+  "resolutions": {
+    "angular": "^1.0.8"
   }
 }

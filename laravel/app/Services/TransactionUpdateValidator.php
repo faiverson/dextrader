@@ -35,7 +35,7 @@ class TransactionUpdateValidator extends AbstractValidator {
 		'billing_state' => 'sometimes|required',
 		'billing_country' => 'sometimes|required',
 		'billing_zip' => 'sometimes|required',
-		'billing_phone' => 'sometimes|required|digits_between:8,30',
+		'billing_phone' => 'sometimes|required|between:8,30',
 
 		'card_id' => 'sometimes|numeric',
 		'card_name' => 'sometimes|required',
