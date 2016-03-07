@@ -32,11 +32,9 @@ var gulp = require('gulp'),
     markdown = require('gulp-markdown'),
     sourcemaps = require('gulp-sourcemaps'),
     prettify = require('gulp-jsbeautifier'),
-    connectPhp = require('gulp-connect-php'),
     debug = require('gulp-debug'),
     inject = require('gulp-inject'),
     sInject = require('gulp-inject-string'),
-    connect = require('connect'),
     replace = require('gulp-replace-task'),
     pkg = require('./package.json'),
     dotenv = require('dotenv').config({path: '../laravel/.env'}),
@@ -185,15 +183,6 @@ gulp.task('compile:clean', function () {
     ], {force: true});
 });
 
-// start a server localhost in php
-gulp.task('server', function (next) {
-    connectPhp.server({
-        //hostname: 'localhost',
-        port: config.port,
-        base: config.paths.server_path
-    });
-});
-
 gulp.task('svg', function () {
     return gulp.src(config.assets.svg.input)
         .pipe(plumber())
@@ -223,11 +212,11 @@ gulp.task('fonts', function () {
 gulp.task('images', function () {
 	return gulp.src(config.assets.images.input)
 		.pipe(plumber())
-		.pipe(gulpif(!(environment === 'local'),imagemin({
+		.pipe(gulpif(environment === 'local'),imagemin({
 			optimizationLevel: 5,
 			progressive: true,
 			interlaced: true
-		})))
+		}))
 		.pipe(gulp.dest(config.assets.images.output));
 });
 
