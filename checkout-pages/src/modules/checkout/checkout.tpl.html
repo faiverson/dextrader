@@ -20,10 +20,8 @@
     <!-- form start -->
     <form id="formCheckout"
 		  name="formCheckout"
-		  xt-form
-		  strategy="invalid"
-		  novalidate="novalidate"
-		  focus-error="true">
+          xt-form strategy="focusedAndDirtyOrSubmitted" focus-error="true"
+		  novalidate="novalidate">
         <div id="checkout-forms" class="checkout-forms content-left">
             <div>
                 <h3 id="co-f1">Account Details</h3>
@@ -38,19 +36,21 @@
                                id="email"
                                required
                                data-ng-model="userData.email"
-							   xt-validation-tooltip>
+							  >
                     </div>
                     <div class="form-group has-feedback" >
                         <label for="email">Username</label>
-                        <input type="text" xt-validation-tooltip
+                        <input type="text"
                                name="username"
 							   class="form-control"
                                id="username"
+                               xt-validation-tooltip
+                               required
                                data-ng-model="userData.username">
                     </div>
                     <div class="form-group has-feedback" >
                         <label for="first_name">Password</label>
-                        <input type="password" xt-validation-tooltip
+                        <input type="password"
                                name="password"
                                class="form-control"
                                id="password"
@@ -59,7 +59,7 @@
                     </div>
                     <div class="form-group has-feedback" >
                         <label for="first_name">First Name</label>
-                        <input type="text" xt-validation-tooltip
+                        <input type="text"
                                name="first_name"
                                data-ng-blur="autoCompleteBillingName()"
                                class="form-control"
@@ -69,7 +69,7 @@
                     </div>
                     <div class="form-group has-feedback" >
                         <label for="last_name">Last Name</label>
-                        <input type="text" xt-validation-tooltip
+                        <input type="text"
                                name="last_name"
                                data-ng-blur="autoCompleteBillingName()"
                                class="form-control"
@@ -86,8 +86,9 @@
 							   msg-pattern="Invalid phone"
                                class="form-control"
                                id="phone"
+                               xt-validation-tooltip
                                data-ng-model="userData.phone"
-							   xt-validation-tooltip>
+							  >
                     </div>
                 </div>
             </div>
@@ -97,7 +98,7 @@
                 <div class="form-wrapper">
                     <div class="form-group has-feedback" >
                         <label for="address">Address</label>
-                        <input type="text" xt-validation-tooltip
+                        <input type="text"
                                name="address"
                                class="form-control"
                                required
@@ -106,7 +107,7 @@
                     </div>
                     <div class="form-group has-feedback" >
                         <label for="billing_address2">Address 2</label>
-                        <input type="text" xt-validation-tooltip
+                        <input type="text"
                                name="billing_address2"
                                class="form-control"
                                id="billing_address2"
@@ -141,7 +142,7 @@
                                 <span ng-bind-html="match.model.name | uibTypeaheadHighlight:query"></span>
                             </a>
                         </script>
-                        <input type="text" name="dex_city" id="dex_city" xt-validation-tooltip
+                        <input type="text" name="dex_city" id="dex_city"
                                data-ng-disabled="formCheckout.dex_country.$invalid"
                                ng-model="formData.billing_city"
                                typeahead-on-select="selectCity($item, $model, $label)"
@@ -156,7 +157,7 @@
                     </div>
                     <div class="form-group has-feedback" >
                         <label for="dex_state">State/Province</label>
-                        <input type="text" xt-validation-tooltip
+                        <input type="text"
                                name="dex_state"
                                id="dex_state"
                                aria-autocomplete="none"
@@ -167,7 +168,7 @@
                     </div>
                     <div class="form-group has-feedback" >
                         <label for="zip">Zip/Postal Code</label>
-                        <input type="text" xt-validation-tooltip
+                        <input type="text"
                                name="zip"
                                class="form-control"
                                id="zip"
@@ -192,7 +193,7 @@
                 <div class="form-wrapper">
                     <div class="form-group has-feedback" >
                         <label for="card_name">Full Name</label>
-                        <input type="text" xt-validation-tooltip
+                        <input type="text"
                                name="card_name"
                                class="form-control"
                                id="card_name"
@@ -201,7 +202,7 @@
                     </div>
                     <div class="form-group has-feedback" >
                         <label for="card_number">Card Number</label>
-                        <input type="text" xt-validation-tooltip
+                        <input type="text"
                                ui-mask="9999 9999 9999 999?9"
                                ui-mask-placeholder=""
                                ui-mask-placeholder-char="*"
@@ -238,7 +239,7 @@
                     <div class="form-group has-feedback" >
                         <div>
                             <label for="cc-cvv">Security Code</label>
-                            <input type="number" name="cc-cvv" id="cc-cvv" xt-validation-tooltip
+                            <input type="number" name="cc-cvv" id="cc-cvv"
                                    class="form-control"
                                    placeholder="CVV"
                                    required
@@ -249,7 +250,7 @@
                     </div>
                     <div class="form-group has-feedback" >
                         <label for="billing_phone">Billing Phone</label>
-                        <input type="text" xt-validation-tooltip
+                        <input type="text"
 							   name="phone"
                                ng-pattern="/^([\s\+\-\(\)0-9])+$/"
 							   msg-pattern="Invalid phone"
