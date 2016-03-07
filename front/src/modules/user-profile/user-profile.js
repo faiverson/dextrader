@@ -455,5 +455,30 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
                 }
             };
 
+			$scope.checkStatus = function () {
+				var data = {
+					subscription_id: $scope.subscription.subscription_id
+				};
+
+				if($scope.isActive()) {
+					SubscriptionService.cancel(data).then(function(response) {
+						Notification.success('Your subscription has been canceled');
+						$uibModalInstance.close(response.data);
+					}, vm.saveError);
+				}
+				else {
+					SubscriptionService.reactive(data).then(function(response) {
+						Notification.success('Your subscription has been reactivated');
+						$uibModalInstance.close(response.data);
+					}, vm.saveError);
+				}
+			};
+
+			$scope.isActive = function () {
+				return $scope.subscription.status === 'active';
+			};
+
+
+
             vm.init();
         }]);

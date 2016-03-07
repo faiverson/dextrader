@@ -226,14 +226,14 @@ gulp.task('sounds', function() {
 });
 
 // Copy image files into output folder
-gulp.task('images', function() {
+gulp.task('images', function () {
 	return gulp.src(config.assets.images.input)
 		.pipe(plumber())
-		.pipe(imagemin({
+		.pipe(gulpif(!(environment === 'local'),imagemin({
 			optimizationLevel: 5,
 			progressive: true,
 			interlaced: true
-		}))
+		})))
 		.pipe(gulp.dest(config.assets.images.output));
 });
 

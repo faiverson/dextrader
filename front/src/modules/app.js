@@ -27,7 +27,8 @@ angular.module('app', [
         'app.whitelist',
         'app.refund',
         'app.start',
-        'app.contact-us'
+        'app.contact-us',
+		'app.confirmation-popup'
     ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {

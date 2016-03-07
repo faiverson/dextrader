@@ -15,7 +15,7 @@ class SubscriptionRepository extends AbstractRepository implements SubscriptionR
 	}
 
 	public function findByUser($user_id, $columns = array('*'), $limit = null, $offset = null) {
-		$query = $this->model->with('card')->with('product')->with('address')->where('status', 'active')->where('user_id', $user_id);
+		$query = $this->model->with('card')->with('product')->with('address')->whereIn('status', ['cancel', 'active'])->where('user_id', $user_id);
 
 		if($limit != null) {
 			$query = $query->take($limit);

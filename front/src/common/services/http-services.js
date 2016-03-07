@@ -171,7 +171,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             },
             'responseError': function (rejection) {
                 // do something on error
-                if (rejection.data.error === "token_expired") {
+                if (rejection.data.error === "token_expired" || rejection.data.error === "token_invalid") {
                     localStorageService.clearAll();
                     window.location.href = '/login';
                 }
@@ -518,10 +518,56 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             return deferred.promise;
         }
 
+		function cancel(data) {
+			var endpoint = service,
+				deferred = $q.defer();
+
+			function success(res) {
+				deferred.resolve(res.data);
+			}
+
+			function error(err) {
+				deferred.reject(err);
+			}
+
+			if (angular.isDefined(data.subscription_id)) {
+				endpoint += data.subscription_id + '/users/' + AuthService.getLoggedInUser().user_id + '/cancel';
+
+				$http.put(endpoint, data)
+					.then(success, error);
+			}
+
+			return deferred.promise;
+		}
+
+		function reactive(data) {
+			var endpoint = service,
+				deferred = $q.defer();
+
+			function success(res) {
+				deferred.resolve(res.data);
+			}
+
+			function error(err) {
+				deferred.reject(err);
+			}
+
+			if (angular.isDefined(data.subscription_id)) {
+				endpoint += data.subscription_id + '/users/' + AuthService.getLoggedInUser().user_id + '/reactive';
+
+				$http.put(endpoint, data)
+					.then(success, error);
+			}
+
+			return deferred.promise;
+		}
+
         return {
             query: query,
             getOne: getOne,
-            save: save
+            save: save,
+            cancel: cancel,
+			reactive: reactive
         };
     }])
 
