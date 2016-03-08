@@ -11,19 +11,16 @@ angular.module('app.shared-directives', [])
             replace: true,
             template: '<div class="udt-timer"><span data-ng-bind="minutes"></span> : <span data-ng-bind="seconds"></span></div>',
             link: function ($scope, $elem, $attrs) {
-                var vm = this;
 
                 var duration = moment.duration($scope.totalSeconds * 1000, 'milliseconds');
 
-                vm.seconds = $scope.seconds;
-
-                vm.update = function () {
+                $scope.update = function () {
                     duration = moment.duration(duration - 1000, 'milliseconds');
                     $scope.minutes = (duration.minutes() < 10) ? '0' + duration.minutes() : duration.minutes();
                     $scope.seconds = (duration.seconds() < 10) ? '0' + duration.seconds() : duration.seconds();
 
                     if (parseInt($scope.minutes, 0) === 0 && parseInt($scope.seconds, 0) === 0) {
-                        $interval.cancel(vm.interval);
+                        $interval.cancel($scope.interval);
 
                         if (angular.isFunction($scope.onFinish)) {
                             $scope.onFinish();
@@ -39,17 +36,17 @@ angular.module('app.shared-directives', [])
                     $scope.totalSeconds--;
                 };
 
-                vm.start = function () {
-                    vm.interval = $interval(vm.update, 1000);
+                $scope.start = function () {
+                    $scope.interval = $interval($scope.update, 1000);
                 };
 
-                vm.init = function () {
+                $scope.init = function () {
                     if (angular.isNumber($scope.totalSeconds) && $scope.totalSeconds > 0) {
-                        vm.start();
+                        $scope.start();
                     }
                 };
 
-                vm.init();
+                $scope.init();
             }
         };
     }])
