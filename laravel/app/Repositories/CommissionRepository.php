@@ -40,12 +40,12 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 		$query = $this->model
 			->select([
 				DB::raw('GROUP_CONCAT(id SEPARATOR ",") AS ids'),
-				DB::raw('GROUP_CONCAT(CASE WHEN payout_dt IS NULL THEN id END SEPARATOR \',\') AS comms_ids'),
-				DB::raw('GROUP_CONCAT(CASE WHEN holdback_dt IS NULL THEN id END SEPARATOR \',\') AS holdbacks_ids'),
+				DB::raw('GROUP_CONCAT(CASE WHEN payout_dt IS NULL AND refund_dt IS NULL AND status = \'pending\' THEN id END SEPARATOR \',\') AS comms_ids'),
+				DB::raw('GROUP_CONCAT(CASE WHEN holdback_dt IS NULL AND holdback_paid = 0 AND status IN(\'ready\', \'paid\') THEN id END SEPARATOR \',\') AS holdbacks_ids'),
 				DB::raw('to_user_id AS user_id'),
-				DB::raw('SUM( CASE WHEN holdback_dt IS NULL THEN (amount - holdback) ELSE holdback END ) AS total'),
-				DB::raw('SUM( CASE WHEN holdback_dt IS NULL THEN (amount - holdback) ELSE 0 END ) AS total_comms'),
-				DB::raw('SUM( CASE WHEN holdback_dt IS NOT NULL THEN holdback ELSE 0 END ) AS total_holdbacks')
+				DB::raw('SUM( CASE WHEN payout_dt IS NULL  THEN (amount - holdback) ELSE holdback END ) AS total'),
+				DB::raw('SUM( CASE WHEN payout_dt IS NULL THEN (amount - holdback) ELSE 0 END ) AS total_comms'),
+				DB::raw('SUM( CASE WHEN payout_dt IS NOT NULL AND refund_dt IS NULL THEN holdback ELSE 0 END ) AS total_holdbacks')
 			])
 			->where(function ($q) use ($from) {
 				$q->where('status', 'pending')
@@ -57,6 +57,7 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 				$q->whereIn('status', ['ready', 'paid'])
 					->where('holdback_paid', 0)
 					->WhereNull('holdback_dt')
+					->WhereNull('refund_dt')
 					->whereDate('created_at', '<=', $holdback_dt);
 			})
 			->groupBy('to_user_id')
@@ -78,7 +79,7 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 				DB::raw('SUM( CASE WHEN holdback_dt IS NULL THEN (amount - holdback) ELSE holdback END ) AS total')
 			])
 			->where(function ($q) use ($date) {
-				$q->where(DB::raw('DATE(payout_dt)'), $date->format('Y-m-d'))
+				$q->whereDate('payout_dt', '=', $date->format('Y-m-d'))
 					->where('status', 'ready')
 					->whereNull('refund_dt');
 			})
@@ -186,9 +187,36 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 	 */
 	public function getUserCommissions($id, $limit, $offset, $order_by, $where)
 	{
-		$query =  $this->model;
+		$select = [
+			'to_user_id',
+			'from_user_id',
+			'status',
+			'amount',
+			'holdback',
+			'invoice_id',
+			'created_at'
+		];
 
-		$query = $query->with('from')->with('products')->where('to_user_id', $id);
+		$query_enroller =  $this->model->with('to')->with('from')->with('products')->select($select);
+		$query_enroller = $query_enroller->where('to_user_id', $id)->where('type', 'enroller');
+		$query_enroller = $this->filters($query_enroller, $where);
+
+		$select = [
+			'c.to_user_id',
+			'c.from_user_id',
+			'commissions.status',
+			'commissions.amount',
+			'commissions.holdback',
+			'commissions.invoice_id',
+			'commissions.created_at'
+		];
+		$query_parent =  $this->model->with('to')->with('from')->with('products')->select($select);
+		$query_parent = $query_parent->join('commissions AS c', function($join) {
+				$join->on('c.invoice_id', '=', 'commissions.invoice_id')
+					->on('c.to_user_id', '=', 'commissions.from_user_id');
+			})->where('commissions.to_user_id', $id)->where('commissions.type', 'parent');
+		$query_parent = $this->filters($query_parent, $where);
+		$query = $query_enroller->union($query_parent);
 
 		if($limit != null) {
 			$query = $query->take($limit);
@@ -204,57 +232,51 @@ class CommissionRepository extends AbstractRepository implements CommissionRepos
 			}
 		}
 
-		if(array_key_exists('from', $where) && $where['from'] != null) {
-			$from = new DateTime($where['from']);
-			$query = $query->whereDate('created_at', '>=', $from);
-		}
-
-		if(array_key_exists('to', $where) && $where['to'] != null) {
-			$from = new DateTime($where['to']);
-			$query = $query->whereDate('created_at', '<=', $from);
-		}
-
-		if(array_key_exists('status', $where) && $where['status'] != null) {
-			$query = $query->where('status', '=', $where['status']);
-		}
-
-		if(array_key_exists('product', $where) && $where['product'] != null) {
-			$query = $query->whereHas('products', function($q) use ($where) {
-				$q->where('invoices_detail.product_display_name', '=', $where['product']);
-			});
-		}
-
 		return $query->get();
 	}
 
 	public function getTotalUserCommissions($id, $where)
 	{
-		$query =  $this->model;
+		$params = array_merge([$id, 'enroller'], array_values($where), [$id, 'parent'], array_values($where));
+		$query_enroller =  $this->model->with('to')->with('from')->with('products')->select(['to_user_id', 'from_user_id', 'status', 'amount', 'holdback', 'invoice_id', 'created_at']);
+		$query_enroller = $query_enroller->where('to_user_id', $id)->where('type', 'enroller');
+		$query_enroller = $this->filters($query_enroller, $where);
 
-		$query = $query->with('from')->with('products')->where('to_user_id', $id);
+		$query_parent =  $this->model->with('to')->with('from')->with('products')->select(['c.to_user_id', 'c.from_user_id', 'status', 'amount', 'holdback', 'invoice_id', 'created_at']);
+		$query_parent = $query_parent->join('commissions AS c', function($join) {
+			$join->on('c.invoice_id', '=', 'commissions.invoice_id')
+				->on('c.to_user_id', '=', 'commissions.from_user_id');
+		})->where('commissions.to_user_id', $id)->where('commissions.type', 'parent');
+		$query_parent = $this->filters($query_parent, $where);
 
+		$query = $query_enroller->union($query_parent);
+		$query = DB::select('SELECT count(*) as total from (' . $query->toSql() . ') as totals', $params);
+		return $query[0]->total;
+	}
 
-		if(array_key_exists('from', $where) && $where['from'] != null) {
-			$from = new DateTime($where['from']);
-			$query = $query->whereDate('created_at', '>=', $from);
+	protected function filters($query, $where)
+	{
+		foreach($where as $key => $w) {
+			switch($key) {
+				case 'from':
+					$from = new DateTime($w);
+					$query = $query->whereDate('commissions.created_at', '>=', $from);
+					break;
+				case 'to':
+					$from = new DateTime($w);
+					$query = $query->whereDate('commissions.created_at', '<=', $from);
+					break;
+				case 'status':
+					$query = $query->where('commissions.status', $w);
+					break;
+				case 'product':
+					$query = $query->whereHas('products', function($q) use ($w) {
+						$q->where('invoices_detail.product_display_name', '=', $w['product']);
+					});
+					break;
+			}
 		}
-
-		if(array_key_exists('to', $where) && $where['to'] != null) {
-			$from = new DateTime($where['to']);
-			$query = $query->whereDate('created_at', '<=', $from);
-		}
-
-		if(array_key_exists('status', $where) && $where['status'] != null) {
-			$query = $query->where('status', '=', $where['status']);
-		}
-
-		if(array_key_exists('product', $where) && $where['product'] != null) {
-			$query = $query->whereHas('products', function($q) use ($where) {
-				$q->where('invoices_detail.product_display_name', '=', $where['product']);
-			});
-		}
-
-		return $query->count();
+		return $query;
 	}
 
 	public function getSummaryUserCommissions($id)

@@ -28,6 +28,11 @@ class TrainingGateway extends AbstractGateway {
 		return $this->repository->getCertification($userId);
 	}
 
+	public function getAffiliates()
+	{
+		return $this->repository->getTrainingByType('affiliates');
+	}
+
 	public function parse_youtube($link){
 
 		$regexstr = '~
@@ -85,6 +90,27 @@ class TrainingGateway extends AbstractGateway {
 	public function getTrainingCompletedByUser($type, $userId)
 	{
 		return $this->repository->getTrainingCompletedByUser($type, $userId);
+	}
+
+	public function add($data)
+	{
+		if( ! $this->createValidator->with($data)->passes() )
+		{
+			$this->errors = $this->createValidator->errors();
+			return false;
+		}
+
+		if(!array_key_exists('list_order', $data) || (array_key_exists('list_order', $data) && $data['list_order'] != '')) {
+			$position = $this->findTotalByType($data['type']);
+			$data['list_order'] = $position + 1;
+		}
+
+		return $this->repository->create($data);
+	}
+
+	public function findTotalByType($type)
+	{
+		return $this->repository->findTotalByType($type);
 	}
 
 }

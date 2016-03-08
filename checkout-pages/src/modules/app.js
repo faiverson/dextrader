@@ -20,7 +20,8 @@ angular.module('app', [
         'app.term-and-conditions',
         'app.whitelist',
         'app.refund',
-        'app.contact-us'
+        'app.contact-us',
+        'xtForm'
     ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {
@@ -35,8 +36,8 @@ angular.module('app', [
             startRight: 10,
             verticalSpacing: 20,
             horizontalSpacing: 20,
-            positionX: 'right',
-            positionY: 'top'
+			positionX: 'right',
+			positionY: 'top'
         });
 
         localStorageServiceProvider

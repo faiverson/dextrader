@@ -44,34 +44,34 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-		Log::info('Exception! ');
 		if ($e instanceof Tymon\JWTAuth\Exceptions\TokenExpiredException) {
 			return response()->error('The token has expired.' , $e->getStatusCode());
 		}
 		else if ($e instanceof Tymon\JWTAuth\Exceptions\TokenInvalidException) {
 			return response()->error('The token is invalid.', $e->getStatusCode());
 		}
+		elseif($e instanceof Tymon\JWTAuth\Exceptions\TokenBlacklistedException){
+			return response()->error('The token is blacklisted.', $e->getStatusCode());
+		}
 		else if ($e instanceof ModelNotFoundException) {
 			$e = new NotFoundHttpException($e->getMessage(), $e);
 		}
-//		else if ($e instanceof QueryException) {
-//			return response()->error('Ups! There was a problem in database. Please contact support immediately!');
-//		}
+		else if ($e instanceof QueryException) {
+			return response()->error('Oops! There was a problem in database. Please contact support immediately!');
+		}
 		else if ($e instanceof NotFoundHttpException) {
 			return response()->error('Oops! The URL provided was not found!', $e->getStatusCode());
 		}
-//		else if ($this->isHttpException($e))
-//		{
-//			return response()->view('home');
-//		}
 
-//		return response()->error($e->getMessage(), $e->getStatusCode());
-        return parent::render($request, $e);
+		if(env('APP_ENV') != 'local') {
+			return response()->error($e->getMessage());
+		} else {
+			return parent::render($request, $e);
+		}
     }
 
 	protected function renderHttpException(HttpException $e)
 	{
-		//dd('asas');
 		if (view()->exists('errors.' . $e->getStatusCode())) {
 			response()->error($e->getMessage(), $e->getStatusCode());
 			return response()->view('errors.'.$e->getStatusCode(), [], $e->getStatusCode());

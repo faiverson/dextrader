@@ -4,13 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Gateways\TrainingGateway;
 use Illuminate\Http\Request;
-use Auth;
 use App\Models\Training;
-use DB;
 use Role;
-use DateTime;
 use Token;
-use Files;
 
 class TrainingsController extends Controller
 {
@@ -21,9 +17,22 @@ class TrainingsController extends Controller
 
 	public function show(Request $request){
 		$training_id = $request->training_id;
-		$doc = Training::find($training_id);
+		$training = $this->gateway->find($training_id);
 
-		return response()->ok($doc);
+
+		return response()->ok($training);
+	}
+
+	public function list_orders(Request $request){
+		$certification = $this->gateway->findTotalByType('certification');
+		$pro = $this->gateway->findTotalByType('pro');
+		$affiliates = $this->gateway->findTotalByType('affiliates');
+
+		return response()->ok([
+			'Affiliates' => $affiliates,
+			'Certification' => $certification,
+			'Pro' => $pro
+		]);
 	}
 
 	/**
@@ -40,7 +49,7 @@ class TrainingsController extends Controller
 			$data['video_id'] = $this->gateway->parse_youtube($data['video_id']);
 		}
 
-		$response = $this->gateway->create($data);
+		$response = $this->gateway->add($data);
 		if(!$response) {
 			return response()->error($this->gateway->errors());
 		}
@@ -71,7 +80,7 @@ class TrainingsController extends Controller
 	 */
     public function affiliates()
     {
-		$response = $this->gateway->findBy('type', 'affiliates');
+		$response = $this->gateway->getAffiliates();
 		if(!$response) {
 			return response()->error($this->gateway->errors());
 		}

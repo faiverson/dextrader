@@ -85,10 +85,9 @@ class TransactionController extends Controller
 			Event::fire(new CheckoutFailedEvent($response));
 			Log::info('Merchant', $response);
 			if(!array_key_exists('responsetext', $response)) {
-				$response['responsetext'] = 'There is a problem with the Merchant. Please contact support to solve the problem!';
+				$response['gateway_message'] = 'There is a problem with the Merchant. Please contact support to solve the problem!';
 			}
-			return response()->error($response['responsetext']);
-
+			return response()->error($response['gateway_message']);
 		}
 
 		return response()->ok($response);
@@ -111,6 +110,7 @@ class TransactionController extends Controller
 		if(array_key_exists('offer_id', $fields)) {
 			$fields['offer_id'] = is_string($fields['offer_id']) ? explode(',', $fields['offer_id']) : $fields['offer_id'];
 		}
+
 		$response = $this->transaction->upgrade($fields);
 		if(!$response) {
 			return response()->error($this->transaction->errors());

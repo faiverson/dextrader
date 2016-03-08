@@ -6,6 +6,12 @@ return [
 
     'model' => App\Models\User::class,
 
-    'table' => 'users'
+    'table' => 'users',
+
+	'password' => [
+		'email' => 'emails.password',
+		'table' => 'password_resets',
+		'expire' => 60,
+	],
 
 ];

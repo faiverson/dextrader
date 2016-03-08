@@ -107,6 +107,8 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
 
             $scope.userData = {};
 
+			$scope.model = {};
+
             vm.feelExpMonth = function () {
                 $scope.months = [];
                 var text = '';
@@ -316,12 +318,24 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                         angular.forEach(err.data.error, function (e) {
                             Notification.error(e);
                         });
-                    } else {
+                    }
+					else if(angular.isObject( err.data.error )) {
+						angular.forEach(err.data.error, function (value, key) {
+							if (angular.isArray(value)) {
+								angular.forEach(value, function (response) {
+									Notification.error(response);
+								});
+							}
+							else {
+								Notification.error(value);
+							}
+						});
+					}
+					else {
                         Notification.error(err.data.error);
                     }
-
                 } else {
-                    Notification.error('Oops! something went wrong! please try again!');
+                    Notification.error('Oops! something went wrong! Contact with support!');
                 }
             };
 

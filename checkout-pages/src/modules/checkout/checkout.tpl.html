@@ -18,42 +18,48 @@
         <div class="right">Order Details</div>
     </div>
     <!-- form start -->
-    <form id="formCheckout" name="formCheckout" novalidate="novalidate" autocomplete="off">
+    <form id="formCheckout"
+		  name="formCheckout"
+		  xt-form
+		  strategy="invalid"
+		  novalidate="novalidate"
+		  focus-error="true">
         <div id="checkout-forms" class="checkout-forms content-left">
             <div>
                 <h3 id="co-f1">Account Details</h3>
 
                 <div class="form-wrapper">
-                    <div class="form-group has-feedback" data-show-errors>
+                    <div class="form-group has-feedback" >
                         <label for="email">Email</label>
                         <input type="email"
                                name="email"
-                               autocomplete="address-level4"
+							   autocomplete="address-level4"
                                class="form-control"
                                id="email"
                                required
-                               data-ng-model="userData.email">
+                               data-ng-model="userData.email"
+							   xt-validation-tooltip>
                     </div>
-                    <div class="form-group has-feedback" data-show-errors>
+                    <div class="form-group has-feedback" >
                         <label for="email">Username</label>
-                        <input type="text"
+                        <input type="text" xt-validation-tooltip
                                name="username"
-                               class="form-control"
+							   class="form-control"
                                id="username"
                                data-ng-model="userData.username">
                     </div>
-                    <div class="form-group has-feedback" data-show-errors>
+                    <div class="form-group has-feedback" >
                         <label for="first_name">Password</label>
-                        <input type="password"
+                        <input type="password" xt-validation-tooltip
                                name="password"
                                class="form-control"
                                id="password"
                                required
                                data-ng-model="userData.password">
                     </div>
-                    <div class="form-group has-feedback" data-show-errors>
+                    <div class="form-group has-feedback" >
                         <label for="first_name">First Name</label>
-                        <input type="text"
+                        <input type="text" xt-validation-tooltip
                                name="first_name"
                                data-ng-blur="autoCompleteBillingName()"
                                class="form-control"
@@ -61,9 +67,9 @@
                                required
                                data-ng-model="userData.first_name">
                     </div>
-                    <div class="form-group has-feedback" data-show-errors>
+                    <div class="form-group has-feedback" >
                         <label for="last_name">Last Name</label>
-                        <input type="text"
+                        <input type="text" xt-validation-tooltip
                                name="last_name"
                                data-ng-blur="autoCompleteBillingName()"
                                class="form-control"
@@ -71,15 +77,17 @@
                                required
                                data-ng-model="userData.last_name">
                     </div>
-                    <div class="form-group has-feedback" data-show-errors>
+                    <div class="form-group has-feedback" >
                         <label for="phone">Mobile Phone</label>
                         <input type="text"
                                name="phone"
                                data-ng-minlength="10"
-                               data-ng-maxlength="12"
+							   ng-pattern="/^([\s\+\-\(\)0-9])+$/"
+							   msg-pattern="Invalid phone"
                                class="form-control"
                                id="phone"
-                               data-ng-model="userData.phone">
+                               data-ng-model="userData.phone"
+							   xt-validation-tooltip>
                     </div>
                 </div>
             </div>
@@ -87,25 +95,25 @@
                 <h3 id="co-f2">Billing Address</h3>
 
                 <div class="form-wrapper">
-                    <div class="form-group has-feedback" data-show-errors>
+                    <div class="form-group has-feedback" >
                         <label for="address">Address</label>
-                        <input type="text"
+                        <input type="text" xt-validation-tooltip
                                name="address"
                                class="form-control"
                                required
                                id="address"
                                data-ng-model="formData.billing_address">
                     </div>
-                    <div class="form-group has-feedback" data-show-errors>
+                    <div class="form-group has-feedback" >
                         <label for="billing_address2">Address 2</label>
-                        <input type="text"
+                        <input type="text" xt-validation-tooltip
                                name="billing_address2"
                                class="form-control"
                                id="billing_address2"
                                data-ng-model="formData.billing_address2">
                     </div>
 
-                    <div class="form-group has-feedback" data-show-errors>
+                    <div class="form-group has-feedback" >
                         <label for="dex_country">Country</label>
                         <script type="text/ng-template" id="countryTemplate.html">
                             <a>
@@ -125,7 +133,7 @@
                                uib-typeahead="country.name for country in getCountry($viewValue)"
                                class="form-control">
                     </div>
-                    <div class="form-group has-feedback" data-show-errors>
+                    <div class="form-group has-feedback" >
                         <label for="dex_city">City</label>
                         <script type="text/ng-template" id="cityTemplate.html">
                             <a>
@@ -133,7 +141,7 @@
                                 <span ng-bind-html="match.model.name | uibTypeaheadHighlight:query"></span>
                             </a>
                         </script>
-                        <input type="text" name="dex_city" id="dex_city"
+                        <input type="text" name="dex_city" id="dex_city" xt-validation-tooltip
                                data-ng-disabled="formCheckout.dex_country.$invalid"
                                ng-model="formData.billing_city"
                                typeahead-on-select="selectCity($item, $model, $label)"
@@ -146,9 +154,9 @@
                                uib-typeahead="city.name for city in getCity($viewValue)"
                                class="form-control">
                     </div>
-                    <div class="form-group has-feedback" data-show-errors>
+                    <div class="form-group has-feedback" >
                         <label for="dex_state">State/Province</label>
-                        <input type="text"
+                        <input type="text" xt-validation-tooltip
                                name="dex_state"
                                id="dex_state"
                                aria-autocomplete="none"
@@ -157,14 +165,13 @@
                                required
                                data-ng-model="formData.billing_state"/>
                     </div>
-                    <div class="form-group has-feedback" data-show-errors>
+                    <div class="form-group has-feedback" >
                         <label for="zip">Zip/Postal Code</label>
-                        <input type="text"
+                        <input type="text" xt-validation-tooltip
                                name="zip"
                                class="form-control"
                                id="zip"
                                required
-                               maxlength="6"
                                data-ng-minlength="4"
                                data-ng-maxlength="10"
                                data-ng-model="formData.billing_zip">
@@ -183,18 +190,18 @@
                     </div>
                 </div>
                 <div class="form-wrapper">
-                    <div class="form-group has-feedback" data-show-errors>
+                    <div class="form-group has-feedback" >
                         <label for="card_name">Full Name</label>
-                        <input type="text"
+                        <input type="text" xt-validation-tooltip
                                name="card_name"
                                class="form-control"
                                id="card_name"
                                required
                                data-ng-model="formData.card_name">
                     </div>
-                    <div class="form-group has-feedback" data-show-errors>
+                    <div class="form-group has-feedback" >
                         <label for="card_number">Card Number</label>
-                        <input type="text"
+                        <input type="text" xt-validation-tooltip
                                ui-mask="9999 9999 9999 999?9"
                                ui-mask-placeholder=""
                                ui-mask-placeholder-char="*"
@@ -205,7 +212,7 @@
                                data-ng-model="formData.number">
                     </div>
 
-                    <div class="form-group has-feedback" data-show-errors>
+                    <div class="form-group has-feedback" >
                         <div>
                             <label for="cc-exp">Expiration</label>
 
@@ -228,10 +235,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group has-feedback" data-show-errors>
+                    <div class="form-group has-feedback" >
                         <div>
                             <label for="cc-cvv">Security Code</label>
-                            <input type="number" name="cc-cvv" id="cc-cvv"
+                            <input type="number" name="cc-cvv" id="cc-cvv" xt-validation-tooltip
                                    class="form-control"
                                    placeholder="CVV"
                                    required
@@ -240,13 +247,13 @@
                                    data-ng-model="formData.cvv">
                         </div>
                     </div>
-                    <div class="form-group has-feedback" data-show-errors>
+                    <div class="form-group has-feedback" >
                         <label for="billing_phone">Billing Phone</label>
-                        <input type="text"
-                               name="phone"
-                               data-ng-minlength="10"
-                               data-ng-maxlength="12"
-                               class="form-control"
+                        <input type="text" xt-validation-tooltip
+							   name="phone"
+                               ng-pattern="/^([\s\+\-\(\)0-9])+$/"
+							   msg-pattern="Invalid phone"
+							   class="form-control"
                                id="billing_phone"
                                data-ng-model="formData.billing_phone">
                     </div>

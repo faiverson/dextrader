@@ -25,8 +25,24 @@ class StatRepository extends AbstractRepository implements StatRepositoryInterfa
 
 	public function getMarketingStats($user_id, $limit, $offset, $order_by, $where)
 	{
-		$query =  $this->model->where('user_id', $user_id);
+		$query =  $this->model->select([
+			DB::raw('id'),
+			DB::raw('funnel'),
+			DB::raw('tag'),
+			DB::raw('created_at'),
+			DB::raw('SUM(hits) AS hits'),
+			DB::raw('SUM(unique_hits) AS unique_hits'),
+			DB::raw('SUM(leads) AS leads'),
+			DB::raw('SUM(ib) AS ib'),
+			DB::raw('SUM(pro) AS pro'),
+			DB::raw('SUM(na) AS na'),
+			DB::raw('SUM(fx) AS fx'),
+			DB::raw('SUM(academy) AS academy'),
+			DB::raw('SUM(income) AS income'),
+		]);
+		$query = $query->where('user_id', $user_id);
 		$query = $this->filters($query, $where);
+
 		if($limit != null) {
 			$query = $query->take($limit);
 		}
@@ -43,6 +59,7 @@ class StatRepository extends AbstractRepository implements StatRepositoryInterfa
 
 		return $query->groupBy('funnel_id')
 			->groupBy('tag_id')
+			->groupBy('created_at')
 			->get();
 	}
 
@@ -51,7 +68,8 @@ class StatRepository extends AbstractRepository implements StatRepositoryInterfa
 		$sq = $this->model->where('user_id', $user_id);
 		$sq = $this->filters($sq, $where);
 		$sq = $sq->groupBy('funnel_id')
-			->groupBy('tag_id');
+			->groupBy('tag_id')
+			->groupBy('created_at');
 
 		$params = array_merge([$user_id] , array_values($where));
 		$query = DB::select('SELECT count(*) as total from (' . $sq->toSql() . ') as totals', $params);

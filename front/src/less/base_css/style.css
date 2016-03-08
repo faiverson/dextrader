@@ -485,6 +485,7 @@ input {
     padding: 15px 0;
     padding-left: 30px;
     background: transparent url('/front/assets/images/ico-1.png') center left no-repeat;
+	cursor: pointer;
 }
 
 #form-login-submit {

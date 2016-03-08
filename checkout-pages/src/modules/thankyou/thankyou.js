@@ -30,7 +30,7 @@ angular.module('app.thankyou', ['ui.router'])
                 var total = 0;
 
                 angular.forEach(invoices, function (invoice) {
-                    total += invoice.amount;
+                    total = (parseFloat(total) + parseFloat(invoice.amount)).toFixed(2);
                 });
 
                 return total;

@@ -52,15 +52,17 @@ class CommissionsPayments extends Command
      */
     public function handle()
     {
-		$this->info('Starting commission payment process');
+		$this->info('Starting comms:weekly');
 		DB::beginTransaction();
 		try {
 			$comms = $this->commissionGateway->getCommissionToPay($this->day);
 			if($comms->count() > 0) {
 				$this->createCSV();
-				foreach ($comms as $commissions) {
+				$paid_limit = (float)Config::get('dextrader.paid_limit');
 
-					if ((float)$commissions->total <= (float)Config::get('dextrader.paid_limit')) {
+				foreach ($comms as $commissions) {
+					$total = (float)$commissions->total;
+					if ($total >= $paid_limit) {
 						$payment = $this->paymentGateway->payCommission($commissions);
 						if ($payment) {
 							$response = $this->commissionGateway->updateToPaid($commissions);
@@ -69,6 +71,8 @@ class CommissionsPayments extends Command
 								Log::info('Failed updateToPaid user: ' . $commissions->user_id, $this->commissionGateway->errors());
 							}
 							$this->addRowToCSV($commissions, $payment);
+							$this->warn('Paid user: ' . $commissions->user_id . ' ' . $total);
+							Log::info('Paid user: ' . $commissions->user_id . ' ' . $total);
 						} else {
 							$this->warn('Failed payCommission user: ' . $commissions->user_id);
 							Log::info('Failed payCommission user: ' . $commissions->user_id);
@@ -79,14 +83,20 @@ class CommissionsPayments extends Command
 							$this->warn('Failed payCommissionOnNextDate user: ' . $commissions->user_id);
 							Log::info('Failed payCommissionOnNextDate user: ' . $commissions->user_id);
 						}
+						else {
+							$this->warn('comms:weekly next day payment user ' . $commissions->user_id);
+							Log::info('comms:weekly next day payment user: ' . $commissions->user_id);
+						}
+
 					}
 
-					$this->info('Commission user: ' . $commissions->user_id);
+					$this->info('comms:weekly user: ' . $commissions->user_id);
+					Log::info('comms:weekly user: ' . $commissions->user_id);
 				}
 			}
 			else {
 				$this->info('No users found');
-				Log::info('No users found in comms:weekly');
+				Log::info('comms:weekly: No users found');
 			}
 		} catch(\Exception $e) {
 			DB::rollback();
@@ -94,7 +104,8 @@ class CommissionsPayments extends Command
 			Log::info('ERROR in comms:weekly', (array) $e->getMessage());
 		}
 		DB::commit();
-		$this->info('Finished commission payment proccess');
+		$this->info('comms:weekly finished');
+		Log::info('comms:weekly finished');
     }
 
 	protected function createCSV()

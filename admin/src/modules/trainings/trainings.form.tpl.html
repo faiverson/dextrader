@@ -26,15 +26,23 @@
                                     <select name="type"
                                             class="form-control"
                                             id="type"
-                                            data-ng-model="training.type"
-                                            placeholder="Title"
-                                            required>
-                                        <option value="certification">IB Certification</option>
-                                        <option value="pro">IB Pro</option>
-                                        <option value="affiliates">Affiliates</option>
+                                            data-ng-model="selectedType"
+                                            data-ng-change="changeType();"
+											ng-options="type.id as type.name for type in types">
                                     </select>
                                 </div>
                             </div>
+							<div class="col-md-6">
+								<div class="form-group" data-show-errors>
+									<label for="type">Order List</label>
+									<select name="order"
+											class="form-control"
+											id="order"
+											data-ng-model="selectedOrder"
+											ng-options="order for order in ((types | filter:{'id':selectedType})[0].order_list)">
+									</select>
+								</div>
+							</div>
                         </div>
 
                         <div class="form-group" data-show-errors>

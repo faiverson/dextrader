@@ -43,7 +43,9 @@
     <table class="base-table table-commissions">
         <thead>
         <tr>
+            <th sort-column="created_at" on-sort="getStats()" sort-data="sortBy">Date</th>
             <th sort-column="funnel_id" on-sort="getStats()" sort-data="sortBy">Funnel</th>
+            <th sort-column="funnel_id" on-sort="getStats()" sort-data="sortBy">Tag</th>
             <th sort-column="hits" on-sort="getStats()" sort-data="sortBy">Hits</th>
             <th sort-column="unique_hits" on-sort="getStats()" sort-data="sortBy">Unique Hits</th>
             <th sort-column="leads" on-sort="getStats()" sort-data="sortBy">Leads</th>
@@ -54,7 +56,9 @@
         </thead>
         <tbody>
         <tr data-ng-repeat="item in stats">
+            <td data-ng-bind="item.created_at | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY'"></td>
             <td data-ng-bind="item.funnel"></td>
+            <td data-ng-bind="item.tag"></td>
             <td data-ng-bind="item.hits"></td>
             <td data-ng-bind="item.unique_hits"></td>
             <td data-ng-bind="item.leads"></td>

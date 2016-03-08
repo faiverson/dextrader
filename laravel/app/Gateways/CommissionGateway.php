@@ -120,11 +120,6 @@ class CommissionGateway extends AbstractGateway {
 		return $this->repository->getPendingToReady();
 	}
 
-	public function getPendingHoldbacksToReady()
-	{
-		return $this->repository->getPendingHoldbacksToReady();
-	}
-
 	public function updateToReady(Commission $commission)
 	{
 		if($commission->comms_ids) {
@@ -136,16 +131,16 @@ class CommissionGateway extends AbstractGateway {
 		}
 
 		if($commission->holdbacks_ids) {
-			$response = $this->repository->updateHoldbackToReady($commission->ids);
+			$response = $this->repository->updateHoldbackToReady($commission->holdbacks_ids);
 			if(!$response) {
-				$this->errors = ['Failed updateHoldbackToReady ' . $commission->comms_ids];
+				$this->errors = ['Failed updateHoldbackToReady ' . $commission->holdbacks_ids];
 				return false;
 			}
 		}
 
 		if($response) {
 			$response = $this->totalGateway->setToReady($commission);
-			if($response) {
+			if(!$response) {
 				$this->errors = ['Failed totalGateway setToReady '];
 				return false;
 			}

@@ -311,11 +311,11 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 'Pending', 'Ready to Pay', 'Paid'
             ],
             apply: function () {
-                if(angular.isDefined(this.from.value)){
+                if(angular.isDefined(this.from.value) && this.from.value !== null){
                     this.toApply.from = moment(this.from.value).format('YYYY-MM-DD');
                 }
 
-                if(angular.isDefined(this.to.value)){
+                if(angular.isDefined(this.to.value) && this.to.value !== null){
                     this.toApply.to = moment(this.to.value).format('YYYY-MM-DD');
                 }
 
@@ -329,7 +329,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
 
             if(angular.isArray(products)){
                 angular.forEach(products, function (prd) {
-                    amount += prd.product_amount;
+                    amount = (parseFloat(amount) + parseFloat(prd.product_amount)).toFixed(2);
                 });
             }
 
@@ -426,11 +426,11 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 'Pending', 'Ready to Pay', 'Paid'
             ],
             apply: function () {
-                if(angular.isDefined(this.from.value)){
+                if(angular.isDefined(this.from.value) && this.from.value !== null){
                     this.toApply.from = moment(this.from.value).format('YYYY-MM-DD');
                 }
 
-                if(angular.isDefined(this.to.value)){
+                if(angular.isDefined(this.to.value) && this.to.value !== null){
                     this.toApply.to = moment(this.to.value).format('YYYY-MM-DD');
                 }
 
@@ -524,11 +524,11 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 format: 'dd MMM yyyy'
             },
             apply: function () {
-                if(angular.isDefined(this.from.value)){
+                if(angular.isDefined(this.from.value) && this.from.value !== null){
                     this.toApply.from = moment(this.from.value).format('YYYY-MM-DD');
                 }
 
-                if(angular.isDefined(this.to.value)){
+                if(angular.isDefined(this.to.value) && this.to.value !== null){
                     this.toApply.to = moment(this.to.value).format('YYYY-MM-DD');
                 }
 
@@ -598,15 +598,15 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
                 delete this.toApply.to;
                 delete this.toApply.funnel;
 
-                if(angular.isDefined(this.from.value)){
+                if(angular.isDefined(this.from.value) && this.from.value !== null){
                     this.toApply.from = moment(this.from.value).format('YYYY-MM-DD');
                 }
 
-                if(angular.isDefined(this.to.value)){
+                if(angular.isDefined(this.to.value) && this.to.value !== null){
                     this.toApply.to = moment(this.to.value).format('YYYY-MM-DD');
                 }
 
-                if(this.selectedFunnel && angular.isDefined(this.selectedFunnel)){
+                if(this.selectedFunnel && angular.isDefined(this.selectedFunnel) && this.selectedFunnel !== null){
                     this.toApply.funnel = this.selectedFunnel.funnel_id;
                 }
 
@@ -614,6 +614,11 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
             },
             toApply: {}
         };
+
+		$scope.formatDate = function(date){
+			var dateOut = new Date(date);
+			return dateOut;
+		};
 
         $scope.getStats = function () {
 

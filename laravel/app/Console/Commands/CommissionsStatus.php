@@ -6,6 +6,7 @@ use App\Gateways\CommissionGateway;
 use App\Gateways\PaymentGateway;
 use Illuminate\Console\Command;
 use DB;
+use League\Flysystem\Exception;
 use Log;
 
 class CommissionsStatus extends Command
@@ -42,7 +43,7 @@ class CommissionsStatus extends Command
      */
 	public function handle()
 	{
-		$this->info('Starting commission process');
+		$this->info('Starting comms:pending');
 		DB::beginTransaction();
 		try {
 			$comms = $this->commissionGateway->getPendingToReady();
@@ -51,20 +52,21 @@ class CommissionsStatus extends Command
 					$response = $this->commissionGateway->updateToReady($commission);
 					if($response) {
 						$this->info('Commission user: ' . $commission->user_id . ' processed');
+						Log::info('comms:pending user: ' . $commission->user_id. ' processed');
 					}
 					else {
 						$this->warn('user: ' . $commission->user_id);
-						Log::info('user: ' . $commission->user_id);
+						Log::info('comms:pending user: ' . $commission->user_id);
 					}
 				}
 			}
 		} catch(\Exception $e) {
 			DB::rollback();
 			$this->warn('ERROR in comms:pending');
-			Log::info('ERROR in comms:pending', (array) $e->getMessage());
+			Log::error('ERROR in comms:pending', (array) $e);
 		}
 		DB::commit();
-		$this->info('Commissions Finished - ' . $comms);
-		Log::info('Commissions Finished');
+		$this->info('comms:pending finished - ' . $comms);
+		Log::info('comms:pending finished');
 	}
 }

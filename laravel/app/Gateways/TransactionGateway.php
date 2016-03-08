@@ -274,6 +274,9 @@ class TransactionGateway extends AbstractGateway {
 			elseif ($e instanceof TransactionDetailException) {
 				$type = 'TransactionDetailException';
 			}
+			else {
+				$type = 'Exception';
+			}
 			Log::error($type . ': ', ['error' => (array) $this->errors, 'data' => $data]);
 			return false;
 		}
@@ -351,7 +354,7 @@ class TransactionGateway extends AbstractGateway {
 				'transaction_id' => $data['orderid']
 			]));
 			if(!$invoice) {
-				throw new InvoiceException(['invoice' => $this->invoice->errors()]);
+				throw new InvoiceException($this->invoice->errors());
 			}
 
 			$set = $this->set([
@@ -359,7 +362,7 @@ class TransactionGateway extends AbstractGateway {
 				'billing_address_id' => $billing->id
 			], $data['orderid']);
 			if(!$set) {
-				throw new \Exception(['Transaction update fails']);
+				throw new \Exception('Transaction update fails');
 			}
 
 			$now = new DateTime('now');
@@ -561,7 +564,7 @@ class TransactionGateway extends AbstractGateway {
 			'billing_country' => $billing_address->country,
 			'billing_zip' => $billing_address->zip,
 			'billing_phone' => $billing_address->phone,
-			'amount' => dd(number_format($amount, 2, '.', ','))
+			'amount' => number_format($amount, 2, '.', ',')
 		]);
 
 		$transaction = $this->create($data);

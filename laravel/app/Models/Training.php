@@ -18,7 +18,7 @@ class Training extends Model
 		'training_id' => 'id',
 	];
 
-	protected $fillable	 = ['video_id', 'type', 'title', 'filename', 'description', 'time', 'unlock_at'];
+	protected $fillable	 = ['video_id', 'type', 'title', 'filename', 'description', 'time', 'unlock_at', 'list_order'];
 
 	protected $appends = array('training_id');
 
@@ -26,4 +26,5 @@ class Training extends Model
 	{
 		return $this->attributes['id'];
 	}
+
 }

@@ -17,3 +17,23 @@
 @import (inline) "base_css/popup.css";
 @import (inline) "../../vendor/angular-ui-notification/dist/angular-ui-notification.css";
 @import (inline) "../../vendor/angular-loading-bar/build/loading-bar.css";
+
+/* ==== Utility classes ===== */
+
+input.ng-dirty.ng-invalid,
+select.ng-dirty.ng-invalid,
+textarea.ng-dirty.ng-invalid {
+	border: 1px solid red;
+}
+
+.ng-submitted input.ng-invalid,
+.ng-submitted select.ng-invalid,
+.ng-submitted textarea.ng-invalid {
+	border: 1px solid red;
+}
+
+input.ng-dirty.ng-valid,
+select.ng-dirty.ng-valid,
+textarea.ng-dirty.ng-valid {
+	border: 1px solid green;
+}

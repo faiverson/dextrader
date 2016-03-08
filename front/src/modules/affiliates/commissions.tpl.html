@@ -125,7 +125,7 @@
             <td data-ng-bind="commission.created_at | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY'"></td>
             <td data-ng-bind="commission.status"></td>
             <td data-ng-bind="commission.from.full_name"></td>
-            <td data-ng-bind="user.full_name"></td>
+            <td data-ng-bind="commission.to.full_name"></td>
             <td>
                 <p class="prd-name" data-ng-repeat="prd in commission.products" data-ng-bind="prd.product_display_name"></p>
             </td>

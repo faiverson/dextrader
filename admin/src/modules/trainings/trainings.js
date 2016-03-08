@@ -48,11 +48,16 @@ angular.module('app.trainings', ['ui.router', 'youtube-embed'])
 
             $scope.playerVars = {};
 
+			$scope.selectedType = 0;
+			$scope.selectedOrder= 0;
+
             $scope.save = function () {
                 $scope.$broadcast('show-errors-check-validity');
 
                 if ($scope.trainingForm.$valid) {
 
+                    $scope.training.type = $scope.selectedType;
+                    $scope.training.list_order = $scope.selectedOrder;
                     $scope.training.time = moment($scope.video_time).format('HH:mm:ss');
                     $scope.training.unlock_at = (parseInt(moment($scope.unlock_at).format('HH')) * 60 *60) + (parseInt(moment($scope.unlock_at).format('mm')) *60) + parseInt(moment($scope.unlock_at).format('ss'));
 
@@ -84,24 +89,61 @@ angular.module('app.trainings', ['ui.router', 'youtube-embed'])
             vm.getTrainingForEdit = function (id) {
                 TrainingsService.getOne(id)
                     .then(function (res) {
-                        $scope.training = res.data;
-
-                        var video_time = moment($scope.training.time, 'HH:mm:ss');
-
-                        $scope.video_time = moment().hour(video_time.format('HH')).minutes(video_time.format('mm')).seconds(video_time.format('ss'));
-
+						var video_time;
+						$scope.training = res.data;
+						$scope.total = res.data.total;
+						video_time = moment($scope.training.time, 'HH:mm:ss');
+						$scope.selectedType = $scope.training.type;
+						$scope.selectedOrder = $scope.training.list_order;
+						$scope.video_time = moment().hour(video_time.format('HH')).minutes(video_time.format('mm')).seconds(video_time.format('ss'));
                         $scope.unlock_at = moment().hour(0).minutes(0).seconds(0).add($scope.training.unlock_at, 'seconds');
                     });
             };
 
             vm.init = function () {
+				TrainingsService.query({}, 'orders')
+					.then(function (response) {
+						var total = response.data;
+						$scope.types = [];
+						angular.forEach(total, function(total, key) {
+							var i,
+								array = [];
+
+							if (!angular.isDefined($stateParams.id)) {
+								total += 1;
+							}
+
+							for(i = total; i > 0; i--) {
+								array.push(i);
+							}
+							$scope.types.push({
+								id: key.toLowerCase(),
+								name: key,
+								order_list: array
+							});
+						});
+
+						$scope.selectedType = $scope.types[0].id;
+						$scope.selectedOrder = $scope.types[0].order_list[0];
+					});
+
+
+
                 if (angular.isDefined($stateParams.id)) {
                     vm.getTrainingForEdit($stateParams.id);
                 }
             };
 
+			$scope.changeType = function() {
+				angular.forEach($scope.types, function(item, key) {
+					if(item.id === $scope.selectedType) {
+						$scope.selectedOrder = item.order_list[0];
+					}
+				});
+			};
+
             vm.success = function (res) {
-                Notification.success('Provider created successfully!');
+                Notification.success('Training created successfully!');
                 $state.go('trainings.list');
             };
 
@@ -111,6 +153,18 @@ angular.module('app.trainings', ['ui.router', 'youtube-embed'])
 				if(angular.isArray(response.error)) {
 					angular.forEach(response.error, function(item) {
 						txt += item + '<br>';
+					});
+				}
+				else if(angular.isObject( response.error)) {
+					angular.forEach(response.error, function (value, key) {
+						if (angular.isArray(value)) {
+							angular.forEach(value, function (response) {
+								txt += response;
+							});
+						}
+						else {
+							txt += value;
+						}
 					});
 				}
 				else {
