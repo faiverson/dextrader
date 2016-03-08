@@ -18,9 +18,12 @@
         <div class="right">Order Details</div>
     </div>
     <!-- form start -->
-    <form id="formCheckout" name="formCheckout" xt-form
-		  strategy="focusedAndDirtyOrSubmitted"
-		  novalidate="novalidate" autocomplete="off" focus-error="true">
+    <form id="formCheckout"
+		  name="formCheckout"
+		  xt-form
+		  strategy="invalid"
+		  novalidate="novalidate"
+		  focus-error="true">
         <div id="checkout-forms" class="checkout-forms content-left">
             <div>
                 <h3 id="co-f1">Account Details</h3>
@@ -28,13 +31,14 @@
                 <div class="form-wrapper">
                     <div class="form-group has-feedback" >
                         <label for="email">Email</label>
-                        <input type="email" xt-validation-tooltip
+                        <input type="email"
                                name="email"
 							   autocomplete="address-level4"
                                class="form-control"
                                id="email"
                                required
-                               data-ng-model="userData.email">
+                               data-ng-model="userData.email"
+							   xt-validation-tooltip>
                     </div>
                     <div class="form-group has-feedback" >
                         <label for="email">Username</label>
@@ -75,14 +79,15 @@
                     </div>
                     <div class="form-group has-feedback" >
                         <label for="phone">Mobile Phone</label>
-                        <input type="text" xt-validation-tooltip
+                        <input type="text"
                                name="phone"
                                data-ng-minlength="10"
 							   ng-pattern="/^([\s\+\-\(\)0-9])+$/"
 							   msg-pattern="Invalid phone"
                                class="form-control"
                                id="phone"
-                               data-ng-model="userData.phone">
+                               data-ng-model="userData.phone"
+							   xt-validation-tooltip>
                     </div>
                 </div>
             </div>
