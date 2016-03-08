@@ -155,6 +155,18 @@ angular.module('app.trainings', ['ui.router', 'youtube-embed'])
 						txt += item + '<br>';
 					});
 				}
+				else if(angular.isObject( response.error)) {
+					angular.forEach(response.error, function (value, key) {
+						if (angular.isArray(value)) {
+							angular.forEach(value, function (response) {
+								txt += response;
+							});
+						}
+						else {
+							txt += value;
+						}
+					});
+				}
 				else {
 					txt += response.error;
 				}

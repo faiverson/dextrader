@@ -28,6 +28,11 @@ class TrainingGateway extends AbstractGateway {
 		return $this->repository->getCertification($userId);
 	}
 
+	public function getAffiliates()
+	{
+		return $this->repository->getTrainingByType('affiliates');
+	}
+
 	public function parse_youtube($link){
 
 		$regexstr = '~

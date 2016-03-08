@@ -1,9 +1,7 @@
 <div class="provider-list">
-
     <h1>Trainings
         <button class="btn btn-sm btn-primary pull-right" ui-sref="trainings.new">NEW TRAINING</button>
     </h1>
-
     <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4"></div>
@@ -28,6 +26,7 @@
         <thead>
         <tr>
             <th>Image</th>
+            <th>Order #</th>
             <th>Title</th>
             <th>Description</th>
             <th>Time</th>
@@ -36,28 +35,28 @@
         </tr>
         </thead>
         <tbody>
-        <tr data-ng-repeat="training in trainings">
-            <td><img src="http://img.youtube.com/vi/{{training.video_id}}/1.jpg" class="img-responsive" width="60"></td>
-            <td data-ng-bind="training.title"></td>
-            <td data-ng-bind="training.description"></td>
-            <td data-ng-bind="training.time"></td>
-            <td data-ng-bind="training.unlock_at"></td>
-            <td>
-                <div class="btn-group">
-                    <button type="button"
-                            class="btn btn-default dropdown-toggle"
-                            data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                        Actions <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a ui-sref="trainings.edit({id:training.training_id})">Edit</a></li>
-                        <li><a href="#" data-ng-click="openDeleteConfirm(training.training_id)">Remove</a></li>
-                    </ul>
-                </div>
-            </td>
-        </tr>
-
+			<tr data-ng-repeat="training in trainings">
+				<td><img src="http://img.youtube.com/vi/{{training.video_id}}/1.jpg" class="img-responsive" width="60"></td>
+				<td data-ng-bind="training.list_order"></td>
+				<td data-ng-bind="training.title"></td>
+				<td data-ng-bind="training.description"></td>
+				<td data-ng-bind="training.time"></td>
+				<td data-ng-bind="training.unlock_at"></td>
+				<td>
+					<div class="btn-group">
+						<button type="button"
+								class="btn btn-default dropdown-toggle"
+								data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">
+							Actions <span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li><a ui-sref="trainings.edit({id:training.training_id})">Edit</a></li>
+							<li><a href="#" data-ng-click="openDeleteConfirm(training.training_id)">Remove</a></li>
+						</ul>
+					</div>
+				</td>
+			</tr>
         </tbody>
     </table>
     <div class="table-nav row">

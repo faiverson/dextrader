@@ -80,7 +80,7 @@ class TrainingsController extends Controller
 	 */
     public function affiliates()
     {
-		$response = $this->gateway->findBy('type', 'affiliates');
+		$response = $this->gateway->getAffiliates();
 		if(!$response) {
 			return response()->error($this->gateway->errors());
 		}

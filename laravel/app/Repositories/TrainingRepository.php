@@ -20,6 +20,7 @@ class TrainingRepository extends AbstractRepository implements TrainingRepositor
 		return DB::table('trainings as t')
 			->select([
 				't.id AS training_id',
+				't.list_order',
 				't.video_id',
 				't.title',
 				't.description',
@@ -31,6 +32,7 @@ class TrainingRepository extends AbstractRepository implements TrainingRepositor
 				$join->on('ut.training_id', '=', 't.id')->on('ut.user_id', '=', DB::raw($userId));
 			})
 			->where('t.type', 'certification')
+			->orderBy('t.list_order', 'asc')
 			->get();
 	}
 
@@ -82,6 +84,11 @@ class TrainingRepository extends AbstractRepository implements TrainingRepositor
 	public function findTotalByType($type)
 	{
 		return $this->model->where('type', $type)->count();
+	}
+
+	public function getTrainingByType($type)
+	{
+		return $this->model->where('type', $type)->orderBy('list_order', 'asc')->get();
 	}
 
 }
