@@ -13,7 +13,7 @@ angular.module('app.shared-directives', [])
             link: function ($scope, $elem, $attrs) {
 
                 var duration = moment.duration($scope.totalSeconds * 1000, 'milliseconds');
-                
+
                 $scope.update = function () {
                     duration = moment.duration(duration - 1000, 'milliseconds');
                     $scope.minutes = (duration.minutes() < 10) ? '0' + duration.minutes() : duration.minutes();
