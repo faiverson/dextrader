@@ -615,6 +615,11 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
             toApply: {}
         };
 
+		$scope.formatDate = function(date){
+			var dateOut = new Date(date);
+			return dateOut;
+		};
+
         $scope.getStats = function () {
 
             var params = {

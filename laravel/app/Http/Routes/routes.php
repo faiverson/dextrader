@@ -33,9 +33,3 @@ Route::group(['namespace' => 'Auth', 'prefix' => 'api'], function () {
 //	var_dump($params);
 ////	exit;
 //});
-
-//Event::listen('router.matched', function($route, $request)
-//{
-//	print $query.'<br>';
-//	var_dump($request->path());
-//});
