@@ -50,6 +50,9 @@ class Handler extends ExceptionHandler
 		else if ($e instanceof Tymon\JWTAuth\Exceptions\TokenInvalidException) {
 			return response()->error('The token is invalid.', $e->getStatusCode());
 		}
+		elseif($e instanceof Tymon\JWTAuth\Exceptions\TokenBlacklistedException){
+			return response()->error('The token is blacklisted.', $e->getStatusCode());
+		}
 		else if ($e instanceof ModelNotFoundException) {
 			$e = new NotFoundHttpException($e->getMessage(), $e);
 		}
