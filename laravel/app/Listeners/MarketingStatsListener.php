@@ -73,7 +73,7 @@ class MarketingStatsListener implements ShouldQueue
 				'user_id' => $lead->enroller_id,
 				'funnel' => $funnel->title,
 				'funnel_id' => $lead->funnel_id,
-				'tag' => $tag->tag,
+				'tag' => $tag ? $tag->tag : '',
 				'tag_id' => $lead->tag_id,
 				'leads' => 1,
 				'created_at' => $lead->created_at->format('Y-m-d H:i:s'),

@@ -329,7 +329,7 @@ angular.module('app.affiliates', ['ui.router', 'youtube-embed', 'app.affiliates-
 
             if(angular.isArray(products)){
                 angular.forEach(products, function (prd) {
-                    amount += prd.product_amount;
+                    amount = (parseFloat(amount) + parseFloat(prd.product_amount)).toFixed(2);
                 });
             }
 

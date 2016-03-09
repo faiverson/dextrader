@@ -10,12 +10,16 @@
 		selling {{ $products }} to {{ $from->fullname }}<br>
 		{{ $from->fullname }} just gave you a commission...</p>
 
-	<p>Here's their info if you want to contact them. <br><br>
-		Email: {{ $from->email }}
-		@if ($from->phone != '')
-			Phone: {{ $from->phone }}
-		@endif <br><br>
-		Keep up the good work!<br><br>
+	<p>
+		@if(empty($intermediate))
+			Here's their info if you want to contact them. <br><br>
+			Email: {{ $from->email }}
+			@if ($from->phone != '')
+				Phone: {{ $from->phone }}
+			@endif <br><br>
+			Keep up the good work!
+		@endif
+		<br><br>
 		Sincerely,<br>
 		Maxx Fairo
 	</p>
