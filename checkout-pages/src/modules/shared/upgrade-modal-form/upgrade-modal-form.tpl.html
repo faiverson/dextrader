@@ -63,8 +63,8 @@
                         <input type="text"
                                name="phone"
                                readonly="readonly"
-                               data-ng-minlength="10"
-                               data-ng-maxlength="12"
+							   data-ng-minlength="10"
+							   ng-pattern="/^([\s\+\-\(\)0-9])+$/"
                                class="form-control"
                                id="phone"
                                data-ng-model="userData.phone">

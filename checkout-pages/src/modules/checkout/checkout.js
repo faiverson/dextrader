@@ -334,9 +334,8 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
 					else {
                         Notification.error(err.data.error);
                     }
-
                 } else {
-                    Notification.error('Oops! something went wrong! please try again!');
+                    Notification.error('Oops! something went wrong! Contact with support!');
                 }
             };
 

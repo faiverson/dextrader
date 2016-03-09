@@ -564,7 +564,7 @@ class TransactionGateway extends AbstractGateway {
 			'billing_country' => $billing_address->country,
 			'billing_zip' => $billing_address->zip,
 			'billing_phone' => $billing_address->phone,
-			'amount' => dd(number_format($amount, 2, '.', ','))
+			'amount' => number_format($amount, 2, '.', ',')
 		]);
 
 		$transaction = $this->create($data);
