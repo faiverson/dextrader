@@ -15,7 +15,7 @@ angular.module('app.shared-directives', [])
 
                 var duration = moment.duration($scope.totalSeconds * 1000, 'milliseconds');
 
-                vm.seconds = $scope.seconds;
+                //vm.seconds = $scope.seconds;
 
                 vm.update = function () {
                     duration = moment.duration(duration - 1000, 'milliseconds');
