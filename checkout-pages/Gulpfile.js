@@ -68,8 +68,7 @@ gulp.task('production', function (callback) {
 
 gulp.task('default', ['env']);
 
-// run a server and a watcher
-gulp.task('dev', ['env', 'server', 'watch']);
+gulp.task('dev', ['env', 'watch']);
 
 // TASKS
 // set the environment
@@ -212,11 +211,11 @@ gulp.task('fonts', function () {
 gulp.task('images', function () {
 	return gulp.src(config.assets.images.input)
 		.pipe(plumber())
-		.pipe(gulpif(environment === 'local'),imagemin({
+		.pipe(gulpif(environment === 'local', imagemin({
 			optimizationLevel: 5,
 			progressive: true,
 			interlaced: true
-		}))
+		})))
 		.pipe(gulp.dest(config.assets.images.output));
 });
 

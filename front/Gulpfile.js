@@ -70,8 +70,7 @@ gulp.task('production', function (callback) {
 
 gulp.task('default', ['env']);
 
-// run a server and a watcher
-gulp.task('dev', ['env', 'server', 'watch']);
+gulp.task('dev', ['env', 'watch']);
 
 // TASKS
 // set the environment
@@ -183,15 +182,6 @@ gulp.task('compile:clean', function () {
         '!' + config.js.files.output,
         '!' + config.js.files.output + filename
     ], {force: true});
-});
-
-// start a server localhost in php
-gulp.task('server', function (next) {
-    connectPhp.server({
-        //hostname: 'localhost',
-        port: config.port,
-        base: config.paths.server_path
-    });
 });
 
 gulp.task('svg', function () {
