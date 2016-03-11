@@ -5,7 +5,7 @@ module.exports = {
         ' * <%= pkg.description %>\n' +
         ' *\n' +
         ' * (c) ' + new Date().getFullYear() + ' - <%= pkg.author %>\n' +
-        ' * <%= pkg.license %> License' +
+        ' * @license <%= pkg.license %>' +
         ' * <%= pkg.repository.url %>\n' +
         ' *\n' +
         ' */\n\n',

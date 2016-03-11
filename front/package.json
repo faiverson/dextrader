@@ -1,7 +1,7 @@
 {
   "name": "DexTrader",
-  "version": "1.0.0",
-  "description": "Starting point of Laravel and Angular using gulpjs",
+  "version": "1.0.23",
+  "description": "Do You Want To Become A Successful Binary Options Trader, Without The Risk Of Losing All Your Money?",
   "author": "The Real Creators",
   "license": "UNLICENSED",
   "contributors": [
@@ -25,13 +25,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/therealcreators/laravel_template"
+    "url": "https://github.com/therealcreators/dextrader"
   },
   "bugs": {
-    "url": "https://github.com/therealcreators/laravel_template/issues"
+    "url": "https://github.com/therealcreators/dextrader/issues"
   },
   "private": true,
-  "homepage": "https://github.com/therealcreators/laravel_template",
+  "homepage": "https://github.com/therealcreators/dextrader",
   "dependencies": {
     "del": "^1.2.0",
     "dotenv": "^1.2.0",

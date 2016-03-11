@@ -1,7 +1,7 @@
 {
   "name": "DexTrader",
-  "version": "1.0.0",
-  "description": "Starting point of Laravel and Angular using gulpjs",
+  "version": "1.1.0",
+  "description": "Do You Want To Become A Successful Binary Options Trader, Without The Risk Of Losing All Your Money?",
   "author": "The Real Creators",
   "license": "UNLICENSED",
   "contributors": [
@@ -25,13 +25,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/therealcreators/laravel_template"
+    "url": "https://github.com/therealcreators/dextrader"
   },
   "bugs": {
-    "url": "https://github.com/therealcreators/laravel_template/issues"
+    "url": "https://github.com/therealcreators/dextrader/issues"
   },
   "private": true,
-  "homepage": "https://github.com/therealcreators/laravel_template",
+  "homepage": "https://github.com/therealcreators/dextrader",
   "dependencies": {
     "del": "^1.2.0",
     "dotenv": "^1.2.0",
@@ -66,19 +66,19 @@
     "lazypipe": "^0.2.4"
   },
   "devDependencies": {
-	"gulp-concat": "^2.6.0",
-	"gulp-debug": "^2.1.2",
-	"gulp-if": "^2.0.0",
-	"gulp-inject": "^3.0.0",
-	"gulp-inject-string": "^1.0.0",
-	"gulp-jsbeautifier": "^1.0.1",
-	"gulp-less": "^3.0.5",
-	"gulp-ng-annotate": "^1.1.0",
-	"gulp-rename": "^1.2.2",
-	"gulp-replace-task": "^0.11.0",
-	"gulp-util": "^3.0.7",
-	"less-plugin-autoprefix": "^1.5.1",
-	"less-plugin-clean-css": "^1.5.1",
-	"run-sequence": "^1.1.5"
+    "gulp-concat": "^2.6.0",
+    "gulp-debug": "^2.1.2",
+    "gulp-if": "^2.0.0",
+    "gulp-inject": "^3.0.0",
+    "gulp-inject-string": "^1.0.0",
+    "gulp-jsbeautifier": "^1.0.1",
+    "gulp-less": "^3.0.5",
+    "gulp-ng-annotate": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace-task": "^0.11.0",
+    "gulp-util": "^3.0.7",
+    "less-plugin-autoprefix": "^1.5.1",
+    "less-plugin-clean-css": "^1.5.1",
+    "run-sequence": "^1.1.5"
   }
 }

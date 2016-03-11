@@ -32,15 +32,15 @@ var gulp = require('gulp'),
     markdown = require('gulp-markdown'),
     sourcemaps = require('gulp-sourcemaps'),
     prettify = require('gulp-jsbeautifier'),
-    connectPhp = require('gulp-connect-php'),
     debug = require('gulp-debug'),
     inject = require('gulp-inject'),
     sInject = require('gulp-inject-string'),
     connect = require('connect'),
     replace = require('gulp-replace-task'),
-    pkg = require('./package.json'),
-    dotenv = require('dotenv').config({path: '../laravel/.env'}),
-	environment,
+	bump = require('gulp-bump'),
+	dotenv = require('dotenv').config({path: '../laravel/.env'}),
+    environment,
+	pkg,
     config = require('./build.config.js');
 
 gulp.task('test', function () {
@@ -51,22 +51,21 @@ gulp.task('test', function () {
 gulp.task('build', function (callback) {
     runSequence('clean:dist',
         'jshint',
-        ['js:vendor', 'js:templates', 'css', 'fonts', 'sounds', 'images', 'svg'],
+        ['js:vendor', 'js:templates', 'css', 'fonts', 'sounds', 'images', 'svg', 'htaccess'],
         'js:files',
         'html',
-		'htaccess',
         callback);
 });
 
 gulp.task('production', function (callback) {
     runSequence(['clean:dist'],
         'jshint',
-        ['js:vendor', 'js:templates', 'css', 'fonts', 'sounds', 'images', 'svg'],
+		'tag',
+        ['js:vendor', 'js:templates', 'css', 'fonts', 'sounds', 'images', 'svg', 'htaccess'],
         'js:files',
         'compile:js',
         'compile:clean',
-        'html',
-		'htaccess',
+		'html',
         callback);
 });
 
@@ -86,21 +85,45 @@ gulp.task('env', function () {
     }
 });
 
+gulp.task('bump', function() {
+	gulp.src('./package.json')
+		.pipe(bump({
+			type:'patch'
+		}))
+		.pipe(gulp.dest('./'));
+});
+
+gulp.task('tag', ['bump'], function() {
+	// This doesn't work, because require uses caching
+	//  var config = require('./package.json');
+	pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
+});
+
+gulp.task('minor', function(){
+	gulp.src('./package.json')
+		.pipe(bump({type:'minor'}))
+		.pipe(gulp.dest('./'));
+});
+
+gulp.task('mayor', function(){
+	gulp.src('./package.json')
+		.pipe(bump({type:'mayor'}))
+		.pipe(gulp.dest('./'));
+});
+
 // clean public folder
 gulp.task('clean:dist', function () {
     // we don't want to remove favicons
     // and the main file either
     del.sync([
         config.paths.output + '**/*',
-        '!' + config.paths.output + '.htaccess',
         '!' + config.paths.output + 'favicon.ico',
         '!' + config.paths.output + 'favicon.png',
         '!' + config.paths.output + 'apple-touch-icon-57x57-precomposed.png',
         '!' + config.paths.output + 'apple-touch-icon-72x72-precomposed.png',
         '!' + config.paths.output + 'apple-touch-icon-114x114-precomposed.png',
         '!' + config.paths.output + 'apple-touch-icon-144x144-precomposed.png',
-        '!' + config.paths.output + 'apple-touch-icon.png',
-        '!' + config.paths.output + 'index.php'
+        '!' + config.paths.output + 'apple-touch-icon.png'
     ], {force: true});
 });
 
@@ -171,19 +194,19 @@ gulp.task('compile:js', function () {
             config.js.files.output + 'app.js'
         ])
         .pipe(plumber())
-        .pipe(header(config.banner.min, {pkg: pkg}))
         .pipe(concat(filename))
-        .pipe(rename({
+		.pipe(rename({
             suffix: '.min'
         }))
-        .pipe(uglify({
+		.pipe(uglify({
             outSourceMap: filename + '.map'
         }))
-        .pipe(gulp.dest(config.js.files.output));
+		.pipe(header(config.banner.min, {pkg: pkg}))
+		.pipe(gulp.dest(config.js.files.output));
 });
 
 gulp.task('compile:clean', function () {
-    var filename = pkg.name + '-v' + pkg.version + '.min.js';
+	var filename = pkg.name + '-v' + pkg.version + '.min.js';
 
     return del.sync([
         config.js.files.output + '*.js',
@@ -286,7 +309,7 @@ gulp.task('css', function () {
 
 //// Convert index.jade into index.html.
 gulp.task('html', function () {
-    var condition = environment !== 'local',
+	var condition = environment !== 'local',
         input, inputs, sources,
         appending = '';
 

@@ -36,9 +36,10 @@ var gulp = require('gulp'),
     inject = require('gulp-inject'),
     sInject = require('gulp-inject-string'),
     replace = require('gulp-replace-task'),
-    pkg = require('./package.json'),
+	bump = require('gulp-bump'),
     dotenv = require('dotenv').config({path: '../laravel/.env'}),
 	environment,
+	pkg,
     config = require('./build.config.js');
 
 gulp.task('test', function () {
@@ -49,22 +50,20 @@ gulp.task('test', function () {
 gulp.task('build', function (callback) {
     runSequence('clean:dist',
         'jshint',
-        ['js:vendor', 'js:templates', 'css', 'fonts', 'images', 'svg'],
+		['js:vendor', 'js:templates', 'css', 'fonts', 'images', 'svg', 'htaccess'],
         'js:files',
         'html',
-		'htaccess',
         callback);
 });
 
 gulp.task('production', function (callback) {
     runSequence(['clean:dist'],
         'jshint',
-        ['js:vendor', 'js:templates', 'css', 'fonts', 'images', 'svg'],
-        'js:files',
+		'tag',
+		['js:vendor', 'js:templates', 'css', 'fonts', 'images', 'svg', 'htaccess'],
         'compile:js',
         'compile:clean',
         'html',
-		'htaccess',
         callback);
 });
 
@@ -84,21 +83,45 @@ gulp.task('env', function () {
     }
 });
 
+gulp.task('bump', function() {
+	gulp.src('./package.json')
+		.pipe(bump({
+			type:'patch'
+		}))
+		.pipe(gulp.dest('./'));
+});
+
+gulp.task('tag', ['bump'], function() {
+	// This doesn't work, because require uses caching
+	//  var config = require('./package.json');
+	pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
+});
+
+gulp.task('minor', function(){
+	gulp.src('./package.json')
+		.pipe(bump({type:'minor'}))
+		.pipe(gulp.dest('./'));
+});
+
+gulp.task('mayor', function(){
+	gulp.src('./package.json')
+		.pipe(bump({type:'mayor'}))
+		.pipe(gulp.dest('./'));
+});
+
 // clean public folder
 gulp.task('clean:dist', function () {
     // we don't want to remove favicons
     // and the main file either
     del.sync([
         config.paths.output + '**/*',
-        '!' + config.paths.output + '.htaccess',
         '!' + config.paths.output + 'favicon.ico',
         '!' + config.paths.output + 'favicon.png',
         '!' + config.paths.output + 'apple-touch-icon-57x57-precomposed.png',
         '!' + config.paths.output + 'apple-touch-icon-72x72-precomposed.png',
         '!' + config.paths.output + 'apple-touch-icon-114x114-precomposed.png',
         '!' + config.paths.output + 'apple-touch-icon-144x144-precomposed.png',
-        '!' + config.paths.output + 'apple-touch-icon.png',
-        '!' + config.paths.output + 'index.php'
+        '!' + config.paths.output + 'apple-touch-icon.png'
     ], {force: true});
 });
 
@@ -169,7 +192,6 @@ gulp.task('compile:js', function () {
             config.js.files.output + 'app.js'
         ])
         .pipe(plumber())
-        .pipe(header(config.banner.min, {pkg: pkg}))
         .pipe(concat(filename))
         .pipe(rename({
             suffix: '.min'
@@ -177,6 +199,7 @@ gulp.task('compile:js', function () {
         .pipe(uglify({
             outSourceMap: filename + '.map'
         }))
+		.pipe(header(config.banner.min, {pkg: pkg}))
         .pipe(gulp.dest(config.js.files.output));
 });
 
