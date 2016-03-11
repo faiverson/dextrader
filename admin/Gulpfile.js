@@ -54,6 +54,7 @@ gulp.task('build', function(callback) {
 		['js:vendor', 'js:templates', 'css', 'fonts', 'sounds', 'images', 'svg'],
 		'js:files',
 		'html',
+		'htaccess',
 		callback);
 });
 
@@ -65,6 +66,7 @@ gulp.task('production', function(callback) {
 		'compile:js',
 		'compile:clean',
 		'html',
+		'htaccess',
 		callback);
 });
 
@@ -108,6 +110,12 @@ gulp.task('clean:test', function () {
 		config.test.coverage,
 		config.test.results
 	]);
+});
+
+gulp.task('htaccess', function () {
+	return gulp.src(config.htaccess.input)
+		.pipe(rename(config.htaccess.output))
+		.pipe(gulp.dest(config.paths.output));
 });
 
 // create a file with all JS vendors

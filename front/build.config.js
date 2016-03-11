@@ -25,6 +25,10 @@ module.exports = {
         output: '../public_html/front/',
         server_path: '../public_html'
     },
+	htaccess: {
+		input: 'src/.htaccess',
+		output: '.htaccess'
+	},
     js: {
         vendor: {
             input: [
