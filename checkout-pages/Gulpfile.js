@@ -52,6 +52,7 @@ gulp.task('build', function (callback) {
         ['js:vendor', 'js:templates', 'css', 'fonts', 'images', 'svg'],
         'js:files',
         'html',
+		'htaccess',
         callback);
 });
 
@@ -63,6 +64,7 @@ gulp.task('production', function (callback) {
         'compile:js',
         'compile:clean',
         'html',
+		'htaccess',
         callback);
 });
 
@@ -106,6 +108,12 @@ gulp.task('clean:test', function () {
         config.test.coverage,
         config.test.results
     ]);
+});
+
+gulp.task('htaccess', function () {
+	return gulp.src(config.htaccess.input)
+		.pipe(rename(config.htaccess.output))
+		.pipe(gulp.dest(config.paths.output));
 });
 
 // create a file with all JS vendors
@@ -211,7 +219,7 @@ gulp.task('fonts', function () {
 gulp.task('images', function () {
 	return gulp.src(config.assets.images.input)
 		.pipe(plumber())
-		.pipe(gulpif(environment === 'local', imagemin({
+		.pipe(gulpif(environment !== 'local', imagemin({
 			optimizationLevel: 5,
 			progressive: true,
 			interlaced: true

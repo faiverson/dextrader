@@ -25,7 +25,11 @@ module.exports = {
         output: '../public_html/sales/',
         server_path: '../public_html'
     },
-    js: {
+	htaccess: {
+		input: 'src/.htaccess',
+		output: '.htaccess'
+	},
+	js: {
         vendor: {
             input: [
                 'vendor/jquery/dist/jquery.js',
