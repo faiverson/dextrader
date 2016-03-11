@@ -73,7 +73,7 @@ class TransactionController extends Controller
 		}
 
 		// if everything is ok, we set the user and create the invoice
-		if(array_key_exists('responsetext', $response) && strtolower($response['responsetext']) == 'success') {
+		if(array_key_exists('response', $response) && $response['response'] == '1') {
 			$purchase = $this->transaction->purchase($response);
 			if(!$purchase) {
 				return response()->error($this->transaction->errors());
@@ -84,7 +84,7 @@ class TransactionController extends Controller
 			$this->transaction->addLead($response);
 			Event::fire(new CheckoutFailedEvent($response));
 			Log::info('Merchant', $response);
-			if(!array_key_exists('responsetext', $response)) {
+			if(!array_key_exists('response', $response)) {
 				$response['gateway_message'] = 'There is a problem with the Merchant. Please contact support to solve the problem!';
 			}
 			return response()->error($response['gateway_message']);
@@ -117,7 +117,7 @@ class TransactionController extends Controller
 		}
 
 		// if everything is ok, we set the user and create the invoice
-		if(array_key_exists('responsetext', $response) && strtolower($response['responsetext']) == 'success') {
+		if(array_key_exists('response', $response) && $response['response'] == '1') {
 			$purchase = $this->transaction->purchase($response);
 			if(!$purchase) {
 				return response()->error($this->transaction->errors());
@@ -127,10 +127,10 @@ class TransactionController extends Controller
 		}
 		else {
 			Log::info('Merchant', $response);
-			if(!array_key_exists('responsetext', $response)) {
-				$response['responsetext'] = 'There is a problem with the Merchant. Please contact support to solve the problem!';
+			if(!array_key_exists('response', $response)) {
+				$response['gateway_message'] = 'There is a problem with the Merchant. Please contact support to solve the problem!';
 			}
-			return response()->error($response['responsetext']);
+			return response()->error($response['gateway_message']);
 		}
 
 		try {

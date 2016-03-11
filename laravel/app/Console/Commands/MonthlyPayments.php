@@ -69,7 +69,7 @@ class MonthlyPayments extends Command
 					$data = array_merge($gateway, $data);
 				}
 
-				if(array_key_exists('responsetext', $gateway) && strtolower($gateway['responsetext']) == 'success') {
+				if(array_key_exists('response', $response) && $response['response'] == '1') {
 					$response = $this->subscription->renewed($subscription);
 					if(!$response) {
 						$this->warn('Error in subscription renewed');

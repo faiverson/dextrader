@@ -202,7 +202,7 @@ class TransactionGateway extends AbstractGateway {
 		}
 		else {
 			// when there is a free offer
-			$gateway['responsetext'] = 'success';
+			$gateway['responsetext'] = 'Approved';
 			$gateway['response'] = 1;
 			$gateway['response_code'] = 10;
 		}
@@ -582,7 +582,7 @@ class TransactionGateway extends AbstractGateway {
 		}
 		else {
 			// when there is a free offer
-			$gateway['responsetext'] = 'success';
+			$gateway['responsetext'] = 'Approved';
 			$gateway['response'] = 1;
 			$gateway['response_code'] = 11; //upgrade code amount 0
 		}
@@ -653,7 +653,8 @@ class TransactionGateway extends AbstractGateway {
 			} else {
 				$data = array_merge($gateway, $ts);
 			}
-			if(!array_key_exists('responsetext', $gateway) && strtolower($gateway['responsetext']) == 'success') {
+
+			if(!array_key_exists('response', $response) && $response['response'] != '1') {
 				$this->errors = [$response['responsetext']];
 				return false;
 			}
