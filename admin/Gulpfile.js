@@ -39,6 +39,7 @@ var gulp = require('gulp'),
 	connect = require('connect'),
 	replace = require('gulp-replace-task'),
 	bump = require('gulp-bump'),
+	tag_version = require('gulp-tag-version'),
 	environment,
 	pkg,
 	dotenv = require('dotenv').config({path: '../laravel/.env'}),
@@ -87,23 +88,20 @@ gulp.task('env', function() {
 });
 
 gulp.task('bump', function() {
-	gulp.src('./package.json')
+	return gulp.src('./package.json')
 		.pipe(bump({
-			type:'patch'
+			type: process.argv[3] ? process.argv[3].substr(2) : 'patch'
 		}))
-		.pipe(gulp.dest('./'));
+		.pipe(gulp.dest('./'))
+		.pipe(tag_version({
+			prefix: 'admin.v'
+		}));
 });
 
 gulp.task('tag', ['bump'], function() {
 	// This doesn't work, because require uses caching
 	//  var config = require('./package.json');
 	pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
-});
-
-gulp.task('minor', function(){
-	gulp.src('./package.json')
-		.pipe(bump({type:'minor'}))
-		.pipe(gulp.dest('./'));
 });
 
 gulp.task('mayor', function(){

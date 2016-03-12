@@ -37,6 +37,7 @@ var gulp = require('gulp'),
     sInject = require('gulp-inject-string'),
     replace = require('gulp-replace-task'),
 	bump = require('gulp-bump'),
+	tag_version = require('gulp-tag-version'),
     dotenv = require('dotenv').config({path: '../laravel/.env'}),
 	environment,
 	pkg,
@@ -61,6 +62,7 @@ gulp.task('production', function (callback) {
         'jshint',
 		'tag',
 		['js:vendor', 'js:templates', 'css', 'fonts', 'images', 'svg', 'htaccess'],
+		'js:files',
         'compile:js',
         'compile:clean',
         'html',
@@ -71,7 +73,6 @@ gulp.task('default', ['env']);
 
 gulp.task('dev', ['env', 'watch']);
 
-// TASKS
 // set the environment
 gulp.task('env', function () {
     environment = process.env.APP_ENV;
@@ -84,29 +85,20 @@ gulp.task('env', function () {
 });
 
 gulp.task('bump', function() {
-	gulp.src('./package.json')
+	return gulp.src('./package.json')
 		.pipe(bump({
-			type:'patch'
+			type: process.argv[3] ? process.argv[3].substr(2) : 'patch'
 		}))
-		.pipe(gulp.dest('./'));
+		.pipe(gulp.dest('./'))
+		.pipe(tag_version({
+			prefix: 'sales.v'
+		}));
 });
 
 gulp.task('tag', ['bump'], function() {
 	// This doesn't work, because require uses caching
 	//  var config = require('./package.json');
 	pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
-});
-
-gulp.task('minor', function(){
-	gulp.src('./package.json')
-		.pipe(bump({type:'minor'}))
-		.pipe(gulp.dest('./'));
-});
-
-gulp.task('mayor', function(){
-	gulp.src('./package.json')
-		.pipe(bump({type:'mayor'}))
-		.pipe(gulp.dest('./'));
 });
 
 // clean public folder
@@ -242,11 +234,11 @@ gulp.task('fonts', function () {
 gulp.task('images', function () {
 	return gulp.src(config.assets.images.input)
 		.pipe(plumber())
-		.pipe(gulpif(environment !== 'local', imagemin({
-			optimizationLevel: 5,
-			progressive: true,
-			interlaced: true
-		})))
+		//.pipe(gulpif(environment !== 'local', imagemin({
+		//	optimizationLevel: 5,
+		//	progressive: true,
+		//	interlaced: true
+		//})))
 		.pipe(gulp.dest(config.assets.images.output));
 });
 

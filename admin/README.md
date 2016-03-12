@@ -87,3 +87,10 @@ ng-launchpad/
   Templates in `src/modules` are added to Angular's template cache and
   bundled into `templates-modules` module in file `templates-modules.js`.
   Template names are without `src/common` or `src/modules` prefix.
+
+### Git tag with Gulp
+You can run the follow commands
+gulp
+gulp production
+gulp production  --minor *Recommended for a new feature
+gulp production --major *Recommended for a new release
