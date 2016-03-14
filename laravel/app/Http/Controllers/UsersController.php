@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Libraries\eWallet\eWallet;
 use Config;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class UsersController extends Controller
 {
@@ -80,7 +81,15 @@ class UsersController extends Controller
 		if(!$user) {
 			return response()->error($this->gateway->errors()->all());
 		}
-        return response()->ok((array('user_id' => $user->id)));
+
+		try {
+			$token = Token::add($user->id);
+		}
+		catch (JWTException $e) {
+			return response()->error('Could not create a token', $e->getStatusCode());
+		}
+
+		return response()->ok(array_merge($user, compact('token')));
     }
 
     /**

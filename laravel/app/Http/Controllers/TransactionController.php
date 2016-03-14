@@ -90,7 +90,14 @@ class TransactionController extends Controller
 			return response()->error($response['gateway_message']);
 		}
 
-		return response()->ok($response);
+		try {
+			$token = Token::refresh($request);
+		}
+		catch (JWTException $e) {
+			return response()->error('Could not create a token', $e->getStatusCode());
+		}
+
+		return response()->ok(array_merge($response, compact('token')));
 	}
 
 	/**

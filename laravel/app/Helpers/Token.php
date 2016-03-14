@@ -59,7 +59,7 @@ class Token {
 		return $payload;
 	}
 
-	public static function refresh($request)
+	public static function refresh($request, $remove = false)
 	{
 		$old_token = JWTAuth::setRequest($request)->getToken();
 		$payload = JWTAuth::setRequest($request)->getPayload();
@@ -69,7 +69,7 @@ class Token {
 		$customClaims['exp'] = strtotime('+7 days', time());
 		unset($customClaims['id']);
 		$token = JWTAuth::fromUser($user, $customClaims);
-		if($token) {
+		if($token && $remove) {
 			JWTAuth::invalidate($old_token);
 		}
 		return $token;
