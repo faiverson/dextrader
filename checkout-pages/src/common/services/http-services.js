@@ -253,7 +253,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         };
     }])
 
-    .factory('CheckoutService', ['$q', '$site-configs', '$http', function ($q, $config, $http) {
+    .factory('CheckoutService', ['$q', '$site-configs', '$http', 'localStorageService', function ($q, $config, $http, localStorageService) {
         var service = $config.API_BASE_URL + 'checkout';
 
         function send(data) {
@@ -261,6 +261,12 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 deferred = $q.defer();
 
             function success(res) {
+
+				if (angular.isDefined(res.data.data) && angular.isDefined(res.data.data.token)) {
+					// Set the token into local storage
+					localStorageService.set('token', res.data.data.token);
+				}
+
                 deferred.resolve(res.data);
             }
 
@@ -555,8 +561,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                     return enroller;
                 }
             }
-
-            return;
+			return 'admin'; // it means no enroller found or set
         }
 
         function setEnroller(enroller) {

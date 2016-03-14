@@ -1589,7 +1589,6 @@ input[type="checkbox"]:checked + label  { background-image: url('/assets/images/
 .bg-gray                                { background-color: #f8f8f8 }
 #login-details>h3                       { font-size: 20px }
 #login-details                          {
-    height: 305px;
     background-color: #f6f1eb;
     border: 1px solid #ff4e00;
 }

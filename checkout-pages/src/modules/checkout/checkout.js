@@ -296,8 +296,12 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             };
 
             vm.success = function (res) {
-                var invoice_details = res.data;
+                var invoice_details = res.data,
+					token = res.data.token;
                 $scope.working = false;
+				if(invoice_details.hasOwnProperty('token')) {
+					delete invoice_details['token'];
+				}
                 InvoicesService.setInvoice(invoice_details);
 
                 //forcing the user to go to thankyou page for IB and IB PRO for free
@@ -307,7 +311,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                     $state.go('upsell');
                 }
 
-                Notification.success('Congratulations!!! Account has been created!');
+                Notification.success('Congratulations!!! Your account has been created!');
             };
 
             vm.error = function (err) {

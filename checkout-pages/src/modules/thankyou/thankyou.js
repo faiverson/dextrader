@@ -16,14 +16,7 @@ angular.module('app.thankyou', ['ui.router'])
             var vm = this;
 
             $scope.login = function () {
-
-                $scope.$broadcast('show-errors-check-validity');
-
-                if ($scope.loginFormDetails.$valid) {
-                    AuthService.userLogin($scope.user.username, $scope.user.password)
-                        .then(vm.successLogin, vm.errorLogin);
-                }
-
+				window.location.href = $configs.DASHBOARD_URL; // + "/doLogin?token=" + res.data.token;
             };
 
             $scope.totalInvoices = function (invoices) {
@@ -61,14 +54,6 @@ angular.module('app.thankyou', ['ui.router'])
                 }
 
                 return amount;
-            };
-
-            vm.successLogin = function (res) {
-                window.location.href = $configs.DASHBOARD_URL + "/doLogin?token=" + res.data.token;
-            };
-
-            vm.errorLogin = function (err) {
-                Notification.error(err.error);
             };
 
             vm.loadInvoice = function () {

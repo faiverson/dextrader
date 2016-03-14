@@ -13,112 +13,88 @@
 </header>
 
 <section id="content" class="thank-you clearfix ty-content">
-    <div class="content-right ty-content">
-        <div id="login-details">
-            <h3 class="login-details-title">Your Login Details</h3>
-
-            <form class="login-form-details" id="loginFormDetails" name="loginFormDetails" novalidate="novalidate">
-                <div class="form-group has-feedback" data-show-errors>
-                    <label for="email">Username</label>
-                    <input type="text"
-                           name="email"
-                           class="form-control"
-                           id="email"
-                           required
-                           placeholder="Username or E-Mail"
-                           data-ng-model="user.username">
-                    <span class="glyphicon glyphicon-envelope form-control-feedback" aria-hidden="true"></span>
-                </div>
-                <div class="form-group has-feedback" data-show-errors>
-                    <label for="password">Password</label>
-                    <input type="password"
-                           name="password"
-                           class="form-control"
-                           id="password"
-                           required
-                           placeholder="Password"
-                           data-ng-model="user.password">
-                    <span class="glyphicon glyphicon-lock form-control-feedback" aria-hidden="true"></span>
-                </div>
-                <button class="text-left btn btn-warning btn-block submitbutton bg-orange" style="text-align: left"
-                        data-ng-disabled="loginFormDetails.$invalid"
-                        data-ng-click="login()"
-                        type="submit">Continue to the Back Office</button>
-            </form>
-        </div>
-        <h3>Billed To</h3>
-
-        <div id="billed-to">
-            <h3 class="size17 bold">{{invoices[0].first_name}} {{invoices[0].last_name}}</h3>
-            {{invoices[0].billing_address}},
-            {{invoices[0].billing_zip}}
-        </div>
-        <div id="billing-data" class="bg-gray">
-            <div class="clearfix">
-                <div class="left">
-                    Payment Method
-                </div>
-                <div class="right">
-                    Credit Card
-                </div>
-            </div>
-            <div class="clearfix">
-                <div class="left">
-                    Order Date
-                </div>
-                <div class="right">
-                    {{order_date}}
-                </div>
-            </div>
-            <div class="bold">
-                Statement Descriptor
-                <p>
-                    On your bank statement you may see different descriptors including DEX Trader, DexTrader.com,
-                    Infinite Leverage. This is due to us using multiple credit card merchant accounts for the different
-                    products we offer.
-                </p>
-            </div>
-        </div>
+    <div class="content-right ty-content" style="height: 310px">
+		<div id="login-details">
+			<button class="text-left btn btn-warning btn-block submitbutton bg-orange" style="text-align: left"
+					data-ng-click="login()"
+					type="submit">Continue to the Back Office</button>
+		</div>
     </div>
-    <div class="content-left ty-content">
+    <div class="content-left ty-content" >
         <div id="ty-video">
             <iframe id="video-player" type="text/html"
                     src="https://www.youtube.com/embed/lYKRPzOi1zI?autoplay=0&amp;controls=0&amp;showinfo=0"
                     frameborder="0"></iframe>
         </div>
-        <h3>Order Summary</h3>
-
-        <div id="billing-items" class="bg-gray">
-            <div id="b-items-head" class="clearfix">
-                <div class="left">
-                    ITEM
-                </div>
-                <div class="right">
-                    PRICE
-                </div>
-            </div>
-            <div class="clearfix" data-ng-repeat="invoice in invoices">
-                <div data-ng-repeat="prd in invoice.products">
-                    <div class="left">
-                    <span class="bold">{{prd.product_display_name}}</span> – {{getProductPrice(invoice, prd.product_id) | currency:'$'}} today and the re-bills for {{prd.product_amount | currency:'$'}} every
-                    30 days until you decide to cancel
-                </div>
-                    <div class="right">
-                    {{getProductPrice(invoice, prd.product_id) | currency:'$'}}
-                </div>
-                </div>
-            </div>
-            <div id="checkout-total" class="clearfix">
-                <div class="left">
-                    Total
-                </div>
-                <div class="right">
-                    {{totalInvoices(invoices) | currency:'$'}}
-                </div>
-            </div>
-            <p>
-                Immediate access to this product or service is available once payment is approved.
-            </p>
-        </div>
     </div>
+	<div class="clearfix"></div>
+	<div class="content-right ty-content">
+		<h3>Billed To</h3>
+		<div id="billed-to">
+			<h3 class="size17 bold">{{invoices[0].first_name}} {{invoices[0].last_name}}</h3>
+			{{invoices[0].billing_address}},
+			{{invoices[0].billing_zip}}
+		</div>
+		<div id="billing-data" class="bg-gray">
+			<div class="clearfix">
+				<div class="left">
+					Payment Method
+				</div>
+				<div class="right">
+					Credit Card
+				</div>
+			</div>
+			<div class="clearfix">
+				<div class="left">
+					Order Date
+				</div>
+				<div class="right">
+					{{order_date}}
+				</div>
+			</div>
+			<div class="bold">
+				Statement Descriptor
+				<p>
+					On your bank statement you may see different descriptors including DEX Trader, DexTrader.com,
+					Infinite Leverage. This is due to us using multiple credit card merchant accounts for the different
+					products we offer.
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class="content-left ty-content">
+		<h3>Order Summary</h3>
+		<div id="billing-items" class="bg-gray">
+			<div id="b-items-head" class="clearfix">
+				<div class="left">
+					ITEM
+				</div>
+				<div class="right">
+					PRICE
+				</div>
+			</div>
+			<div class="clearfix" data-ng-repeat="invoice in invoices">
+				<div data-ng-repeat="prd in invoice.products">
+					<div class="left">
+						<span class="bold">{{prd.product_display_name}}</span> – {{getProductPrice(invoice, prd.product_id) | currency:'$'}} today and the re-bills for {{prd.product_amount | currency:'$'}} every
+						30 days until you decide to cancel
+					</div>
+					<div class="right">
+						{{getProductPrice(invoice, prd.product_id) | currency:'$'}}
+					</div>
+				</div>
+			</div>
+			<div id="checkout-total" class="clearfix">
+				<div class="left">
+					Total
+				</div>
+				<div class="right">
+					{{totalInvoices(invoices) | currency:'$'}}
+				</div>
+			</div>
+			<p>
+				Immediate access to this product or service is available once payment is approved.
+			</p>
+		</div>
+	</div>
 </section>

@@ -374,6 +374,13 @@ angular.module('app.user-profile', [])
                     }
                 });
 
+				tmpTransaction = angular.forEach( tmpTransaction, function ( value, key) {
+					var nKey = key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase();
+					nKey = nKey.replace(/_/g, ' ');
+					tmpTransaction[nKey] = value;
+					delete tmpTransaction[key];
+				});
+
                 var modalInstance = $uibModal.open({
                     templateUrl: 'transactionDetails.html',
                     controller: ['$scope', 'properties', '$uibModalInstance', function ($scope, properties, $uibModalInstance) {
