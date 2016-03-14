@@ -33,11 +33,8 @@
     </form>
 </div>
 <div class="modal-footer">
-	<confirmation text="{{ isActive() && 'Cancel' || 'ReActive' }}" on-confirm="checkStatus()"></confirmation>
+	<confirmation text="{{ isActive() && 'Cancel Subscription' || 'ReActive Subscription' }}" on-confirm="checkStatus()"></confirmation>
 	<button type="submit" data-ng-disabled="ccForm.$invalid" class="btn btn-warning"
-			data-ng-click="save()">Save
-	</button>
-    <button type="button" class="btn btn-default"
-            data-ng-click="close()">Cancel
-    </button>
+			data-ng-click="save()">Update Subscription
+	</button> 
 </div>
