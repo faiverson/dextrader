@@ -4,7 +4,7 @@
     "angular": "^1.4.7",
     "angular-ui-router": "^0.2.15",
     "bootstrap": "^3.3.5",
-	"angular-bootstrap": "^1.2.4",
+    "angular-bootstrap": "^1.2.4",
     "jquery": "^2.1.1",
     "angular-bootstrap-show-errors": "~2.3.0",
     "angular-ui-notification": "~0.1.0",
@@ -14,7 +14,8 @@
     "moment": "~2.10.6",
     "angular-ui-mask": "~1.6.5",
     "angular-loading-bar": "~0.8.0",
-    "xtform": "~2.0.0-beta.2"
+    "xtform": "~2.0.0-beta.2",
+    "angular-autodisable": "^0.2.2"
   },
   "devDependencies": {
     "angular-cookies": "~1.4.7",

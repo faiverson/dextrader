@@ -48,14 +48,14 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
             var vm = this;
 
             $scope.login = function () {
-
+                var prom;
                 $scope.$broadcast('show-errors-check-validity');
 
                 if ($scope.loginForm.$valid) {
-                    AuthService.login($scope.username, $scope.password)
-                        .then(vm.successLogin, vm.errorLogin);
+                    prom = AuthService.login($scope.username, $scope.password);
+                    prom.then(vm.successLogin, vm.errorLogin);
                 }
-
+                return prom;
             };
 
             vm.successLogin = function () {

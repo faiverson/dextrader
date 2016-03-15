@@ -24,19 +24,20 @@ angular.module('app.sign-up-modal-form', [])
             };
 
             $scope.send = function () {
-                var proms = [];
+                var prom;
 
                 if ($scope.formCheckout.$valid) {
 
                     $scope.userData.username = $scope.userData.email.split('@')[0];
 
-                    UserService.signUp($scope.userData)
-                        .then(vm.success, vm.error);
+                    prom = UserService.signUp($scope.userData);
+                    prom.then(vm.success, vm.error);
 
                 } else {
                     $scope.$broadcast('show-errors-check-validity');
                 }
 
+                return prom;
             };
 
             vm.success = function (res) {

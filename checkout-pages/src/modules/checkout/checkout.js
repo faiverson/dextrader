@@ -107,7 +107,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
 
             $scope.userData = {};
 
-			$scope.model = {};
+            $scope.model = {};
 
             vm.feelExpMonth = function () {
                 $scope.months = [];
@@ -131,7 +131,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             };
 
             $scope.send = function () {
-                var proms = [];
+                var deferred = $q.defer();
                 var offers_id = [];
                 $scope.showAgreementWarning = angular.isUndefined($scope.formData.terms);
 
@@ -153,34 +153,52 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                     }
 
 
-                    if($scope.products.length > 0){
+                    if ($scope.products.length > 0) {
                         angular.forEach($scope.products, function (prd) {
-                            if(angular.isDefined(prd.offer_id)){
+                            if (angular.isDefined(prd.offer_id)) {
                                 offers_id.push(prd.offer_id);
                             }
                         });
 
-                        if(offers_id.length > 0){
+                        if (offers_id.length > 0) {
                             $scope.formData.offer_id = offers_id;
                         }
                     }
 
                     if (angular.isDefined($scope.formData.user_id)) {
                         CheckoutService.send($scope.formData, $scope.token)
-                            .then(vm.success, vm.error);
+                            .then(vm.success, vm.error)
+                            .then(function () {
+                                deferred.resolve();
+                            }, function () {
+                                deferred.reject();
+                            });
                     } else {
-                        UserService.send($scope.userData).then(function (res) {
-                            $scope.formData.user_id = res.data.user_id;
-                            CheckoutService.send($scope.formData, $scope.token)
-                                .then(vm.success, vm.error);
+                        UserService.send($scope.userData)
+                            .then(function (res) {
+                                $scope.formData.user_id = res.data.user_id;
+                                CheckoutService.send($scope.formData, $scope.token)
+                                    .then(vm.success, vm.error)
+                                    .then(function () {
+                                        deferred.resolve();
+                                    }, function () {
+                                        deferred.reject();
+                                    });
 
-                        }, vm.error);
+                            }, vm.error)
+                            .then(function () {
+                                //wait for checkout response
+                            }, function () {
+                                deferred.reject();
+                            });
                     }
 
                 } else {
                     $scope.$broadcast('show-errors-check-validity');
+                    deferred.reject();
                 }
 
+                return deferred.promise;
             };
 
             $scope.getCountry = function (q) {
@@ -298,15 +316,15 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             vm.success = function (res) {
                 var invoice_details = res.data;
                 $scope.working = false;
-				if(invoice_details.hasOwnProperty('token')) {
-					delete invoice_details['token'];
-				}
+                if (invoice_details.hasOwnProperty('token')) {
+                    delete invoice_details['token'];
+                }
                 InvoicesService.setInvoice(invoice_details);
 
                 //forcing the user to go to thankyou page for IB and IB PRO for free
-                if(product.id.length > 1){
+                if (product.id.length > 1) {
                     $state.go('thankyou');
-                }else{
+                } else {
                     $state.go('upsell');
                 }
 
@@ -322,19 +340,19 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                             Notification.error(e);
                         });
                     }
-					else if(angular.isObject( err.data.error )) {
-						angular.forEach(err.data.error, function (value, key) {
-							if (angular.isArray(value)) {
-								angular.forEach(value, function (response) {
-									Notification.error(response);
-								});
-							}
-							else {
-								Notification.error(value);
-							}
-						});
-					}
-					else {
+                    else if (angular.isObject(err.data.error)) {
+                        angular.forEach(err.data.error, function (value, key) {
+                            if (angular.isArray(value)) {
+                                angular.forEach(value, function (response) {
+                                    Notification.error(response);
+                                });
+                            }
+                            else {
+                                Notification.error(value);
+                            }
+                        });
+                    }
+                    else {
                         Notification.error(err.data.error);
                     }
                 } else {

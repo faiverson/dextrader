@@ -49,7 +49,8 @@ module.exports = {
                 'vendor/angular-ui-mask/dist/mask.js',
                 'vendor/angular-loading-bar/build/loading-bar.js',
                 'vendor/xtform/dist/xtForm.js',
-                'vendor/xtform/dist/xtForm.tpl.js'
+                'vendor/xtform/dist/xtForm.tpl.js',
+                'vendor/angular-autodisable/src/angular-autodisable.js'
             ],
             output: 'vendor.js'
         },

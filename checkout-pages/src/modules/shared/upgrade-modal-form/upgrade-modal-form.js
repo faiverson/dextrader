@@ -18,7 +18,7 @@ angular.module('app.upgrade-modal-form', [])
 			};
 
 			$scope.send = function () {
-
+				var prom;
 				$scope.showAgreementWarning = angular.isUndefined($scope.formData.terms);
 
 				if ($scope.formCheckout.$valid) {
@@ -31,14 +31,15 @@ angular.module('app.upgrade-modal-form', [])
 					$scope.formData.info = osInfo.getOS();
 
 					if (InvoicesService.getInvoices().length > 0  && angular.isDefined(InvoicesService.getInvoices()[0].user_id)) {
-						CheckoutService.upgrade($scope.formData, InvoicesService.getInvoices()[0].user_id)
-							.then(vm.success, vm.error);
+						prom = CheckoutService.upgrade($scope.formData, InvoicesService.getInvoices()[0].user_id);
+						prom.then(vm.success, vm.error);
 					}
 
 				} else {
 					$scope.$broadcast('show-errors-check-validity');
 				}
 
+				return prom;
 			};
 
             vm.setUserData = function () {

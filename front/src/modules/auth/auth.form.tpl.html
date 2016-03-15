@@ -2,7 +2,7 @@
     <h1>Login</h1>
 
     <div id="login-box">
-        <form name="loginForm" novalidate="novalidate" data-ng-submit="login()">
+        <form name="loginForm" novalidate="novalidate" data-ng-submit="login()" ng-autodisable>
             <div class="form-group has-feedback" data-show-errors>
                 <!--<label for="username">Username</label>-->
                 <input type="text"
@@ -31,10 +31,9 @@
             <div id="form-login-links">
                 <a id="form-login-forgotten" data-ng-click="openForgotPassword()">Forgot Password?</a>
                 <!--<a id="form-login-submit" class="button bg-orange" href="#">Login</a>-->
-                <input type="submit"
+                <button type="submit"
                        id="form-login-submit"
-                       value="Login"
-                       class="button btn btn-warning"/>
+                       class="btn button btn btn-warning">Login</button>
 
                 <div class="clear"></div>
             </div>
