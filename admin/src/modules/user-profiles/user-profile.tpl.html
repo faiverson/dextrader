@@ -32,6 +32,7 @@
                         <table class="table table-striped ">
                             <thead>
                             <tr>
+                                <th>ID #</th>
                                 <th>Address</th>
                                 <th>City</th>
                                 <th>State</th>
@@ -43,6 +44,7 @@
                             </thead>
                             <tbody>
                             <tr data-ng-repeat="ba in billing_addresses">
+                                <td>{{ba.address_id}}</td>
                                 <td>{{ba.address}}</td>
                                 <td>{{ba.city}}</td>
                                 <td>{{ba.state}}</td>
@@ -63,6 +65,7 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
+                                <th>Id #</th>
                                 <th>Name</th>
                                 <th>First Six</th>
                                 <th>Last Four</th>
@@ -73,6 +76,7 @@
                             </thead>
                             <tbody>
                             <tr data-ng-repeat="cc in credit_cards">
+                                <td>{{cc.cc_id}}</td>
                                 <td>{{cc.name}}</td>
                                 <td>{{cc.first_six}}</td>
                                 <td>{{cc.last_four}}</td>
@@ -92,6 +96,7 @@
                         <table class="table table-striped table-invoices">
                             <thead>
                             <tr>
+								<th>Id #</th>
                                 <th>Date</th>
                                 <th>Detail</th>
                                 <th>Billed to</th>
@@ -101,7 +106,8 @@
                             </thead>
                             <tbody>
                             <tr data-ng-repeat="invoice in invoices">
-                                <td>{{invoice.created_at | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY
+								<td>{{invoice.id}}</td>
+								<td>{{invoice.created_at | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY
                                     HH:mm'}}
                                 </td>
                                 <td>
@@ -135,7 +141,8 @@
                         <table class="table table-striped table-invoices">
                             <thead>
                             <tr>
-                                <th>Product</th>
+								<th>Id #</th>
+								<th>Product</th>
                                 <th>Address</th>
                                 <th>Credit Card</th>
                                 <th>Last Billing</th>
@@ -145,10 +152,11 @@
                             </thead>
                             <tbody>
                             <tr data-ng-repeat="subscription in subscriptions">
-                                <td>
-                                    {{subscription.product.display_name}} - {{subscription.product.amount | currency:
-                                    '$'}}
-                                </td>
+                                <td>{{subscription.subscription_id}}</td>
+								<td>
+									{{subscription.product.display_name}} - {{subscription.product.amount | currency:
+									'$'}}
+								</td>
                                 <td class="small">
                                     <p>{{subscription.address.address}} - {{subscription.address.zip}}</p>
 
@@ -182,6 +190,7 @@
                         <table class="table table-striped table-invoices">
                             <thead>
                             <tr>
+                                <th>Id #</th>
                                 <th>Date</th>
                                 <th>Transaction ID</th>
                                 <th>Billed to</th>
@@ -191,9 +200,11 @@
                             </thead>
                             <tbody>
                             <tr data-ng-repeat="transaction in transactions.data">
-                                <td>{{transaction.created_at | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY
-                                    HH:mm'}}
+                                <td>{{transaction.id }}
                                 </td>
+								<td>{{transaction.created_at | amParse: 'YYYY-MM-DD HH:mm:ss' | dateFormat: 'DD MMM YYYY
+									HH:mm'}}
+								</td>
                                 <td>
                                     {{transaction.transactionid}}
                                 </td>
