@@ -11,12 +11,13 @@ angular.module('app.thankyou', ['ui.router'])
             });
     })
 
-    .controller('ThankyouCtrl', ['$scope', 'AuthService', 'Notification', '$site-configs', 'InvoicesService', '$stateParams', '$filter',
-        function ($scope, AuthService, Notification, $configs, InvoicesService, $stateParams, $filter) {
+    .controller('ThankyouCtrl', ['$scope', 'AuthService', 'Notification', '$site-configs', 'InvoicesService', '$stateParams', '$filter', 'localStorageService',
+        function ($scope, AuthService, Notification, $configs, InvoicesService, $stateParams, $filter, localStorageService) {
             var vm = this;
 
             $scope.login = function () {
-				window.location.href = $configs.DASHBOARD_URL; // + "/doLogin?token=" + res.data.token;
+				var token = localStorageService.get('user-token');
+				window.location.href = $configs.DASHBOARD_URL + "/doLogin?token=" + token;
             };
 
             $scope.totalInvoices = function (invoices) {

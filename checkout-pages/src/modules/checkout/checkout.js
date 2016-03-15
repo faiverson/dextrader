@@ -137,7 +137,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
 
                 if ($scope.formCheckout.$valid) {
                     $scope.working = true;
-                    $scope.formData.data = vm.getUserBrowserData();
+                    $scope.formData.info = vm.getUserBrowserData();
 
                     if (angular.isDefined($stateParams.user) && $stateParams.user.length > 0) {
                         $scope.formData.enroller = $stateParams.user;
@@ -296,8 +296,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             };
 
             vm.success = function (res) {
-                var invoice_details = res.data,
-					token = res.data.token;
+                var invoice_details = res.data;
                 $scope.working = false;
 				if(invoice_details.hasOwnProperty('token')) {
 					delete invoice_details['token'];
@@ -339,7 +338,7 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                         Notification.error(err.data.error);
                     }
                 } else {
-                    Notification.error('Oops! something went wrong! Contact with support!');
+                    Notification.error('Oops! Something went wrong! Contact with support!');
                 }
             };
 

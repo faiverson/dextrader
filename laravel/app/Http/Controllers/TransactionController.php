@@ -76,6 +76,7 @@ class TransactionController extends Controller
 		if(array_key_exists('response', $response) && $response['response'] == '1') {
 			$purchase = $this->transaction->purchase($response);
 			if(!$purchase) {
+//				$this->transaction->backLastPurchase($response); // going back the transaction
 				return response()->error($this->transaction->errors());
 			}
 			$response = array_merge($response, $purchase);
@@ -91,7 +92,7 @@ class TransactionController extends Controller
 		}
 
 		try {
-			$token = Token::refresh($request);
+			$token = Token::add($response['user_id']);
 		}
 		catch (JWTException $e) {
 			return response()->error('Could not create a token', $e->getStatusCode());
@@ -141,7 +142,7 @@ class TransactionController extends Controller
 		}
 
 		try {
-			$token = Token::refresh($request);
+			$token = Token::add($response['user_id']);
 		}
 		catch (JWTException $e) {
 			return response()->error('Could not create a token', $e->getStatusCode());

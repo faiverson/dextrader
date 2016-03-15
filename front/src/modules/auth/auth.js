@@ -101,7 +101,7 @@ angular.module('app.auth', ['ui.router', 'ui.bootstrap.showErrors'])
 
                         Notification.success("Welcome " + user.full_name);
 
-                        $state.go('dashboard');
+                        $state.go('affiliates.how_it_works');
                     });
                 } else {
                     $state.go('dashboard');

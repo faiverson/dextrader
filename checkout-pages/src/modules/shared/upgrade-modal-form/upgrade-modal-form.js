@@ -1,14 +1,45 @@
 angular.module('app.upgrade-modal-form', [])
-    .controller('UpgradeModalFormCtrl', ['$scope', 'CheckoutService', 'products', '$uibModalInstance', 'Notification', '$state', 'InvoicesService', 'promotionalPrice',
-        function ($scope, CheckoutService, products, $uibModalInstance, Notification, $state, InvoicesService, promotionalPrice) {
+    .controller('UpgradeModalFormCtrl', ['$scope', 'CheckoutService', 'products', '$uibModalInstance', 'Notification', '$state', 'InvoicesService', 'os-info', 'specialOffers',
+        function ($scope, CheckoutService, products, $uibModalInstance, Notification, $state, InvoicesService, osInfo, specialOffers) {
             var vm = this;
 
             $scope.userData = {};
-            $scope.promotionalPrice = promotionalPrice;
+			$scope.promotionalPrice = {
+				initial_payment: specialOffers.amount,
+				future_payments: angular.isDefined(specialOffers.product) ? specialOffers.product.amount : specialOffers.amount
+			};
 
-            $scope.formData = {
+			$scope.formData = {
                 products: products
             };
+
+			$scope.close = function () {
+				$uibModalInstance.dismiss('close');
+			};
+
+			$scope.send = function () {
+
+				$scope.showAgreementWarning = angular.isUndefined($scope.formData.terms);
+
+				if ($scope.formCheckout.$valid) {
+
+					$scope.formData.billing_address_id = $scope.address.address_id;
+					$scope.formData.card_id = $scope.card.cc_id;
+					if(angular.isDefined(specialOffers.offer_id)) {
+						$scope.formData.offer_id = specialOffers.offer_id;
+					}
+					$scope.formData.info = osInfo.getOS();
+
+					if (InvoicesService.getInvoices().length > 0  && angular.isDefined(InvoicesService.getInvoices()[0].user_id)) {
+						CheckoutService.upgrade($scope.formData, InvoicesService.getInvoices()[0].user_id)
+							.then(vm.success, vm.error);
+					}
+
+				} else {
+					$scope.$broadcast('show-errors-check-validity');
+				}
+
+			};
 
             vm.setUserData = function () {
                 var invoice = InvoicesService.getInvoices().length > 0 ? InvoicesService.getInvoices()[0] : {};
@@ -52,45 +83,39 @@ angular.module('app.upgrade-modal-form', [])
                 }
             };
 
-            $scope.send = function () {
-
-                $scope.showAgreementWarning = angular.isUndefined($scope.formData.terms);
-
-                if ($scope.formCheckout.$valid) {
-
-                    $scope.formData.billing_address_id = $scope.address.address_id;
-                    $scope.formData.card_id = $scope.card.cc_id;
-
-                    if (InvoicesService.getInvoices().length > 0  && angular.isDefined(InvoicesService.getInvoices()[0].user_id)) {
-                        CheckoutService.upgrade($scope.formData, InvoicesService.getInvoices()[0].user_id)
-                            .then(vm.success, vm.error);
-                    }
-
-                } else {
-                    $scope.$broadcast('show-errors-check-validity');
-                }
-
-            };
-
             vm.success = function (res) {
                 InvoicesService.setInvoice(res.data);
                 $uibModalInstance.close(res);
             };
 
-            vm.error = function (err) {
-                if (err.data && angular.isDefined(err.data.error)) {
-                    if (angular.isArray(err.data.error)) {
-                        angular.forEach(err.data.error, function (e) {
-                            Notification.error(e);
-                        });
-                    } else {
-                        Notification.error(err.data.error);
-                    }
-
-                } else {
-                    Notification.error('Oops! something went wrong! Contact with support!');
-                }
-
+            vm.error = function (response) {
+				var txt = '';
+				response = response.data;
+				if (response.data && angular.isDefined(response.data.error)) {
+					if (angular.isArray(response.error)) {
+						angular.forEach(response.error, function (item) {
+							txt += item + '<br>';
+						});
+					}
+					else if (angular.isObject(response.error)) {
+						angular.forEach(response.error, function (value, key) {
+							if (angular.isArray(value)) {
+								angular.forEach(value, function (response) {
+									txt += response;
+								});
+							}
+							else {
+								txt += value;
+							}
+						});
+					}
+					else {
+						txt += response.error;
+					}
+				} else {
+					txt += 'Something went wrong! Contact with support!';
+				}
+				Notification.error("Oops! " + txt);
             };
 
             vm.init();

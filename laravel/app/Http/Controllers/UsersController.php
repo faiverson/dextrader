@@ -9,6 +9,7 @@ use App\Http\Requests;
 use App\Libraries\eWallet\eWallet;
 use Config;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Token;
 
 class UsersController extends Controller
 {
@@ -89,7 +90,7 @@ class UsersController extends Controller
 			return response()->error('Could not create a token', $e->getStatusCode());
 		}
 
-		return response()->ok(array_merge($user, compact('token')));
+		return response()->ok(array_merge($user->toArray(), compact('token')));
     }
 
     /**

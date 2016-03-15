@@ -523,7 +523,6 @@ class TransactionGateway extends AbstractGateway {
 
 		// add geo location
 		$data['info'] = array_merge($this->setInfo($data), ['type' => 'upgrade']);
-
 		if(array_key_exists('offer_id', $data)) {
 			$offers = $this->offer->findIn($data['offer_id']);
 			if($offers) {

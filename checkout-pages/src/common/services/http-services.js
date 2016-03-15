@@ -242,6 +242,9 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         function setInvoice(data) {
             var invoices = localStorageService.get('invoices') || [];
 
+			if(invoices.length > 0 && invoices[0].user_id !== data.user_id) {
+				invoices = [];
+			}
             invoices.push(data);
 
             return localStorageService.set('invoices', invoices);
@@ -263,8 +266,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
             function success(res) {
 
 				if (angular.isDefined(res.data.data) && angular.isDefined(res.data.data.token)) {
-					// Set the token into local storage
-					localStorageService.set('token', res.data.data.token);
+					localStorageService.set('user-token', res.data.data.token);
 				}
 
                 deferred.resolve(res.data);
@@ -285,6 +287,10 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 deferred = $q.defer();
 
             function success(res) {
+				if (angular.isDefined(res.data.data) && angular.isDefined(res.data.data.token)) {
+					localStorageService.set('user-token', res.data.data.token);
+				}
+
                 deferred.resolve(res.data);
             }
 
