@@ -567,7 +567,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                     return enroller;
                 }
             }
-			return 'admin'; // it means no enroller found or set
+			return;
         }
 
         function setEnroller(enroller) {
