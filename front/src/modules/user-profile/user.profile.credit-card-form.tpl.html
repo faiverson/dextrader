@@ -94,7 +94,10 @@
     </form>
 </div>
 <div class="modal-footer">
-    <button type="submit" data-ng-disabled="ccForm.$invalid" class="btn btn-warning"
+    <button type="submit"
+            data-ng-disabled="ccForm.$invalid"
+            class="btn btn-warning"
+            ng-autodisable
             data-ng-click="save()">Save
     </button>
     <button type="button" class="btn btn-default"

@@ -29,7 +29,8 @@ angular.module('app', [
         'app.start',
         'app.contact-us',
 		'app.confirmation-popup',
-		'xtForm'
+		'xtForm',
+        'ngAutodisable'
     ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {

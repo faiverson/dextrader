@@ -64,7 +64,7 @@ angular.module('app.upgrade-modal-form', [])
             };
 
             $scope.send = function () {
-                var proms = [];
+                var prom;
                 $scope.showAgreementWarning = angular.isUndefined($scope.formData.terms);
 
                 if ($scope.formCheckout.$valid) {
@@ -73,14 +73,15 @@ angular.module('app.upgrade-modal-form', [])
                     $scope.formData.card_id = $scope.card.cc_id;
 
                     if (angular.isDefined(AuthService.getLoggedInUser().user_id)) {
-                        CheckoutService.send($scope.formData, AuthService.getLoggedInUser().user_id)
-                            .then(vm.success, vm.error);
+                        prom = CheckoutService.send($scope.formData, AuthService.getLoggedInUser().user_id);
+                        prom.then(vm.success, vm.error);
                     }
 
                 } else {
                     $scope.$broadcast('show-errors-check-validity');
                 }
 
+                return prom;
             };
 
             vm.success = function (res) {

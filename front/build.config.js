@@ -57,7 +57,8 @@ module.exports = {
                 'vendor/angular-loading-bar/build/loading-bar.js',
                 'vendor/angular-ui-bootstrap-datetimepicker/datetimepicker.js',
                 'vendor/angular-socket-io/socket.js',
-                'vendor/angular-audio/app/angular.audio.js'
+                'vendor/angular-audio/app/angular.audio.js',
+                'vendor/angular-autodisable/src/angular-autodisable.js'
             ],
             output: 'vendor.js'
         },

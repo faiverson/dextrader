@@ -37,6 +37,7 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
         var vm = this;
 
         $scope.save = function () {
+            var prom;
             if ($scope.userForm.$valid) {
 
                 if (angular.isUndefined($scope.user.password) || $scope.user.password.length === 0) {
@@ -44,12 +45,14 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
                     delete $scope.user.confirm_password;
                 }
 
-                UserService.saveUser($scope.user)
-                    .then(vm.successSaveUser, vm.errorSaveUser);
+                prom = UserService.saveUser($scope.user);
+                prom.then(vm.successSaveUser, vm.errorSaveUser);
 
             } else {
                 $scope.$broadcast('show-errors-check-validity');
             }
+
+            return prom;
         };
 
         vm.successSaveUser = function success(res) {
@@ -57,17 +60,17 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
         };
 
         vm.errorSaveUser = function error(response) {
-			var txt = '';
-			response = response.data;
-			if(angular.isArray(response.error)) {
-				angular.forEach(response.error, function(item) {
-					txt += item + '<br>';
-				});
-			}
-			else {
-				txt += response.error;
-			}
-			Notification.error("Oops! " + txt);
+            var txt = '';
+            response = response.data;
+            if (angular.isArray(response.error)) {
+                angular.forEach(response.error, function (item) {
+                    txt += item + '<br>';
+                });
+            }
+            else {
+                txt += response.error;
+            }
+            Notification.error("Oops! " + txt);
         };
 
         vm.getUser = function () {
@@ -320,14 +323,16 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
 
             $scope.save = function () {
                 //$scope.$broadcast('show-errors-check-validity');
-
+                var prom;
                 if ($scope.ccForm.$valid) {
                     $scope.card.month = $scope.exp_month.id;
                     $scope.card.year = $scope.exp_year.id;
 
-                    CreditCardService.save($scope.card)
-                        .then(vm.saveSuccess, vm.saveError);
+                    prom = CreditCardService.save($scope.card);
+                    prom.then(vm.saveSuccess, vm.saveError);
                 }
+
+                return prom;
             };
 
             vm.init();
@@ -369,13 +374,16 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
             };
 
             $scope.save = function () {
+                var prom;
                 $scope.$broadcast('show-errors-check-validity');
 
                 if ($scope.addressForm.$valid) {
 
-                    BillingAddressService.save($scope.address)
-                        .then(vm.saveSuccess, vm.saveError);
+                    prom = BillingAddressService.save($scope.address);
+                    prom.then(vm.saveSuccess, vm.saveError);
                 }
+
+                return prom;
             };
 
             vm.init();
@@ -397,7 +405,7 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
             vm.getAddressSuccess = function (res) {
 
                 angular.forEach(res.data, function (address) {
-                    if(address.address_id === subscription.address.address_id){
+                    if (address.address_id === subscription.address.address_id) {
                         $scope.address = address;
                     }
                 });
@@ -414,7 +422,7 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
 
                 angular.forEach(res.data, function (card) {
                     card.last_four = '**** **** **** ' + card.last_four;
-                    if(card.cc_id === subscription.card.cc_id){
+                    if (card.cc_id === subscription.card.cc_id) {
                         $scope.card = card;
                     }
                 });
@@ -455,29 +463,28 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
                 }
             };
 
-			$scope.checkStatus = function () {
-				var data = {
-					subscription_id: $scope.subscription.subscription_id
-				};
+            $scope.checkStatus = function () {
+                var data = {
+                    subscription_id: $scope.subscription.subscription_id
+                };
 
-				if($scope.isActive()) {
-					SubscriptionService.cancel(data).then(function(response) {
-						Notification.success('Your subscription has been canceled');
-						$uibModalInstance.close(response.data);
-					}, vm.saveError);
-				}
-				else {
-					SubscriptionService.reactive(data).then(function(response) {
-						Notification.success('Your subscription has been reactivated');
-						$uibModalInstance.close(response.data);
-					}, vm.saveError);
-				}
-			};
+                if ($scope.isActive()) {
+                    SubscriptionService.cancel(data).then(function (response) {
+                        Notification.success('Your subscription has been canceled');
+                        $uibModalInstance.close(response.data);
+                    }, vm.saveError);
+                }
+                else {
+                    SubscriptionService.reactive(data).then(function (response) {
+                        Notification.success('Your subscription has been reactivated');
+                        $uibModalInstance.close(response.data);
+                    }, vm.saveError);
+                }
+            };
 
-			$scope.isActive = function () {
-				return $scope.subscription.status === 'active';
-			};
-
+            $scope.isActive = function () {
+                return $scope.subscription.status === 'active';
+            };
 
 
             vm.init();

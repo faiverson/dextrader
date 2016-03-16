@@ -30,13 +30,14 @@ angular.module('app.sign-up-modal-form', [])
             };
 
             $scope.send = function () {
-                var proms = [];
+                var prom;
 
                 if ($scope.formCheckout.$valid) {
-                    UserService.signUp($scope.userData)
-                        .then(vm.success, vm.error);
+                    prom = UserService.signUp($scope.userData);
+                    prom.then(vm.success, vm.error);
                 }
 
+                return prom;
             };
 
             vm.success = function (res) {
