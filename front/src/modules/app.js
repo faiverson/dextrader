@@ -28,7 +28,8 @@ angular.module('app', [
         'app.refund',
         'app.start',
         'app.contact-us',
-		'app.confirmation-popup'
+		'app.confirmation-popup',
+		'xtForm'
     ])
 
     .config(function appConfig($stateProvider, $urlRouterProvider, $locationProvider, showErrorsConfigProvider, $httpProvider, localStorageServiceProvider, NotificationProvider) {

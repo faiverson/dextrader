@@ -1,5 +1,5 @@
 <?php
-Route::post('/users/signup', 'UsersController@store');
+Route::post('/users/signup', 'UsersController@signup');
 Route::post('/users', ['middleware' => 'page:adduser',
 						'uses' => 'UsersController@store']);
 

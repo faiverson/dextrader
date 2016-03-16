@@ -2,78 +2,96 @@
     <button type="button" class="close" data-ng-click="close()" aria-label="Close">
         <span aria-hidden="true">×</span>
     </button>
-    <h3 class="modal-title">Sign up!</h3>
+    <h3 class="modal-title"><strong>Sign up!</strong></h3>
 </div>
 <div class="modal-body sign-up-modal-form">
-    <form id="formCheckout" name="formCheckout" novalidate="novalidate" autocomplete="off">
-        <div class="">
-            <div>
-                <h3 id="co-f1">Account Details</h3>
-
-                <div>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="form-group has-feedback" data-show-errors>
-                                <label for="first_name">First Name</label>
-                                <input type="text"
-                                       name="first_name"
-                                       data-ng-blur="autoCompleteBillingName()"
-                                       class="form-control"
-                                       id="first_name"
-                                       required
-                                       data-ng-model="userData.first_name">
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="form-group has-feedback" data-show-errors>
-                                <label for="last_name">Last Name</label>
-                                <input type="text"
-                                       name="last_name"
-                                       data-ng-blur="autoCompleteBillingName()"
-                                       class="form-control"
-                                       id="last_name"
-                                       required
-                                       data-ng-model="userData.last_name">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="form-group has-feedback" data-show-errors>
-                                <label for="email">Email</label>
-                                <input type="email"
-                                       name="email"
-                                       autocomplete="address-level4"
-                                       class="form-control"
-                                       id="email"
-                                       required
-                                       data-ng-model="userData.email">
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="form-group has-feedback" data-show-errors>
-                                <label for="password">Password</label>
-                                <input type="password"
-                                       name="password"
-                                       class="form-control"
-                                       id="password"
-                                       data-ng-model="userData.password">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group has-feedback" data-show-errors>
-                        <label for="phone">Mobile Phone</label>
-                        <input type="text"
-                               name="phone"
-                               data-ng-minlength="10"
-                               data-ng-maxlength="12"
-                               class="form-control"
-                               id="phone"
-                               data-ng-model="userData.phone">
-                    </div>
-                </div>
-            </div>
-        </div>
+    <form id="formCheckout" name="formCheckout"
+		  xt-form strategy="focusedAndDirtyOrSubmitted" focus-error="true"
+		  novalidate="novalidate">
+		<div>
+			<div class="row">
+				<div class="col-xs-6">
+					<div class="form-group has-feedback">
+						<label for="first_name">First Name</label>
+						<input type="text"
+							   name="userData.first_name"
+							   data-ng-blur="autoCompleteBillingName()"
+							   class="form-control"
+							   id="first_name"
+							   required
+							   xt-validation-tooltip
+							   data-ng-model="userData.first_name">
+					</div>
+				</div>
+				<div class="col-xs-6">
+					<div class="form-group has-feedback">
+						<label for="last_name">Last Name</label>
+						<input type="text"
+							   name="userData.last_name"
+							   data-ng-blur="autoCompleteBillingName()"
+							   class="form-control"
+							   id="last_name"
+							   required
+							   xt-validation-tooltip
+							   data-ng-model="userData.last_name">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-6">
+					<div class="form-group has-feedback">
+						<label for="email">Email</label>
+						<input type="text"
+							   name="email"
+							   class="form-control"
+							   id="email"
+							   required
+							   data-ng-blur="usernameFill()"
+							   ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 500, 'blur': 0 } }"
+							   xt-validation-tooltip
+							   data-ng-model="userData.email">
+					</div>
+				</div>
+				<div class="col-xs-6">
+					<div class="form-group has-feedback">
+						<label for="password">Password</label>
+						<input type="password"
+							   name="userData.password"
+							   class="form-control"
+							   id="password"
+							   xt-validation-tooltip
+							   data-ng-model="userData.password">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-6">
+					<div class="form-group has-feedback">
+						<label for="password">Username</label>
+						<input type="text"
+							   name="userData.username"
+							   class="form-control"
+							   id="username"
+							   xt-validation-tooltip
+							   data-ng-model="userData.username">
+					</div>
+				</div>
+				<div class="col-xs-6">
+					<div class="form-group has-feedback">
+						<label for="phone">Mobile Phone</label>
+						<input type="text"
+							   name="userData.phone"
+							   required
+							   data-ng-minlength="10"
+							   ng-pattern="/^([\s\+\-\(\)0-9])+$/"
+							   xt-validation-tooltip
+							   class="form-control"
+							   id="phone"
+							   data-ng-model="userData.phone">
+					</div>
+				</div>
+		</div>
+	</div>
     </form>
 </div>
 <div class="modal-footer">

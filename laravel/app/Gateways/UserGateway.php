@@ -1,10 +1,13 @@
 <?php
 namespace App\Gateways;
 
+use App\Exceptions\UserException;
 use App\Gateways\AbstractGateway;
 use App\Services\UserCreateValidator;
 use App\Services\UserUpdateValidator;
 use App\Repositories\UserRepository;
+use DB;
+use Log;
 
 class UserGateway extends AbstractGateway
 {
@@ -27,6 +30,12 @@ class UserGateway extends AbstractGateway
         $this->role = $role;
     }
 
+	public function signup(array $data)
+	{
+		$data['roles'] = [$this->role->getRoleIdByName('user')];
+		return $this->add($data);
+	}
+
     public function add(array $data)
     {
         if (array_key_exists('enroller', $data)) {
@@ -38,15 +47,36 @@ class UserGateway extends AbstractGateway
             }
         }
 
-		$user = $this->create($data);
-		if($user) {
-			if (array_key_exists('roles', $data) && strlen($data['roles']) > 0) {
+		DB::beginTransaction();
+		try {
+			$user = $this->create($data);
+			if(!$user) {
+				throw new UserException($this->errors());
+			}
+			if (array_key_exists('roles', $data) && (
+					(is_array($data['roles']) && count($data['roles']) > 0) ||
+					is_string($data['roles']) && strlen($data['roles']) > 0)
+			) {
 				$user = $this->repository->find($user->id);
 				$roles = array_column($user->roles->toArray(), 'role_id');
 				$this->repository->detachRoles($user->id, $roles);
-				$this->repository->addRoles($user->id, json_decode($data['roles']));
+				$new_roles = is_array($data['roles']) ? $data['roles'] : json_decode($data['roles']);
+				$this->repository->addRoles($user->id, $new_roles);
 			}
 		}
+		catch(\Exception $e) {
+			DB::rollback();
+			$type = '';
+			$this->errors = json_decode($e->getMessage());
+			Log::info((array)$this->errors);
+			Log::info($e->getMessage());
+			if ($e instanceof UserException) {
+				$type .= 'UserException';
+			}
+			Log::error($type . ': ', ['error' => (array)$this->errors, 'data' => $data]);
+			return false;
+		}
+		DB::commit();
 		return $user;
     }
 

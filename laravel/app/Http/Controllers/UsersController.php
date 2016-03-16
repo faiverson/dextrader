@@ -74,13 +74,13 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function signup(Request $request)
     {
 		$fields = $request->all();
 		$fields['ip_address'] = $request->ip();
-		$user = $this->gateway->add($fields);
+		$user = $this->gateway->signup($fields);
 		if(!$user) {
-			return response()->error($this->gateway->errors()->all());
+			return response()->error($this->gateway->errors());
 		}
 
 		try {
@@ -92,6 +92,24 @@ class UsersController extends Controller
 
 		return response()->ok(array_merge($user->toArray(), compact('token')));
     }
+
+	public function store(Request $request)
+	{
+		$fields = $request->all();
+		$user = $this->gateway->add($fields);
+		if(!$user) {
+			return response()->error($this->gateway->errors());
+		}
+
+		try {
+			$token = Token::add($user->id);
+		}
+		catch (JWTException $e) {
+			return response()->error('Could not create a token', $e->getStatusCode());
+		}
+
+		return response()->ok(array_merge($user->toArray(), compact('token')));
+	}
 
     /**
      * Edit the form for editing the specified resource.

@@ -5,7 +5,10 @@ use App\Events\SubscriptionCancelEvent;
 use App\Events\SubscriptionRenewedEvent;
 use App\Exceptions\BillingAddressException;
 use App\Exceptions\CreditCardException;
+use App\Exceptions\InvoiceDetailException;
 use App\Exceptions\InvoiceException;
+use App\Exceptions\PurchaseException;
+use App\Exceptions\SubscriptionException;
 use App\Exceptions\TransactionDetailException;
 use App\Exceptions\TransactionException;
 use App\Repositories\TransactionRepository;
@@ -28,6 +31,7 @@ use DateTime;
 use Illuminate\Database\Eloquent\Collection;
 use Event;
 use Log;
+use PhpSpec\Exception\Wrapper\SubjectException;
 
 class TransactionGateway extends AbstractGateway {
 
@@ -267,15 +271,16 @@ class TransactionGateway extends AbstractGateway {
 			}
 		} catch(\Exception $e) {
 			DB::rollback();
+			$type = '';
 			$this->errors = json_decode($e->getMessage());
 			if ($e instanceof TransactionException) {
-				$type = 'TransactionException';
+				$type .= 'TransactionException';
 			}
 			elseif ($e instanceof TransactionDetailException) {
-				$type = 'TransactionDetailException';
+				$type .= 'TransactionDetailException';
 			}
 			else {
-				$type = 'Exception';
+				$type .= 'Exception';
 			}
 			Log::error($type . ': ', ['error' => (array) $this->errors, 'data' => $data]);
 			return false;
@@ -326,7 +331,7 @@ class TransactionGateway extends AbstractGateway {
 			}
 
 			if(!$card) {
-				throw new CreditCardException(['card' => $this->card->errors()]);
+				throw new CreditCardException($this->card->errors());
 			}
 
 			if(array_key_exists('billing_address_id', $data)) {
@@ -382,7 +387,7 @@ class TransactionGateway extends AbstractGateway {
 					'amount' => number_format($product['product_amount'] - ($product['product_amount'] * $product['product_discount']), 2, '.', ',')
 				]));
 				if (!$subscription) {
-					throw new \Exception(['subscription' => $this->subscription->errors()]);
+					throw new SubscriptionException($this->subscription->errors());
 				}
 
 				// set the offer price in the invoice detail
@@ -395,7 +400,7 @@ class TransactionGateway extends AbstractGateway {
 					'invoice_id' => $invoice->id
 				]));
 				if (!$invoice_detail) {
-					throw new \Exception(['invoice detail' => $this->invoice->errors()]);
+					throw new InvoiceDetailException($this->invoice->errors());
 				}
 
 				$purchase = $this->purchase->create(array_merge($data, [
@@ -406,7 +411,7 @@ class TransactionGateway extends AbstractGateway {
 					'transaction_id' => $data['orderid']
 				]));
 				if(!$purchase) {
-					throw new \Exception(['purchase' => $this->purchase->errors()]);
+					throw new PurchaseException($this->purchase->errors());
 				}
 
 				$role_id = $this->user->getRoleByName($product['roles']);
@@ -416,15 +421,25 @@ class TransactionGateway extends AbstractGateway {
 		}
 		catch(\Exception $e) {
 			DB::rollback();
+			$type = '';
 			$this->errors = json_decode($e->getMessage());
 			if ($e instanceof CreditCardException) {
-				$type = 'CreditCardException';
+				$type .= 'CreditCardException';
 			}
 			elseif ($e instanceof BillingAddressException) {
-				$type = 'BillingAddressException';
+				$type .= 'BillingAddressException';
+			}
+			elseif ($e instanceof SubscriptionException) {
+				$type .= 'SubscriptionException';
 			}
 			elseif ($e instanceof InvoiceException) {
-				$type = 'InvoiceException';
+				$type .= 'InvoiceException';
+			}
+			elseif ($e instanceof InvoiceDetailException) {
+				$type .= 'InvoiceDetailException';
+			}
+			elseif ($e instanceof PurchaseException) {
+				$type .= 'PurchaseException';
 			}
 			Log::error($type . ': ', ['error' => (array)$this->errors, 'data' => $data]);
 			return false;

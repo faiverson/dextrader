@@ -599,12 +599,7 @@ angular.module('app.dex_ib', ['ui.router', 'youtube-embed', 'app.upgrade-modal-f
                     }
                 });
 
-                modalInstance.result.then(function (email) {
-                    Notification.success('Welcomo to Dextrader.com!');
-                    $state.go('login');
-                }, function () {
-                    //$log.info('Modal dismissed at: ' + new Date());
-                });
+                modalInstance.result.then(function (email) {}, function () {});
             };
 
             vm.sendHit = function () {
