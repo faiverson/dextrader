@@ -76,7 +76,6 @@ class TransactionController extends Controller
 		if(array_key_exists('response', $response) && $response['response'] == '1') {
 			$purchase = $this->transaction->purchase($response);
 			if(!$purchase) {
-//				$this->transaction->backLastPurchase($response); // going back the transaction
 				return response()->error($this->transaction->errors());
 			}
 			$response = array_merge($response, $purchase);
@@ -91,13 +90,30 @@ class TransactionController extends Controller
 			return response()->error($response['gateway_message']);
 		}
 
-		try {
-			$token = Token::add($response['user_id']);
-		}
-		catch (JWTException $e) {
-			return response()->error('Could not create a token', $e->getStatusCode());
+		$token = $this->generateToken($response['user_id']);
+		return response()->ok(array_merge($response, compact('token')));
+	}
+
+	/**
+	 *
+	 * Used by the admin when a transaction goes to the gateway
+	 * and it failing after that
+	 *
+	 * @param Request $request
+	 * @return mixed
+	 */
+	public function fallback(Request $request)
+	{
+		$id = $request->id;
+		$transaction = $this->gateway->find($id);
+		$response = $this->fallback($transaction->toArray());
+		$purchase = $this->transaction->purchase($response);
+		if(!$purchase) {
+			return response()->error($this->transaction->errors());
 		}
 
+		Event::fire(new CheckoutEvent($response));
+		$token = $this->generateToken($response['user_id']);
 		return response()->ok(array_merge($response, compact('token')));
 	}
 
@@ -141,13 +157,7 @@ class TransactionController extends Controller
 			return response()->error($response['gateway_message']);
 		}
 
-		try {
-			$token = Token::add($response['user_id']);
-		}
-		catch (JWTException $e) {
-			return response()->error('Could not create a token', $e->getStatusCode());
-		}
-
+		$token = $this->generateToken($response['user_id']);
 		return response()->ok(array_merge($response, compact('token')));
 	}
 
@@ -162,5 +172,15 @@ class TransactionController extends Controller
 		$response['admin_id'] = $request->user()->id;
 		Event::fire(new RefundEvent($response));
 		return response()->ok($response);
+	}
+
+	protected function generateToken($user_id)
+	{
+		try {
+			$token = Token::add($user_id);
+		} catch (JWTException $e) {
+			return response()->error('Could not create a token', $e->getStatusCode());
+		}
+		return $token;
 	}
 }

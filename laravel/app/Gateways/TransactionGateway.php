@@ -223,6 +223,16 @@ class TransactionGateway extends AbstractGateway {
 		return $data;
 	}
 
+	public function fallback(array $data)
+	{
+		$subs = $this->subscription->findByUser($data['user_id'], ['product_id']);
+		if($subs->count() > 0 ) {
+			$this->errors = 'You are trying to generate a subscription but it is one active in the system';
+			return false;
+		}
+		return $this->add($data);
+	}
+
 	public function setDetail(Collection $products)
 	{
 		$p = [];

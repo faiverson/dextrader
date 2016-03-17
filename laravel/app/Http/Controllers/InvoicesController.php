@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Config;
 use App;
 use PDF;
+use File;
 
 class InvoicesController extends Controller
 {
@@ -33,10 +34,19 @@ class InvoicesController extends Controller
 
     public function download(Request $request)
     {
-        $invoice = $this->gateway->findBy('id', $request->invoice_id)->first();
-        $pdf = PDF::loadView('invoices.details', compact('invoice'));
-        $path = base_path() . '/resources/assets/files/test.pdf';
-        return $pdf->save($path)->stream();
+		$folder = base_path() . '/../public_html/assets/invoices/';
+		$invoice = $this->gateway->findBy('id', $request->invoice_id)->first();
+		$path = $folder . 'invoice-' . $request->invoice_id . '.pdf';
+		if (!File::exists($folder)) {
+			File::makeDirectory($folder);
+		}
+		if (!File::exists($path)) {
+			$pdf = PDF::loadView('invoices.details', compact('invoice'));
+//        return $pdf->save($path)->stream();
+			$pdf->save($path);
+		}
+      	return response()->ok();
+//		return view('invoices.details', ['invoice' => $invoice]);
     }
 
 }

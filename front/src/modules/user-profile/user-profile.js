@@ -94,8 +94,8 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
         vm.init();
     }])
 
-    .controller('BillingCtrl', ['$scope', 'CreditCardService', 'BillingAddressService', 'Notification', '$uibModal', 'SubscriptionService', 'InvoiceService', 'FileSaver',
-        function ($scope, CreditCardService, BillingAddressService, Notification, $uibModal, SubscriptionService, InvoiceService, FileSaver) {
+    .controller('BillingCtrl', ['$scope', '$window', 'CreditCardService', 'BillingAddressService', 'Notification', '$uibModal', 'SubscriptionService', 'InvoiceService', 'FileSaver',
+        function ($scope, $window, CreditCardService, BillingAddressService, Notification, $uibModal, SubscriptionService, InvoiceService, FileSaver) {
             var vm = this;
             $scope.creditCards = [];
             $scope.addresses = [];
@@ -160,24 +160,12 @@ angular.module('app.user-profile', ['ui.router', 'ui.select', 'ngSanitize', 'ui.
             };
 
             $scope.getPdf = function (invoice) {
+				var filename = 'invoice-' + invoice.id + '.pdf',
+					invoice_tab = $window.open('/assets/invoices/' + filename, 'Invoice');
                 InvoiceService.download(invoice.id)
                     .then(function (res) {
-                        var urlCreator = window.URL || window.webkitURL || window.mozURL || window.msURL;
-                        var link = document.createElement("a");
-                        var blob = new Blob([res], {type: "application/pdf"});
-                        var url = urlCreator.createObjectURL(blob);
-
-                        link.setAttribute("href", url);
-                        link.setAttribute("download", 'test.pdf');
-
-                        // Simulate clicking the download link
-                        var event = document.createEvent('MouseEvents');
-                        event.initMouseEvent('click', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
-                        link.dispatchEvent(event);
-                        //FileSaver.saveAs(blob, 'test.pdf');
-                    }, function (err) {
-
-                    });
+						invoice_tab.location.href = '/assets/invoices/' + filename;
+					}, function (err) {});
             };
 
             vm.getSubscriptions = function () {

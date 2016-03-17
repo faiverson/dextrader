@@ -12,5 +12,6 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 
 	Route::group(['middleware' => 'perms:user.update'], function () {
 		Route::post('/transactions/{id}/refund', 'TransactionController@refund')->where('id', '[0-9]+');
+		Route::post('/transactions/{id}/fallback', 'TransactionController@fallback')->where('id', '[0-9]+');
 	});
 });

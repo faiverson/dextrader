@@ -598,7 +598,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
                 deferred = $q.defer();
 
             if (angular.isUndefined(id)) {
-                deferred.reject('Subsctiption id is required!');
+                deferred.reject('Subscription id is required!');
             }
 
             endpoint += '/download/' + id;
