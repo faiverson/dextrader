@@ -50,14 +50,6 @@ class ResponseServiceProvider extends ServiceProvider
 
 			return Response($response, $code);
 		});
-
-		Response::macro('pdf', function($pdf, $filename = 'test.pdf') {
-			return Response($pdf, 200, [
-					'Content-Type' => 'application/pdf',
-					'Content-Disposition' =>  'inline; filename="'.$filename.'"'
-				]
-			);
-		});
 	}
 
 	public function register()

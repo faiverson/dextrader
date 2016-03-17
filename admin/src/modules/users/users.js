@@ -1,4 +1,4 @@
-angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables', 'datatables.bootstrap'])
+angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors'])
     .config(function config($stateProvider) {
         $stateProvider
             .state('users', {
@@ -53,6 +53,7 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
                     this.toApply.to = null;
                     this.toApply.first_name = null;
                     this.toApply.last_name = null;
+                    this.toApply.username = null;
                     this.toApply.email = null;
 
                     if (angular.isDefined(this.from) && this.from !== null) {
@@ -70,6 +71,10 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
                     if (angular.isDefined(this.last_name) && this.last_name !== null && this.last_name.length >= 3) {
                         this.toApply.last_name = this.last_name;
                     }
+
+					if (angular.isDefined(this.username) && this.username !== null && this.username.length >= 3) {
+						this.toApply.username = this.username;
+					}
 
                     if (angular.isDefined(this.email) && this.email !== null && this.email.length >= 3) {
                         this.toApply.email = this.email;
@@ -110,6 +115,16 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
                     }, 600);
                 }
             });
+
+			$scope.$watch('filters.username', function (nv, ov) {
+				if (angular.isDefined(nv) && nv !== ov) {
+					$timeout.cancel(vm.username_tm);
+
+					vm.username_tm = $timeout(function () {
+						$scope.filters.apply();
+					}, 600);
+				}
+			});
 
             $scope.$watch('filters.email', function (nv, ov) {
                 if (angular.isDefined(nv) && nv !== ov) {
@@ -153,7 +168,7 @@ angular.module('app.home', ['ui.router', 'ui.bootstrap.showErrors', 'datatables'
                 };
 
                 function success(res) {
-                    $scope.pagination.totalItems = res.data.totalItems;
+                    $scope.pagination.totalItems = res.data.total;
                     $scope.users = res.data.users;
                 }
 
