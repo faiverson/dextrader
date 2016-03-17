@@ -9,28 +9,4 @@ Homestead.json
 
 /node_app/node_modules
 
-public_html/assets/*
-public_html/index.html
-
-public_html/admin/js
-public_html/admin/js/*
-public_html/admin/css
-public_html/admin/css/*
-public_html/admin/assets
-public_html/admin/assets/*
-public_html/admin/index.html
-
-public_html/front/js
-public_html/front/js/*
-public_html/front/css
-public_html/front/css/*
-public_html/front/assets
-public_html/front/assets/*
-
-public_html/sales/js
-public_html/sales/js/*
-public_html/sales/css
-public_html/sales/css/*
-public_html/sales/assets
-public_html/sales/assets/*
-public_html/sales/index.html
+public_html/*
