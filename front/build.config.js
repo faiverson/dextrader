@@ -98,6 +98,10 @@ module.exports = {
             input: ['src/assets/**/*.{png,gif,jpeg,jpg}'],
             output: '../public_html/front/assets/'
         },
+		favicons: {
+			input: ['src/assets/favicon/*.{png,ico}'],
+			output: '../public_html/'
+		},
         svg: {
             input: 'src/assets/**/*.svg',
             output: '../public_html/front/assets/'

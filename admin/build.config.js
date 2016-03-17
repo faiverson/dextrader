@@ -95,6 +95,10 @@ module.exports = {
             input: ['src/assets/**/*.{png,gif,jpeg,jpg}'],
             output: '../public_html/admin/assets/'
         },
+		favicons: {
+			input: ['src/assets/favicon/*.{png,ico}'],
+			output: '../public_html/admin/'
+		},
         svg: {
             input: 'src/assets/**/*.svg',
             output: '../public_html/admin/assets/'

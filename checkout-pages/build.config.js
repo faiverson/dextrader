@@ -89,6 +89,10 @@ module.exports = {
             input: ['src/assets/**/*.{png,gif,jpeg,jpg}'],
             output: '../public_html/sales/assets/'
         },
+		favicons: {
+			input: ['src/assets/favicon/*.{png,ico}'],
+			output: '../public_html/sales/'
+		},
         svg: {
             input: 'src/assets/**/*.svg',
             output: '../public_html/sales/assets/'

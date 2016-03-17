@@ -51,7 +51,7 @@ gulp.task('test', function () {
 gulp.task('build', function (callback) {
     runSequence('clean:dist',
         'jshint',
-		['js:vendor', 'js:templates', 'css', 'fonts', 'images', 'svg', 'htaccess'],
+		['js:vendor', 'js:templates', 'css', 'fonts', 'images', 'favicons', 'svg', 'htaccess'],
         'js:files',
         'html',
         callback);
@@ -61,7 +61,7 @@ gulp.task('production', function (callback) {
     runSequence(['clean:dist'],
         'jshint',
 		'tag',
-		['js:vendor', 'js:templates', 'css', 'fonts', 'images', 'svg', 'htaccess'],
+		['js:vendor', 'js:templates', 'css', 'fonts', 'images', 'favicons', 'svg', 'htaccess'],
 		'js:files',
         'compile:js',
         'compile:clean',
@@ -234,12 +234,23 @@ gulp.task('fonts', function () {
 gulp.task('images', function () {
 	return gulp.src(config.assets.images.input)
 		.pipe(plumber())
-		.pipe(gulpif(environment !== 'local', imagemin({
+		.pipe(gulpif(environment !== 'local',imagemin({
 			optimizationLevel: 5,
 			progressive: true,
 			interlaced: true
 		})))
 		.pipe(gulp.dest(config.assets.images.output));
+});
+
+gulp.task('favicons', function () {
+	return gulp.src(config.assets.favicons.input)
+		.pipe(plumber())
+		.pipe(gulpif(environment !== 'local',imagemin({
+			optimizationLevel: 5,
+			progressive: true,
+			interlaced: true
+		})))
+		.pipe(gulp.dest(config.assets.favicons.output));
 });
 
 gulp.task('jshint', function () {
