@@ -54,7 +54,8 @@ class Handler extends ExceptionHandler
 			return response()->error('The token is blacklisted.', $e->getStatusCode());
 		}
 		else if ($e instanceof ModelNotFoundException) {
-			$e = new NotFoundHttpException($e->getMessage(), $e);
+//			$e = new NotFoundHttpException($e->getMessage(), $e);
+			return response()->error('Oops! There is a problem in the system. Please contact support immediately!');
 		}
 		else if ($e instanceof QueryException) {
 			return response()->error('Oops! There was a problem in database. Please contact support immediately!');

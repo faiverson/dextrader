@@ -37,9 +37,7 @@ class InvoicesController extends Controller
 		$invoice = $this->gateway->findBy('id', $request->invoice_id)->first();
 		$path = 'invoice-' . $request->invoice_id . '.pdf';
 		$pdf = PDF::loadView('invoices.details', compact('invoice'));
-
-		return $pdf->download($path);
-//		return response()->download($pdf->stream($path), $file->name, $headers);
+		return $pdf->stream($path);
 //      	return response()->ok($pdf->stream($path));
 //		return view('invoices.details', ['invoice' => $invoice]);
     }
