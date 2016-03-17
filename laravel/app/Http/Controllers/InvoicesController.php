@@ -34,18 +34,13 @@ class InvoicesController extends Controller
 
     public function download(Request $request)
     {
-		$folder = base_path() . '/../public_html/assets/invoices/';
 		$invoice = $this->gateway->findBy('id', $request->invoice_id)->first();
-		$path = $folder . 'invoice-' . $request->invoice_id . '.pdf';
-		if (!File::exists($folder)) {
-			File::makeDirectory($folder);
-		}
-		if (!File::exists($path)) {
-			$pdf = PDF::loadView('invoices.details', compact('invoice'));
-//        return $pdf->save($path)->stream();
-			$pdf->save($path);
-		}
-      	return response()->ok();
+		$path = 'invoice-' . $request->invoice_id . '.pdf';
+		$pdf = PDF::loadView('invoices.details', compact('invoice'));
+
+		return $pdf->download($path);
+//		return response()->download($pdf->stream($path), $file->name, $headers);
+//      	return response()->ok($pdf->stream($path));
 //		return view('invoices.details', ['invoice' => $invoice]);
     }
 
