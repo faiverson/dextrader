@@ -37,9 +37,8 @@ angular.module('app.thankyou', ['ui.router'])
                     var offer;
 
                     if(angular.isObject(invoice.offers)){
-                        amount = invoice.offers[1].amount;
-                    }else {
-
+                        amount = invoice.offers[prd_id].amount;
+                    } else {
                         offer = $filter('filter')(invoice.offers, {product_id: prd_id}, true);
 
                         if (offer.length > 0) {

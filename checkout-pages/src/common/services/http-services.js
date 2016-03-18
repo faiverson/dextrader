@@ -242,7 +242,7 @@ angular.module('app.http-services', ['app.site-configs', 'angular-jwt', 'app.sha
         function setInvoice(data) {
             var invoices = localStorageService.get('invoices') || [];
 
-			if(invoices.length > 0 && invoices[0].user_id !== data.user_id) {
+			if(parseInt(invoices[0].user_id, 10) !== parseInt(data.user_id, 10) && invoices.length > 0 ) {
 				invoices = [];
 			}
             invoices.push(data);

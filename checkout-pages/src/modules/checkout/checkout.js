@@ -90,7 +90,8 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
             $scope.formData = {
                 billing_address2: "",
                 products: product.id,
-                funnel_id: product.funnel_id
+                funnel_id: product.funnel_id,
+				number: ''
             };
 
             $scope.productsData = [
@@ -194,7 +195,6 @@ angular.module('app.checkout', ['ui.router', 'ui.mask', 'app.shared-helpers'])
                     }
 
                 } else {
-                    $scope.$broadcast('show-errors-check-validity');
                     deferred.reject();
                 }
 

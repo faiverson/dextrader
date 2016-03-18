@@ -165,12 +165,9 @@ class TransactionGateway extends AbstractGateway {
 					$amount += $offer->amount;
 					$data['offers'][$offer->product_id] = $offer->toArray();
 				}
-			} else {
-				unset($data['offer_id']);
 			}
 		}
 		else {
-			unset($data['offer_id']);
 			$amount = $this->product->total($products);
 		}
 
@@ -556,12 +553,9 @@ class TransactionGateway extends AbstractGateway {
 					$amount += $offer->amount;
 					$data['offers'][$offer->product_id] = $offer->toArray();
 				}
-			} else {
-				unset($data['offer_id']);
 			}
 		}
 		else {
-			unset($data['offer_id']);
 			$amount = $this->product->total($products);
 		}
 

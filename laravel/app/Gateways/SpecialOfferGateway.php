@@ -42,6 +42,7 @@ class SpecialOfferGateway extends AbstractGateway {
 
 	public function findIn($ids)
 	{
+		$ids = is_array($ids) ? $ids : [$ids];
 		return $this->repository->findIn($ids);
 	}
 }

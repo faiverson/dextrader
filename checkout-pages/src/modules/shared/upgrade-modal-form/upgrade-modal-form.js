@@ -35,8 +35,6 @@ angular.module('app.upgrade-modal-form', [])
 						prom.then(vm.success, vm.error);
 					}
 
-				} else {
-					$scope.$broadcast('show-errors-check-validity');
 				}
 
 				return prom;
@@ -91,8 +89,13 @@ angular.module('app.upgrade-modal-form', [])
 
             vm.error = function (response) {
 				var txt = '';
-				response = response.data;
-				if (response.data && angular.isDefined(response.data.error)) {
+				if (response) {
+					response = response.data;
+				} else {
+					txt += 'Something went wrong! Contact with support!';
+				}
+
+				if (response.error && angular.isDefined(response.error)) {
 					if (angular.isArray(response.error)) {
 						angular.forEach(response.error, function (item) {
 							txt += item + '<br>';

@@ -76,9 +76,6 @@ angular.module('app.upgrade-modal-form', [])
                         prom = CheckoutService.send($scope.formData, AuthService.getLoggedInUser().user_id);
                         prom.then(vm.success, vm.error);
                     }
-
-                } else {
-                    $scope.$broadcast('show-errors-check-validity');
                 }
 
                 return prom;

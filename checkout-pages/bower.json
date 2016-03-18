@@ -12,9 +12,8 @@
     "angular-animate": "~1.4.8",
     "angular-moment": "~0.10.3",
     "moment": "~2.10.6",
-    "angular-ui-mask": "~1.6.5",
+    "angular-ui-mask": "^1.6.5",
     "angular-loading-bar": "~0.8.0",
-    "xtform": "~2.0.0-beta.2",
     "angular-autodisable": "^0.2.2"
   },
   "devDependencies": {
