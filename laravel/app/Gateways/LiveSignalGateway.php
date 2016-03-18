@@ -53,8 +53,7 @@ class LiveSignalGateway extends AbstractGateway {
 			return false;
 		}
 
-		if( ! $this->createValidator->with($data)->passes() )
-		{
+		if(! $this->createValidator->with($data)->passes() ) {
 			$this->errors = $this->createValidator->errors();
 			return false;
 		}

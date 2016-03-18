@@ -62,7 +62,6 @@ class LiveSignalsController extends Controller
 
 	public function store_signal(Request $request)
 	{
-		dd($request);
 		$product = $request->product;
 		return $this->store($request->all(), $product);
 	}
@@ -71,7 +70,7 @@ class LiveSignalsController extends Controller
 	{
 		$response = $this->gateway->add($data, $type);
 		if(!$response) {
-			Log::info('Error on add a signal', $data);
+			Log::info('Error on add a signal', array_merge((array)$this->gateway->errors(), $data));
 			return response()->error($this->gateway->errors());
 		}
 		Event::fire(new AddSignalEvent($response->toArray()));

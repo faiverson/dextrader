@@ -32,7 +32,6 @@ var gulp = require('gulp'),
 	markdown = require('gulp-markdown'),
 	sourcemaps = require('gulp-sourcemaps'),
 	prettify = require('gulp-jsbeautifier'),
-	connectPhp = require('gulp-connect-php'),
 	debug = require('gulp-debug'),
 	inject = require('gulp-inject'),
 	sInject = require('gulp-inject-string'),
@@ -197,7 +196,7 @@ gulp.task('compile:js', function () {
 			suffix: '.min'
 		}))
 		.pipe(uglify({
-			outSourceMap: filename + '.map'
+			outSourceMap: true
 		}))
 		.pipe(header(config.banner.min, {pkg: pkg}))
 		.pipe(gulp.dest(config.js.files.output));

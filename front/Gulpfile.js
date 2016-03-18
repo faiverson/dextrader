@@ -191,7 +191,7 @@ gulp.task('compile:js', function () {
             suffix: '.min'
         }))
 		.pipe(uglify({
-            outSourceMap: filename + '.map'
+			outSourceMap: true
         }))
 		.pipe(header(config.banner.min, {pkg: pkg}))
 		.pipe(gulp.dest(config.js.files.output));
