@@ -7,6 +7,7 @@ use App\Services\HitCreateValidator;
 use App\Repositories\HitRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\TagRepository;
+use GeoIP;
 
 class HitGateway extends AbstractGateway {
 
@@ -42,6 +43,7 @@ class HitGateway extends AbstractGateway {
 				$data['tag_id'] = $tag->id;
 			}
 		}
+		$data['info'] = $this->setInfo($data);
 
 		if( ! $this->createValidator->with($data)->passes() )
 		{
@@ -50,5 +52,14 @@ class HitGateway extends AbstractGateway {
 		}
 
 		return $this->repository->create($data);
+	}
+
+	protected function setInfo(array $info)
+	{
+		$geo = GeoIP::getLocation($info['ip_address']);
+		if(array_key_exists('info', $info)) {
+			return array_merge($geo, $info['info']);
+		}
+		return $geo;
 	}
 }
