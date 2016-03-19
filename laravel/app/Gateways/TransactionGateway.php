@@ -222,12 +222,29 @@ class TransactionGateway extends AbstractGateway {
 
 	public function fallback(array $data)
 	{
+		if(!array_key_exists('number', $data)){
+			$this->errors = 'You need a card number';
+			return false;
+		}
+
+		$data['products'] = is_string($data['products']) ? explode(',', $data['products']) : $data['products'];
+		if(array_key_exists('offer_id', $data)) {
+			$data['offer_id'] = is_string($data['offer_id']) ? explode(',', $data['offer_id']) : $data['offer_id'];
+		}
+		$products = $this->product->findIn($data['products']);
+		$data['products'] = $this->setDetail($products);
+
 		$subs = $this->subscription->findByUser($data['user_id'], ['product_id']);
 		if($subs->count() > 0 ) {
 			$this->errors = 'You are trying to generate a subscription but it is one active in the system';
 			return false;
 		}
-		return $this->add($data);
+
+		$data['fallback'] = true;
+		$data = array_filter($data, function($value) {
+			return ($value !== null && $value !== '');
+		});
+		return $data;
 	}
 
 	public function setDetail(Collection $products)
@@ -290,6 +307,7 @@ class TransactionGateway extends AbstractGateway {
 				$type .= 'Exception';
 			}
 			Log::error($type . ': ', ['error' => (array) $this->errors, 'data' => $data]);
+			$this->errors = $this->errors();
 			return false;
 		}
 		DB::commit();
@@ -447,6 +465,9 @@ class TransactionGateway extends AbstractGateway {
 			}
 			elseif ($e instanceof PurchaseException) {
 				$type .= 'PurchaseException';
+			} else {
+				$type .= 'Exception';
+				$this->errors = $e->getMessage();
 			}
 			Log::error($type . ': ', ['error' => (array)$this->errors, 'data' => $data]);
 			return false;

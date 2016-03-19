@@ -105,13 +105,18 @@ class TransactionController extends Controller
 	public function fallback(Request $request)
 	{
 		$id = $request->id;
-		$transaction = $this->gateway->find($id);
-		$response = $this->fallback($transaction->toArray());
+		$transaction = $this->transaction->find($id);
+		$response = $this->transaction->fallback(array_merge($transaction->toArray(), $request->all()));
+		if(!$response) {
+			return response()->error($this->transaction->errors());
+		}
+
 		$purchase = $this->transaction->purchase($response);
 		if(!$purchase) {
 			return response()->error($this->transaction->errors());
 		}
 
+		$response = array_merge($response, $purchase);
 		Event::fire(new CheckoutEvent($response));
 		$token = $this->generateToken($response['user_id']);
 		return response()->ok(array_merge($response, compact('token')));

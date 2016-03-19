@@ -264,7 +264,7 @@
                         <label for="billing_phone">Billing Phone</label>
                         <input type="text"
 							   name="phone"
-							   required
+
                                ng-pattern="/^([\s\+\-\(\)0-9])+$/"
 							   msg-pattern="Invalid phone"
 							   class="form-control"
@@ -333,10 +333,8 @@
                         {{(prd.product && prd.product.amount || prd.amount) | currency: '$'}}
                     </div>
                 </div>
-                <div id="checkout-price-monthly" class="clearfix" data-ng-if="products.length > 1">
-                    <div class="left">
-                        Total:
-                    </div>
+                <div id="checkout-price-total" class="clearfix" data-ng-if="products.length > 1">
+                    <div class="left">Total:</div>
                     <div class="right">
                         {{ total() | currency: '$'}}
                     </div>
